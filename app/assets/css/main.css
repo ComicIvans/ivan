@@ -1,0 +1,215 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Animaciones suaves para transiciones */
+@layer utilities {
+  .transition-fade {
+    @apply transition-opacity duration-500 ease-in-out;
+  }
+
+  /* Clases de utilidad para animaciones con delay */
+  .animation-delay-100 {
+    animation-delay: 100ms;
+  }
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+  .animation-delay-500 {
+    animation-delay: 500ms;
+  }
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+  .animation-delay-700 {
+    animation-delay: 700ms;
+  }
+  .animation-delay-800 {
+    animation-delay: 800ms;
+  }
+}
+
+/* Skip link para accesibilidad */
+.skip-link {
+  @apply absolute -top-10 left-0 bg-primary text-primary-content px-4 py-2 z-50;
+  @apply focus:top-0 transition-all;
+}
+
+/* Mejoras de foco para accesibilidad */
+:focus-visible {
+  @apply outline-2 outline-offset-2 outline-primary;
+}
+
+/* Scroll suave */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Mejor legibilidad */
+body {
+  @apply antialiased;
+}
+
+/* Transiciones suaves para cambio de tema - sin afectar layout */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+/* Evitar transición de color en texto para prevenir flash */
+p,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+li {
+  transition: none;
+}
+
+/* Animación para el botón de foto de perfil */
+.profile-btn {
+  @apply transition-transform duration-300 ease-out;
+}
+
+.profile-btn:hover {
+  @apply scale-110;
+}
+
+.profile-btn:active {
+  @apply scale-95;
+}
+
+/* Animación para links */
+.link-animated {
+  @apply relative;
+}
+
+.link-animated::after {
+  content: "";
+  @apply absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300;
+}
+
+.link-animated:hover::after {
+  @apply w-full;
+}
+
+/* Animación de subrayado para enlaces primarios */
+.link.link-primary {
+  @apply relative;
+  text-decoration: none;
+}
+
+.link.link-primary::after {
+  content: "";
+  @apply absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300;
+}
+
+.link.link-primary:hover::after {
+  @apply w-full;
+}
+
+/* Animación para iconos sociales */
+.social-icon {
+  @apply transition-transform duration-300 ease-out;
+}
+
+.social-icon:hover {
+  @apply scale-125;
+}
+
+/* Dock de navegación móvil */
+.dock-item {
+  @apply flex flex-col items-center justify-center py-2 px-3;
+  @apply transition-all duration-200 ease-out;
+}
+
+.dock-item.active {
+  @apply text-primary;
+}
+
+.dock-item.active .dock-icon {
+  @apply scale-110;
+}
+
+/* Animación de entrada para secciones - solo en carga inicial */
+.section-enter {
+  animation: sectionEnter 0.4s ease-out forwards;
+}
+
+@keyframes sectionEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animación para el modal */
+.modal-animated .modal-box {
+  animation: modalEnter 0.25s ease-out;
+}
+
+@keyframes modalEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Efecto de gradiente animado para el borde del avatar */
+.avatar-animated {
+  background: linear-gradient(
+    45deg,
+    oklch(0.55 0.25 25),
+    oklch(0.65 0.25 25),
+    oklch(0.55 0.25 25)
+  );
+  background-size: 200% 200%;
+  animation: gradientMove 3s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Mejoras para móvil */
+@media (max-width: 640px) {
+  /* Cards más compactas en móvil */
+  .card-body {
+    @apply p-4;
+  }
+
+  /* Timeline más compacta */
+  .timeline-box {
+    @apply p-3;
+  }
+
+  /* Texto más pequeño en badges para móvil */
+  .badge-sm {
+    @apply text-xs;
+  }
+}

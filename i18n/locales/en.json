@@ -1,0 +1,212 @@
+{
+  "seo": {
+    "pageTitle": "About me",
+    "title": "Iván Salido Cobo - Professional Portfolio",
+    "description": "Professional portfolio of Iván Salido Cobo. Mathematician from the University of Granada and Master's in Cybersecurity. Experience in student representation, web development, and project management.",
+    "skillsDescription": "Knowledge, certifications, and projects by Iván Salido Cobo. Experience in cybersecurity, web development, and service management.",
+    "representationDescription": "Career in student representation and events organized by Iván Salido Cobo. Experience in associations and national congresses."
+  },
+  "schema": {
+    "jobTitle": "Mathematician and Master's in Cybersecurity"
+  },
+  "header": {
+    "title": "Iván Salido Cobo",
+    "subtitle": "Mathematician and Master's in Cybersecurity",
+    "profileAlt": "Profile photo of Iván Salido Cobo",
+    "jokeButton": "Show a random joke",
+    "content": "Content"
+  },
+  "nav": {
+    "about": "About me",
+    "skills": "Certifications and skills",
+    "representation": "Representation and events",
+    "skipLink": "Skip to main content"
+  },
+  "joke": {
+    "title": "I'm also a joker",
+    "error": "Oops! Couldn't load any joke :(",
+    "close": "Close"
+  },
+  "contact": {
+    "title": "Contact",
+    "phone": "+ 34 744 48 17 21",
+    "phoneLabel": "Call phone number +34 744 48 17 21",
+    "emailLabel": "Send email to isalidocobo{'@'}gmail.com",
+    "linkedinLabel": "Iván Salido Cobo's LinkedIn profile (opens in new tab)"
+  },
+  "about": {
+    "title": "About me",
+    "descriptionTitle": "Description",
+    "description": "My academic background has given me critical thinking skills and a great ability to find optimal solutions to complex problems. Added to this is my experience participating in projects and representative bodies, which has allowed me to develop a solid foundation in project management and organizational leadership. I consider myself a proactive person, highly adaptable, and always ready to face new challenges.",
+    "studiesTitle": "Education",
+    "studies1": "I hold a Bachelor's degree in Mathematics from the {university}. I began my studies in September 2019 and completed them in July 2024.",
+    "studies2": "I am currently finishing the Master's in Cybersecurity at the University of Granada.",
+    "university": "University of Granada",
+    "imageAlt": "Photo of Iván Salido Cobo"
+  },
+  "skills": {
+    "title": "Academic Knowledge",
+    "cybersecurity": "Cybersecurity",
+    "cyber1Title": "Cybersecurity Management:",
+    "cyber1Desc": "Coordination of policies, processes, and tools to protect digital assets.",
+    "cyber2Title": "Legal Compliance:",
+    "cyber2Desc": "Application of regulations and standards in data protection and security.",
+    "cyber3Title": "Infrastructure Design and Hardening:",
+    "cyber3Desc": "Planning and strengthening systems and networks against threats.",
+    "languages": "Programming Languages",
+    "lang1Title": "JavaScript, HTML and CSS:",
+    "lang1Desc": "Although I have used JavaScript independently, I usually use all three together for most of my projects.",
+    "lang2Title": "Python:",
+    "lang2Desc": "I have written several scripts and my thesis consisted of developing a package.",
+    "lang3Title": "PHP:",
+    "lang3Desc": "I maintain and update several websites with WordPress and Laravel.",
+    "lang4Title": "C++, Java and Rust:",
+    "lang4Desc": "I have used them occasionally for various projects.",
+    "frameworks": "Frameworks and Tools",
+    "fw1Title": "Vue.js / Nuxt:",
+    "fw1Desc": "I use it for most of my projects, such as this page.",
+    "fw2Title": "Domains and Google Workspace:",
+    "fw2Desc": "I own a domain and have been managing it for several years. I also manage other domains and their Google Workspace, such as the {link} association."
+  },
+  "projects": {
+    "title": "Relevant Projects",
+    "server": "Personal Server",
+    "serverDesc": "Since 2020, I have been maintaining a computer at home as a personal server with Linux. It has several services available through the {domain} domain and Docker. All services are documented in {guide}. This has allowed me to gain extensive knowledge in {bold}.",
+    "serverBold": "equipment and online service management",
+    "serverGuide": "this guide",
+    "ceebi": "Website for III CEEBI",
+    "ceebiDesc": "In addition to helping with the development of the {bold}, I developed a website for consulting workshops and micro-talks assigned to each attendee, viewing and asking questions to speakers during conferences, and subsequently downloading attendance certificates for the event, micro-courses, and poster presentations. The website can be found at {link}.",
+    "ceebiBold": "III National Congress of Bioscience Students (CEEBI)",
+    "ceebiLink": "this link"
+  },
+  "certificates": {
+    "title": "Certifications",
+    "license": "Driver's License:",
+    "licenseValue": "Class B",
+    "english": "English:",
+    "englishValue": "B2 level, preparing for C1.",
+    "dataAnalyst": "Data Analyst",
+    "dataAnalystDesc": "by Google Cloud Skills Boost. Profile at {link}.",
+    "dataAnalystLink": "this link"
+  },
+  "conferences": {
+    "title": "Conference Attendance",
+    "intro": "I have attended, and have certificates of completion for, multiple editions of the {link}, a congress organized by and for students, where I have gained {bold}. These editions are:",
+    "enemLink": "National Meeting of Mathematics Students (ENEM)",
+    "enemBold": "additional training in mathematics, statistics, and data science",
+    "edition1": "University of Valladolid (2020)",
+    "edition2": "University of Murcia (2021)",
+    "edition3": "University of Valencia (2022)",
+    "edition4": "University of Extremadura (2023)",
+    "edition5": "Carlos III, Complutense, Polytechnic, and Rey Juan Carlos Universities of Madrid (2024)",
+    "organizer": "Additionally, I am an {bold} of the one to be held this year in Granada.",
+    "organizerBold": "organizer",
+    "congressDetails": "These congresses take place over a week and consist of {bold}. Additionally, contact is established with various companies through a {bold2}.",
+    "congressBold": "conferences, workshops, and pecha kuchas",
+    "congressBold2": "Company Forum",
+    "creup": "On the other hand, I attended the {bold} organized by CREUP in Madrid in 2025. This event brings together Rectors and Vice-Rectors with students from multiple Spanish universities to present current issues and seek solutions together.",
+    "creupBold": "VI CREUP-CRUE Congress and XIV Representatives Meeting"
+  },
+  "timeline": {
+    "title": "Representation Career",
+    "ariaLabel": "Timeline of student representation career",
+    "item1Date": "December 2020",
+    "item1Title": "Start as member",
+    "item1Desc": "I began my career as a full member of the University Senate, the General Student Delegation (DGE), and consequently, the Student Delegation of the Faculty of Sciences (DEFC). At this time, I also became {bold1} and {bold2}.",
+    "item1Bold1": "Treasurer of the DGE",
+    "item1Bold2": "Secretary of the DEFC",
+    "item2Date": "December 2022",
+    "item2Title": "End of my first term",
+    "item2Desc": "The term for both the DGE and DEFC ended, so I left the positions of Secretary and Treasurer after two years of intense work and dedication. However, I continued as a member in the next term, the current one, since the University Senate term is four years. This allowed me to join the {bold} that same month, where I was a member and participated in its committees until July 2024.",
+    "item2Bold": "Governing Council",
+    "item3Date": "March 2023",
+    "item3Title": "External Relations Director",
+    "item3Desc": "To improve the management of the DGE's external relations, the position of External Relations Director was created, which I assumed due to my experience in managing trips and contact with other entities. In this role, I have been able to increase the DGE's participation in external events and meetings and strengthen its presence on the national stage. I finished my term in December 2024.",
+    "item4Date": "June 2023",
+    "item4Title": "Academic Vice-Coordinator",
+    "item4Desc": "When a new team had to be presented for the DGE's Permanent Commission, I decided to be part of it as Academic Vice-Coordinator, a position that has allowed me to contribute directly to improving teaching quality and acquiring new guarantees and rights for student assessment. I finished my term in December 2024.",
+    "item5Date": "June 2024",
+    "item5Title": "Digitalization and Transparency Officer",
+    "item5Desc": "I am currently part of the Extended Executive Committee of the Coordinator of Student Representatives of Public Universities (CREUP) as Digitalization and Transparency Officer. In this role, I am responsible for maintaining all the association's IT infrastructure, as well as its security, privacy, and data protection policies."
+  },
+  "events": {
+    "title": "Organized Events",
+    "ariaLabel": "Timeline of organized events",
+    "event1Date": "March 2023",
+    "event1Title": "ANEM General Assembly",
+    "event1Desc": "Together with three other people, I organized an ordinary general assembly of the National Association of Mathematics Students (ANEM), an event attended by around 60 people. My tasks mainly consisted of managing payments from different organizers, organizing coffee breaks, and requesting space reservations.",
+    "event2Date": "November 2023",
+    "event2Title": "San Alberto 2023",
+    "event2Desc": "Although this is an event I have been participating in since 2019, in this edition of my Faculty's patron saint I was more involved than ever in its organization. Together with another person, I was in charge of organizing the star activity, bingo with Andrés Quintana Martín, which was attended by around 300 people. The organization of the activity consisted of creating bingo cards using HTML, CSS, and JavaScript {link1} and creating a web platform to display the results {link2}.",
+    "event2Link": "(view code)",
+    "event3Date": "April 2024",
+    "event3Title": "XIII ACUA General Assembly",
+    "event3Desc": "As External Relations Director, I helped organize the XIII ordinary general assembly of the Andalusian University Councils Assembly, attended by around 20 people. I was mainly in charge of organizing coffee breaks, managing meals, and subsequently processing invoices.",
+    "event4Date": "November 2024",
+    "event4Title": "LXXVII CREUP General Assembly",
+    "event4Desc": "I was the main organizer of the 77th CREUP Ordinary General Assembly, coordinating space reservations and contacts with the different bodies involved. Additionally, I was in charge of the event's financial management and fundraising.",
+    "event5Date": "July 2025",
+    "event5Title": "XXVI ENEM",
+    "event5Desc": "I am Treasurer and Secretary of the Organizing Committee for the XXVI National Meeting of Mathematics Students (ENEM), which brings together hundreds of students of Mathematics, Statistics, and Data Science from all over Spain every year. These meetings have both an academic and professional focus, allowing direct contact with companies in the sector."
+  },
+  "footer": {
+    "copyright": "Developed by Iván Salido Cobo under MIT license. Check the code on {link}.",
+    "github": "GitHub",
+    "linkedinLabel": "LinkedIn profile (opens in new tab)",
+    "instagramLabel": "Instagram profile (opens in new tab)",
+    "githubLabel": "GitHub profile (opens in new tab)"
+  },
+  "theme": {
+    "toggle": "Toggle theme",
+    "light": "Light theme",
+    "dark": "Dark theme"
+  },
+  "language": {
+    "toggle": "Change language",
+    "es": "Español",
+    "en": "English"
+  },
+  "legal": {
+    "title": "Legal notice and privacy policy",
+    "seo": {
+      "pageTitle": "Legal notice",
+      "title": "Legal notice - Iván Salido Cobo",
+      "description": "Legal information, cookie policy and privacy for Iván Salido Cobo's portfolio."
+    },
+    "siteInfo": {
+      "title": "Site information",
+      "description": "This website is a personal portfolio with no commercial purpose.",
+      "owner": "Owner",
+      "email": "Contact",
+      "purpose": "Purpose",
+      "purposeText": "Display personal professional and academic information"
+    },
+    "cookies": {
+      "title": "Cookie policy",
+      "description": "This site only uses strictly necessary technical cookies for its operation. No tracking, advertising or analytics cookies are used.",
+      "table": {
+        "name": "Cookie",
+        "purpose": "Purpose",
+        "duration": "Duration"
+      },
+      "colorMode": "Stores your theme preference (light/dark)",
+      "i18n": "Stores your language preference",
+      "year": "1 year",
+      "note": "These cookies are essential for the site's operation and are exempt from the consent requirement under European regulations (Article 5.3 of the ePrivacy Directive)."
+    },
+    "privacy": {
+      "title": "Privacy",
+      "description": "This site respects your privacy:",
+      "noTracking": "No tracking of any kind is performed",
+      "noAnalytics": "No analytics tools are used (Google Analytics, etc.)",
+      "noThirdParty": "No data is shared with third parties",
+      "noPersonalData": "No personal data is collected"
+    },
+    "rights": {
+      "title": "Your rights",
+      "description": "You can delete this site's cookies at any time from your browser settings. If you have any questions, you can contact me by email."
+    },
+    "lastUpdate": "Last updated",
+    "updateDate": "November 2025"
+  }
+}
