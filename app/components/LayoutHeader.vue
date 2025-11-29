@@ -26,11 +26,10 @@ const tabs = computed(() => [
 ]);
 
 // Responsividad
-const { width, height } = useWindowSize();
-const isMobile = computed(
-  () => width.value < height.value || width.value < 868
-);
+const { width } = useWindowSize();
+const isMobile = computed(() => width.value < 868);
 const isLargeScreen = computed(() => width.value >= 1300);
+const isVeryNarrow = computed(() => width.value < 400);
 
 // Tema
 const isDark = computed(() => colorMode.value === "dark");
@@ -136,8 +135,11 @@ const closeJokeModal = () => {
         </p>
       </div>
 
-      <!-- Controles de tema e idioma en columna -->
-      <div class="flex flex-col items-center gap-0.5 shrink-0">
+      <!-- Controles de tema e idioma (fila por defecto, columna en pantallas muy pequeñas) -->
+      <div
+        class="flex items-center shrink-0"
+        :class="isVeryNarrow ? 'flex-col gap-0.5' : 'flex-row gap-1'"
+      >
         <button
           @click="toggleTheme"
           class="btn btn-ghost btn-xs btn-circle"
