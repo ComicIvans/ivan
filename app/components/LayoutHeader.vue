@@ -26,8 +26,11 @@ const tabs = computed(() => [
 ]);
 
 // Responsividad
-const { width } = useWindowSize();
-const isMobile = computed(() => width.value < 868);
+const { width, height } = useWindowSize();
+// Detectar móvil por proporción (modo portrait) o ancho menor a 1024px
+const isMobile = computed(
+  () => height.value > width.value || width.value < 1024
+);
 const isLargeScreen = computed(() => width.value >= 1300);
 const isVeryNarrow = computed(() => width.value < 400);
 
