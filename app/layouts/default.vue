@@ -12,7 +12,7 @@ const { t } = useI18n();
       {{ t("nav.skipLink") }}
     </a>
 
-    <main id="main-content" class="flex-grow" role="main">
+    <main id="main-content" class="main-content" role="main">
       <div class="w-11/12 max-w-7xl mx-auto p-4 sm:p-6">
         <LayoutHeader />
 
@@ -24,3 +24,18 @@ const { t } = useI18n();
     <LayoutFooter />
   </div>
 </template>
+
+<style scoped>
+.main-content {
+  flex-grow: 1;
+  /* Padding para el dock en móvil */
+  padding-bottom: 4rem;
+}
+
+/* En desktop (con hover), no necesitamos padding extra */
+@media (hover: hover) and (min-width: 768px) {
+  .main-content {
+    padding-bottom: 0;
+  }
+}
+</style>

@@ -25,34 +25,24 @@ const tabs = computed(() => [
   },
 ]);
 
-// Responsividad
-const { width, height } = useWindowSize();
-// Detectar móvil por proporción (modo portrait) o ancho menor a 1024px
-const isMobile = computed(
-  () => height.value > width.value || width.value < 1024
-);
-const isLargeScreen = computed(() => width.value >= 1300);
-const isVeryNarrow = computed(() => width.value < 400);
-
 // Tema
 const isDark = computed(() => colorMode.value === "dark");
 const toggleTheme = () => {
   colorMode.preference = isDark.value ? "light" : "dark";
 };
 
-// Idiomas disponibles con banderas
+// Idiomas disponibles
 const availableLocales = [
   { code: "es", name: "Español", flag: "🇪🇸" },
   { code: "en", name: "English", flag: "🇬🇧" },
 ] as const;
 
-// Obtener locale actual
 const currentLocale = computed(() => {
-  const found = availableLocales.find((l) => l.code === locale.value);
-  return found ?? availableLocales[0];
+  return (
+    availableLocales.find((l) => l.code === locale.value) ?? availableLocales[0]
+  );
 });
 
-// Cambiar idioma manteniendo la ruta actual
 const switchLocale = (code: "es" | "en") => {
   if (code !== locale.value) {
     navigateTo(localePath(route.path, code));
@@ -61,9 +51,7 @@ const switchLocale = (code: "es" | "en") => {
 
 // Verificar si una ruta está activa
 const isActiveRoute = (path: string) => {
-  const currentPath = route.path;
-  const localizedPath = localePath(path);
-  return currentPath === localizedPath;
+  return route.path === localePath(path);
 };
 
 // Función para mostrar chiste aleatorio
@@ -74,7 +62,6 @@ const showRandomJoke = () => {
   jokeModalOpen.value = true;
 };
 
-// Cerrar modal
 const closeJokeModal = () => {
   jokeModalOpen.value = false;
 };
@@ -84,17 +71,15 @@ const closeJokeModal = () => {
   <!-- Modal de chistes -->
   <dialog
     :open="jokeModalOpen"
-    class="modal modal-animated"
+    class="modal"
     :class="{ 'modal-open': jokeModalOpen }"
     @click.self="closeJokeModal"
     @keydown.escape="closeJokeModal"
     aria-labelledby="joke-title"
     aria-modal="true"
   >
-    <div class="modal-box" role="document">
-      <h3 id="joke-title" class="font-bold text-lg">
-        {{ t("joke.title") }}
-      </h3>
+    <div class="modal-box">
+      <h3 id="joke-title" class="font-bold text-lg">{{ t("joke.title") }}</h3>
       <p class="py-4">{{ currentJoke }}</p>
       <div class="modal-action">
         <button class="btn btn-primary" @click="closeJokeModal">
@@ -106,249 +91,319 @@ const closeJokeModal = () => {
   </dialog>
 
   <!-- Header -->
-  <header class="mb-6 sm:mb-8">
-    <!-- Móvil: diseño vertical centrado -->
-    <div v-if="isMobile" class="flex flex-col items-center gap-4 text-center">
-      <!-- Controles: tema a la izquierda, idioma a la derecha -->
-      <div class="w-full flex justify-between">
+  <header class="header">
+    <!-- Controles (tema e idioma) -->
+    <div class="header-controls">
+      <button
+        @click="toggleTheme"
+        class="btn btn-ghost btn-sm btn-circle"
+        :aria-label="t('theme.toggle')"
+      >
+        <Icon :name="isDark ? 'tabler:sun' : 'tabler:moon'" class="w-5 h-5" />
+      </button>
+
+      <div class="dropdown dropdown-end">
         <button
-          @click="toggleTheme"
-          class="btn btn-ghost btn-sm btn-circle"
-          :aria-label="t('theme.toggle')"
+          tabindex="0"
+          role="button"
+          class="btn btn-ghost btn-sm btn-square"
+          :aria-label="t('language.toggle')"
+          aria-haspopup="listbox"
         >
-          <Icon :name="isDark ? 'tabler:sun' : 'tabler:moon'" class="w-5 h-5" />
+          <span class="text-xl">{{ currentLocale.flag }}</span>
         </button>
-
-        <div class="dropdown dropdown-end">
-          <button
-            tabindex="0"
-            role="button"
-            class="btn btn-ghost btn-sm btn-square"
-            :aria-label="t('language.toggle')"
-            aria-haspopup="listbox"
-          >
-            <span class="text-xl" aria-hidden="true">{{
-              currentLocale.flag
-            }}</span>
-          </button>
-          <ul
-            tabindex="0"
-            class="dropdown-content menu bg-base-100 rounded-box z-[100] w-40 p-2 shadow-xl border border-base-300 mt-2"
-            role="listbox"
-            :aria-label="t('language.toggle')"
-          >
-            <li v-for="lang in availableLocales" :key="lang.code">
-              <button
-                role="option"
-                :aria-selected="lang.code === locale"
-                class="flex items-center gap-2 w-full"
-                :class="{
-                  'bg-primary/10 text-primary': lang.code === locale,
-                }"
-                @click="switchLocale(lang.code)"
-              >
-                <span class="text-lg" aria-hidden="true">{{ lang.flag }}</span>
-                <span class="flex-1">{{ lang.name }}</span>
-                <Icon
-                  v-if="lang.code === locale"
-                  name="tabler:check"
-                  class="w-4 h-4"
-                  aria-hidden="true"
-                />
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Foto de perfil centrada -->
-      <button
-        @click="showRandomJoke"
-        class="profile-btn focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-full"
-        :aria-label="t('header.jokeButton')"
-      >
-        <div class="avatar-animated p-1 rounded-full">
-          <NuxtImg
-            class="rounded-full w-24 h-24"
-            src="/profile-pic.jpg"
-            :alt="t('header.profileAlt')"
-            width="96"
-            height="96"
-            format="webp"
-            quality="80"
-          />
-        </div>
-      </button>
-
-      <!-- Título y subtítulo centrados -->
-      <div class="w-full">
-        <h1 class="text-2xl font-bold text-primary leading-tight">
-          {{ t("header.title") }}
-        </h1>
-        <p class="text-base text-base-content/70 leading-tight mt-1">
-          {{ t("header.subtitle") }}
-        </p>
-      </div>
-    </div>
-
-    <!-- Desktop: diseño horizontal -->
-    <div v-else class="flex items-center justify-between gap-8">
-      <!-- Foto de perfil -->
-      <button
-        @click="showRandomJoke"
-        class="profile-btn focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-full shrink-0"
-        :aria-label="t('header.jokeButton')"
-      >
-        <div class="avatar-animated p-1 rounded-full">
-          <NuxtImg
-            class="rounded-full w-32 h-32"
-            src="/profile-pic.jpg"
-            :alt="t('header.profileAlt')"
-            width="128"
-            height="128"
-            format="webp"
-            quality="80"
-          />
-        </div>
-      </button>
-
-      <!-- Navegación desktop -->
-      <nav class="flex-1 flex justify-center" aria-label="Navegación principal">
         <ul
-          :class="isLargeScreen ? 'menu-horizontal' : 'menu-vertical'"
-          class="menu gap-2 bg-base-100 rounded-box border border-base-300 shadow-sm"
-          role="menubar"
+          tabindex="0"
+          class="dropdown-content menu bg-base-100 rounded-box z-50 w-40 p-2 shadow-lg border border-base-300 mt-2"
+          role="listbox"
         >
-          <li v-for="tab in tabs" :key="tab.path" role="none">
-            <NuxtLink
-              :to="localePath(tab.path)"
-              role="menuitem"
-              class="transition-all duration-200"
-              :class="{ active: isActiveRoute(tab.path) }"
-              :aria-current="isActiveRoute(tab.path) ? 'page' : undefined"
-            >
-              <Icon :name="tab.icon" class="w-4 h-4" />
-              {{ tab.name }}
-            </NuxtLink>
-          </li>
-        </ul>
-      </nav>
-
-      <!-- Título y controles -->
-      <div class="text-right shrink-0">
-        <h1 class="text-3xl lg:text-4xl font-bold text-primary">
-          {{ t("header.title") }}
-        </h1>
-        <p class="text-lg text-base-content/70">
-          {{ t("header.subtitle") }}
-        </p>
-
-        <div class="flex gap-2 mt-2 justify-end">
-          <button
-            @click="toggleTheme"
-            class="btn btn-ghost btn-sm btn-circle"
-            :aria-label="t('theme.toggle')"
-          >
-            <Icon
-              :name="isDark ? 'tabler:sun' : 'tabler:moon'"
-              class="w-5 h-5"
-            />
-          </button>
-
-          <div class="dropdown dropdown-end">
+          <li v-for="lang in availableLocales" :key="lang.code">
             <button
-              tabindex="0"
-              role="button"
-              class="btn btn-ghost btn-sm gap-1"
-              :aria-label="t('language.toggle')"
-              aria-haspopup="listbox"
+              role="option"
+              :aria-selected="lang.code === locale"
+              class="flex items-center gap-2"
+              :class="{ 'bg-primary/10 text-primary': lang.code === locale }"
+              @click="switchLocale(lang.code)"
             >
-              <span class="text-lg" aria-hidden="true">{{
-                currentLocale.flag
-              }}</span>
-              <span>{{ currentLocale.name }}</span>
+              <span class="text-lg">{{ lang.flag }}</span>
+              <span class="flex-1">{{ lang.name }}</span>
               <Icon
-                name="tabler:chevron-down"
+                v-if="lang.code === locale"
+                name="tabler:check"
                 class="w-4 h-4"
-                aria-hidden="true"
               />
             </button>
-            <ul
-              tabindex="0"
-              class="dropdown-content menu bg-base-100 rounded-box z-50 w-40 p-2 shadow-lg border border-base-300"
-              role="listbox"
-              :aria-label="t('language.toggle')"
-            >
-              <li v-for="lang in availableLocales" :key="lang.code">
-                <button
-                  role="option"
-                  :aria-selected="lang.code === locale"
-                  class="flex items-center gap-2"
-                  :class="{
-                    'bg-primary/10 text-primary': lang.code === locale,
-                  }"
-                  @click="switchLocale(lang.code)"
-                >
-                  <span class="text-lg" aria-hidden="true">{{
-                    lang.flag
-                  }}</span>
-                  {{ lang.name }}
-                  <Icon
-                    v-if="lang.code === locale"
-                    name="tabler:check"
-                    class="w-4 h-4 ml-auto"
-                    aria-hidden="true"
-                  />
-                </button>
-              </li>
-            </ul>
-          </div>
-        </div>
+          </li>
+        </ul>
       </div>
     </div>
+
+    <!-- Foto de perfil -->
+    <button
+      @click="showRandomJoke"
+      class="profile-btn"
+      :aria-label="t('header.jokeButton')"
+    >
+      <NuxtImg
+        class="profile-img"
+        src="/profile-pic.jpg"
+        :alt="t('header.profileAlt')"
+        width="128"
+        height="128"
+        format="webp"
+        quality="80"
+      />
+    </button>
+
+    <!-- Título -->
+    <div class="header-title">
+      <h1 class="title-text">
+        {{ t("header.title") }}
+      </h1>
+      <p class="subtitle-text">
+        {{ t("header.subtitle") }}
+      </p>
+    </div>
+
+    <!-- Navegación desktop -->
+    <nav class="header-nav" aria-label="Navegación principal">
+      <ul class="nav-menu">
+        <li v-for="tab in tabs" :key="tab.path">
+          <NuxtLink
+            :to="localePath(tab.path)"
+            class="nav-link"
+            :class="{ 'nav-link-active': isActiveRoute(tab.path) }"
+            :aria-current="isActiveRoute(tab.path) ? 'page' : undefined"
+          >
+            <Icon :name="tab.icon" class="w-4 h-4 min-w-4" />
+            <span>{{ tab.name }}</span>
+          </NuxtLink>
+        </li>
+      </ul>
+    </nav>
   </header>
 
-  <div class="divider my-4" role="separator"></div>
+  <div class="divider my-4"></div>
 
-  <!-- Dock de navegación móvil (fijo abajo) -->
-  <div
-    v-if="isMobile"
-    class="dock dock-bottom bg-base-100 border-t border-base-300 z-40"
-  >
+  <!-- Dock de navegación móvil -->
+  <nav class="mobile-dock" aria-label="Navegación principal">
     <NuxtLink
       v-for="tab in tabs"
       :key="tab.path"
       :to="localePath(tab.path)"
-      class="flex flex-col items-center justify-center gap-1 py-2 flex-1 transition-colors"
-      :class="
-        isActiveRoute(tab.path)
-          ? 'text-primary'
-          : 'text-base-content/60 hover:text-base-content'
-      "
+      class="dock-item"
+      :class="{ 'dock-item-active': isActiveRoute(tab.path) }"
     >
-      <Icon
-        :name="tab.icon"
-        class="w-6 h-6"
-        :class="{ 'scale-110': isActiveRoute(tab.path) }"
-      />
-      <span class="dock-label text-xs text-center">{{ tab.name }}</span>
+      <Icon :name="tab.icon" class="w-6 h-6 min-w-6" />
+      <span class="text-xs">{{ tab.name }}</span>
     </NuxtLink>
-  </div>
+  </nav>
 </template>
 
 <style scoped>
-.dock-bottom {
+/* Header - Layout base móvil (mobile-first) */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Controles siempre en la parte superior en móvil */
+.header-controls {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* Navegación desktop oculta en móvil */
+.header-nav {
+  display: none;
+}
+
+/* Estilos base del menú de navegación (necesarios para SSR) */
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: oklch(var(--b1));
+  border-radius: 1rem;
+  border: 1px solid oklch(var(--b3));
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  list-style: none;
+  margin: 0;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  color: oklch(var(--bc));
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.nav-link:hover {
+  background: oklch(var(--b2));
+}
+
+.nav-link-active {
+  background: oklch(var(--p) / 0.1);
+  color: oklch(var(--p));
+}
+
+/* Imagen de perfil */
+.profile-img {
+  width: 6rem;
+  height: 6rem;
+  min-width: 6rem;
+  border-radius: 9999px;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+/* Textos */
+.title-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: oklch(var(--p));
+}
+
+.subtitle-text {
+  font-size: 1rem;
+  color: oklch(var(--bc) / 0.7);
+}
+
+/* Dock móvil visible por defecto */
+.mobile-dock {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   display: flex;
   justify-content: space-around;
-  padding-bottom: env(safe-area-inset-bottom, 4px);
-  padding-top: 4px;
+  background: oklch(var(--b1));
+  border-top: 1px solid oklch(var(--b3));
+  padding: 0.5rem 0;
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  z-index: 50;
 }
 
-.dock-label {
-  line-height: 1.2;
+.dock-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  color: oklch(var(--bc) / 0.6);
+  transition: color 0.2s;
+}
+
+.dock-item:hover {
+  color: oklch(var(--bc));
+}
+
+.dock-item-active {
+  color: oklch(var(--p));
+}
+
+/* Botón de perfil */
+.profile-btn {
+  border-radius: 9999px;
+  transition: transform 0.2s;
+}
+
+.profile-btn:hover {
+  transform: scale(1.05);
+}
+
+.profile-btn:active {
+  transform: scale(0.95);
+}
+
+.profile-btn:focus-visible {
+  outline: 2px solid oklch(var(--p));
+  outline-offset: 2px;
+}
+
+/* Desktop: detectar por hover capability (ratón) y ancho mínimo */
+@media (hover: hover) and (min-width: 768px) {
+  .header {
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
+    gap: 2rem;
+  }
+
+  .header-controls {
+    order: 3;
+    width: auto;
+    gap: 0.5rem;
+  }
+
+  .header-title {
+    order: 2;
+    flex: 1;
+  }
+
+  .profile-btn {
+    order: 1;
+    flex-shrink: 0;
+  }
+
+  .profile-img {
+    width: 8rem;
+    height: 8rem;
+    min-width: 8rem;
+  }
+
+  .title-text {
+    font-size: 2.25rem;
+  }
+
+  .subtitle-text {
+    font-size: 1.125rem;
+  }
+
+  .header-nav {
+    display: flex;
+    order: 2;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .mobile-dock {
+    display: none;
+  }
+}
+
+/* Pantallas grandes: título a la derecha */
+@media (hover: hover) and (min-width: 1024px) {
+  .header-title {
+    order: 3;
+    text-align: right;
+    flex: none;
+  }
+
+  .header-controls {
+    order: 4;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+}
+
+/* Pantallas muy anchas: menú horizontal */
+@media (hover: hover) and (min-width: 1400px) {
+  .nav-menu {
+    flex-direction: row;
+  }
+  .nav-link {
+    text-wrap: nowrap;
+  }
 }
 </style>

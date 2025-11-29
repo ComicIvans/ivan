@@ -1,13 +1,10 @@
 <script setup lang="ts">
 const { t } = useI18n();
-const { width, height } = useWindowSize();
-const isMobile = computed(() => width.value < height.value);
 </script>
 
 <template>
   <article
-    class="card card-border bg-base-100 min-w-fit h-fit mx-auto mt-3 transition-shadow hover:shadow-lg"
-    :class="{ 'text-lg': !isMobile }"
+    class="contact-card card card-border bg-base-100 min-w-fit h-fit mx-auto mt-3 transition-shadow hover:shadow-lg"
     aria-labelledby="contact-title"
   >
     <div class="card-body items-center text-center gap-4">
@@ -67,3 +64,12 @@ const isMobile = computed(() => width.value < height.value);
     </div>
   </article>
 </template>
+
+<style scoped>
+/* Texto más grande en desktop (hover capability) */
+@media (hover: hover) {
+  .contact-card {
+    font-size: 1.125rem;
+  }
+}
+</style>
