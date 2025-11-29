@@ -107,45 +107,13 @@ const closeJokeModal = () => {
 
   <!-- Header -->
   <header class="mb-6 sm:mb-8">
-    <!-- Móvil: diseño compacto -->
-    <div v-if="isMobile" class="flex items-center gap-3">
-      <!-- Foto de perfil -->
-      <button
-        @click="showRandomJoke"
-        class="profile-btn focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-full shrink-0"
-        :aria-label="t('header.jokeButton')"
-      >
-        <div class="avatar-animated p-0.5 rounded-full">
-          <NuxtImg
-            class="rounded-full w-16 h-16"
-            src="/profile-pic.jpg"
-            :alt="t('header.profileAlt')"
-            width="64"
-            height="64"
-            format="webp"
-            quality="80"
-          />
-        </div>
-      </button>
-
-      <!-- Título completo -->
-      <div class="flex-1 min-w-0">
-        <h1 class="text-xl font-bold text-primary leading-tight">
-          {{ t("header.title") }}
-        </h1>
-        <p class="text-sm text-base-content/70 leading-tight">
-          {{ t("header.subtitle") }}
-        </p>
-      </div>
-
-      <!-- Controles de tema e idioma (fila por defecto, columna en pantallas muy pequeñas) -->
-      <div
-        class="flex items-center shrink-0"
-        :class="isVeryNarrow ? 'flex-col gap-0.5' : 'flex-row gap-1'"
-      >
+    <!-- Móvil: diseño vertical centrado -->
+    <div v-if="isMobile" class="flex flex-col items-center gap-4 text-center">
+      <!-- Controles: tema a la izquierda, idioma a la derecha -->
+      <div class="w-full flex justify-between">
         <button
           @click="toggleTheme"
-          class="btn btn-ghost btn-xs btn-circle"
+          class="btn btn-ghost btn-sm btn-circle"
           :aria-label="t('theme.toggle')"
         >
           <Icon :name="isDark ? 'tabler:sun' : 'tabler:moon'" class="w-5 h-5" />
@@ -191,6 +159,35 @@ const closeJokeModal = () => {
             </li>
           </ul>
         </div>
+      </div>
+
+      <!-- Foto de perfil centrada -->
+      <button
+        @click="showRandomJoke"
+        class="profile-btn focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-full"
+        :aria-label="t('header.jokeButton')"
+      >
+        <div class="avatar-animated p-1 rounded-full">
+          <NuxtImg
+            class="rounded-full w-24 h-24"
+            src="/profile-pic.jpg"
+            :alt="t('header.profileAlt')"
+            width="96"
+            height="96"
+            format="webp"
+            quality="80"
+          />
+        </div>
+      </button>
+
+      <!-- Título y subtítulo centrados -->
+      <div class="w-full">
+        <h1 class="text-2xl font-bold text-primary leading-tight">
+          {{ t("header.title") }}
+        </h1>
+        <p class="text-base text-base-content/70 leading-tight mt-1">
+          {{ t("header.subtitle") }}
+        </p>
       </div>
     </div>
 
