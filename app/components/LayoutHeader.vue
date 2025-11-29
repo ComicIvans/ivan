@@ -1,70 +1,67 @@
 <script setup lang="ts">
-import jokesEs from "~/assets/jokes-es.json";
-import jokesEn from "~/assets/jokes-en.json";
+import jokesEs from '~/assets/jokes-es.json'
+import jokesEn from '~/assets/jokes-en.json'
 
-const { t, locale } = useI18n();
-const colorMode = useColorMode();
-const localePath = useLocalePath();
-const route = useRoute();
+const { t, locale } = useI18n()
+const colorMode = useColorMode()
+const localePath = useLocalePath()
+const route = useRoute()
 
 // Chistes según idioma
-const jokes = computed(() => (locale.value === "en" ? jokesEn : jokesEs));
+const jokes = computed(() => (locale.value === 'en' ? jokesEn : jokesEs))
 
 // Modal de chistes
-const jokeModalOpen = ref(false);
-const currentJoke = ref("");
+const jokeModalOpen = ref(false)
+const currentJoke = ref('')
 
 // Navegación
 const tabs = computed(() => [
-  { name: t("nav.about"), icon: "tabler:user", path: "/" },
-  { name: t("nav.skills"), icon: "tabler:school", path: "/skills" },
+  { name: t('nav.about'), icon: 'tabler:user', path: '/' },
+  { name: t('nav.skills'), icon: 'tabler:school', path: '/skills' },
   {
-    name: t("nav.representation"),
-    icon: "tabler:building-bank",
-    path: "/representation",
+    name: t('nav.representation'),
+    icon: 'tabler:building-bank',
+    path: '/representation',
   },
-]);
+])
 
 // Tema
-const isDark = computed(() => colorMode.value === "dark");
+const isDark = computed(() => colorMode.value === 'dark')
 const toggleTheme = () => {
-  colorMode.preference = isDark.value ? "light" : "dark";
-};
+  colorMode.preference = isDark.value ? 'light' : 'dark'
+}
 
 // Idiomas disponibles
 const availableLocales = [
-  { code: "es", name: "Español", flag: "🇪🇸" },
-  { code: "en", name: "English", flag: "🇬🇧" },
-] as const;
+  { code: 'es', name: 'Español', flag: '🇪🇸' },
+  { code: 'en', name: 'English', flag: '🇬🇧' },
+] as const
 
 const currentLocale = computed(() => {
-  return (
-    availableLocales.find((l) => l.code === locale.value) ?? availableLocales[0]
-  );
-});
+  return availableLocales.find((l) => l.code === locale.value) ?? availableLocales[0]
+})
 
-const switchLocale = (code: "es" | "en") => {
+const switchLocale = (code: 'es' | 'en') => {
   if (code !== locale.value) {
-    navigateTo(localePath(route.path, code));
+    navigateTo(localePath(route.path, code))
   }
-};
+}
 
 // Verificar si una ruta está activa
 const isActiveRoute = (path: string) => {
-  return route.path === localePath(path);
-};
+  return route.path === localePath(path)
+}
 
 // Función para mostrar chiste aleatorio
 const showRandomJoke = () => {
-  const jokeList = jokes.value;
-  currentJoke.value =
-    jokeList[Math.floor(Math.random() * jokeList.length)] || t("joke.error");
-  jokeModalOpen.value = true;
-};
+  const jokeList = jokes.value
+  currentJoke.value = jokeList[Math.floor(Math.random() * jokeList.length)] || t('joke.error')
+  jokeModalOpen.value = true
+}
 
 const closeJokeModal = () => {
-  jokeModalOpen.value = false;
-};
+  jokeModalOpen.value = false
+}
 </script>
 
 <template>
@@ -73,17 +70,17 @@ const closeJokeModal = () => {
     :open="jokeModalOpen"
     class="modal"
     :class="{ 'modal-open': jokeModalOpen }"
-    @click.self="closeJokeModal"
-    @keydown.escape="closeJokeModal"
     aria-labelledby="joke-title"
     aria-modal="true"
+    @click.self="closeJokeModal"
+    @keydown.escape="closeJokeModal"
   >
     <div class="modal-box">
-      <h3 id="joke-title" class="font-bold text-lg">{{ t("joke.title") }}</h3>
+      <h3 id="joke-title" class="text-lg font-bold">{{ t('joke.title') }}</h3>
       <p class="py-4">{{ currentJoke }}</p>
       <div class="modal-action">
         <button class="btn btn-primary" @click="closeJokeModal">
-          {{ t("joke.close") }}
+          {{ t('joke.close') }}
         </button>
       </div>
     </div>
@@ -95,18 +92,18 @@ const closeJokeModal = () => {
     <!-- Controles (tema e idioma) -->
     <div class="header-controls">
       <button
-        @click="toggleTheme"
-        class="btn btn-ghost btn-sm btn-circle"
+        class="btn btn-circle btn-ghost btn-sm"
         :aria-label="t('theme.toggle')"
+        @click="toggleTheme"
       >
-        <Icon :name="isDark ? 'tabler:sun' : 'tabler:moon'" class="w-5 h-5" />
+        <Icon :name="isDark ? 'tabler:sun' : 'tabler:moon'" class="h-5 w-5" />
       </button>
 
       <div class="dropdown dropdown-end">
         <button
           tabindex="0"
           role="button"
-          class="btn btn-ghost btn-sm btn-square"
+          class="btn btn-square btn-ghost btn-sm"
           :aria-label="t('language.toggle')"
           aria-haspopup="listbox"
         >
@@ -114,7 +111,7 @@ const closeJokeModal = () => {
         </button>
         <ul
           tabindex="0"
-          class="dropdown-content menu bg-base-100 rounded-box z-50 w-40 p-2 shadow-lg border border-base-300 mt-2"
+          class="menu dropdown-content z-50 mt-2 w-40 rounded-box border border-base-300 bg-base-100 p-2 shadow-lg"
           role="listbox"
         >
           <li v-for="lang in availableLocales" :key="lang.code">
@@ -127,11 +124,7 @@ const closeJokeModal = () => {
             >
               <span class="text-lg">{{ lang.flag }}</span>
               <span class="flex-1">{{ lang.name }}</span>
-              <Icon
-                v-if="lang.code === locale"
-                name="tabler:check"
-                class="w-4 h-4"
-              />
+              <Icon v-if="lang.code === locale" name="tabler:check" class="h-4 w-4" />
             </button>
           </li>
         </ul>
@@ -139,11 +132,7 @@ const closeJokeModal = () => {
     </div>
 
     <!-- Foto de perfil -->
-    <button
-      @click="showRandomJoke"
-      class="profile-btn"
-      :aria-label="t('header.jokeButton')"
-    >
+    <button class="profile-btn" :aria-label="t('header.jokeButton')" @click="showRandomJoke">
       <NuxtImg
         class="profile-img"
         src="/profile-pic.jpg"
@@ -158,10 +147,10 @@ const closeJokeModal = () => {
     <!-- Título -->
     <div class="header-title">
       <h1 class="title-text">
-        {{ t("header.title") }}
+        {{ t('header.title') }}
       </h1>
       <p class="subtitle-text">
-        {{ t("header.subtitle") }}
+        {{ t('header.subtitle') }}
       </p>
     </div>
 
@@ -175,7 +164,7 @@ const closeJokeModal = () => {
             :class="{ 'nav-link-active': isActiveRoute(tab.path) }"
             :aria-current="isActiveRoute(tab.path) ? 'page' : undefined"
           >
-            <Icon :name="tab.icon" class="w-4 h-4 min-w-4" />
+            <Icon :name="tab.icon" class="h-4 w-4 min-w-4" />
             <span>{{ tab.name }}</span>
           </NuxtLink>
         </li>
@@ -194,7 +183,7 @@ const closeJokeModal = () => {
       class="dock-item"
       :class="{ 'dock-item-active': isActiveRoute(tab.path) }"
     >
-      <Icon :name="tab.icon" class="w-6 h-6 min-w-6" />
+      <Icon :name="tab.icon" class="h-6 w-6 min-w-6" />
       <span class="text-xs">{{ tab.name }}</span>
     </NuxtLink>
   </nav>

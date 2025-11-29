@@ -1,19 +1,19 @@
 <script setup lang="ts">
-const { t } = useI18n();
+const { t } = useI18n()
 </script>
 
 <template>
-  <div class="min-w-screen min-h-screen flex flex-col bg-base-200">
+  <div class="min-w-screen flex min-h-screen flex-col bg-base-200">
     <!-- Skip link para accesibilidad -->
     <a
       href="#main-content"
-      class="skip-link sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-primary focus:text-primary-content focus:px-4 focus:py-2 focus:rounded"
+      class="skip-link sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-content"
     >
-      {{ t("nav.skipLink") }}
+      {{ t('nav.skipLink') }}
     </a>
 
     <main id="main-content" class="main-content" role="main">
-      <div class="w-11/12 max-w-7xl mx-auto p-4 sm:p-6">
+      <div class="mx-auto w-11/12 max-w-7xl p-4 sm:p-6">
         <LayoutHeader />
 
         <!-- Contenido de la página -->

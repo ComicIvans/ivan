@@ -1,92 +1,83 @@
 <script setup lang="ts">
-const { t } = useI18n();
+const { t } = useI18n()
 
 // Responsividad propia del componente
-const { width, height } = useWindowSize();
-const isMobile = computed(
-  () => width.value < height.value || width.value < 868
-);
+const { width, height } = useWindowSize()
+const isMobile = computed(() => width.value < height.value || width.value < 868)
 
 const events = computed(() => [
   {
-    dateKey: "event1Date",
-    titleKey: "event1Title",
-    descKey: "event1Desc",
+    dateKey: 'event1Date',
+    titleKey: 'event1Title',
+    descKey: 'event1Desc',
     hasLinks: false,
-    position: "start",
+    position: 'start',
   },
   {
-    dateKey: "event2Date",
-    titleKey: "event2Title",
-    descKey: "event2Desc",
+    dateKey: 'event2Date',
+    titleKey: 'event2Title',
+    descKey: 'event2Desc',
     hasLinks: true,
-    position: "end",
+    position: 'end',
   },
   {
-    dateKey: "event3Date",
-    titleKey: "event3Title",
-    descKey: "event3Desc",
+    dateKey: 'event3Date',
+    titleKey: 'event3Title',
+    descKey: 'event3Desc',
     hasLinks: false,
-    position: "start",
+    position: 'start',
   },
   {
-    dateKey: "event4Date",
-    titleKey: "event4Title",
-    descKey: "event4Desc",
+    dateKey: 'event4Date',
+    titleKey: 'event4Title',
+    descKey: 'event4Desc',
     hasLinks: false,
-    position: "end",
+    position: 'end',
   },
   {
-    dateKey: "event5Date",
-    titleKey: "event5Title",
-    descKey: "event5Desc",
+    dateKey: 'event5Date',
+    titleKey: 'event5Title',
+    descKey: 'event5Desc',
     hasLinks: false,
-    position: "start",
+    position: 'start',
     isLast: true,
   },
-]);
+])
 </script>
 
 <template>
-  <section
-    class="flex flex-col items-center justify-center"
-    aria-labelledby="events-title"
-  >
+  <section class="flex flex-col items-center justify-center" aria-labelledby="events-title">
     <header
-      class="flex items-center gap-2 text-xl font-bold bg-base-300 rounded-box px-5 py-3 mb-4"
+      class="mb-4 flex items-center gap-2 rounded-box bg-base-300 px-5 py-3 text-xl font-bold"
     >
-      <Icon
-        name="tabler:calendar-event"
-        class="w-6 h-6 text-primary"
-        aria-hidden="true"
-      />
-      <h2 id="events-title">{{ t("events.title") }}</h2>
+      <Icon name="tabler:calendar-event" class="h-6 w-6 text-primary" aria-hidden="true" />
+      <h2 id="events-title">{{ t('events.title') }}</h2>
     </header>
     <ol
       :class="{ 'timeline-compact': isMobile }"
-      class="timeline timeline-snap-icon timeline-vertical mx-auto"
+      class="timeline timeline-vertical timeline-snap-icon mx-auto"
       role="list"
       :aria-label="t('events.ariaLabel')"
     >
       <li v-for="(event, index) in events" :key="index">
         <hr v-if="index > 0" class="bg-primary" />
         <div class="timeline-middle text-primary" aria-hidden="true">
-          <Icon name="tabler:circle-check-filled" class="w-5 h-5" />
+          <Icon name="tabler:circle-check-filled" class="h-5 w-5" />
         </div>
         <div
           :class="[
             event.position === 'start' ? 'timeline-start' : 'timeline-end',
             { 'text-end': !isMobile && event.position === 'start' },
           ]"
-          class="mb-10 timeline-box bg-base-200 border-base-300"
+          class="timeline-box mb-10 border-base-300 bg-base-200"
         >
-          <time class="badge badge-soft badge-secondary badge-sm mb-2">
+          <time class="badge-soft badge badge-secondary badge-sm mb-2">
             {{ t(`events.${event.dateKey}`) }}
           </time>
           <h3 class="text-lg font-bold text-secondary">
             {{ t(`events.${event.titleKey}`) }}
           </h3>
-          <p class="text-base-content/90 mt-1">
+          <p class="mt-1 text-base-content/90">
             <template v-if="event.hasLinks">
               <i18n-t :keypath="`events.${event.descKey}`" tag="span">
                 <template #link1>
@@ -95,7 +86,7 @@ const events = computed(() => [
                     href="https://github.com/defcUGR/bingo"
                     target="_blank"
                     rel="noopener noreferrer"
-                    >{{ t("events.event2Link") }}</a
+                    >{{ t('events.event2Link') }}</a
                   >
                 </template>
                 <template #link2>
@@ -104,7 +95,7 @@ const events = computed(() => [
                     href="https://github.com/defcUGR/bingo-web"
                     target="_blank"
                     rel="noopener noreferrer"
-                    >{{ t("events.event2Link") }}</a
+                    >{{ t('events.event2Link') }}</a
                   >
                 </template>
               </i18n-t>
