@@ -25,7 +25,7 @@ const localePath = useLocalePath();
             <template #link>
               <a
                 class="link link-primary"
-                href="https://github.com/ComicIvans/cv"
+                href="https://github.com/ComicIvans/ivan"
                 target="_blank"
                 rel="noopener noreferrer"
                 >{{ t("footer.github") }}</a
