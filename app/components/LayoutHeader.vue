@@ -166,7 +166,7 @@ const closeJokeModal = () => {
     </div>
 
     <!-- Navegación desktop -->
-    <nav class="header-nav" aria-label="Navegación principal">
+    <nav class="header-nav" :aria-label="t('nav.mainNav')">
       <ul class="nav-menu">
         <li v-for="tab in tabs" :key="tab.path">
           <NuxtLink
@@ -186,7 +186,7 @@ const closeJokeModal = () => {
   <div class="divider my-4"></div>
 
   <!-- Dock de navegación móvil -->
-  <nav class="mobile-dock" aria-label="Navegación principal">
+  <nav class="mobile-dock" :aria-label="t('nav.mainNav')">
     <NuxtLink
       v-for="tab in tabs"
       :key="tab.path"
@@ -298,6 +298,8 @@ const closeJokeModal = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   gap: 0.25rem;
   padding: 0.5rem 1rem;
   color: oklch(var(--bc) / 0.6);

@@ -20,7 +20,8 @@
     "about": "About me",
     "skills": "Certifications and skills",
     "representation": "Representation and events",
-    "skipLink": "Skip to main content"
+    "skipLink": "Skip to main content",
+    "mainNav": "Main navigation"
   },
   "joke": {
     "title": "I'm also a joker",
@@ -154,7 +155,8 @@
     "github": "GitHub",
     "linkedinLabel": "LinkedIn profile (opens in new tab)",
     "instagramLabel": "Instagram profile (opens in new tab)",
-    "githubLabel": "GitHub profile (opens in new tab)"
+    "githubLabel": "GitHub profile (opens in new tab)",
+    "socialNav": "Social networks"
   },
   "theme": {
     "toggle": "Toggle theme",

@@ -20,7 +20,8 @@
     "about": "Sobre mí",
     "skills": "Certificaciones y conocimientos",
     "representation": "Representación y eventos",
-    "skipLink": "Saltar al contenido principal"
+    "skipLink": "Saltar al contenido principal",
+    "mainNav": "Navegación principal"
   },
   "joke": {
     "title": "También soy un chistoso",
@@ -154,7 +155,8 @@
     "github": "GitHub",
     "linkedinLabel": "Perfil de LinkedIn (abre en nueva pestaña)",
     "instagramLabel": "Perfil de Instagram (abre en nueva pestaña)",
-    "githubLabel": "Perfil de GitHub (abre en nueva pestaña)"
+    "githubLabel": "Perfil de GitHub (abre en nueva pestaña)",
+    "socialNav": "Redes sociales"
   },
   "theme": {
     "toggle": "Cambiar tema",
