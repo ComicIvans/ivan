@@ -106,93 +106,85 @@ const closeJokeModal = () => {
   <!-- Header -->
   <header class="mb-6 sm:mb-8">
     <!-- Móvil: diseño compacto -->
-    <div v-if="isMobile" class="flex flex-col gap-3">
-      <!-- Fila 1: Foto + Título + Controles -->
-      <div class="flex items-center gap-3">
-        <!-- Foto de perfil (más pequeña en móvil) -->
+    <div v-if="isMobile" class="flex items-center gap-3">
+      <!-- Foto de perfil -->
+      <button
+        @click="showRandomJoke"
+        class="profile-btn focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-full shrink-0"
+        :aria-label="t('header.jokeButton')"
+      >
+        <div class="avatar-animated p-0.5 rounded-full">
+          <NuxtImg
+            class="rounded-full w-16 h-16"
+            src="/profile-pic.jpg"
+            :alt="t('header.profileAlt')"
+            width="64"
+            height="64"
+            format="webp"
+            quality="80"
+          />
+        </div>
+      </button>
+
+      <!-- Título completo -->
+      <div class="flex-1 min-w-0">
+        <h1 class="text-xl font-bold text-primary leading-tight">
+          {{ t("header.title") }}
+        </h1>
+        <p class="text-sm text-base-content/70 leading-tight">
+          {{ t("header.subtitle") }}
+        </p>
+      </div>
+
+      <!-- Controles de tema e idioma en columna -->
+      <div class="flex flex-col items-center gap-0.5 shrink-0">
         <button
-          @click="showRandomJoke"
-          class="profile-btn focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-full shrink-0"
-          :aria-label="t('header.jokeButton')"
+          @click="toggleTheme"
+          class="btn btn-ghost btn-xs btn-circle"
+          :aria-label="t('theme.toggle')"
         >
-          <div class="avatar-animated p-0.5 rounded-full">
-            <NuxtImg
-              class="rounded-full w-16 h-16"
-              src="/profile-pic.jpg"
-              :alt="t('header.profileAlt')"
-              width="64"
-              height="64"
-              format="webp"
-              quality="80"
-            />
-          </div>
+          <Icon :name="isDark ? 'tabler:sun' : 'tabler:moon'" class="w-5 h-5" />
         </button>
 
-        <!-- Título -->
-        <div class="flex-1 min-w-0">
-          <h1 class="text-xl font-bold text-primary truncate">
-            {{ t("header.title") }}
-          </h1>
-          <p class="text-sm text-base-content/70 truncate">
-            {{ t("header.subtitle") }}
-          </p>
-        </div>
-
-        <!-- Controles de tema e idioma -->
-        <div class="flex gap-1 shrink-0">
+        <div class="dropdown dropdown-end">
           <button
-            @click="toggleTheme"
-            class="btn btn-ghost btn-sm btn-circle"
-            :aria-label="t('theme.toggle')"
+            tabindex="0"
+            role="button"
+            class="btn btn-ghost btn-sm btn-square"
+            :aria-label="t('language.toggle')"
+            aria-haspopup="listbox"
           >
-            <Icon
-              :name="isDark ? 'tabler:sun' : 'tabler:moon'"
-              class="w-5 h-5"
-            />
+            <span class="text-xl" aria-hidden="true">{{
+              currentLocale.flag
+            }}</span>
           </button>
-
-          <div class="dropdown dropdown-end">
-            <button
-              tabindex="0"
-              role="button"
-              class="btn btn-ghost btn-sm btn-square"
-              :aria-label="t('language.toggle')"
-              aria-haspopup="listbox"
-            >
-              <span class="text-lg" aria-hidden="true">{{
-                currentLocale.flag
-              }}</span>
-            </button>
-            <ul
-              tabindex="0"
-              class="dropdown-content menu bg-base-100 rounded-box z-50 w-36 p-2 shadow-lg border border-base-300"
-              role="listbox"
-              :aria-label="t('language.toggle')"
-            >
-              <li v-for="lang in availableLocales" :key="lang.code">
-                <button
-                  role="option"
-                  :aria-selected="lang.code === locale"
-                  class="flex items-center gap-2"
-                  :class="{
-                    'bg-primary/10 text-primary': lang.code === locale,
-                  }"
-                  @click="switchLocale(lang.code)"
-                >
-                  <span class="text-lg" aria-hidden="true">{{
-                    lang.flag
-                  }}</span>
-                  {{ lang.name }}
-                  <Icon
-                    v-if="lang.code === locale"
-                    name="tabler:check"
-                    class="w-4 h-4 ml-auto"
-                    aria-hidden="true"
-                  />
-                </button>
-              </li>
-            </ul>
-          </div>
+          <ul
+            tabindex="0"
+            class="dropdown-content menu bg-base-100 rounded-box z-[100] w-40 p-2 shadow-xl border border-base-300 mt-2"
+            role="listbox"
+            :aria-label="t('language.toggle')"
+          >
+            <li v-for="lang in availableLocales" :key="lang.code">
+              <button
+                role="option"
+                :aria-selected="lang.code === locale"
+                class="flex items-center gap-2 w-full"
+                :class="{
+                  'bg-primary/10 text-primary': lang.code === locale,
+                }"
+                @click="switchLocale(lang.code)"
+              >
+                <span class="text-lg" aria-hidden="true">{{ lang.flag }}</span>
+                <span class="flex-1">{{ lang.name }}</span>
+                <Icon
+                  v-if="lang.code === locale"
+                  name="tabler:check"
+                  class="w-4 h-4"
+                  aria-hidden="true"
+                />
+              </button>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -350,8 +342,7 @@ const closeJokeModal = () => {
   right: 0;
   display: flex;
   justify-content: space-around;
-  /* Más padding para la barra de gestos */
-  padding-bottom: max(env(safe-area-inset-bottom, 0px), 12px);
+  padding-bottom: env(safe-area-inset-bottom, 4px);
   padding-top: 4px;
 }
 

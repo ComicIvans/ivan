@@ -1,32 +1,19 @@
 <script setup lang="ts">
 const { t } = useI18n();
 const localePath = useLocalePath();
-
-// Responsividad
-const { width, height } = useWindowSize();
-const isMobile = computed(
-  () => width.value < height.value || width.value < 868
-);
 </script>
 
 <template>
   <footer
-    class="footer footer-center p-4 bg-base-300 text-base-content"
-    :class="{ 'pb-24': isMobile }"
+    class="footer footer-center p-4 pb-28 md:pb-4 bg-base-300 text-base-content"
     role="contentinfo"
   >
     <aside
-      class="w-11/12 max-w-7xl mx-auto"
-      :class="
-        isMobile
-          ? 'flex flex-col items-center gap-3'
-          : 'grid grid-cols-3 items-center'
-      "
+      class="w-11/12 max-w-7xl mx-auto flex flex-col items-center gap-3 text-center md:grid md:grid-cols-3 md:items-center"
     >
       <!-- Copyright -->
       <div
-        class="flex items-center gap-2 text-left"
-        :class="{ 'justify-start': !isMobile }"
+        class="flex flex-col items-center gap-2 text-center md:flex-row md:justify-start md:text-left"
       >
         <Icon
           name="tabler:copyright"
@@ -51,18 +38,13 @@ const isMobile = computed(
       <!-- Aviso legal -->
       <NuxtLink
         :to="localePath('/legal')"
-        class="link link-hover text-sm opacity-70 hover:opacity-100"
-        :class="{ 'text-center': !isMobile }"
+        class="link link-hover text-sm opacity-70 hover:opacity-100 md:text-center"
       >
         {{ t("legal.title") }}
       </NuxtLink>
 
       <!-- Redes sociales -->
-      <nav
-        class="flex gap-4"
-        :class="{ 'justify-end': !isMobile }"
-        aria-label="Redes sociales"
-      >
+      <nav class="flex gap-4 md:justify-end" aria-label="Redes sociales">
         <a
           class="link link-hover social-icon"
           href="https://www.linkedin.com/in/ivansalidocobo/"

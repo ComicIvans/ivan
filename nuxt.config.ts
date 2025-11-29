@@ -3,6 +3,15 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
 
+  vite: {
+    server:
+      process.env.NODE_ENV === "development"
+        ? {
+            allowedHosts: true,
+          }
+        : {},
+  },
+
   app: {
     head: {
       link: [{ rel: "icon", type: "image/svg+xml", href: "/favicon.svg" }],
