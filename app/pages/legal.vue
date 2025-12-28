@@ -56,6 +56,7 @@ useSeoMeta({
             </li>
             <li>
               <strong>{{ t('legal.siteInfo.email') }}:</strong>
+              <span class="mr-1" />
               <ULink :to="localePath('/contacto')" class="text-primary-500 hover:underline">
                 {{ t('legal.siteInfo.contactForm') }}
               </ULink>
