@@ -86,7 +86,7 @@ async function handleSubmit() {
       <UCard>
         <form class="space-y-6" @submit.prevent="handleSubmit" aria-describedby="form-description">
           <p id="form-description" class="sr-only">{{ t('contactPage.subtitle') }}</p>
-          
+
           <!-- Honeypot field -->
           <div class="sr-only" aria-hidden="true">
             <label for="website">Website</label>
