@@ -163,7 +163,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  // Create nodemailer transporter
+  // Create nodemailer transporter with timeouts to prevent NGINX connection issues
   const transporter = nodemailer.createTransport({
     host: config.smtpHost,
     port: Number(config.smtpPort) || 587,
@@ -172,18 +172,10 @@ export default defineEventHandler(async (event) => {
       user: config.smtpUser,
       pass: config.smtpPass,
     },
+    connectionTimeout: 10000, // 10 seconds
+    greetingTimeout: 10000,
+    socketTimeout: 30000, // 30 seconds
   })
-
-  // Verify SMTP connection before attempting to send
-  try {
-    await transporter.verify()
-  } catch (error) {
-    console.error('SMTP connection verification failed:', error)
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Unable to connect to email server',
-    })
-  }
 
   // Build email content
   const emailContent = `
@@ -197,7 +189,7 @@ Nuevo mensaje de contacto desde el portfolio
 ${message}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Enviado desde: ${config.public.siteUrl || 'ivan.wupp.dev'}
+Enviado desde: ${config.public.siteUrl}
 Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })}
   `.trim()
 

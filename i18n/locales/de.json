@@ -519,7 +519,20 @@
       "sending": "Wird gesendet...",
       "success": "Nachricht erfolgreich gesendet! Ich melde mich so schnell wie möglich bei dir.",
       "errorGeneric": "Beim Senden der Nachricht ist ein Fehler aufgetreten. Bitte versuche es erneut.",
-      "privacyNote": "Deine Informationen werden vertraulich behandelt und nur verwendet, um auf deine Anfrage zu antworten."
+      "privacyNote": "Deine Informationen werden vertraulich behandelt und nur verwendet, um auf deine Anfrage zu antworten.",
+      "errors": {
+        "nameRequired": "Name ist erforderlich",
+        "nameMin": "Name muss mindestens 2 Zeichen lang sein",
+        "nameMax": "Name darf maximal 100 Zeichen lang sein",
+        "emailRequired": "E-Mail-Adresse ist erforderlich",
+        "emailInvalid": "Bitte gib eine gültige E-Mail-Adresse ein",
+        "subjectRequired": "Betreff ist erforderlich",
+        "subjectMin": "Betreff muss mindestens 3 Zeichen lang sein",
+        "subjectMax": "Betreff darf maximal 200 Zeichen lang sein",
+        "messageRequired": "Nachricht ist erforderlich",
+        "messageMin": "Nachricht muss mindestens 10 Zeichen lang sein",
+        "messageMax": "Nachricht darf maximal 5000 Zeichen lang sein"
+      }
     },
     "alternative": "Du kannst mich auch über meine Social-Media-Profile kontaktieren:"
   }

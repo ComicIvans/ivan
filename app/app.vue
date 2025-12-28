@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { getOgLocale } from '~/utils/locales'
+import { getNuxtUiLocale } from '~/utils/nuxtUiLocale'
 
 const { t, locale, localeCodes } = useI18n()
 const siteConfig = useSiteConfig()
+
+const nuxtUiLocale = computed(() => getNuxtUiLocale(locale.value))
 
 useSeoMeta({
   titleTemplate: (title) => (title ? `${title} | ${t('seo.title')}` : t('seo.title')),
@@ -105,11 +108,10 @@ useSchemaOrg([
 </script>
 
 <template>
-  <div>
+  <UApp :locale="nuxtUiLocale">
     <NuxtRouteAnnouncer />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
-  </div>
+  </UApp>
 </template>
-

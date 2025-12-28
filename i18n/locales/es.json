@@ -529,7 +529,7 @@
       "description": "Ponte en contacto con Iván Salido Cobo. Envía un mensaje a través del formulario de contacto."
     },
     "title": "Contacto",
-    "subtitle": "\u00bfTienes alguna pregunta o propuesta? Envíame un mensaje y te responderé lo antes posible.",
+    "subtitle": "¿Tienes alguna pregunta o propuesta? Envíame un mensaje y te responderé lo antes posible.",
     "form": {
       "name": "Nombre",
       "namePlaceholder": "Tu nombre",
@@ -543,7 +543,20 @@
       "sending": "Enviando...",
       "success": "¡Mensaje enviado correctamente! Te responderé lo antes posible.",
       "errorGeneric": "Ha ocurrido un error al enviar el mensaje. Por favor, inténtalo de nuevo.",
-      "privacyNote": "Tu información será tratada de forma confidencial y solo se usará para responder a tu consulta."
+      "privacyNote": "Tu información será tratada de forma confidencial y solo se usará para responder a tu consulta.",
+      "errors": {
+        "nameRequired": "El nombre es obligatorio",
+        "nameMin": "El nombre debe tener al menos 2 caracteres",
+        "nameMax": "El nombre no puede superar los 100 caracteres",
+        "emailRequired": "El correo electrónico es obligatorio",
+        "emailInvalid": "Introduce un correo electrónico válido",
+        "subjectRequired": "El asunto es obligatorio",
+        "subjectMin": "El asunto debe tener al menos 3 caracteres",
+        "subjectMax": "El asunto no puede superar los 200 caracteres",
+        "messageRequired": "El mensaje es obligatorio",
+        "messageMin": "El mensaje debe tener al menos 10 caracteres",
+        "messageMax": "El mensaje no puede superar los 5000 caracteres"
+      }
     },
     "alternative": "También puedes contactarme a través de mis redes sociales:"
   }

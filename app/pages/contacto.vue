@@ -16,20 +16,83 @@ const form = reactive({
   website: '', // Honeypot field
 })
 
+// Track which fields have been touched (user interacted with them)
+const touched = reactive({
+  name: false,
+  email: false,
+  subject: false,
+  message: false,
+})
+
 const isSubmitting = ref(false)
+const formSubmitted = ref(false)
+
+// Validation rules
+const validations = computed(() => ({
+  name: {
+    valid: form.name.trim().length >= 2 && form.name.trim().length <= 100,
+    error:
+      form.name.trim().length === 0
+        ? t('contactPage.form.errors.nameRequired')
+        : form.name.trim().length < 2
+          ? t('contactPage.form.errors.nameMin')
+          : t('contactPage.form.errors.nameMax'),
+  },
+  email: {
+    valid: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim()),
+    error:
+      form.email.trim().length === 0
+        ? t('contactPage.form.errors.emailRequired')
+        : t('contactPage.form.errors.emailInvalid'),
+  },
+  subject: {
+    valid: form.subject.trim().length >= 3 && form.subject.trim().length <= 200,
+    error:
+      form.subject.trim().length === 0
+        ? t('contactPage.form.errors.subjectRequired')
+        : form.subject.trim().length < 3
+          ? t('contactPage.form.errors.subjectMin')
+          : t('contactPage.form.errors.subjectMax'),
+  },
+  message: {
+    valid: form.message.trim().length >= 10 && form.message.trim().length <= 5000,
+    error:
+      form.message.trim().length === 0
+        ? t('contactPage.form.errors.messageRequired')
+        : form.message.trim().length < 10
+          ? t('contactPage.form.errors.messageMin')
+          : t('contactPage.form.errors.messageMax'),
+  },
+}))
+
+// Check if field should show error (touched or form submitted)
+function shouldShowError(field: keyof typeof touched): boolean {
+  return (touched[field] || formSubmitted.value) && !validations.value[field].valid
+}
+
+// Get error message for a field
+function getFieldError(field: keyof typeof touched): string | undefined {
+  return shouldShowError(field) ? validations.value[field].error : undefined
+}
 
 const isFormValid = computed(() => {
-  return (
-    form.name.trim() !== '' &&
-    form.email.trim() !== '' &&
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) &&
-    form.subject.trim() !== '' &&
-    form.message.trim() !== ''
-  )
+  return Object.values(validations.value).every((v) => v.valid)
 })
 
 async function handleSubmit() {
-  if (!isFormValid.value || isSubmitting.value) return
+  formSubmitted.value = true
+
+  if (!isFormValid.value || isSubmitting.value) {
+    // Focus the first invalid field
+    const firstInvalidField = Object.keys(validations.value).find(
+      (key) => !validations.value[key as keyof typeof validations.value].valid
+    )
+    if (firstInvalidField) {
+      const element = document.getElementById(`contact-${firstInvalidField}`)
+      element?.focus()
+    }
+    return
+  }
 
   isSubmitting.value = true
 
@@ -56,8 +119,20 @@ async function handleSubmit() {
     form.email = ''
     form.subject = ''
     form.message = ''
+    formSubmitted.value = false
+    Object.keys(touched).forEach((key) => (touched[key as keyof typeof touched] = false))
   } catch (error: unknown) {
-    const errorMsg = error instanceof Error ? error.message : t('contactPage.form.errorGeneric')
+    // FetchError has the message in data.message or statusMessage
+    const fetchError = error as {
+      data?: { message?: string }
+      statusMessage?: string
+      message?: string
+    }
+    const errorMsg =
+      fetchError.data?.message ||
+      fetchError.statusMessage ||
+      fetchError.message ||
+      t('contactPage.form.errorGeneric')
     toast.add({
       title: errorMsg,
       icon: 'i-tabler-alert-circle',
@@ -101,51 +176,74 @@ async function handleSubmit() {
           </div>
 
           <!-- Name -->
-          <UFormField :label="t('contactPage.form.name') + ' *'">
+          <UFormField :label="t('contactPage.form.name') + ' *'" :error="getFieldError('name')">
             <UInput
+              id="contact-name"
               v-model="form.name"
               type="text"
               :placeholder="t('contactPage.form.namePlaceholder')"
               required
               :disabled="isSubmitting"
+              :color="shouldShowError('name') ? 'error' : undefined"
               class="w-full"
+              @blur="touched.name = true"
             />
           </UFormField>
 
           <!-- Email -->
-          <UFormField :label="t('contactPage.form.email') + ' *'">
+          <UFormField :label="t('contactPage.form.email') + ' *'" :error="getFieldError('email')">
             <UInput
+              id="contact-email"
               v-model="form.email"
               type="email"
               :placeholder="t('contactPage.form.emailPlaceholder')"
               required
               :disabled="isSubmitting"
+              :color="shouldShowError('email') ? 'error' : undefined"
               class="w-full"
+              @blur="touched.email = true"
             />
           </UFormField>
 
           <!-- Subject -->
-          <UFormField :label="t('contactPage.form.subject') + ' *'">
+          <UFormField
+            :label="t('contactPage.form.subject') + ' *'"
+            :error="getFieldError('subject')"
+          >
             <UInput
+              id="contact-subject"
               v-model="form.subject"
               type="text"
               :placeholder="t('contactPage.form.subjectPlaceholder')"
               required
               :disabled="isSubmitting"
+              :color="shouldShowError('subject') ? 'error' : undefined"
               class="w-full"
+              @blur="touched.subject = true"
             />
           </UFormField>
 
           <!-- Message -->
-          <UFormField :label="t('contactPage.form.message') + ' *'">
+          <UFormField
+            :label="t('contactPage.form.message') + ' *'"
+            :error="getFieldError('message')"
+          >
             <UTextarea
+              id="contact-message"
               v-model="form.message"
               :placeholder="t('contactPage.form.messagePlaceholder')"
               :rows="5"
               required
               :disabled="isSubmitting"
+              :color="shouldShowError('message') ? 'error' : undefined"
               class="w-full"
+              @blur="touched.message = true"
             />
+            <template #hint>
+              <span :class="form.message.trim().length < 10 ? 'text-error' : 'text-muted'">
+                {{ form.message.trim().length }}/5000
+              </span>
+            </template>
           </UFormField>
 
           <!-- Submit Button -->

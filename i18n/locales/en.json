@@ -519,7 +519,20 @@
       "sending": "Sending...",
       "success": "Message sent successfully! I will reply as soon as possible.",
       "errorGeneric": "An error occurred while sending the message. Please try again.",
-      "privacyNote": "Your information will be treated confidentially and used only to respond to your enquiry."
+      "privacyNote": "Your information will be treated confidentially and used only to respond to your enquiry.",
+      "errors": {
+        "nameRequired": "Name is required",
+        "nameMin": "Name must be at least 2 characters",
+        "nameMax": "Name cannot exceed 100 characters",
+        "emailRequired": "Email address is required",
+        "emailInvalid": "Please enter a valid email address",
+        "subjectRequired": "Subject is required",
+        "subjectMin": "Subject must be at least 3 characters",
+        "subjectMax": "Subject cannot exceed 200 characters",
+        "messageRequired": "Message is required",
+        "messageMin": "Message must be at least 10 characters",
+        "messageMax": "Message cannot exceed 5000 characters"
+      }
     },
     "alternative": "You can also contact me via my social media profiles:"
   }
