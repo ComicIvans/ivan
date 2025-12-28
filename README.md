@@ -19,17 +19,17 @@ Portfolio personal desarrollado con **Nuxt 4**, **Nuxt UI** y **TailwindCSS**.
 
 ## 🛠️ Stack Tecnológico
 
-| Tecnología                                | Uso                                  |
-| ----------------------------------------- | ------------------------------------ |
-| [Nuxt 4](https://nuxt.com)                | Framework de Vue.js con SSR          |
-| [Nuxt UI](https://ui.nuxt.com)            | Sistema de componentes               |
-| [TailwindCSS v4](https://tailwindcss.com) | Utility-first CSS                    |
-| [@nuxt/image](https://image.nuxt.com)     | Optimización de imágenes             |
-| [@nuxt/fonts](https://fonts.nuxt.com)     | Optimización de fuentes              |
-| [@nuxtjs/seo](https://nuxtseo.com)        | SEO y meta tags                      |
-| [@nuxtjs/i18n](https://i18n.nuxtjs.org)   | Internacionalización (i18n v9)       |
-| [@vueuse/nuxt](https://vueuse.org)        | Composables de utilidad              |
-| [Iconify](https://iconify.design)         | Iconos (Tabler Icons + Simple Icons) |
+| Tecnología                                                | Uso                                |
+| --------------------------------------------------------- | ---------------------------------- |
+| [Nuxt 4](https://nuxt.com)                                | Framework de Vue.js con SSR        |
+| [Nuxt UI v3](https://ui.nuxt.com)                         | Sistema de componentes (Radix Vue) |
+| [TailwindCSS](https://tailwindcss.com)                    | Utility-first CSS (v4.1)           |
+| [@nuxt/image](https://image.nuxt.com)                     | Optimización de imágenes           |
+| [@nuxtjs/seo](https://nuxtseo.com)                        | SEO y meta tags                    |
+| [@nuxtjs/i18n](https://i18n.nuxtjs.org)                   | Internacionalización (i18n v10)    |
+| [@formkit/auto-animate](https://auto-animate.formkit.com) | Animaciones automáticas            |
+| [Iconify](https://iconify.design)                         | Iconos (Tabler Icons)              |
+| [Nodemailer](https://nodemailer.com)                      | Envío de emails desde API          |
 
 ## 📁 Estructura del Proyecto
 
@@ -121,19 +121,19 @@ El sitio cumple con **WCAG 2.1 nivel AA**:
 - **Textos alternativos** descriptivos en todas las imágenes
 - **Estructura semántica** con headings jerárquicos (h1, h2, h3)
 - **Formularios accesibles** con labels, validación y mensajes de error
-- **Componentes accesibles** nativos de Nuxt UI (basados en Radix Vue)
+- **Componentes accesibles** nativos de Nuxt UI v3 (basados en Radix Vue)
 
 ## 🎨 Diseño y UX
 
 - **Tema personalizado** con paleta rojo/coral como color primario
-- **Transiciones suaves** entre modo oscuro y claro
+- **Transiciones suaves** entre modo oscuro y claro con auto-animate
 - **Animaciones sutiles** en entrada de secciones y hover de elementos
-- **Tipografía optimizada** con fuentes del sistema y web fonts
+- **Tipografía optimizada** con fuentes del sistema
 - **Espaciado consistente** usando sistema de diseño de Tailwind
-- **Componentes reutilizables** con Nuxt UI
+- **Componentes reutilizables** con Nuxt UI v3
 - **Layout responsive** con breakpoints mobile-first
 - **Foto de perfil centrada** perfectamente en móvil con contenedores de ancho fijo
-- **Iconos consistentes** de Tabler Icons y Simple Icons vía Iconify
+- **Iconos consistentes** de Tabler Icons vía Iconify
 
 ## 📧 Formulario de Contacto
 
@@ -141,7 +141,7 @@ El formulario incluye:
 
 - **Validación en cliente** (nombre, email, asunto, mensaje)
 - **Honeypot field** para protección anti-spam
-- **API endpoint** en `/api/contact` (POST)
+- **API endpoint** en `/api/contact` (POST) con Nodemailer
 - **Toast notifications** para feedback al usuario
 - **Estados de carga** durante el envío
 - **Cumplimiento RGPD** con nota de privacidad
