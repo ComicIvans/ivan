@@ -450,9 +450,10 @@
       "title": "Allgemeiner Datenschutz",
       "description": "Diese Website respektiert deine Privatsphäre:",
       "items": [
-        "Es findet kein Tracking oder Profiling statt",
-        "Es werden keine Analyse-Tools verwendet (Google Analytics usw.)",
-        "Es werden keine Daten an Dritte weitergegeben, außer wie beim Kontaktformular angegeben",
+        "Umami Analytics wird verwendet, ein datenschutzorientiertes Analyse-Tool, das keine personenbezogenen Daten erfasst",
+        "Umami verwendet keine Tracking-Cookies und identifiziert Benutzer nicht individuell",
+        "Es findet kein seitenübergreifendes Tracking statt",
+        "Es werden keine Daten an Dritte weitergegeben",
         "Es werden nur die Daten erhoben, die du freiwillig über das Kontaktformular bereitstellst"
       ]
     },

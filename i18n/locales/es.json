@@ -474,9 +474,10 @@
       "title": "Privacidad general",
       "description": "Este sitio respeta tu privacidad:",
       "items": [
-        "No se realiza ningún tipo de seguimiento ni perfilado",
-        "No se utilizan herramientas de analítica (Google Analytics, etc.)",
-        "No se comparten datos con terceros salvo lo indicado para el formulario de contacto",
+        "Se utiliza Umami Analytics, una herramienta de analítica respaldada por privacidad que no recopila datos personales",
+        "Umami no utiliza cookies de seguimiento ni identifica a usuarios individuales",
+        "No se realiza seguimiento entre sitios web",
+        "No se comparten datos con terceros",
         "Solo se recopilan los datos que tú proporcionas voluntariamente en el formulario de contacto"
       ]
     },

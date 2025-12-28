@@ -450,9 +450,10 @@
       "title": "General privacy",
       "description": "This website respects your privacy:",
       "items": [
-        "No tracking or profiling is carried out",
-        "No analytics tools are used (Google Analytics, etc.)",
-        "No data are shared with third parties beyond what is stated for the contact form",
+        "Umami Analytics is used, a privacy-focused analytics tool that does not collect personal data",
+        "Umami does not use tracking cookies or identify individual users",
+        "No cross-site tracking is performed",
+        "No data are shared with third parties",
         "Only the data you voluntarily provide via the contact form are collected"
       ]
     },
