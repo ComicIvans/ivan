@@ -416,6 +416,7 @@
       "description": "Este sitio web es un portfolio personal sin fines comerciales.",
       "owner": "Titular",
       "email": "Contacto",
+      "contactForm": "Formulario de contacto",
       "purpose": "Finalidad",
       "purposeText": "Mostrar información profesional y académica personal"
     },

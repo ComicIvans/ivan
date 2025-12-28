@@ -392,6 +392,7 @@
       "description": "Diese Website ist ein persönliches, nicht kommerzielles Portfolio.",
       "owner": "Betreiber",
       "email": "Kontakt",
+      "contactForm": "Kontaktformular",
       "purpose": "Zweck",
       "purposeText": "Darstellung persönlicher beruflicher und akademischer Informationen"
     },

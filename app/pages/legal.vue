@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const { t, tm, rt } = useI18n()
+const localePath = useLocalePath()
 
 const cookieItems = computed(() => {
   const items = tm('legal.cookies.items') as Array<{
@@ -55,8 +56,8 @@ useSeoMeta({
             </li>
             <li>
               <strong>{{ t('legal.siteInfo.email') }}:</strong>
-              <ULink to="mailto:isalidocobo@gmail.com" class="text-primary-500 hover:underline">
-                isalidocobo@gmail.com
+              <ULink :to="localePath('/contacto')" class="text-primary-500 hover:underline">
+                {{ t('legal.siteInfo.contactForm') }}
               </ULink>
             </li>
             <li>
