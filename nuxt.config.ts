@@ -64,6 +64,10 @@ export default defineNuxtConfig({
     redirectToCanonicalSiteUrl: true,
   },
 
+  sitemap: {
+    zeroRuntime: true,
+  },
+
   ogImage: {
     enabled: true,
   },
