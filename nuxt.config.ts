@@ -39,7 +39,14 @@ export default defineNuxtConfig({
     '@formkit/auto-animate/nuxt',
     '@nuxtjs/i18n',
     '@nuxt/eslint',
+    'nuxt-umami',
   ],
+
+  umami: {
+    id: 'c3dac3c3-bdd7-46d3-886b-7c21c097a7b3',
+    host: 'https://analytics.wupp.dev',
+    autoTrack: true,
+  },
 
   css: ['~/assets/css/main.css'],
 

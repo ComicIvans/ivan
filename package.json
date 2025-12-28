@@ -14,7 +14,8 @@
   "dependencies": {
     "@formkit/auto-animate": "^0.9.0",
     "nodemailer": "^7.0.12",
-    "nuxt": "^4.2.2"
+    "nuxt": "^4.2.2",
+    "nuxt-umami": "3.2.1"
   },
   "devDependencies": {
     "@iconify-json/circle-flags": "^1.2.10",
