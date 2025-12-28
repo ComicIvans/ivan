@@ -166,7 +166,7 @@ export default defineEventHandler(async (event) => {
   // Create nodemailer transporter with timeouts to prevent NGINX connection issues
   const transporter = nodemailer.createTransport({
     host: config.smtpHost,
-    port: Number(config.smtpPort) || 587,
+    port: Number(config.smtpPort),
     secure: config.smtpSecure === 'true',
     auth: {
       user: config.smtpUser,
