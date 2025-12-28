@@ -3,6 +3,20 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
 
+  runtimeConfig: {
+    // Private keys (only available on server) - SMTP configuration
+    smtpHost: process.env.SMTP_HOST,
+    smtpPort: process.env.SMTP_PORT,
+    smtpSecure: process.env.SMTP_SECURE,
+    smtpUser: process.env.SMTP_USER,
+    smtpPass: process.env.SMTP_PASS,
+    smtpToEmail: process.env.SMTP_TO_EMAIL,
+    // Public keys (available on client and server)
+    public: {
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
+    },
+  },
+
   vite: {
     server:
       process.env.NODE_ENV === 'development'
@@ -31,12 +45,16 @@ export default defineNuxtConfig({
   ],
 
   site: {
-    url: 'https://ivan.wupp.dev',
+    url: process.env.NUXT_PUBLIC_SITE_URL,
     name: 'Iván Salido Cobo',
   },
 
   seo: {
     redirectToCanonicalSiteUrl: true,
+  },
+
+  ogImage: {
+    enabled: true,
   },
 
   icon: {
@@ -56,11 +74,12 @@ export default defineNuxtConfig({
   i18n: {
     locales: [
       { code: 'es', language: 'es-ES', name: 'Español', file: 'es.json' },
-      { code: 'en', language: 'en-US', name: 'English', file: 'en.json' },
+      { code: 'en', language: 'en-GB', name: 'English', file: 'en.json' },
+      { code: 'de', language: 'de-DE', name: 'Deutsch', file: 'de.json' },
     ],
     defaultLocale: 'es',
     langDir: 'locales',
-    strategy: 'prefix_except_default',
+    customRoutes: 'config',
     detectBrowserLanguage: {
       useCookie: true,
       cookieKey: 'i18n_redirected',

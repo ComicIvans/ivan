@@ -1,214 +1,524 @@
 {
   "seo": {
-    "pageTitle": "About me",
-    "title": "Iván Salido Cobo - Professional Portfolio",
-    "description": "Professional portfolio of Iván Salido Cobo. Mathematician from the University of Granada and Master's in Cybersecurity. Experience in student representation, web development, and project management.",
-    "skillsDescription": "Knowledge, certifications, and projects by Iván Salido Cobo. Experience in cybersecurity, web development, and service management.",
-    "representationDescription": "Career in student representation and events organized by Iván Salido Cobo. Experience in associations and national congresses."
+    "pageTitle": "Home",
+    "title": "Iván Salido Cobo - Cybersecurity, Strategy and Project Management",
+    "description": "Mathematics graduate specialising in Cybersecurity, with experience in project management, strategy and IT governance.",
+    "pages": {
+      "legal": "Legal information, cookies and privacy policy of Iván Salido Cobo’s professional portfolio.",
+      "experience": "Key experience in strategic management, university governance and organisation of national-level events.",
+      "projects": "Technology projects and technical stack. Specialisation in Cybersecurity, automation and web development.",
+      "representation": "Background in student representation, university policy and management of collegiate bodies.",
+      "gallery": "Gallery of events, conferences and key moments from my professional and academic trajectory.",
+      "training": "Academic background, languages and skills. MBA, Cybersecurity and BSc in Mathematics.",
+      "contact": "Professional contact. Send me a message via the contact form."
+    }
   },
   "schema": {
-    "jobTitle": "Mathematician and Master's in Cybersecurity"
+    "jobTitle": "Mathematician | Cybersecurity, Strategy and Project Management"
   },
   "header": {
     "title": "Iván Salido Cobo",
-    "subtitle": "Mathematician and Master's in Cybersecurity",
-    "profileAlt": "Profile photo of Iván Salido Cobo",
+    "subtitle": "Cybersecurity, Strategy and Project Management",
+    "profileAlt": "Profile picture of Iván Salido Cobo",
     "jokeButton": "Show a random joke",
     "content": "Content"
   },
   "nav": {
-    "about": "About me",
-    "skills": "Certifications and skills",
-    "representation": "Representation and events",
+    "home": "Home",
+    "experience": "Experience",
+    "representation": "Representation",
+    "projects": "Projects",
+    "gallery": "Gallery",
+    "training": "Education",
     "skipLink": "Skip to main content",
-    "mainNav": "Main navigation"
+    "mainNav": "Navigation",
+    "contact": "Contact"
   },
   "joke": {
-    "title": "I'm also a joker",
-    "error": "Oops! Couldn't load any joke :(",
+    "title": "I also have a sense of humour",
+    "error": "Oops! A joke could not be loaded :(",
     "close": "Close"
   },
   "contact": {
-    "title": "Contact",
-    "phone": "+ 34 744 48 17 21",
-    "phoneLabel": "Call phone number +34 744 48 17 21",
-    "emailLabel": "Send email to isalidocobo{'@'}gmail.com",
-    "linkedinLabel": "Iván Salido Cobo's LinkedIn profile (opens in new tab)"
+    "linkedinLabel": "Iván Salido Cobo’s LinkedIn profile",
+    "instagramLabel": "Iván Salido Cobo’s Instagram profile"
   },
-  "about": {
-    "title": "About me",
-    "descriptionTitle": "Description",
-    "description": "My academic background has given me critical thinking skills and a great ability to find optimal solutions to complex problems. Added to this is my experience participating in projects and representative bodies, which has allowed me to develop a solid foundation in project management and organizational leadership. I consider myself a proactive person, highly adaptable, and always ready to face new challenges.",
-    "studiesTitle": "Education",
-    "studies1": "I hold a Bachelor's degree in Mathematics from the {university}. I began my studies in September 2019 and completed them in July 2024.",
-    "studies2": "I am currently finishing the Master's in Cybersecurity at the University of Granada.",
-    "university": "University of Granada",
-    "imageAlt": "Photo of Iván Salido Cobo"
+  "home": {
+    "hero": {
+      "title": "Hi, I’m Iván",
+      "subtitle": "MBA candidate and Cybersecurity specialist",
+      "pitch": "Mathematics graduate specialising in Cybersecurity. I am currently pursuing an MBA, with a practical focus on project execution and organisational management. I enjoy working on complex challenges, bringing analysis, judgement and structure to deliver tangible results in technology-driven and digital security environments."
+    },
+    "cta": {
+      "experience": "View my experience",
+      "contact": "Get in touch"
+    },
+    "highlights": {
+      "title": "Areas of expertise",
+      "items": [
+        {
+          "id": "governance",
+          "title": "Governance and decision-making",
+          "description": "Experience as a member of the Governing Council of the University of Granada, contributing to strategic decisions on academic and financial policies."
+        },
+        {
+          "id": "infrastructure",
+          "title": "Digital infrastructure and security",
+          "description": "Responsible for the technological infrastructure and security policies of CREUP, an organisation representing over one million students nationwide."
+        },
+        {
+          "id": "events",
+          "title": "Project and event management",
+          "description": "Coordination of national-level institutional events, with direct responsibility for logistics, budgeting and planning."
+        }
+      ]
+    }
   },
-  "skills": {
-    "title": "Academic Knowledge",
-    "cybersecurity": "Cybersecurity",
-    "cyber1Title": "Cybersecurity Management:",
-    "cyber1Desc": "Coordination of policies, processes, and tools to protect digital assets.",
-    "cyber2Title": "Legal Compliance:",
-    "cyber2Desc": "Application of regulations and standards in data protection and security.",
-    "cyber3Title": "Infrastructure Design and Hardening:",
-    "cyber3Desc": "Planning and strengthening systems and networks against threats.",
-    "languages": "Programming Languages",
-    "lang1Title": "JavaScript, HTML and CSS:",
-    "lang1Desc": "Although I have used JavaScript independently, I usually use all three together for most of my projects.",
-    "lang2Title": "Python:",
-    "lang2Desc": "I have written several scripts and my thesis consisted of developing a package.",
-    "lang3Title": "PHP:",
-    "lang3Desc": "I maintain and update several websites with WordPress and Laravel.",
-    "lang4Title": "C++, Java and Rust:",
-    "lang4Desc": "I have used them occasionally for various projects.",
-    "frameworks": "Frameworks and Tools",
-    "fw1Title": "Vue.js / Nuxt:",
-    "fw1Desc": "I use it for most of my projects, such as this page.",
-    "fw2Title": "Domains and Google Workspace:",
-    "fw2Desc": "I own a domain and have been managing it for several years. I also manage other domains and their Google Workspace, such as the {link} association."
+  "experience": {
+    "title": "Selected Experience",
+    "intro": "A career focused on project management, institutional governance and team coordination within complex organisational environments.",
+    "fullExperience": "If you would like to see my full background in student representation, you can find it in the Representation section.",
+    "viewRepresentation": "View full trajectory",
+    "roles": [
+      {
+        "id": "creup-digitalization",
+        "title": "Board Member for Digitalisation and Transparency",
+        "organization": "Coordinator of Student Representatives of Public Universities (CREUP)",
+        "period": "Jun 2024 - Present",
+        "description": "Management of VPS infrastructure, Google Workspace and the definition of security, privacy and data protection policies for the organisation."
+      },
+      {
+        "id": "enem-treasurer",
+        "title": "Treasurer and Secretary (Organising Committee)",
+        "organization": "26th National Meeting of Mathematics Students (ENEM)",
+        "period": "Feb 2024 - Jul 2025",
+        "description": "End-to-end management of budgets, sponsorship and logistics for a national conference with hundreds of participants and dozens of partner organisations."
+      },
+      {
+        "id": "ugr-council",
+        "title": "Member of the Governing Council",
+        "organization": "University of Granada",
+        "period": "Dec 2022 - Jan 2025",
+        "description": "Participation in the university’s highest collegiate body, contributing to academic regulation and the negotiation of budgets and other key policies."
+      },
+      {
+        "id": "dge-treasurer",
+        "title": "Treasurer",
+        "organization": "University of Granada Students’ Council",
+        "period": "Dec 2020 - Dec 2022",
+        "description": "Management and optimisation of a €35,000 public budget, with a strong focus on transparency and efficiency."
+      }
+    ]
   },
   "projects": {
-    "title": "Relevant Projects",
-    "server": "Personal Server",
-    "serverDesc": "Since 2020, I have been maintaining a computer at home as a personal server with Linux. It has several services available through the {domain} domain and Docker. All services are documented in {guide}. This has allowed me to gain extensive knowledge in {bold}.",
-    "serverBold": "equipment and online service management",
-    "serverGuide": "this guide",
-    "ceebi": "Website for III CEEBI",
-    "ceebiDesc": "In addition to helping with the development of the {bold}, I developed a website for consulting workshops and micro-talks assigned to each attendee, viewing and asking questions to speakers during conferences, and subsequently downloading attendance certificates for the event, micro-courses, and poster presentations. The website can be found at {link}.",
-    "ceebiBold": "III National Congress of Bioscience Students (CEEBI)",
-    "ceebiLink": "this link"
+    "title": "Projects and Technology",
+    "stack": {
+      "title": "Technology stack",
+      "primary": {
+        "title": "Core technologies",
+        "items": [
+          {
+            "id": "nuxt",
+            "name": "Nuxt",
+            "description": "Vue.js framework for modern web applications with SSR and static generation."
+          },
+          {
+            "id": "vue",
+            "name": "Vue.js",
+            "description": "Progressive JavaScript framework for building user interfaces."
+          },
+          {
+            "id": "linux",
+            "name": "Linux",
+            "description": "Administration of Linux-based systems and servers."
+          },
+          {
+            "id": "docker",
+            "name": "Docker",
+            "description": "Containerisation for application deployment and orchestration."
+          }
+        ]
+      },
+      "secondary": {
+        "title": "Secondary technologies",
+        "items": [
+          { "id": "powershell", "name": "PowerShell" },
+          { "id": "python", "name": "Python" },
+          { "id": "php", "name": "PHP" },
+          { "id": "sql", "name": "SQL" },
+          { "id": "nginx", "name": "Nginx" },
+          { "id": "dns", "name": "DNS" },
+          { "id": "typescript", "name": "TypeScript" },
+          { "id": "node", "name": "Node.js" }
+        ]
+      }
+    },
+    "list": {
+      "title": "Key projects",
+      "items": [
+        {
+          "id": "server",
+          "title": "Personal server",
+          "description": "Since 2020, management of a personal Linux server with Docker, hosting multiple services under my own domain.",
+          "link": "wupp.dev"
+        },
+        {
+          "id": "firmas",
+          "title": "Corporate Email Signature Generator",
+          "description": "Two tools (a Python CLI and a web application) to generate email signatures aligned with corporate identity guidelines.",
+          "link": "firmas.wupp.dev"
+        },
+        {
+          "id": "win-ens",
+          "title": "ENS Compliance Automation (Master’s Thesis)",
+          "description": "PowerShell scripts to automatically configure and audit Windows 10/11 systems according to the Spanish National Security Scheme (ENS).",
+          "link": "github.com/ComicIvans/win-ens"
+        },
+        {
+          "id": "ceebi",
+          "title": "Conference Management Platform (CEEBI)",
+          "description": "Web platform for schedule consultation, real-time Q&A and automated generation of attendance certificates.",
+          "link": "ceebi.wupp.dev"
+        }
+      ]
+    }
   },
-  "certificates": {
-    "title": "Certifications",
-    "license": "Driver's License:",
-    "licenseValue": "Class B",
-    "english": "English:",
-    "englishValue": "B2 level, preparing for C1.",
-    "dataAnalyst": "Data Analyst",
-    "dataAnalystDesc": "by Google Cloud Skills Boost. Profile at {link}.",
-    "dataAnalystLink": "this link"
+  "representation": {
+    "title": "Student Representation",
+    "intro": "Comprehensive experience in university politics, student advocacy and institutional governance.",
+    "timelineLabel": "Timeline of student representation",
+    "timeline": [
+      {
+        "id": "start-2020",
+        "date": "December 2020",
+        "title": "Starting point",
+        "description": "Joined the University Senate, the Students’ Council (DGE) and the Faculty of Science Student Delegation (DEFC), actively participating in representative bodies.",
+        "highlights": ["DGE Treasurer", "DEFC Secretary"]
+      },
+      {
+        "id": "end-first-term",
+        "date": "December 2022",
+        "title": "End of first term",
+        "description": "Completion of the first term of office, continuing participation in the Senate and joining the Governing Council.",
+        "highlights": [
+          "Governing Council",
+          "Academic Committee",
+          "Economic Committee",
+          "Advisor to the DEFC"
+        ]
+      },
+      {
+        "id": "external-relations",
+        "date": "March 2023",
+        "title": "Director of External Relations",
+        "description": "Creation and assumption of the role to strengthen institutional presence and coordination with external entities.",
+        "highlights": ["Director of External Relations (DGE)"]
+      },
+      {
+        "id": "academic-vicecoord",
+        "date": "June 2023",
+        "title": "Academic Vice-Coordinator",
+        "description": "Direct involvement in improving teaching quality and strengthening student assessment guarantees.",
+        "highlights": ["Academic Vice-Coordinator (DGE)"]
+      },
+      {
+        "id": "creup-digitalization",
+        "date": "June 2024",
+        "title": "Board Member for Digitalisation and Transparency",
+        "description": "Responsible for CREUP’s technological infrastructure and its security, privacy and data protection policies.",
+        "highlights": ["Board Member for Digitalisation and Transparency (CREUP)"]
+      },
+      {
+        "id": "dge-advisor",
+        "date": "March 2025",
+        "title": "Director of Transparency and Advisor",
+        "description": "Elected Director of Transparency and appointed Advisor to the Students’ Council, undertaking strategic support, institutional advisory duties and oversight of transparency and internal management practices.",
+        "highlights": ["Director of Transparency (DGE)", "Advisor to the DGE"]
+      },
+      {
+        "id": "upv-delegate",
+        "date": "September 2025",
+        "title": "Class Representative at UPV",
+        "description": "Elected class representative at the Universitat Politècnica de València at the start of my master’s studies, continuing my work in student representation within a new academic environment.",
+        "highlights": ["Class representative"]
+      }
+    ]
   },
-  "conferences": {
-    "title": "Conference Attendance",
-    "intro": "I have attended, and have certificates of completion for, multiple editions of the {link}, a congress organized by and for students, where I have gained {bold}. These editions are:",
-    "enemLink": "National Meeting of Mathematics Students (ENEM)",
-    "enemBold": "additional training in mathematics, statistics, and data science",
-    "edition1": "University of Valladolid (2020)",
-    "edition2": "University of Murcia (2021)",
-    "edition3": "University of Valencia (2022)",
-    "edition4": "University of Extremadura (2023)",
-    "edition5": "Carlos III, Complutense, Polytechnic, and Rey Juan Carlos Universities of Madrid (2024)",
-    "organizer": "Additionally, I am an {bold} of the one to be held this year in Granada.",
-    "organizerBold": "organizer",
-    "congressDetails": "These congresses take place over a week and consist of {bold}. Additionally, contact is established with various companies through a {bold2}.",
-    "congressBold": "conferences, workshops, and pecha kuchas",
-    "congressBold2": "Company Forum",
-    "creup": "On the other hand, I attended the {bold} organized by CREUP in Madrid in 2025. This event brings together Rectors and Vice-Rectors with students from multiple Spanish universities to present current issues and seek solutions together.",
-    "creupBold": "VI CREUP-CRUE Congress and XIV Representatives Meeting"
+  "gallery": {
+    "title": "Gallery",
+    "intro": "Highlights from events, conferences and student representation activities.",
+    "photoSoon": "Photo coming soon",
+    "comingSoon": "Photographs from these events will be added shortly.",
+    "events": [
+      {
+        "id": "enem-2025",
+        "title": "26th ENEM Granada",
+        "date": "22–27 July 2025",
+        "description": "National Meeting of Mathematics Students, where I served as Treasurer and Secretary of the Organising Committee. A special anniversary edition returning to its home city."
+      },
+      {
+        "id": "creup-riano",
+        "title": "CREUP Extended Executive Meeting in Riaño",
+        "date": "1–4 September 2025",
+        "description": "In-person strategic meeting to coordinate work across areas and define new lines of action, including the restructuring of the new website."
+      },
+      {
+        "id": "ceeina-2025",
+        "title": "4th CEEINA Conference",
+        "date": "16–21 September 2025",
+        "description": "Training event of the EINA Students’ Council in Munébrega (Zaragoza), where I delivered two sessions on ICT tools for representation and complaint management."
+      },
+      {
+        "id": "creup-ago-78",
+        "title": "78th CREUP General Assembly",
+        "date": "4–8 November 2025",
+        "description": "Ordinary General Assembly of CREUP held at the University of Barcelona, attended as Board Member for Digitalisation to report on activities and provide technical support."
+      }
+    ]
   },
-  "timeline": {
-    "title": "Representation Career",
-    "ariaLabel": "Timeline of student representation career",
-    "item1Date": "December 2020",
-    "item1Title": "Start as member",
-    "item1Desc": "I began my career as a full member of the University Senate, the General Student Delegation (DGE), and consequently, the Student Delegation of the Faculty of Sciences (DEFC). At this time, I also became {bold1} and {bold2}.",
-    "item1Bold1": "Treasurer of the DGE",
-    "item1Bold2": "Secretary of the DEFC",
-    "item2Date": "December 2022",
-    "item2Title": "End of my first term",
-    "item2Desc": "The term for both the DGE and DEFC ended, so I left the positions of Secretary and Treasurer after two years of intense work and dedication. However, I continued as a member in the next term, the current one, since the University Senate term is four years. This allowed me to join the {bold} that same month, where I was a member and participated in its committees until July 2024.",
-    "item2Bold": "Governing Council",
-    "item3Date": "March 2023",
-    "item3Title": "External Relations Director",
-    "item3Desc": "To improve the management of the DGE's external relations, the position of External Relations Director was created, which I assumed due to my experience in managing trips and contact with other entities. In this role, I have been able to increase the DGE's participation in external events and meetings and strengthen its presence on the national stage. I finished my term in December 2024.",
-    "item4Date": "June 2023",
-    "item4Title": "Academic Vice-Coordinator",
-    "item4Desc": "When a new team had to be presented for the DGE's Permanent Commission, I decided to be part of it as Academic Vice-Coordinator, a position that has allowed me to contribute directly to improving teaching quality and acquiring new guarantees and rights for student assessment. I finished my term in December 2024.",
-    "item5Date": "June 2024",
-    "item5Title": "Digitalization and Transparency Officer",
-    "item5Desc": "I am currently part of the Extended Executive Committee of the Coordinator of Student Representatives of Public Universities (CREUP) as Digitalization and Transparency Officer. In this role, I am responsible for maintaining all the association's IT infrastructure, as well as its security, privacy, and data protection policies."
-  },
-  "events": {
-    "title": "Organized Events",
-    "ariaLabel": "Timeline of organized events",
-    "event1Date": "March 2023",
-    "event1Title": "ANEM General Assembly",
-    "event1Desc": "Together with three other people, I organized an ordinary general assembly of the National Association of Mathematics Students (ANEM), an event attended by around 60 people. My tasks mainly consisted of managing payments from different organizers, organizing coffee breaks, and requesting space reservations.",
-    "event2Date": "November 2023",
-    "event2Title": "San Alberto 2023",
-    "event2Desc": "Although this is an event I have been participating in since 2019, in this edition of my Faculty's patron saint I was more involved than ever in its organization. Together with another person, I was in charge of organizing the star activity, bingo with Andrés Quintana Martín, which was attended by around 300 people. The organization of the activity consisted of creating bingo cards using HTML, CSS, and JavaScript {link1} and creating a web platform to display the results {link2}.",
-    "event2Link": "(view code)",
-    "event3Date": "April 2024",
-    "event3Title": "XIII ACUA General Assembly",
-    "event3Desc": "As External Relations Director, I helped organize the XIII ordinary general assembly of the Andalusian University Councils Assembly, attended by around 20 people. I was mainly in charge of organizing coffee breaks, managing meals, and subsequently processing invoices.",
-    "event4Date": "November 2024",
-    "event4Title": "LXXVII CREUP General Assembly",
-    "event4Desc": "I was the main organizer of the 77th CREUP Ordinary General Assembly, coordinating space reservations and contacts with the different bodies involved. Additionally, I was in charge of the event's financial management and fundraising.",
-    "event5Date": "July 2025",
-    "event5Title": "XXVI ENEM",
-    "event5Desc": "I am Treasurer and Secretary of the Organizing Committee for the XXVI National Meeting of Mathematics Students (ENEM), which brings together hundreds of students of Mathematics, Statistics, and Data Science from all over Spain every year. These meetings have both an academic and professional focus, allowing direct contact with companies in the sector."
+  "training": {
+    "title": "Education and Skills",
+    "academic": {
+      "title": "Academic background",
+      "items": [
+        {
+          "id": "mugeps",
+          "title": "Master’s Degree in Business, Product and Service Management (MUGEPS)",
+          "organization": "Universitat Politècnica de València",
+          "period": "Ongoing",
+          "description": "Focus on strategic management and team leadership. Teaching mainly in English, with a forthcoming Erasmus+ stay in Germany."
+        },
+        {
+          "id": "cybersecurity-master",
+          "title": "Master’s Degree in Cybersecurity",
+          "organization": "University of Granada",
+          "period": "2024",
+          "description": "Specialisation in ethical hacking, digital forensics and security management. Thesis focused on ENS compliance."
+        },
+        {
+          "id": "math-degree",
+          "title": "Bachelor’s Degree in Mathematics",
+          "organization": "University of Granada",
+          "period": "2019 - 2024",
+          "description": "Development of advanced analytical thinking and complex problem-solving skills."
+        },
+        {
+          "id": "data-analyst",
+          "title": "Data Analyst Course",
+          "organization": "Google Cloud Skills Boost",
+          "period": "03/2023 - 05/2023",
+          "description": "Google Cloud Big Data and Machine Learning Fundamentals, data preparation with BigQuery, dataset creation and insight visualisation, and advanced analytics with BigQuery."
+        },
+        {
+          "id": "math-conferences",
+          "title": "National Mathematics Meetings",
+          "organization": "ENEM / ANEM",
+          "period": "Since 2019 (annual)",
+          "description": "Annual attendance at training events covering mathematics, statistics, data science and artificial intelligence."
+        }
+      ]
+    },
+    "languages": {
+      "title": "Languages",
+      "proficiency": "Proficiency level",
+      "items": [
+        {
+          "id": "english",
+          "name": "English",
+          "level": "C1 level (in progress)",
+          "description": "Full professional proficiency (master’s taught in English). Immersion stay in Galway (2018)."
+        },
+        {
+          "id": "german",
+          "name": "German",
+          "level": "Basic level (A1)",
+          "description": "Currently in training for international mobility."
+        },
+        {
+          "id": "spanish",
+          "name": "Spanish",
+          "level": "Native",
+          "description": "Mother tongue."
+        }
+      ]
+    },
+    "other": {
+      "title": "Other certifications",
+      "drivingLicense": {
+        "title": "Driving licence (Category B)",
+        "description": "Licence to drive private motor vehicles."
+      }
+    },
+    "competencies": {
+      "title": "Core competencies",
+      "items": [
+        { "id": "project-management", "name": "Project Management and Execution" },
+        { "id": "team-leadership", "name": "Team Leadership and Coordination" },
+        { "id": "governance", "name": "Institutional Governance and Negotiation" },
+        { "id": "communication", "name": "Professional Communication" },
+        { "id": "systems", "name": "Systems Administration" },
+        { "id": "cybersecurity-management", "name": "Information Security Management" },
+        { "id": "compliance", "name": "Regulatory Compliance and Cybersecurity" },
+        { "id": "automation", "name": "Process Automation" },
+        { "id": "data-analysis", "name": "Analysis and Decision-Making" },
+        { "id": "problem-solving", "name": "Complex Problem Solving" },
+        { "id": "strategic-thinking", "name": "Strategic Thinking and Planning" }
+      ]
+    }
   },
   "footer": {
-    "copyright": "Developed by Iván Salido Cobo under MIT license. Check the code on {link}.",
+    "copyright": "Developed by Iván Salido Cobo under the MIT licence. View the source code at {link}.",
     "github": "GitHub",
-    "linkedinLabel": "LinkedIn profile (opens in new tab)",
-    "instagramLabel": "Instagram profile (opens in new tab)",
-    "githubLabel": "GitHub profile (opens in new tab)",
-    "socialNav": "Social networks"
+    "contactLabel": "Go to the contact page",
+    "linkedinLabel": "LinkedIn profile (opens in a new tab)",
+    "instagramLabel": "Instagram profile (opens in a new tab)",
+    "githubLabel": "GitHub profile (opens in a new tab)",
+    "socialNav": "Social media"
   },
   "theme": {
-    "toggle": "Toggle theme",
+    "toggle": "Change theme",
     "light": "Light theme",
     "dark": "Dark theme"
   },
   "language": {
     "toggle": "Change language",
-    "es": "Español",
+    "es": "Spanish",
     "en": "English"
   },
   "legal": {
     "title": "Legal notice and privacy policy",
-    "seo": {
-      "pageTitle": "Legal notice",
-      "title": "Legal notice - Iván Salido Cobo",
-      "description": "Legal information, cookie policy and privacy for Iván Salido Cobo's portfolio."
-    },
     "siteInfo": {
-      "title": "Site information",
-      "description": "This website is a personal portfolio with no commercial purpose.",
+      "title": "Website information",
+      "description": "This website is a personal, non-commercial portfolio.",
       "owner": "Owner",
       "email": "Contact",
       "purpose": "Purpose",
-      "purposeText": "Display personal professional and academic information"
+      "purposeText": "To present personal professional and academic information"
     },
     "cookies": {
-      "title": "Cookie policy",
-      "description": "This site only uses strictly necessary technical cookies for its operation. No tracking, advertising or analytics cookies are used.",
+      "title": "Cookies policy",
+      "description": "This website uses only strictly necessary technical cookies for its operation. No tracking, advertising or analytics cookies are used.",
       "table": {
         "name": "Cookie",
         "purpose": "Purpose",
         "duration": "Duration"
       },
-      "colorMode": "Stores your theme preference (light/dark)",
-      "i18n": "Stores your language preference",
-      "year": "1 year",
-      "note": "These cookies are essential for the site's operation and are exempt from the consent requirement under European regulations (Article 5.3 of the ePrivacy Directive)."
+      "items": [
+        {
+          "id": "colorMode",
+          "purpose": "Stores your theme preference (light/dark)",
+          "duration": "1 year"
+        },
+        {
+          "id": "i18n",
+          "purpose": "Stores your language preference",
+          "duration": "1 year"
+        }
+      ],
+      "note": "These cookies are essential for the operation of the site and are exempt from the consent requirement under European regulations (Article 6(1)(f) GDPR)."
+    },
+    "contactForm": {
+      "title": "Contact form",
+      "description": "When you use the contact form, the following personal data are collected:",
+      "dataCollected": {
+        "title": "Data collected",
+        "items": [
+          "Name: to identify you and personalise the response",
+          "Email address: to reply to your enquiry",
+          "Subject and message: to handle your request"
+        ]
+      },
+      "purpose": {
+        "title": "Purpose of processing",
+        "description": "The data provided will be used solely to respond to your enquiry or proposal. They will not be used for any other purpose."
+      },
+      "legitimation": {
+        "title": "Legal basis",
+        "description": "Processing is based on your consent, given when submitting the contact form (Art. 6(1)(a) GDPR)."
+      },
+      "retention": {
+        "title": "Data retention",
+        "description": "Form data are sent directly by email and are not stored in the website’s databases. Emails will be kept only as long as necessary to address the enquiry."
+      },
+      "recipients": {
+        "title": "Recipients",
+        "description": "Data will not be shared with third parties, unless required by law."
+      }
     },
     "privacy": {
-      "title": "Privacy",
-      "description": "This site respects your privacy:",
-      "noTracking": "No tracking of any kind is performed",
-      "noAnalytics": "No analytics tools are used (Google Analytics, etc.)",
-      "noThirdParty": "No data is shared with third parties",
-      "noPersonalData": "No personal data is collected"
+      "title": "General privacy",
+      "description": "This website respects your privacy:",
+      "items": [
+        "No tracking or profiling is carried out",
+        "No analytics tools are used (Google Analytics, etc.)",
+        "No data are shared with third parties beyond what is stated for the contact form",
+        "Only the data you voluntarily provide via the contact form are collected"
+      ]
     },
     "rights": {
-      "title": "Your rights",
-      "description": "You can delete this site's cookies at any time from your browser settings. If you have any questions, you can contact me by email."
+      "title": "Your rights (GDPR)",
+      "description": "Under the General Data Protection Regulation, you have the right to:",
+      "items": [
+        "Access: request information about your personal data",
+        "Rectification: correct inaccurate or incomplete data",
+        "Erasure: request the deletion of your data",
+        "Objection: object to the processing of your data",
+        "Portability: receive your data in a structured format",
+        "Restriction: request a limitation of processing"
+      ],
+      "contact": "To exercise these rights, you may contact me by email. You also have the right to lodge a complaint with the Spanish Data Protection Agency (AEPD).",
+      "cookiesNote": "You can delete this site’s cookies at any time via your browser settings."
     },
     "lastUpdate": "Last updated",
-    "updateDate": "November 2025"
+    "updateDate": "December 2025"
+  },
+  "error": {
+    "backHome": "Back to home",
+    "tryAgain": "Try again",
+    "technicalDetails": "Technical details",
+    "titles": {
+      "400": "Bad request",
+      "401": "Unauthorised",
+      "403": "Access denied",
+      "404": "Page not found",
+      "500": "Server error",
+      "502": "Bad gateway",
+      "503": "Service unavailable",
+      "default": "An error has occurred"
+    },
+    "descriptions": {
+      "400": "The request could not be processed due to invalid data.",
+      "401": "You need to sign in to access this content.",
+      "403": "You do not have permission to access this resource.",
+      "404": "Sorry, the page you are looking for does not exist or has been moved.",
+      "500": "Something went wrong on the server. Please try again later.",
+      "502": "The server received an invalid response. Please try again later.",
+      "503": "The service is temporarily unavailable. Please come back later.",
+      "default": "An unexpected error occurred. Please try again."
+    }
+  },
+  "contactPage": {
+    "seo": {
+      "title": "Contact",
+      "description": "Get in touch with Iván Salido Cobo. Send a message using the contact form."
+    },
+    "title": "Contact",
+    "subtitle": "Do you have a question or a proposal? Send me a message and I will get back to you as soon as possible.",
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "email": "Email address",
+      "emailPlaceholder": "your{'@'}email.com",
+      "subject": "Subject",
+      "subjectPlaceholder": "What would you like to talk about?",
+      "message": "Message",
+      "messagePlaceholder": "Write your message here...",
+      "submit": "Send message",
+      "sending": "Sending...",
+      "success": "Message sent successfully! I will reply as soon as possible.",
+      "errorGeneric": "An error occurred while sending the message. Please try again.",
+      "privacyNote": "Your information will be treated confidentially and used only to respond to your enquiry."
+    },
+    "alternative": "You can also contact me via my social media profiles:"
   }
 }

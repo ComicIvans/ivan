@@ -41,6 +41,13 @@ const localePath = useLocalePath()
 
       <!-- Redes sociales -->
       <nav class="flex gap-4 md:justify-end" :aria-label="t('footer.socialNav')">
+        <NuxtLink
+          :to="localePath('/contacto')"
+          class="social-icon link-hover link"
+          :aria-label="t('footer.contactLabel')"
+        >
+          <Icon name="tabler:mail" class="h-6 w-6" />
+        </NuxtLink>
         <a
           class="social-icon link-hover link"
           href="https://www.linkedin.com/in/ivansalidocobo/"

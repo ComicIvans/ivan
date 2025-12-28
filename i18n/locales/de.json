@@ -1,0 +1,524 @@
+{
+  "seo": {
+    "pageTitle": "Startseite",
+    "title": "Iván Salido Cobo - Cybersicherheit, Strategie und Projektmanagement",
+    "description": "Absolvent der Mathematik mit Spezialisierung auf Cybersicherheit und Erfahrung in Projektmanagement, Strategie und IT-Governance.",
+    "pages": {
+      "legal": "Rechtliche Hinweise sowie Cookie- und Datenschutzerklärung des professionellen Portfolios von Iván Salido Cobo.",
+      "experience": "Zentrale Erfahrungen in strategischem Management, universitärer Governance und der Organisation von Veranstaltungen auf nationaler Ebene.",
+      "projects": "Technologieprojekte und technischer Stack. Spezialisierung auf Cybersicherheit, Automatisierung und Webentwicklung.",
+      "representation": "Erfahrung in studentischer Vertretung, Hochschulpolitik und der Arbeit in Kollegialgremien.",
+      "gallery": "Galerie mit Veranstaltungen, Konferenzen und prägenden Momenten meiner beruflichen und akademischen Laufbahn.",
+      "training": "Akademischer Werdegang, Sprachen und Kompetenzen. MBA, Cybersicherheit und Bachelor in Mathematik.",
+      "contact": "Professioneller Kontakt. Sende mir eine Nachricht über das Kontaktformular."
+    }
+  },
+  "schema": {
+    "jobTitle": "Mathematiker | Cybersicherheit, Strategie und Projektmanagement"
+  },
+  "header": {
+    "title": "Iván Salido Cobo",
+    "subtitle": "Cybersicherheit, Strategie und Projektmanagement",
+    "profileAlt": "Profilfoto von Iván Salido Cobo",
+    "jokeButton": "Zufälligen Witz anzeigen",
+    "content": "Inhalt"
+  },
+  "nav": {
+    "home": "Startseite",
+    "experience": "Erfahrung",
+    "representation": "Vertretung",
+    "projects": "Projekte",
+    "gallery": "Galerie",
+    "training": "Ausbildung",
+    "skipLink": "Zum Hauptinhalt springen",
+    "mainNav": "Navigation",
+    "contact": "Kontakt"
+  },
+  "joke": {
+    "title": "Ich habe auch Humor",
+    "error": "Ups! Es konnte kein Witz geladen werden :(",
+    "close": "Schließen"
+  },
+  "contact": {
+    "linkedinLabel": "LinkedIn-Profil von Iván Salido Cobo",
+    "instagramLabel": "Instagram-Profil von Iván Salido Cobo"
+  },
+  "home": {
+    "hero": {
+      "title": "Hi, ich bin Iván",
+      "subtitle": "MBA-Teilnehmer und Spezialist für Cybersicherheit",
+      "pitch": "Mathematik-Absolvent mit Spezialisierung auf Cybersicherheit. Derzeit absolviere ich einen MBA mit einem praxisnahen Fokus auf Projektausführung und Organisationsmanagement. Ich arbeite gern an komplexen Herausforderungen und bringe Analyse, Urteilsvermögen und Struktur mit, um in technologiegetriebenen und digitalen Sicherheitsumfeldern greifbare Ergebnisse zu erzielen."
+    },
+    "cta": {
+      "experience": "Meine Erfahrung ansehen",
+      "contact": "Kontakt aufnehmen"
+    },
+    "highlights": {
+      "title": "Schwerpunkte",
+      "items": [
+        {
+          "id": "governance",
+          "title": "Governance und Entscheidungsfindung",
+          "description": "Erfahrung als Mitglied des Universitätsrats (Governing Council) der Universität Granada, mit Beitrag zu strategischen Entscheidungen zu akademischen und finanziellen Richtlinien."
+        },
+        {
+          "id": "infrastructure",
+          "title": "Digitale Infrastruktur und Sicherheit",
+          "description": "Verantwortlich für die technologische Infrastruktur und Sicherheitsrichtlinien von CREUP, einer Organisation, die landesweit über eine Million Studierende vertritt."
+        },
+        {
+          "id": "events",
+          "title": "Projekt- und Eventmanagement",
+          "description": "Koordination institutioneller Veranstaltungen auf nationaler Ebene, mit direkter Verantwortung für Logistik, Budgetierung und Planung."
+        }
+      ]
+    }
+  },
+  "experience": {
+    "title": "Ausgewählte Erfahrung",
+    "intro": "Ein Werdegang mit Schwerpunkt auf Projektmanagement, institutioneller Governance und Teamkoordination in komplexen organisatorischen Umfeldern.",
+    "fullExperience": "Wenn du meinen vollständigen Hintergrund in der studentischen Vertretung sehen möchtest, findest du ihn im Abschnitt Vertretung.",
+    "viewRepresentation": "Vollständige Laufbahn ansehen",
+    "roles": [
+      {
+        "id": "creup-digitalization",
+        "title": "Vorstandsmitglied für Digitalisierung und Transparenz",
+        "organization": "Koordinierung der Studierendenvertretungen öffentlicher Universitäten (CREUP)",
+        "period": "Jun 2024 - Heute",
+        "description": "Verwaltung der VPS-Infrastruktur, Google Workspace sowie die Definition von Sicherheits-, Datenschutz- und Daten­schutzrichtlinien für die Organisation."
+      },
+      {
+        "id": "enem-treasurer",
+        "title": "Kassenwart und Sekretär (Organisationskomitee)",
+        "organization": "26. Nationales Treffen der Mathematikstudierenden (ENEM)",
+        "period": "Feb 2024 - Jul 2025",
+        "description": "Ganzheitliche Verantwortung für Budgets, Sponsoring und Logistik einer nationalen Konferenz mit Hunderten Teilnehmenden und Dutzenden Partnerorganisationen."
+      },
+      {
+        "id": "ugr-council",
+        "title": "Mitglied des Universitätsrats",
+        "organization": "Universität Granada",
+        "period": "Dez 2022 - Jan 2025",
+        "description": "Mitwirkung im höchsten Kollegialorgan der Universität, mit Beiträgen zur akademischen Regulierung sowie zur Verhandlung von Budgets und weiteren zentralen Regelwerken."
+      },
+      {
+        "id": "dge-treasurer",
+        "title": "Kassenwart",
+        "organization": "Studierendenrat der Universität Granada",
+        "period": "Dez 2020 - Dez 2022",
+        "description": "Verwaltung und Optimierung eines öffentlichen Budgets von 35.000 €, mit starkem Fokus auf Transparenz und Effizienz."
+      }
+    ]
+  },
+  "projects": {
+    "title": "Projekte und Technologie",
+    "stack": {
+      "title": "Technologie-Stack",
+      "primary": {
+        "title": "Kerntechnologien",
+        "items": [
+          {
+            "id": "nuxt",
+            "name": "Nuxt",
+            "description": "Vue.js-Framework für moderne Webanwendungen mit SSR und statischer Generierung."
+          },
+          {
+            "id": "vue",
+            "name": "Vue.js",
+            "description": "Progressives JavaScript-Framework zum Aufbau von Benutzeroberflächen."
+          },
+          {
+            "id": "linux",
+            "name": "Linux",
+            "description": "Administration von Linux-basierten Systemen und Servern."
+          },
+          {
+            "id": "docker",
+            "name": "Docker",
+            "description": "Containerisierung für Deployment und Orchestrierung von Anwendungen."
+          }
+        ]
+      },
+      "secondary": {
+        "title": "Sekundäre Technologien",
+        "items": [
+          { "id": "powershell", "name": "PowerShell" },
+          { "id": "python", "name": "Python" },
+          { "id": "php", "name": "PHP" },
+          { "id": "sql", "name": "SQL" },
+          { "id": "nginx", "name": "Nginx" },
+          { "id": "dns", "name": "DNS" },
+          { "id": "typescript", "name": "TypeScript" },
+          { "id": "node", "name": "Node.js" }
+        ]
+      }
+    },
+    "list": {
+      "title": "Wichtige Projekte",
+      "items": [
+        {
+          "id": "server",
+          "title": "Privater Server",
+          "description": "Seit 2020 Verwaltung eines privaten Linux-Servers mit Docker, der mehrere Dienste unter meiner eigenen Domain hostet.",
+          "link": "wupp.dev"
+        },
+        {
+          "id": "firmas",
+          "title": "Generator für корпоративe E-Mail-Signaturen",
+          "description": "Zwei Tools (eine Python-CLI und eine Webanwendung), um E-Mail-Signaturen gemäß Corporate-Identity-Richtlinien zu erstellen.",
+          "link": "firmas.wupp.dev"
+        },
+        {
+          "id": "win-ens",
+          "title": "ENS-Compliance-Automatisierung (Masterarbeit)",
+          "description": "PowerShell-Skripte zur automatischen Konfiguration und Auditierung von Windows-10/11-Systemen gemäß dem spanischen Nationalen Sicherheits­schema (ENS).",
+          "link": "github.com/ComicIvans/win-ens"
+        },
+        {
+          "id": "ceebi",
+          "title": "Plattform für Konferenzmanagement (CEEBI)",
+          "description": "Webplattform zur Einsicht in Zeitpläne, für Live-Q&A und zur automatisierten Erstellung von Teilnahmezertifikaten.",
+          "link": "ceebi.wupp.dev"
+        }
+      ]
+    }
+  },
+  "representation": {
+    "title": "Studentische Vertretung",
+    "intro": "Umfassende Erfahrung in Hochschulpolitik, studentischer Interessenvertretung und institutioneller Governance.",
+    "timelineLabel": "Zeitstrahl der studentischen Vertretung",
+    "timeline": [
+      {
+        "id": "start-2020",
+        "date": "Dezember 2020",
+        "title": "Startpunkt",
+        "description": "Beitritt zum Universitäts­senat, zum Studierendenrat (DGE) und zur Studierendenvertretung der Fakultät für Naturwissenschaften (DEFC) und aktive Mitarbeit in repräsentativen Gremien.",
+        "highlights": ["Kassenwart (DGE)", "Sekretär (DEFC)"]
+      },
+      {
+        "id": "end-first-term",
+        "date": "Dezember 2022",
+        "title": "Ende der ersten Amtszeit",
+        "description": "Abschluss der ersten Amtszeit, weitere Mitarbeit im Senat und Eintritt in den Universitätsrat.",
+        "highlights": [
+          "Universitätsrat",
+          "Akademischer Ausschuss",
+          "Wirtschaftsausschuss",
+          "Berater der DEFC"
+        ]
+      },
+      {
+        "id": "external-relations",
+        "date": "März 2023",
+        "title": "Direktor für externe Beziehungen",
+        "description": "Schaffung und Übernahme der Rolle zur Stärkung der institutionellen Präsenz und zur Koordination mit externen Organisationen.",
+        "highlights": ["Direktor für externe Beziehungen (DGE)"]
+      },
+      {
+        "id": "academic-vicecoord",
+        "date": "Juni 2023",
+        "title": "Akademischer Vizekoordinator",
+        "description": "Direkte Mitarbeit an der Verbesserung der Lehrqualität und an der Stärkung der Prüfungs- und Bewertungsrechte der Studierenden.",
+        "highlights": ["Akademischer Vizekoordinator (DGE)"]
+      },
+      {
+        "id": "creup-digitalization",
+        "date": "Juni 2024",
+        "title": "Vorstandsmitglied für Digitalisierung und Transparenz",
+        "description": "Verantwortlich für die technologische Infrastruktur von CREUP sowie für Sicherheits-, Datenschutz- und Daten­schutzrichtlinien.",
+        "highlights": ["Vorstandsmitglied für Digitalisierung und Transparenz (CREUP)"]
+      },
+      {
+        "id": "dge-advisor",
+        "date": "März 2025",
+        "title": "Direktor für Transparenz und Berater",
+        "description": "Zum Direktor für Transparenz gewählt und als Berater des Studierendenrats ernannt, mit Aufgaben in strategischer Unterstützung, institutioneller Beratung sowie der Aufsicht über Transparenz- und interne Managementpraktiken.",
+        "highlights": ["Direktor für Transparenz (DGE)", "Berater des DGE"]
+      },
+      {
+        "id": "upv-delegate",
+        "date": "September 2025",
+        "title": "Klassensprecher an der UPV",
+        "description": "Zu Beginn meines Masterstudiums an der Universitat Politècnica de València zum Klassensprecher gewählt und damit die studentische Vertretungsarbeit in einem neuen akademischen Umfeld fortgesetzt.",
+        "highlights": ["Klassensprecher"]
+      }
+    ]
+  },
+  "gallery": {
+    "title": "Galerie",
+    "intro": "Highlights aus Veranstaltungen, Konferenzen und Aktivitäten der studentischen Vertretung.",
+    "photoSoon": "Foto folgt in Kürze",
+    "comingSoon": "Fotos zu diesen Veranstaltungen werden in Kürze hinzugefügt.",
+    "events": [
+      {
+        "id": "enem-2025",
+        "title": "26. ENEM Granada",
+        "date": "22.–27. Juli 2025",
+        "description": "Nationales Treffen der Mathematikstudierenden, bei dem ich als Kassenwart und Sekretär im Organisationskomitee tätig war. Eine besondere Jubiläumsausgabe, die in ihre Heimatstadt zurückkehrte."
+      },
+      {
+        "id": "creup-riano",
+        "title": "Erweitertes CREUP-Exekutivtreffen in Riaño",
+        "date": "1.–4. September 2025",
+        "description": "Präsenztreffen zur strategischen Abstimmung zwischen Bereichen und zur Definition neuer Handlungsfelder, einschließlich der Neustrukturierung der neuen Website."
+      },
+      {
+        "id": "ceeina-2025",
+        "title": "4. CEEINA-Konferenz",
+        "date": "16.–21. September 2025",
+        "description": "Fortbildungsveranstaltung des EINA-Studierendenrats in Munébrega (Zaragoza), bei der ich zwei Sessions zu ICT-Tools für Vertretungsarbeit und Beschwerdemanagement gehalten habe."
+      },
+      {
+        "id": "creup-ago-78",
+        "title": "78. CREUP-Generalversammlung",
+        "date": "4.–8. November 2025",
+        "description": "Ordentliche Generalversammlung von CREUP an der Universität Barcelona, an der ich als Vorstandsmitglied für Digitalisierung teilnahm, um Bericht zu erstatten und technische Unterstützung zu leisten."
+      }
+    ]
+  },
+  "training": {
+    "title": "Ausbildung und Kompetenzen",
+    "academic": {
+      "title": "Akademischer Werdegang",
+      "items": [
+        {
+          "id": "mugeps",
+          "title": "Masterstudiengang in Unternehmens-, Produkt- und Dienstleistungsmanagement (MUGEPS)",
+          "organization": "Universitat Politècnica de València",
+          "period": "Laufend",
+          "description": "Fokus auf strategisches Management und Teamführung. Unterricht überwiegend auf Englisch, mit einem bevorstehenden Erasmus+-Aufenthalt in Deutschland."
+        },
+        {
+          "id": "cybersecurity-master",
+          "title": "Masterstudium in Cybersicherheit",
+          "organization": "Universität Granada",
+          "period": "2024",
+          "description": "Spezialisierung auf Ethical Hacking, digitale Forensik und Sicherheitsmanagement. Abschlussarbeit mit Fokus auf ENS-Compliance."
+        },
+        {
+          "id": "math-degree",
+          "title": "Bachelorabschluss in Mathematik",
+          "organization": "Universität Granada",
+          "period": "2019 - 2024",
+          "description": "Entwicklung fortgeschrittenen analytischen Denkens und der Fähigkeit, komplexe Probleme zu lösen."
+        },
+        {
+          "id": "data-analyst",
+          "title": "Data-Analyst-Kurs",
+          "organization": "Google Cloud Skills Boost",
+          "period": "03/2023 - 05/2023",
+          "description": "Google Cloud Big Data and Machine Learning Fundamentals, Datenaufbereitung mit BigQuery, Erstellung neuer BigQuery-Datensätze und Visualisierung von Erkenntnissen sowie Advanced Insights mit BigQuery."
+        },
+        {
+          "id": "math-conferences",
+          "title": "Nationale Mathematiktreffen",
+          "organization": "ENEM / ANEM",
+          "period": "Seit 2019 (jährlich)",
+          "description": "Jährliche Teilnahme an Fortbildungsveranstaltungen zu Mathematik, Statistik, Data Science und künstlicher Intelligenz."
+        }
+      ]
+    },
+    "languages": {
+      "title": "Sprachen",
+      "proficiency": "Sprachniveau",
+      "items": [
+        {
+          "id": "english",
+          "name": "Englisch",
+          "level": "Niveau C1 (in Vorbereitung)",
+          "description": "Volle berufliche Einsatzfähigkeit (Master auf Englisch). Sprachaufenthalt in Galway (2018)."
+        },
+        {
+          "id": "german",
+          "name": "Deutsch",
+          "level": "Grundkenntnisse (A1)",
+          "description": "Derzeit in Ausbildung für internationale Mobilität."
+        },
+        {
+          "id": "spanish",
+          "name": "Spanisch",
+          "level": "Muttersprache",
+          "description": "Muttersprache."
+        }
+      ]
+    },
+    "other": {
+      "title": "Weitere Zertifizierungen",
+      "drivingLicense": {
+        "title": "Führerschein (Klasse B)",
+        "description": "Berechtigung zum Führen von privaten Kraftfahrzeugen."
+      }
+    },
+    "competencies": {
+      "title": "Kernkompetenzen",
+      "items": [
+        { "id": "project-management", "name": "Projektmanagement und -umsetzung" },
+        { "id": "team-leadership", "name": "Teamführung und -koordination" },
+        { "id": "governance", "name": "Institutionelle Governance und Verhandlung" },
+        { "id": "communication", "name": "Professionelle Kommunikation" },
+        { "id": "systems", "name": "Systemadministration" },
+        { "id": "cybersecurity-management", "name": "Informationssicherheitsmanagement" },
+        { "id": "compliance", "name": "Regulatorische Compliance und Cybersicherheit" },
+        { "id": "automation", "name": "Prozessautomatisierung" },
+        { "id": "data-analysis", "name": "Analyse und Entscheidungsfindung" },
+        { "id": "problem-solving", "name": "Lösen komplexer Probleme" },
+        { "id": "strategic-thinking", "name": "Strategisches Denken und Planung" }
+      ]
+    }
+  },
+  "footer": {
+    "copyright": "Entwickelt von Iván Salido Cobo unter der MIT-Lizenz. Quellcode ansehen unter {link}.",
+    "github": "GitHub",
+    "contactLabel": "Zur Kontaktseite",
+    "linkedinLabel": "LinkedIn-Profil (öffnet in einem neuen Tab)",
+    "instagramLabel": "Instagram-Profil (öffnet in einem neuen Tab)",
+    "githubLabel": "GitHub-Profil (öffnet in einem neuen Tab)",
+    "socialNav": "Soziale Medien"
+  },
+  "theme": {
+    "toggle": "Design wechseln",
+    "light": "Helles Design",
+    "dark": "Dunkles Design"
+  },
+  "language": {
+    "toggle": "Sprache wechseln",
+    "es": "Spanisch",
+    "en": "Englisch"
+  },
+  "legal": {
+    "title": "Impressum und Datenschutzerklärung",
+    "siteInfo": {
+      "title": "Website-Informationen",
+      "description": "Diese Website ist ein persönliches, nicht kommerzielles Portfolio.",
+      "owner": "Betreiber",
+      "email": "Kontakt",
+      "purpose": "Zweck",
+      "purposeText": "Darstellung persönlicher beruflicher und akademischer Informationen"
+    },
+    "cookies": {
+      "title": "Cookie-Richtlinie",
+      "description": "Diese Website verwendet ausschließlich technisch notwendige Cookies, die für den Betrieb erforderlich sind. Es werden keine Tracking-, Werbe- oder Analyse-Cookies eingesetzt.",
+      "table": {
+        "name": "Cookie",
+        "purpose": "Zweck",
+        "duration": "Dauer"
+      },
+      "items": [
+        {
+          "id": "colorMode",
+          "purpose": "Speichert deine Designpräferenz (hell/dunkel)",
+          "duration": "1 Jahr"
+        },
+        {
+          "id": "i18n",
+          "purpose": "Speichert deine Sprachpräferenz",
+          "duration": "1 Jahr"
+        }
+      ],
+      "note": "Diese Cookies sind für den Betrieb der Website erforderlich und unterliegen nach europäischem Recht nicht der Einwilligungspflicht (Art. 6 Abs. 1 lit. f DSGVO)."
+    },
+    "contactForm": {
+      "title": "Kontaktformular",
+      "description": "Wenn du das Kontaktformular nutzt, werden folgende personenbezogene Daten erhoben:",
+      "dataCollected": {
+        "title": "Erhobene Daten",
+        "items": [
+          "Name: um dich zu identifizieren und die Antwort zu personalisieren",
+          "E-Mail-Adresse: um auf deine Anfrage zu antworten",
+          "Betreff und Nachricht: um dein Anliegen zu bearbeiten"
+        ]
+      },
+      "purpose": {
+        "title": "Zweck der Verarbeitung",
+        "description": "Die bereitgestellten Daten werden ausschließlich verwendet, um auf deine Anfrage oder dein Angebot zu antworten. Sie werden nicht für andere Zwecke genutzt."
+      },
+      "legitimation": {
+        "title": "Rechtsgrundlage",
+        "description": "Die Verarbeitung basiert auf deiner Einwilligung, die du beim Absenden des Kontaktformulars erteilst (Art. 6 Abs. 1 lit. a DSGVO)."
+      },
+      "retention": {
+        "title": "Speicherdauer",
+        "description": "Formulardaten werden direkt per E-Mail versendet und nicht in Datenbanken der Website gespeichert. E-Mails werden nur so lange aufbewahrt, wie es zur Bearbeitung der Anfrage erforderlich ist."
+      },
+      "recipients": {
+        "title": "Empfänger",
+        "description": "Die Daten werden nicht an Dritte weitergegeben, sofern keine gesetzliche Verpflichtung besteht."
+      }
+    },
+    "privacy": {
+      "title": "Allgemeiner Datenschutz",
+      "description": "Diese Website respektiert deine Privatsphäre:",
+      "items": [
+        "Es findet kein Tracking oder Profiling statt",
+        "Es werden keine Analyse-Tools verwendet (Google Analytics usw.)",
+        "Es werden keine Daten an Dritte weitergegeben, außer wie beim Kontaktformular angegeben",
+        "Es werden nur die Daten erhoben, die du freiwillig über das Kontaktformular bereitstellst"
+      ]
+    },
+    "rights": {
+      "title": "Deine Rechte (DSGVO)",
+      "description": "Nach der Datenschutz-Grundverordnung hast du das Recht auf:",
+      "items": [
+        "Auskunft: Informationen über deine personenbezogenen Daten anfordern",
+        "Berichtigung: unrichtige oder unvollständige Daten korrigieren lassen",
+        "Löschung: die Löschung deiner Daten verlangen",
+        "Widerspruch: der Verarbeitung widersprechen",
+        "Datenübertragbarkeit: deine Daten in einem strukturierten Format erhalten",
+        "Einschränkung: die Einschränkung der Verarbeitung verlangen"
+      ],
+      "contact": "Zur Ausübung dieser Rechte kannst du mich per E-Mail kontaktieren. Du hast außerdem das Recht, eine Beschwerde bei der spanischen Datenschutzbehörde (AEPD) einzureichen.",
+      "cookiesNote": "Du kannst die Cookies dieser Website jederzeit über die Einstellungen deines Browsers löschen."
+    },
+    "lastUpdate": "Zuletzt aktualisiert",
+    "updateDate": "Dezember 2025"
+  },
+  "error": {
+    "backHome": "Zurück zur Startseite",
+    "tryAgain": "Erneut versuchen",
+    "technicalDetails": "Technische Details",
+    "titles": {
+      "400": "Ungültige Anfrage",
+      "401": "Nicht autorisiert",
+      "403": "Zugriff verweigert",
+      "404": "Seite nicht gefunden",
+      "500": "Serverfehler",
+      "502": "Ungültiges Gateway",
+      "503": "Dienst nicht verfügbar",
+      "default": "Ein Fehler ist aufgetreten"
+    },
+    "descriptions": {
+      "400": "Die Anfrage konnte aufgrund ungültiger Daten nicht verarbeitet werden.",
+      "401": "Du musst dich anmelden, um auf diesen Inhalt zuzugreifen.",
+      "403": "Du hast keine Berechtigung, auf diese Ressource zuzugreifen.",
+      "404": "Sorry, die Seite, die du suchst, existiert nicht oder wurde verschoben.",
+      "500": "Auf dem Server ist etwas schiefgelaufen. Bitte versuche es später erneut.",
+      "502": "Der Server hat eine ungültige Antwort erhalten. Bitte versuche es später erneut.",
+      "503": "Der Dienst ist vorübergehend nicht verfügbar. Bitte schau später wieder vorbei.",
+      "default": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut."
+    }
+  },
+  "contactPage": {
+    "seo": {
+      "title": "Kontakt",
+      "description": "Nimm Kontakt mit Iván Salido Cobo auf. Sende eine Nachricht über das Kontaktformular."
+    },
+    "title": "Kontakt",
+    "subtitle": "Hast du eine Frage oder einen Vorschlag? Schreib mir eine Nachricht und ich melde mich so schnell wie möglich bei dir.",
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Dein Name",
+      "email": "E-Mail-Adresse",
+      "emailPlaceholder": "dein{'@'}email.com",
+      "subject": "Betreff",
+      "subjectPlaceholder": "Worüber möchtest du sprechen?",
+      "message": "Nachricht",
+      "messagePlaceholder": "Schreibe deine Nachricht hier...",
+      "submit": "Nachricht senden",
+      "sending": "Wird gesendet...",
+      "success": "Nachricht erfolgreich gesendet! Ich melde mich so schnell wie möglich bei dir.",
+      "errorGeneric": "Beim Senden der Nachricht ist ein Fehler aufgetreten. Bitte versuche es erneut.",
+      "privacyNote": "Deine Informationen werden vertraulich behandelt und nur verwendet, um auf deine Anfrage zu antworten."
+    },
+    "alternative": "Du kannst mich auch über meine Social-Media-Profile kontaktieren:"
+  }
+}

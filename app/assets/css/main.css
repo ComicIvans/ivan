@@ -2,48 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Animaciones suaves para transiciones */
-@layer utilities {
-  .transition-fade {
-    @apply transition-opacity duration-500 ease-in-out;
-  }
-
-  /* Clases de utilidad para animaciones con delay */
-  .animation-delay-100 {
-    animation-delay: 100ms;
-  }
-  .animation-delay-200 {
-    animation-delay: 200ms;
-  }
-  .animation-delay-300 {
-    animation-delay: 300ms;
-  }
-  .animation-delay-400 {
-    animation-delay: 400ms;
-  }
-  .animation-delay-500 {
-    animation-delay: 500ms;
-  }
-  .animation-delay-600 {
-    animation-delay: 600ms;
-  }
-  .animation-delay-700 {
-    animation-delay: 700ms;
-  }
-  .animation-delay-800 {
-    animation-delay: 800ms;
+/* Componentes reutilizables */
+@layer components {
+  /* Tarjeta con borde sutil */
+  .card-border {
+    @apply border-base-300 border;
   }
 }
 
 /* Skip link para accesibilidad */
 .skip-link {
-  @apply absolute -top-10 left-0 bg-primary text-primary-content px-4 py-2 z-50;
-  @apply focus:top-0 transition-all;
+  @apply bg-primary text-primary-content absolute -top-10 left-0 z-50 px-4 py-2;
+  @apply transition-all focus:top-0;
 }
 
 /* Mejoras de foco para accesibilidad */
 :focus-visible {
-  @apply outline-2 outline-offset-2 outline-primary;
+  @apply outline-primary outline-2 outline-offset-2;
 }
 
 /* Scroll suave */
@@ -58,7 +33,9 @@ body {
 
 /* Transiciones suaves para cambio de tema - sin afectar layout */
 * {
-  transition: background-color 0.2s ease, border-color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 /* Evitar transición de color en texto para prevenir flash */
@@ -75,33 +52,6 @@ li {
   transition: none;
 }
 
-/* Animación para el botón de foto de perfil */
-.profile-btn {
-  @apply transition-transform duration-300 ease-out;
-}
-
-.profile-btn:hover {
-  @apply scale-110;
-}
-
-.profile-btn:active {
-  @apply scale-95;
-}
-
-/* Animación para links */
-.link-animated {
-  @apply relative;
-}
-
-.link-animated::after {
-  content: "";
-  @apply absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300;
-}
-
-.link-animated:hover::after {
-  @apply w-full;
-}
-
 /* Animación de subrayado para enlaces primarios */
 .link.link-primary {
   @apply relative;
@@ -109,8 +59,8 @@ li {
 }
 
 .link.link-primary::after {
-  content: "";
-  @apply absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300;
+  content: '';
+  @apply bg-primary absolute bottom-0 left-0 h-0.5 w-0 transition-all duration-300;
 }
 
 .link.link-primary:hover::after {
@@ -128,7 +78,7 @@ li {
 
 /* Dock de navegación móvil */
 .dock-item {
-  @apply flex flex-col items-center justify-center py-2 px-3;
+  @apply flex flex-col items-center justify-center px-3 py-2;
   @apply transition-all duration-200 ease-out;
 }
 
@@ -169,30 +119,6 @@ li {
   to {
     opacity: 1;
     transform: scale(1) translateY(0);
-  }
-}
-
-/* Efecto de gradiente animado para el borde del avatar */
-.avatar-animated {
-  background: linear-gradient(
-    45deg,
-    oklch(0.55 0.25 25),
-    oklch(0.65 0.25 25),
-    oklch(0.55 0.25 25)
-  );
-  background-size: 200% 200%;
-  animation: gradientMove 3s ease infinite;
-}
-
-@keyframes gradientMove {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
   }
 }
 

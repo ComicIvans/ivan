@@ -1,7 +1,3 @@
-<script setup lang="ts">
-const { t } = useI18n()
-</script>
-
 <template>
   <div class="min-w-screen flex min-h-screen flex-col bg-base-200">
     <!-- Skip link para accesibilidad -->
@@ -9,7 +5,7 @@ const { t } = useI18n()
       href="#main-content"
       class="skip-link sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-content"
     >
-      {{ t('nav.skipLink') }}
+      {{ $t('nav.skipLink') }}
     </a>
 
     <main id="main-content" class="main-content" role="main">

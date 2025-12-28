@@ -1,28 +1,40 @@
 <script setup lang="ts">
-import jokesEs from '~/assets/jokes-es.json'
-import jokesEn from '~/assets/jokes-en.json'
+import { localesConfig, getLocaleConfig, loadJokes, type LocaleCode } from '~/utils/locales'
 
 const { t, locale } = useI18n()
 const colorMode = useColorMode()
 const localePath = useLocalePath()
 const route = useRoute()
 
-// Chistes según idioma
-const jokes = computed(() => (locale.value === 'en' ? jokesEn : jokesEs))
+// Chistes - carga lazy
+const jokes = ref<string[]>([])
+const loadJokesForLocale = async () => {
+  jokes.value = await loadJokes(locale.value)
+}
+
+// Cargar chistes inicialmente y cuando cambie el idioma
+onMounted(loadJokesForLocale)
+watch(locale, loadJokesForLocale)
 
 // Modal de chistes
 const jokeModalOpen = ref(false)
 const currentJoke = ref('')
 
+// Menú móvil
+const mobileMenuOpen = ref(false)
+
+// Ref para el dropdown de idioma
+const languageDropdownOpen = ref(false)
+
 // Navegación
 const tabs = computed(() => [
-  { name: t('nav.about'), icon: 'tabler:user', path: '/' },
-  { name: t('nav.skills'), icon: 'tabler:school', path: '/skills' },
-  {
-    name: t('nav.representation'),
-    icon: 'tabler:building-bank',
-    path: '/representation',
-  },
+  { name: t('nav.home'), icon: 'tabler:home', path: '/' },
+  { name: t('nav.experience'), icon: 'tabler:briefcase', path: '/experiencia' },
+  { name: t('nav.projects'), icon: 'tabler:code', path: '/proyectos' },
+  { name: t('nav.gallery'), icon: 'tabler:photo', path: '/galeria' },
+  { name: t('nav.training'), icon: 'tabler:school', path: '/formacion' },
+  { name: t('nav.representation'), icon: 'tabler:building-bank', path: '/representacion' },
+  { name: t('nav.contact'), icon: 'tabler:mail', path: '/contacto' },
 ])
 
 // Tema
@@ -31,18 +43,12 @@ const toggleTheme = () => {
   colorMode.preference = isDark.value ? 'light' : 'dark'
 }
 
-// Idiomas disponibles
-const availableLocales = [
-  { code: 'es', name: 'Español', flag: '🇪🇸' },
-  { code: 'en', name: 'English', flag: '🇬🇧' },
-] as const
+// Usar configuración centralizada de idiomas
+const currentLocale = computed(() => getLocaleConfig(locale.value))
 
-const currentLocale = computed(() => {
-  return availableLocales.find((l) => l.code === locale.value) ?? availableLocales[0]
-})
-
-const switchLocale = (code: 'es' | 'en') => {
+const switchLocale = (code: string) => {
   if (code !== locale.value) {
+    languageDropdownOpen.value = false
     navigateTo(localePath(route.path, code))
   }
 }
@@ -53,7 +59,11 @@ const isActiveRoute = (path: string) => {
 }
 
 // Función para mostrar chiste aleatorio
-const showRandomJoke = () => {
+const showRandomJoke = async () => {
+  // Cargar chistes si no están cargados
+  if (jokes.value.length === 0) {
+    await loadJokesForLocale()
+  }
   const jokeList = jokes.value
   currentJoke.value = jokeList[Math.floor(Math.random() * jokeList.length)] || t('joke.error')
   jokeModalOpen.value = true
@@ -62,6 +72,22 @@ const showRandomJoke = () => {
 const closeJokeModal = () => {
   jokeModalOpen.value = false
 }
+
+const toggleMobileMenu = () => {
+  mobileMenuOpen.value = !mobileMenuOpen.value
+}
+
+const closeMobileMenu = () => {
+  mobileMenuOpen.value = false
+}
+
+// Cerrar menú al cambiar de ruta
+watch(
+  () => route.path,
+  () => {
+    closeMobileMenu()
+  }
+)
 </script>
 
 <template>
@@ -84,87 +110,195 @@ const closeJokeModal = () => {
         </button>
       </div>
     </div>
-    <div class="modal-backdrop" @click="closeJokeModal"></div>
+    <form method="dialog" class="modal-backdrop">
+      <button @click="closeJokeModal">close</button>
+    </form>
   </dialog>
 
   <!-- Header -->
-  <header class="header">
-    <!-- Controles (tema e idioma) -->
-    <div class="header-controls">
+  <header class="mb-6">
+    <!-- Layout Desktop -->
+    <div class="hidden items-center justify-between gap-4 lg:flex">
+      <!-- Foto de perfil -->
       <button
-        class="btn btn-circle btn-ghost btn-sm"
-        :aria-label="t('theme.toggle')"
-        @click="toggleTheme"
+        class="shrink-0 rounded-full transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-primary"
+        :aria-label="t('header.jokeButton')"
+        @click="showRandomJoke"
       >
-        <Icon :name="isDark ? 'tabler:sun' : 'tabler:moon'" class="h-5 w-5" />
+        <NuxtImg
+          class="h-24 w-24 rounded-full object-cover"
+          src="/profile-pic.jpg"
+          :alt="t('header.profileAlt')"
+          width="128"
+          height="128"
+          format="webp"
+          quality="85"
+        />
       </button>
 
-      <div class="dropdown dropdown-end">
-        <button
-          tabindex="0"
-          role="button"
-          class="btn btn-square btn-ghost btn-sm"
-          :aria-label="t('language.toggle')"
-          aria-haspopup="listbox"
-        >
-          <span class="text-xl">{{ currentLocale.flag }}</span>
-        </button>
-        <ul
-          tabindex="0"
-          class="menu dropdown-content z-50 mt-2 w-40 rounded-box border border-base-300 bg-base-100 p-2 shadow-lg"
-          role="listbox"
-        >
-          <li v-for="lang in availableLocales" :key="lang.code">
-            <button
-              role="option"
-              :aria-selected="lang.code === locale"
-              class="flex items-center gap-2"
-              :class="{ 'bg-primary/10 text-primary': lang.code === locale }"
-              @click="switchLocale(lang.code)"
-            >
-              <span class="text-lg">{{ lang.flag }}</span>
-              <span class="flex-1">{{ lang.name }}</span>
-              <Icon v-if="lang.code === locale" name="tabler:check" class="h-4 w-4" />
-            </button>
-          </li>
-        </ul>
+      <!-- Título -->
+      <div class="flex-1">
+        <h1 class="text-3xl font-bold text-primary">
+          {{ t('header.title') }}
+        </h1>
+        <p class="text-base text-base-content/70">
+          {{ t('header.subtitle') }}
+        </p>
+      </div>
+
+      <!-- Controles (tema e idioma) -->
+      <div class="flex items-center gap-1">
+        <ClientOnly>
+          <button
+            class="btn btn-circle btn-ghost btn-sm"
+            :aria-label="t('theme.toggle')"
+            @click="toggleTheme"
+          >
+            <Icon :name="isDark ? 'tabler:sun' : 'tabler:moon'" class="h-5 w-5" />
+          </button>
+        </ClientOnly>
+
+        <div class="dropdown dropdown-end">
+          <button
+            tabindex="0"
+            role="button"
+            class="btn btn-circle btn-ghost btn-sm"
+            :aria-label="t('language.toggle')"
+            aria-haspopup="listbox"
+            @click="languageDropdownOpen = !languageDropdownOpen"
+          >
+            <Icon :name="currentLocale.icon" class="h-5 w-5" />
+          </button>
+          <ul
+            v-if="languageDropdownOpen"
+            tabindex="0"
+            class="menu dropdown-content z-50 mt-2 w-40 rounded-box border border-base-300 bg-base-100 p-2 shadow-lg"
+            role="listbox"
+          >
+            <li v-for="lang in localesConfig" :key="lang.code">
+              <button
+                role="option"
+                :aria-selected="lang.code === locale"
+                class="flex items-center gap-2 !outline-none"
+                :class="{ 'bg-primary/10 text-primary': lang.code === locale }"
+                @click="switchLocale(lang.code)"
+              >
+                <Icon :name="lang.icon" class="h-5 w-5" />
+                <span class="flex-1">{{ lang.name }}</span>
+                <Icon v-if="lang.code === locale" name="tabler:check" class="h-4 w-4" />
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
 
-    <!-- Foto de perfil -->
-    <button class="profile-btn" :aria-label="t('header.jokeButton')" @click="showRandomJoke">
-      <NuxtImg
-        class="profile-img"
-        src="/profile-pic.jpg"
-        :alt="t('header.profileAlt')"
-        width="128"
-        height="128"
-        format="webp"
-        quality="80"
-      />
-    </button>
+    <!-- Layout Móvil -->
+    <div class="lg:hidden">
+      <!-- Fila superior: menú hamburguesa, foto centrada, controles -->
+      <div class="grid grid-cols-[auto_1fr_auto] items-center">
+        <!-- Botón menú móvil -->
+        <button
+          class="btn btn-circle btn-ghost"
+          :aria-label="t('nav.mainNav')"
+          :aria-expanded="mobileMenuOpen"
+          @click="toggleMobileMenu"
+        >
+          <Icon :name="mobileMenuOpen ? 'tabler:x' : 'tabler:menu-2'" class="h-6 w-6" />
+        </button>
 
-    <!-- Título -->
-    <div class="header-title">
-      <h1 class="title-text">
-        {{ t('header.title') }}
-      </h1>
-      <p class="subtitle-text">
-        {{ t('header.subtitle') }}
-      </p>
+        <!-- Foto de perfil centrada -->
+        <div class="flex justify-center">
+          <button
+            class="shrink-0 rounded-full transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-primary"
+            :aria-label="t('header.jokeButton')"
+            @click="showRandomJoke"
+          >
+            <NuxtImg
+              class="h-24 w-24 rounded-full object-cover"
+              src="/profile-pic.jpg"
+              :alt="t('header.profileAlt')"
+              width="128"
+              height="128"
+              format="webp"
+              quality="85"
+            />
+          </button>
+        </div>
+
+        <!-- Controles (tema e idioma) -->
+        <div class="flex items-center gap-1">
+          <ClientOnly>
+            <button
+              class="btn btn-circle btn-ghost btn-sm"
+              :aria-label="t('theme.toggle')"
+              @click="toggleTheme"
+            >
+              <Icon :name="isDark ? 'tabler:sun' : 'tabler:moon'" class="h-5 w-5" />
+            </button>
+          </ClientOnly>
+
+          <div class="dropdown dropdown-end">
+            <button
+              tabindex="0"
+              role="button"
+              class="btn btn-circle btn-ghost btn-sm"
+              :aria-label="t('language.toggle')"
+              aria-haspopup="listbox"
+              @click="languageDropdownOpen = !languageDropdownOpen"
+            >
+              <Icon :name="currentLocale.icon" class="h-5 w-5" />
+            </button>
+            <ul
+              v-if="languageDropdownOpen"
+              tabindex="0"
+              class="menu dropdown-content z-50 mt-2 w-40 rounded-box border border-base-300 bg-base-100 p-2 shadow-lg"
+              role="listbox"
+            >
+              <li v-for="lang in localesConfig" :key="lang.code">
+                <button
+                  role="option"
+                  :aria-selected="lang.code === locale"
+                  class="flex items-center gap-2 !outline-none"
+                  :class="{ 'bg-primary/10 text-primary': lang.code === locale }"
+                  @click="switchLocale(lang.code)"
+                >
+                  <Icon :name="lang.icon" class="h-5 w-5" />
+                  <span class="flex-1">{{ lang.name }}</span>
+                  <Icon v-if="lang.code === locale" name="tabler:check" class="h-4 w-4" />
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Título móvil -->
+      <div class="mt-4 text-center">
+        <h1 class="text-xl font-bold text-primary">
+          {{ t('header.title') }}
+        </h1>
+        <p class="text-sm text-base-content/70">
+          {{ t('header.subtitle') }}
+        </p>
+      </div>
     </div>
 
-    <!-- Navegación desktop -->
-    <nav class="header-nav" :aria-label="t('nav.mainNav')">
-      <ul class="nav-menu">
+    <!-- Navegación desktop (horizontal compacta) -->
+    <nav class="mt-4 hidden lg:block" :aria-label="t('nav.mainNav')">
+      <ul class="menu menu-horizontal flex-nowrap justify-center gap-1 rounded-box bg-base-200 p-1">
         <li v-for="tab in tabs" :key="tab.path">
           <NuxtLink
             :to="localePath(tab.path)"
-            class="nav-link"
-            :class="{ 'nav-link-active': isActiveRoute(tab.path) }"
+            class="gap-1 px-3 py-2 text-sm !outline-none transition-colors duration-300 hover:!bg-base-300 focus:!bg-inherit focus:!text-inherit"
+            :class="{
+              'bg-primary text-primary-content hover:!bg-primary focus:!bg-primary focus:!text-primary-content':
+                isActiveRoute(tab.path),
+              'text-base-content': !isActiveRoute(tab.path),
+            }"
             :aria-current="isActiveRoute(tab.path) ? 'page' : undefined"
           >
-            <Icon :name="tab.icon" class="h-4 w-4 min-w-4" />
+            <Icon :name="tab.icon" class="h-4 w-4" />
             <span>{{ tab.name }}</span>
           </NuxtLink>
         </li>
@@ -172,229 +306,56 @@ const closeJokeModal = () => {
     </nav>
   </header>
 
+  <!-- Drawer móvil -->
+  <div class="drawer-start drawer lg:hidden">
+    <input
+      id="mobile-drawer"
+      type="checkbox"
+      class="drawer-toggle"
+      :checked="mobileMenuOpen"
+      @change="toggleMobileMenu"
+    />
+    <div class="drawer-side z-50">
+      <label
+        for="mobile-drawer"
+        aria-label="close sidebar"
+        class="drawer-overlay"
+        @click="closeMobileMenu"
+      ></label>
+      <nav class="menu min-h-full w-72 bg-base-100 p-4" :aria-label="t('nav.mainNav')">
+        <!-- Cabecera del menú -->
+        <div class="mb-4 flex items-center justify-between border-b border-base-300 pb-4">
+          <span class="text-lg font-bold text-primary">{{ t('nav.mainNav') }}</span>
+          <button
+            class="btn btn-circle btn-ghost btn-sm"
+            :aria-label="t('joke.close')"
+            @click="closeMobileMenu"
+          >
+            <Icon name="tabler:x" class="h-5 w-5" />
+          </button>
+        </div>
+
+        <!-- Enlaces de navegación -->
+        <ul class="space-y-1">
+          <li v-for="tab in tabs" :key="tab.path">
+            <NuxtLink
+              :to="localePath(tab.path)"
+              class="flex items-center gap-3 rounded-lg px-4 py-3 transition-colors"
+              :class="{
+                'bg-primary text-primary-content': isActiveRoute(tab.path),
+                'hover:bg-base-200': !isActiveRoute(tab.path),
+              }"
+              :aria-current="isActiveRoute(tab.path) ? 'page' : undefined"
+              @click="closeMobileMenu"
+            >
+              <Icon :name="tab.icon" class="h-5 w-5" />
+              <span>{{ tab.name }}</span>
+            </NuxtLink>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
   <div class="divider my-4"></div>
-
-  <!-- Dock de navegación móvil -->
-  <nav class="mobile-dock" :aria-label="t('nav.mainNav')">
-    <NuxtLink
-      v-for="tab in tabs"
-      :key="tab.path"
-      :to="localePath(tab.path)"
-      class="dock-item"
-      :class="{ 'dock-item-active': isActiveRoute(tab.path) }"
-    >
-      <Icon :name="tab.icon" class="h-6 w-6 min-w-6" />
-      <span class="text-xs">{{ tab.name }}</span>
-    </NuxtLink>
-  </nav>
 </template>
-
-<style scoped>
-/* Header - Layout base móvil (mobile-first) */
-.header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-
-/* Controles siempre en la parte superior en móvil */
-.header-controls {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
-/* Navegación desktop oculta en móvil */
-.header-nav {
-  display: none;
-}
-
-/* Estilos base del menú de navegación (necesarios para SSR) */
-.nav-menu {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 0.5rem;
-  background: oklch(var(--b1));
-  border-radius: 1rem;
-  border: 1px solid oklch(var(--b3));
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  list-style: none;
-  margin: 0;
-}
-
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  color: oklch(var(--bc));
-  text-decoration: none;
-  transition: background-color 0.2s;
-}
-
-.nav-link:hover {
-  background: oklch(var(--b2));
-}
-
-.nav-link-active {
-  background: oklch(var(--p) / 0.1);
-  color: oklch(var(--p));
-}
-
-/* Imagen de perfil */
-.profile-img {
-  width: 6rem;
-  height: 6rem;
-  min-width: 6rem;
-  border-radius: 9999px;
-  aspect-ratio: 1;
-  object-fit: cover;
-}
-
-/* Textos */
-.title-text {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: oklch(var(--p));
-}
-
-.subtitle-text {
-  font-size: 1rem;
-  color: oklch(var(--bc) / 0.7);
-}
-
-/* Dock móvil visible por defecto */
-.mobile-dock {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-around;
-  background: oklch(var(--b1));
-  border-top: 1px solid oklch(var(--b3));
-  padding: 0.5rem 0;
-  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
-  z-index: 50;
-}
-
-.dock-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 0.25rem;
-  padding: 0.5rem 1rem;
-  color: oklch(var(--bc) / 0.6);
-  transition: color 0.2s;
-}
-
-.dock-item:hover {
-  color: oklch(var(--bc));
-}
-
-.dock-item-active {
-  color: oklch(var(--p));
-}
-
-/* Botón de perfil */
-.profile-btn {
-  border-radius: 9999px;
-  transition: transform 0.2s;
-}
-
-.profile-btn:hover {
-  transform: scale(1.05);
-}
-
-.profile-btn:active {
-  transform: scale(0.95);
-}
-
-.profile-btn:focus-visible {
-  outline: 2px solid oklch(var(--p));
-  outline-offset: 2px;
-}
-
-/* Desktop: detectar por hover capability (ratón) y ancho mínimo */
-@media (hover: hover) and (min-width: 768px) {
-  .header {
-    flex-direction: row;
-    justify-content: space-between;
-    text-align: left;
-    gap: 2rem;
-  }
-
-  .header-controls {
-    order: 3;
-    width: auto;
-    gap: 0.5rem;
-  }
-
-  .header-title {
-    order: 2;
-    flex: 1;
-  }
-
-  .profile-btn {
-    order: 1;
-    flex-shrink: 0;
-  }
-
-  .profile-img {
-    width: 8rem;
-    height: 8rem;
-    min-width: 8rem;
-  }
-
-  .title-text {
-    font-size: 2.25rem;
-  }
-
-  .subtitle-text {
-    font-size: 1.125rem;
-  }
-
-  .header-nav {
-    display: flex;
-    order: 2;
-    flex: 1;
-    justify-content: center;
-  }
-
-  .mobile-dock {
-    display: none;
-  }
-}
-
-/* Pantallas grandes: título a la derecha */
-@media (hover: hover) and (min-width: 1024px) {
-  .header-title {
-    order: 3;
-    text-align: right;
-    flex: none;
-  }
-
-  .header-controls {
-    order: 4;
-    flex-direction: column;
-    align-items: flex-end;
-  }
-}
-
-/* Pantallas muy anchas: menú horizontal */
-@media (hover: hover) and (min-width: 1400px) {
-  .nav-menu {
-    flex-direction: row;
-  }
-  .nav-link {
-    text-wrap: nowrap;
-  }
-}
-</style>
