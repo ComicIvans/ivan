@@ -85,7 +85,11 @@ const timelineItems = computed(() => {
         <template v-for="(exp, index) in experiences" :key="index" #[`exp-${index}-title`]>
           <span class="text-highlighted text-base font-semibold">{{ exp.title }}</span>
         </template>
-        <template v-for="(exp, index) in experiences" :key="`desc-${index}`" #[`exp-${index}-description`]>
+        <template
+          v-for="(exp, index) in experiences"
+          :key="`desc-${index}`"
+          #[`exp-${index}-description`]
+        >
           <div class="flex flex-col gap-1">
             <span class="text-primary-500 text-sm font-medium">{{ exp.org }}</span>
             <p class="text-muted text-sm">{{ exp.description }}</p>
