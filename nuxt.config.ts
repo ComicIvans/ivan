@@ -33,16 +33,27 @@ export default defineNuxtConfig({
   },
 
   modules: [
-    '@nuxtjs/tailwindcss',
+    '@nuxt/ui',
     '@nuxtjs/seo',
     '@nuxt/image',
-    '@nuxt/icon',
-    '@vueuse/nuxt',
     '@formkit/auto-animate/nuxt',
-    '@nuxtjs/color-mode',
     '@nuxtjs/i18n',
     '@nuxt/eslint',
   ],
+
+  css: ['~/assets/css/main.css'],
+
+  // Nuxt UI configuration
+  colorMode: {
+    preference: 'light',
+    fallback: 'light',
+  },
+
+  ui: {
+    theme: {
+      colors: ['primary', 'secondary', 'success', 'info', 'warning', 'error'],
+    },
+  },
 
   site: {
     url: process.env.NUXT_PUBLIC_SITE_URL,
@@ -62,13 +73,6 @@ export default defineNuxtConfig({
     clientBundle: {
       scan: true,
     },
-  },
-
-  css: ['~/assets/css/main.css'],
-
-  colorMode: {
-    preference: 'light',
-    dataValue: 'theme',
   },
 
   i18n: {

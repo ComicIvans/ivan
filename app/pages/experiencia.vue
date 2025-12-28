@@ -2,43 +2,68 @@
 const { t, tm, rt } = useI18n()
 const localePath = useLocalePath()
 
-// SEO meta para la página de experiencia
 useSeoMeta({
   title: () => t('experience.title'),
   description: () => t('seo.pages.experience'),
 })
 
 const roleIcons: Record<string, string> = {
-  'creup-digitalization': 'uil:server-network',
-  'enem-treasurer': 'uil:calculator',
-  'ugr-council': 'uil:university',
-  'dge-treasurer': 'tabler:coins',
+  'creup-digitalization': 'i-tabler-server-2',
+  'enem-treasurer': 'i-tabler-calculator',
+  'ugr-council': 'i-tabler-building-bank',
+  'dge-treasurer': 'i-tabler-coins',
 }
 
 const currentRoles = ['creup-digitalization']
 
-const experiences = computed(() => {
+interface Experience {
+  id: string
+  title: string
+  org: string
+  period: string
+  description: string
+  icon: string
+  current: boolean
+}
+
+const experiences = computed<Experience[]>(() => {
   const rolesData = tm('experience.roles') as unknown
   const roles = Array.isArray(rolesData) ? rolesData : []
 
   return roles.map((role: unknown) => {
-    const roleData = (role as Record<string, any>) || {}
+    const roleData = (role as Record<string, unknown>) || {}
     const id = getI18nStaticValue(roleData.id)
     const title = getI18nStaticValue(roleData.title)
     const org = getI18nStaticValue(roleData.organization)
     const period = getI18nStaticValue(roleData.period)
     const description = getI18nStaticValue(roleData.description)
-    const icon = roleIcons[id]
     return {
       id,
       title: rt(title),
       org: rt(org),
       period: rt(period),
       description: rt(description),
-      icon: icon || 'tabler:briefcase',
+      icon: roleIcons[id] || 'i-tabler-briefcase',
       current: currentRoles.includes(id),
     }
   })
+})
+
+// Encontrar el índice del rol actual para marcar los completados
+const currentIndex = computed(() => {
+  const idx = experiences.value.findIndex((exp) => exp.current)
+  return idx >= 0 ? idx : experiences.value.length - 1
+})
+
+// Timeline items en formato UTimeline con slots personalizados
+const timelineItems = computed(() => {
+  return experiences.value.map((exp, index) => ({
+    date: exp.period,
+    title: exp.title,
+    description: exp.description,
+    icon: exp.icon,
+    slot: `exp-${index}`,
+  }))
 })
 </script>
 
@@ -46,61 +71,44 @@ const experiences = computed(() => {
   <section role="region" :aria-label="t('experience.title')" class="section-enter">
     <!-- Header -->
     <div class="mb-8 text-center">
-      <h1 class="text-4xl font-bold text-primary lg:text-5xl">
+      <h1 class="text-primary-500 text-4xl font-bold lg:text-5xl">
         {{ t('experience.title') }}
       </h1>
-      <p class="mx-auto mt-4 max-w-2xl text-lg text-base-content/80">
+      <p class="text-muted mx-auto mt-4 max-w-2xl text-lg">
         {{ t('experience.intro') }}
       </p>
     </div>
 
     <!-- Timeline -->
-    <ul class="timeline timeline-vertical timeline-snap-icon max-md:timeline-compact">
-      <li v-for="(exp, index) in experiences" :key="index">
-        <div class="timeline-middle">
-          <div
-            class="flex h-10 w-10 items-center justify-center rounded-full"
-            :class="exp.current ? 'bg-primary text-primary-content' : 'bg-base-300'"
-          >
-            <Icon :name="exp.icon" class="h-5 w-5" />
-          </div>
-        </div>
-        <div
-          class="timeline-box mb-10"
-          :class="index % 2 === 0 ? 'timeline-start md:text-end' : 'timeline-end'"
-        >
+    <div class="mx-auto max-w-2xl">
+      <UTimeline :items="timelineItems" :model-value="currentIndex" color="primary">
+        <template v-for="(exp, index) in experiences" :key="index" #[`exp-${index}-title`]>
+          <span class="text-highlighted text-base font-semibold">{{ exp.title }}</span>
+        </template>
+        <template v-for="(exp, index) in experiences" :key="`desc-${index}`" #[`exp-${index}-description`]>
           <div class="flex flex-col gap-1">
-            <span
-              class="inline-flex items-center gap-2 text-sm font-medium"
-              :class="exp.current ? 'text-primary' : 'text-base-content/60'"
-            >
-              <Icon v-if="exp.current" name="tabler:point-filled" class="h-3 w-3 animate-pulse" />
-              {{ exp.period }}
-            </span>
-            <h2 class="text-xl font-bold text-secondary">{{ exp.title }}</h2>
-            <h3 class="font-medium text-base-content/80">{{ exp.org }}</h3>
-            <p class="mt-2 text-base-content/70">{{ exp.description }}</p>
+            <span class="text-primary-500 text-sm font-medium">{{ exp.org }}</span>
+            <p class="text-muted text-sm">{{ exp.description }}</p>
           </div>
-        </div>
-        <hr v-if="index < experiences.length - 1" />
-      </li>
-    </ul>
+        </template>
+      </UTimeline>
+    </div>
 
     <!-- Enlace a experiencia completa -->
-    <div class="mt-8 rounded-box bg-base-200 p-6 text-center">
-      <p class="text-base-content/80">
-        {{ t('experience.fullExperience') }}
-      </p>
-      <NuxtLink :to="localePath('/representacion')" class="btn btn-primary btn-sm mt-3 gap-2">
-        <Icon name="tabler:history" class="h-4 w-4" />
-        {{ t('experience.viewRepresentation') }}
-      </NuxtLink>
-    </div>
+    <UCard class="mt-8">
+      <div class="text-center">
+        <p class="text-muted">
+          {{ t('experience.fullExperience') }}
+        </p>
+        <UButton
+          :to="localePath('/representacion')"
+          color="primary"
+          class="mt-3"
+          icon="i-tabler-history"
+        >
+          {{ t('experience.viewRepresentation') }}
+        </UButton>
+      </div>
+    </UCard>
   </section>
 </template>
-
-<style scoped>
-.timeline-box {
-  @apply rounded-box border border-base-300 bg-base-100 p-4 transition-shadow hover:shadow-lg;
-}
-</style>

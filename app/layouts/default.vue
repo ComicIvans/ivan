@@ -1,18 +1,16 @@
 <template>
-  <div class="min-w-screen flex min-h-screen flex-col bg-base-200">
+  <div class="bg-default flex min-h-screen min-w-screen flex-col">
     <!-- Skip link para accesibilidad -->
     <a
       href="#main-content"
-      class="skip-link sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-content"
+      class="bg-primary-500 sr-only rounded px-4 py-2 text-white focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50"
     >
       {{ $t('nav.skipLink') }}
     </a>
 
-    <main id="main-content" class="main-content" role="main">
+    <main id="main-content" class="main-content grow" role="main">
       <div class="mx-auto w-11/12 max-w-7xl p-4 sm:p-6">
         <LayoutHeader />
-
-        <!-- Contenido de la página -->
         <slot />
       </div>
     </main>
@@ -23,12 +21,10 @@
 
 <style scoped>
 .main-content {
-  flex-grow: 1;
-  /* Padding para el dock en móvil */
+  /* Padding para navegación móvil */
   padding-bottom: 4rem;
 }
 
-/* En desktop (con hover), no necesitamos padding extra */
 @media (hover: hover) and (min-width: 768px) {
   .main-content {
     padding-bottom: 0;

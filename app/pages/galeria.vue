@@ -1,18 +1,16 @@
 <script setup lang="ts">
 const { t, tm, rt } = useI18n()
 
-// SEO meta para la página de galería
 useSeoMeta({
   title: () => t('gallery.title'),
   description: () => t('seo.pages.gallery'),
 })
 
-// Eventos de la galería
 const eventIcons: Record<string, string> = {
-  'enem-2025': 'tabler:math-function',
-  'creup-riano': 'tabler:users-group',
-  'ceeina-2025': 'tabler:school',
-  'creup-ago-78': 'tabler:building-bank',
+  'enem-2025': 'i-tabler-math-function',
+  'creup-riano': 'i-tabler-users-group',
+  'ceeina-2025': 'i-tabler-school',
+  'creup-ago-78': 'i-tabler-building-bank',
 }
 
 const galleryEvents = computed(() => {
@@ -29,7 +27,7 @@ const galleryEvents = computed(() => {
       titulo: rt(title),
       fecha: rt(date),
       descripcion: rt(description),
-      icon: eventIcons[id] || 'tabler:photo',
+      icon: eventIcons[id] || 'i-tabler-photo',
     }
   })
 })
@@ -39,50 +37,53 @@ const galleryEvents = computed(() => {
   <section role="region" :aria-label="t('gallery.title')" class="section-enter">
     <!-- Header -->
     <div class="mb-8 text-center">
-      <h1 class="text-3xl font-bold text-primary sm:text-4xl lg:text-5xl">
+      <h1 class="text-primary-500 text-4xl font-bold lg:text-5xl">
         {{ t('gallery.title') }}
       </h1>
-      <p class="mx-auto mt-4 max-w-2xl text-base text-base-content/80 sm:text-lg">
+      <p class="text-muted mx-auto mt-4 max-w-2xl">
         {{ t('gallery.intro') }}
       </p>
     </div>
 
     <!-- Gallery Grid -->
     <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-      <article
+      <UCard
         v-for="event in galleryEvents"
         :key="event.id"
-        class="card-border card bg-base-100 transition-all hover:shadow-lg"
+        class="overflow-hidden transition-all hover:shadow-lg"
       >
         <!-- Skeleton para imagen -->
-        <figure class="relative aspect-video w-full overflow-hidden bg-base-300">
-          <div class="skeleton absolute inset-0 rounded-none"></div>
-          <div class="absolute inset-0 flex items-center justify-center">
-            <Icon :name="event.icon" class="h-16 w-16 text-base-content/20" aria-hidden="true" />
+        <template #header>
+          <div class="bg-elevated relative aspect-video w-full overflow-hidden">
+            <USkeleton class="absolute inset-0 rounded-none" />
+            <div class="absolute inset-0 flex items-center justify-center">
+              <UIcon :name="event.icon" class="text-dimmed size-16" />
+            </div>
+            <UBadge color="neutral" size="sm" class="absolute right-2 bottom-2">
+              {{ t('gallery.photoSoon') }}
+            </UBadge>
           </div>
-          <span class="badge badge-neutral badge-sm absolute bottom-2 right-2">
-            {{ t('gallery.photoSoon') }}
-          </span>
-        </figure>
-        <div class="card-body">
-          <h2 class="card-title text-secondary">
-            <Icon :name="event.icon" class="h-5 w-5 text-primary" aria-hidden="true" />
+        </template>
+
+        <div>
+          <h2 class="text-primary-400 flex items-center gap-2 text-lg font-bold">
+            <UIcon :name="event.icon" class="text-primary-500 size-5" />
             {{ event.titulo }}
           </h2>
-          <p class="text-sm font-medium text-primary">{{ event.fecha }}</p>
-          <p class="text-base-content/80">{{ event.descripcion }}</p>
+          <p class="text-primary-500 mt-1 text-sm font-medium">{{ event.fecha }}</p>
+          <p class="text-muted mt-2">{{ event.descripcion }}</p>
         </div>
-      </article>
+      </UCard>
     </div>
 
     <!-- Nota informativa -->
-    <div
-      class="mt-8 flex items-center justify-center gap-3 rounded-box bg-base-200 p-4 text-center"
-    >
-      <Icon name="tabler:camera" class="h-6 w-6 text-primary" aria-hidden="true" />
-      <p class="text-base-content/70">
-        {{ t('gallery.comingSoon') }}
-      </p>
-    </div>
+    <UCard class="mt-8">
+      <div class="flex items-center justify-center gap-3 text-center">
+        <UIcon name="i-tabler-camera" class="text-primary-500 size-6" />
+        <p class="text-muted">
+          {{ t('gallery.comingSoon') }}
+        </p>
+      </div>
+    </UCard>
   </section>
 </template>

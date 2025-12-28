@@ -12,7 +12,6 @@ const loadJokesForLocale = async () => {
   jokes.value = await loadJokes(locale.value)
 }
 
-// Cargar chistes inicialmente y cuando cambie el idioma
 onMounted(loadJokesForLocale)
 watch(locale, loadJokesForLocale)
 
@@ -23,18 +22,19 @@ const currentJoke = ref('')
 // Menú móvil
 const mobileMenuOpen = ref(false)
 
-// Ref para el dropdown de idioma
-const languageDropdownOpen = ref(false)
-
 // Navegación
 const tabs = computed(() => [
-  { name: t('nav.home'), icon: 'tabler:home', path: '/' },
-  { name: t('nav.experience'), icon: 'tabler:briefcase', path: '/experiencia' },
-  { name: t('nav.projects'), icon: 'tabler:code', path: '/proyectos' },
-  { name: t('nav.gallery'), icon: 'tabler:photo', path: '/galeria' },
-  { name: t('nav.training'), icon: 'tabler:school', path: '/formacion' },
-  { name: t('nav.representation'), icon: 'tabler:building-bank', path: '/representacion' },
-  { name: t('nav.contact'), icon: 'tabler:mail', path: '/contacto' },
+  { label: t('nav.home'), icon: 'i-tabler-home', to: localePath('/') },
+  { label: t('nav.experience'), icon: 'i-tabler-briefcase', to: localePath('/experiencia') },
+  { label: t('nav.projects'), icon: 'i-tabler-code', to: localePath('/proyectos') },
+  { label: t('nav.gallery'), icon: 'i-tabler-photo', to: localePath('/galeria') },
+  { label: t('nav.training'), icon: 'i-tabler-school', to: localePath('/formacion') },
+  {
+    label: t('nav.representation'),
+    icon: 'i-tabler-building-bank',
+    to: localePath('/representacion'),
+  },
+  { label: t('nav.contact'), icon: 'i-tabler-mail', to: localePath('/contacto') },
 ])
 
 // Tema
@@ -43,38 +43,39 @@ const toggleTheme = () => {
   colorMode.preference = isDark.value ? 'light' : 'dark'
 }
 
-// Usar configuración centralizada de idiomas
+// Configuración de idiomas para el select
 const currentLocale = computed(() => getLocaleConfig(locale.value))
 
-const switchLocale = (code: string) => {
-  if (code !== locale.value) {
-    languageDropdownOpen.value = false
-    navigateTo(localePath(route.path, code))
-  }
-}
+const localeItems = computed(() =>
+  localesConfig.map((lang) => ({
+    label: lang.name,
+    value: lang.code,
+    icon: lang.icon.replace(':', '-').replace('tabler', 'i-tabler'),
+  }))
+)
+
+const selectedLocale = computed({
+  get: () => locale.value,
+  set: (code: string) => {
+    if (code !== locale.value) {
+      navigateTo(localePath(route.path, code as LocaleCode))
+    }
+  },
+})
 
 // Verificar si una ruta está activa
 const isActiveRoute = (path: string) => {
-  return route.path === localePath(path)
+  return route.path === path
 }
 
 // Función para mostrar chiste aleatorio
 const showRandomJoke = async () => {
-  // Cargar chistes si no están cargados
   if (jokes.value.length === 0) {
     await loadJokesForLocale()
   }
   const jokeList = jokes.value
   currentJoke.value = jokeList[Math.floor(Math.random() * jokeList.length)] || t('joke.error')
   jokeModalOpen.value = true
-}
-
-const closeJokeModal = () => {
-  jokeModalOpen.value = false
-}
-
-const toggleMobileMenu = () => {
-  mobileMenuOpen.value = !mobileMenuOpen.value
 }
 
 const closeMobileMenu = () => {
@@ -92,28 +93,31 @@ watch(
 
 <template>
   <!-- Modal de chistes -->
-  <dialog
-    :open="jokeModalOpen"
-    class="modal"
-    :class="{ 'modal-open': jokeModalOpen }"
-    aria-labelledby="joke-title"
-    aria-modal="true"
-    @click.self="closeJokeModal"
-    @keydown.escape="closeJokeModal"
-  >
-    <div class="modal-box">
-      <h3 id="joke-title" class="text-lg font-bold">{{ t('joke.title') }}</h3>
-      <p class="py-4">{{ currentJoke }}</p>
-      <div class="modal-action">
-        <button class="btn btn-primary" @click="closeJokeModal">
-          {{ t('joke.close') }}
-        </button>
-      </div>
-    </div>
-    <form method="dialog" class="modal-backdrop">
-      <button @click="closeJokeModal">close</button>
-    </form>
-  </dialog>
+  <UModal v-model:open="jokeModalOpen">
+    <template #content>
+      <UCard>
+        <template #header>
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold">{{ t('joke.title') }}</h3>
+            <UButton
+              icon="i-tabler-x"
+              color="neutral"
+              variant="ghost"
+              @click="jokeModalOpen = false"
+            />
+          </div>
+        </template>
+        <p class="text-muted text-base">{{ currentJoke }}</p>
+        <template #footer>
+          <div class="flex justify-end">
+            <UButton color="primary" @click="jokeModalOpen = false">
+              {{ t('joke.close') }}
+            </UButton>
+          </div>
+        </template>
+      </UCard>
+    </template>
+  </UModal>
 
   <!-- Header -->
   <header class="mb-6">
@@ -121,12 +125,12 @@ watch(
     <div class="hidden items-center justify-between gap-4 lg:flex">
       <!-- Foto de perfil -->
       <button
-        class="shrink-0 rounded-full transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-primary"
+        class="focus-visible:ring-primary-500 shrink-0 rounded-full transition-transform hover:scale-105 focus-visible:ring-2"
         :aria-label="t('header.jokeButton')"
         @click="showRandomJoke"
       >
         <NuxtImg
-          class="h-24 w-24 rounded-full object-cover"
+          class="size-24 rounded-full object-cover"
           src="/profile-pic.jpg"
           :alt="t('header.profileAlt')"
           width="128"
@@ -138,84 +142,67 @@ watch(
 
       <!-- Título -->
       <div class="flex-1">
-        <h1 class="text-3xl font-bold text-primary">
+        <h1 class="text-primary-500 text-3xl font-bold">
           {{ t('header.title') }}
         </h1>
-        <p class="text-base text-base-content/70">
+        <p class="text-muted text-base">
           {{ t('header.subtitle') }}
         </p>
       </div>
 
       <!-- Controles (tema e idioma) -->
-      <div class="flex items-center gap-1">
-        <ClientOnly>
-          <button
-            class="btn btn-circle btn-ghost btn-sm"
-            :aria-label="t('theme.toggle')"
-            @click="toggleTheme"
-          >
-            <Icon :name="isDark ? 'tabler:sun' : 'tabler:moon'" class="h-5 w-5" />
-          </button>
-        </ClientOnly>
+      <div class="flex items-center gap-2">
+        <UButton
+          :icon="isDark ? 'i-tabler-sun' : 'i-tabler-moon'"
+          color="neutral"
+          variant="ghost"
+          size="lg"
+          :aria-label="t('theme.toggle')"
+          @click="toggleTheme"
+        />
 
-        <div class="dropdown dropdown-end">
-          <button
-            tabindex="0"
-            role="button"
-            class="btn btn-circle btn-ghost btn-sm"
-            :aria-label="t('language.toggle')"
-            aria-haspopup="listbox"
-            @click="languageDropdownOpen = !languageDropdownOpen"
-          >
-            <Icon :name="currentLocale.icon" class="h-5 w-5" />
-          </button>
-          <ul
-            v-if="languageDropdownOpen"
-            tabindex="0"
-            class="menu dropdown-content z-50 mt-2 w-40 rounded-box border border-base-300 bg-base-100 p-2 shadow-lg"
-            role="listbox"
-          >
-            <li v-for="lang in localesConfig" :key="lang.code">
-              <button
-                role="option"
-                :aria-selected="lang.code === locale"
-                class="flex items-center gap-2 !outline-none"
-                :class="{ 'bg-primary/10 text-primary': lang.code === locale }"
-                @click="switchLocale(lang.code)"
-              >
-                <Icon :name="lang.icon" class="h-5 w-5" />
-                <span class="flex-1">{{ lang.name }}</span>
-                <Icon v-if="lang.code === locale" name="tabler:check" class="h-4 w-4" />
-              </button>
-            </li>
-          </ul>
-        </div>
+        <USelect
+          v-model="selectedLocale"
+          :items="localeItems"
+          value-key="value"
+          class="w-36"
+          :aria-label="t('language.toggle')"
+        >
+          <template #leading="{ modelValue }">
+            <UIcon
+              v-if="modelValue"
+              :name="localeItems.find((l) => l.value === modelValue)?.icon || ''"
+              class="size-5"
+            />
+          </template>
+        </USelect>
       </div>
     </div>
 
     <!-- Layout Móvil -->
     <div class="lg:hidden">
       <!-- Fila superior: menú hamburguesa, foto centrada, controles -->
-      <div class="grid grid-cols-[auto_1fr_auto] items-center">
+      <div class="grid grid-cols-[auto_1fr_auto] items-center gap-2">
         <!-- Botón menú móvil -->
-        <button
-          class="btn btn-circle btn-ghost"
+        <UButton
+          :icon="mobileMenuOpen ? 'i-tabler-x' : 'i-tabler-menu-2'"
+          color="neutral"
+          variant="ghost"
+          size="lg"
           :aria-label="t('nav.mainNav')"
           :aria-expanded="mobileMenuOpen"
-          @click="toggleMobileMenu"
-        >
-          <Icon :name="mobileMenuOpen ? 'tabler:x' : 'tabler:menu-2'" class="h-6 w-6" />
-        </button>
+          @click="mobileMenuOpen = !mobileMenuOpen"
+        />
 
         <!-- Foto de perfil centrada -->
         <div class="flex justify-center">
           <button
-            class="shrink-0 rounded-full transition-transform hover:scale-105 focus-visible:outline-2 focus-visible:outline-primary"
+            class="focus-visible:ring-primary-500 shrink-0 rounded-full transition-transform hover:scale-105 focus-visible:ring-2"
             :aria-label="t('header.jokeButton')"
             @click="showRandomJoke"
           >
             <NuxtImg
-              class="h-24 w-24 rounded-full object-cover"
+              class="size-20 rounded-full object-cover sm:size-24"
               src="/profile-pic.jpg"
               :alt="t('header.profileAlt')"
               width="128"
@@ -227,135 +214,90 @@ watch(
         </div>
 
         <!-- Controles (tema e idioma) -->
-        <div class="flex items-center gap-1">
-          <ClientOnly>
-            <button
-              class="btn btn-circle btn-ghost btn-sm"
-              :aria-label="t('theme.toggle')"
-              @click="toggleTheme"
-            >
-              <Icon :name="isDark ? 'tabler:sun' : 'tabler:moon'" class="h-5 w-5" />
-            </button>
-          </ClientOnly>
+        <div class="flex items-center gap-2">
+          <UButton
+            :icon="isDark ? 'i-tabler-sun' : 'i-tabler-moon'"
+            color="neutral"
+            variant="ghost"
+            size="lg"
+            :aria-label="t('theme.toggle')"
+            @click="toggleTheme"
+          />
 
-          <div class="dropdown dropdown-end">
-            <button
-              tabindex="0"
-              role="button"
-              class="btn btn-circle btn-ghost btn-sm"
+          <UDropdownMenu
+            :items="
+              localeItems.map((item) => ({
+                label: item.label,
+                icon: item.icon,
+                onSelect: () => (selectedLocale = item.value),
+              }))
+            "
+          >
+            <UButton
+              :icon="currentLocale.icon.replace(':', '-').replace('tabler', 'i-tabler')"
+              color="neutral"
+              variant="ghost"
+              size="lg"
               :aria-label="t('language.toggle')"
-              aria-haspopup="listbox"
-              @click="languageDropdownOpen = !languageDropdownOpen"
-            >
-              <Icon :name="currentLocale.icon" class="h-5 w-5" />
-            </button>
-            <ul
-              v-if="languageDropdownOpen"
-              tabindex="0"
-              class="menu dropdown-content z-50 mt-2 w-40 rounded-box border border-base-300 bg-base-100 p-2 shadow-lg"
-              role="listbox"
-            >
-              <li v-for="lang in localesConfig" :key="lang.code">
-                <button
-                  role="option"
-                  :aria-selected="lang.code === locale"
-                  class="flex items-center gap-2 !outline-none"
-                  :class="{ 'bg-primary/10 text-primary': lang.code === locale }"
-                  @click="switchLocale(lang.code)"
-                >
-                  <Icon :name="lang.icon" class="h-5 w-5" />
-                  <span class="flex-1">{{ lang.name }}</span>
-                  <Icon v-if="lang.code === locale" name="tabler:check" class="h-4 w-4" />
-                </button>
-              </li>
-            </ul>
-          </div>
+            />
+          </UDropdownMenu>
         </div>
       </div>
 
       <!-- Título móvil -->
       <div class="mt-4 text-center">
-        <h1 class="text-xl font-bold text-primary">
+        <h1 class="text-primary-500 text-xl font-bold">
           {{ t('header.title') }}
         </h1>
-        <p class="text-sm text-base-content/70">
+        <p class="text-muted text-sm">
           {{ t('header.subtitle') }}
         </p>
       </div>
     </div>
 
-    <!-- Navegación desktop (horizontal compacta) -->
+    <!-- Navegación desktop (horizontal) -->
     <nav class="mt-4 hidden lg:block" :aria-label="t('nav.mainNav')">
-      <ul class="menu menu-horizontal flex-nowrap justify-center gap-1 rounded-box bg-base-200 p-1">
-        <li v-for="tab in tabs" :key="tab.path">
-          <NuxtLink
-            :to="localePath(tab.path)"
-            class="gap-1 px-3 py-2 text-sm !outline-none transition-colors duration-300 hover:!bg-base-300 focus:!bg-inherit focus:!text-inherit"
-            :class="{
-              'bg-primary text-primary-content hover:!bg-primary focus:!bg-primary focus:!text-primary-content':
-                isActiveRoute(tab.path),
-              'text-base-content': !isActiveRoute(tab.path),
-            }"
-            :aria-current="isActiveRoute(tab.path) ? 'page' : undefined"
-          >
-            <Icon :name="tab.icon" class="h-4 w-4" />
-            <span>{{ tab.name }}</span>
-          </NuxtLink>
-        </li>
-      </ul>
+      <UNavigationMenu :items="tabs" highlight highlight-color="primary" class="justify-center" />
     </nav>
   </header>
 
-  <!-- Drawer móvil -->
-  <div class="drawer-start drawer lg:hidden">
-    <input
-      id="mobile-drawer"
-      type="checkbox"
-      class="drawer-toggle"
-      :checked="mobileMenuOpen"
-      @change="toggleMobileMenu"
-    />
-    <div class="drawer-side z-50">
-      <label
-        for="mobile-drawer"
-        aria-label="close sidebar"
-        class="drawer-overlay"
-        @click="closeMobileMenu"
-      ></label>
-      <nav class="menu min-h-full w-72 bg-base-100 p-4" :aria-label="t('nav.mainNav')">
+  <!-- Slideover móvil -->
+  <USlideover v-model:open="mobileMenuOpen" side="left" class="lg:hidden">
+    <template #content>
+      <div class="flex h-full flex-col p-4">
         <!-- Cabecera del menú -->
-        <div class="mb-4 flex items-center justify-between border-b border-base-300 pb-4">
-          <span class="text-lg font-bold text-primary">{{ t('nav.mainNav') }}</span>
-          <button
-            class="btn btn-circle btn-ghost btn-sm"
+        <div class="border-default mb-4 flex items-center justify-between border-b pb-4">
+          <span class="text-primary-500 text-lg font-bold">{{ t('nav.mainNav') }}</span>
+          <UButton
+            icon="i-tabler-x"
+            color="neutral"
+            variant="ghost"
             :aria-label="t('joke.close')"
             @click="closeMobileMenu"
-          >
-            <Icon name="tabler:x" class="h-5 w-5" />
-          </button>
+          />
         </div>
 
         <!-- Enlaces de navegación -->
-        <ul class="space-y-1">
-          <li v-for="tab in tabs" :key="tab.path">
-            <NuxtLink
-              :to="localePath(tab.path)"
-              class="flex items-center gap-3 rounded-lg px-4 py-3 transition-colors"
-              :class="{
-                'bg-primary text-primary-content': isActiveRoute(tab.path),
-                'hover:bg-base-200': !isActiveRoute(tab.path),
-              }"
-              :aria-current="isActiveRoute(tab.path) ? 'page' : undefined"
-              @click="closeMobileMenu"
-            >
-              <Icon :name="tab.icon" class="h-5 w-5" />
-              <span>{{ tab.name }}</span>
-            </NuxtLink>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </div>
+        <nav class="flex-1 space-y-1">
+          <NuxtLink
+            v-for="tab in tabs"
+            :key="tab.to"
+            :to="tab.to"
+            class="flex items-center gap-3 rounded-lg px-4 py-3 transition-colors"
+            :class="{
+              'bg-primary-500 text-white': isActiveRoute(tab.to as string),
+              'hover:bg-elevated': !isActiveRoute(tab.to as string),
+            }"
+            :aria-current="isActiveRoute(tab.to as string) ? 'page' : undefined"
+            @click="closeMobileMenu"
+          >
+            <UIcon :name="tab.icon" class="size-5" />
+            <span>{{ tab.label }}</span>
+          </NuxtLink>
+        </nav>
+      </div>
+    </template>
+  </USlideover>
 
-  <div class="divider my-4"></div>
+  <USeparator class="my-4" />
 </template>

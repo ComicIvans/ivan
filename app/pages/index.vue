@@ -2,16 +2,15 @@
 const { t, tm, rt } = useI18n()
 const localePath = useLocalePath()
 
-// SEO meta dinámico según idioma
 useSeoMeta({
   title: () => t('seo.pageTitle'),
   description: () => t('seo.description'),
 })
 
 const highlightIcons: Record<string, string> = {
-  governance: 'uil:university',
-  infrastructure: 'uil:server-network',
-  events: 'tabler:calendar-event',
+  governance: 'i-tabler-building-bank',
+  infrastructure: 'i-tabler-server-2',
+  events: 'i-tabler-calendar-event',
 }
 
 const highlights = computed(() => {
@@ -20,18 +19,15 @@ const highlights = computed(() => {
 
   return items.map((item: unknown) => {
     const itemData = (item as Record<string, any>) || {}
-
     const id = getI18nStaticValue(itemData.id)
     const title = getI18nStaticValue(itemData.title)
     const description = getI18nStaticValue(itemData.description)
-
-    const icon = highlightIcons[id]
 
     return {
       id,
       title: rt(title),
       description: rt(description),
-      icon: icon || 'tabler:star',
+      icon: highlightIcons[id] || 'i-tabler-star',
     }
   })
 })
@@ -40,12 +36,12 @@ const highlights = computed(() => {
 <template>
   <section role="region" :aria-label="t('nav.home')" class="section-enter">
     <!-- Hero Section -->
-    <div class="hero min-h-[40vh] rounded-box bg-base-100">
-      <div class="hero-content flex-col gap-8 text-center lg:flex-row lg:text-left">
+    <div class="bg-default rounded-2xl py-12">
+      <div class="flex flex-col items-center gap-8 text-center lg:flex-row lg:text-left">
         <figure class="shrink-0">
           <NuxtImg
             src="/full-pic.jpg"
-            class="max-w-[180px] rounded-box shadow-xl sm:max-w-[220px] xl:max-w-[280px]"
+            class="max-w-45 rounded-2xl shadow-xl sm:max-w-55 xl:max-w-70"
             :alt="t('header.profileAlt')"
             loading="eager"
             width="560"
@@ -55,78 +51,82 @@ const highlights = computed(() => {
           />
         </figure>
         <div class="max-w-2xl">
-          <h1 class="text-3xl font-bold text-primary sm:text-4xl lg:text-5xl">
+          <h1 class="text-primary-500 text-3xl font-bold sm:text-4xl lg:text-5xl">
             {{ t('home.hero.title') }}
           </h1>
           <p
             v-if="t('home.hero.subtitle')"
-            class="mt-2 text-lg font-medium text-secondary sm:text-xl lg:text-2xl"
+            class="text-primary-400 mt-2 text-lg font-medium sm:text-xl lg:text-2xl"
           >
             {{ t('home.hero.subtitle') }}
           </p>
-          <p class="mt-6 text-base leading-relaxed text-base-content/90 sm:text-lg">
+          <p class="text-muted mt-6 text-base leading-relaxed sm:text-lg">
             {{ t('home.hero.pitch') }}
           </p>
           <div class="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
-            <NuxtLink :to="localePath('/experiencia')" class="btn btn-primary">
-              <Icon name="tabler:briefcase" class="h-5 w-5" />
+            <UButton :to="localePath('/experiencia')" color="primary" icon="i-tabler-briefcase">
               {{ t('home.cta.experience') }}
-            </NuxtLink>
-            <NuxtLink :to="localePath('/contacto')" class="btn btn-outline btn-secondary">
-              <Icon name="tabler:mail" class="h-5 w-5" />
+            </UButton>
+            <UButton
+              :to="localePath('/contacto')"
+              color="primary"
+              variant="outline"
+              icon="i-tabler-mail"
+            >
               {{ t('home.cta.contact') }}
-            </NuxtLink>
-            <a
-              href="https://www.linkedin.com/in/ivansalidocobo/"
+            </UButton>
+            <UButton
+              to="https://www.linkedin.com/in/ivansalidocobo/"
               target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn-outline"
+              color="neutral"
+              variant="outline"
+              icon="i-tabler-brand-linkedin"
               :aria-label="t('contact.linkedinLabel')"
             >
-              <Icon name="tabler:brand-linkedin" class="h-5 w-5" />
               LinkedIn
-            </a>
-            <a
-              href="https://www.instagram.com/ivansalidocobo/"
+            </UButton>
+            <UButton
+              to="https://www.instagram.com/ivansalidocobo/"
               target="_blank"
-              rel="noopener noreferrer"
-              class="btn btn-outline"
+              color="neutral"
+              variant="outline"
+              icon="i-tabler-brand-instagram"
               :aria-label="t('contact.instagramLabel')"
             >
-              <Icon name="tabler:brand-instagram" class="h-5 w-5" />
               Instagram
-            </a>
+            </UButton>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Divider -->
-    <div class="divider my-8"></div>
+    <USeparator class="my-8" />
 
     <!-- Highlights Section -->
     <div>
-      <h2 class="mb-8 text-center text-2xl font-bold text-primary sm:text-3xl">
+      <h2 class="text-primary-500 mb-8 text-center text-2xl font-bold sm:text-3xl">
         {{ t('home.highlights.title') }}
       </h2>
       <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
-        <article
+        <UCard
           v-for="(highlight, index) in highlights"
           :key="index"
-          class="card-border card bg-base-100 transition-all hover:shadow-lg"
+          class="transition-all hover:shadow-lg"
         >
-          <div class="card-body items-center text-center">
-            <div class="mb-4 rounded-full bg-primary/10 p-4">
-              <Icon :name="highlight.icon" class="h-10 w-10 text-primary" aria-hidden="true" />
+          <div class="flex flex-col items-center text-center">
+            <div
+              class="bg-primary-500/10 mb-4 flex size-16 items-center justify-center rounded-full"
+            >
+              <UIcon :name="highlight.icon" class="text-primary-500 size-8" aria-hidden="true" />
             </div>
-            <h3 class="card-title text-lg text-secondary">
+            <h3 class="text-primary-400 text-lg font-semibold">
               {{ highlight.title }}
             </h3>
-            <p class="text-base-content/80">
+            <p class="text-muted mt-2">
               {{ highlight.description }}
             </p>
           </div>
-        </article>
+        </UCard>
       </div>
     </div>
   </section>

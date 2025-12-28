@@ -1,25 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@import '@nuxt/ui';
 
-/* Componentes reutilizables */
-@layer components {
-  /* Tarjeta con borde sutil */
-  .card-border {
-    @apply border-base-300 border;
-  }
-}
-
-/* Skip link para accesibilidad */
-.skip-link {
-  @apply bg-primary text-primary-content absolute -top-10 left-0 z-50 px-4 py-2;
-  @apply transition-all focus:top-0;
-}
-
-/* Mejoras de foco para accesibilidad */
-:focus-visible {
-  @apply outline-primary outline-2 outline-offset-2;
-}
+/* Custom color theme - Red/Coral accent */
+/* Colors are defined in nuxt.config.ts ui.theme.colors */
 
 /* Scroll suave */
 html {
@@ -28,17 +11,18 @@ html {
 
 /* Mejor legibilidad */
 body {
-  @apply antialiased;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Transiciones suaves para cambio de tema - sin afectar layout */
+/* Transiciones suaves para cambio de tema */
 * {
   transition:
     background-color 0.2s ease,
     border-color 0.2s ease;
 }
 
-/* Evitar transición de color en texto para prevenir flash */
+/* Evitar transición de color en texto */
 p,
 span,
 h1,
@@ -52,45 +36,7 @@ li {
   transition: none;
 }
 
-/* Animación de subrayado para enlaces primarios */
-.link.link-primary {
-  @apply relative;
-  text-decoration: none;
-}
-
-.link.link-primary::after {
-  content: '';
-  @apply bg-primary absolute bottom-0 left-0 h-0.5 w-0 transition-all duration-300;
-}
-
-.link.link-primary:hover::after {
-  @apply w-full;
-}
-
-/* Animación para iconos sociales */
-.social-icon {
-  @apply transition-transform duration-300 ease-out;
-}
-
-.social-icon:hover {
-  @apply scale-125;
-}
-
-/* Dock de navegación móvil */
-.dock-item {
-  @apply flex flex-col items-center justify-center px-3 py-2;
-  @apply transition-all duration-200 ease-out;
-}
-
-.dock-item.active {
-  @apply text-primary;
-}
-
-.dock-item.active .dock-icon {
-  @apply scale-110;
-}
-
-/* Animación de entrada para secciones - solo en carga inicial */
+/* Animación de entrada para secciones */
 .section-enter {
   animation: sectionEnter 0.4s ease-out forwards;
 }
@@ -106,36 +52,11 @@ li {
   }
 }
 
-/* Animación para el modal */
-.modal-animated .modal-box {
-  animation: modalEnter 0.25s ease-out;
+/* Animación para iconos sociales */
+.social-icon {
+  transition: transform 300ms ease-out;
 }
 
-@keyframes modalEnter {
-  from {
-    opacity: 0;
-    transform: scale(0.95) translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-
-/* Mejoras para móvil */
-@media (max-width: 640px) {
-  /* Cards más compactas en móvil */
-  .card-body {
-    @apply p-4;
-  }
-
-  /* Timeline más compacta */
-  .timeline-box {
-    @apply p-3;
-  }
-
-  /* Texto más pequeño en badges para móvil */
-  .badge-sm {
-    @apply text-xs;
-  }
+.social-icon:hover {
+  transform: scale(1.25);
 }

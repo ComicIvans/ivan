@@ -112,3 +112,4 @@ useSchemaOrg([
     </NuxtLayout>
   </div>
 </template>
+

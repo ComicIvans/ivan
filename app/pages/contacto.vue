@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { t } = useI18n()
+const toast = useToast()
 
-// SEO meta dinámico según idioma
 useSeoMeta({
   title: () => t('contactPage.seo.title'),
   description: () => t('contactPage.seo.description'),
@@ -13,12 +13,10 @@ const form = reactive({
   email: '',
   subject: '',
   message: '',
-  website: '', // Honeypot field - bots will fill this
+  website: '', // Honeypot field
 })
 
 const isSubmitting = ref(false)
-const submitStatus = ref<'idle' | 'success' | 'error'>('idle')
-const errorMessage = ref('')
 
 const isFormValid = computed(() => {
   return (
@@ -34,8 +32,6 @@ async function handleSubmit() {
   if (!isFormValid.value || isSubmitting.value) return
 
   isSubmitting.value = true
-  submitStatus.value = 'idle'
-  errorMessage.value = ''
 
   try {
     await $fetch('/api/contact', {
@@ -45,31 +41,31 @@ async function handleSubmit() {
         email: form.email.trim(),
         subject: form.subject.trim(),
         message: form.message.trim(),
-        website: form.website, // Honeypot
+        website: form.website,
       },
     })
 
-    submitStatus.value = 'success'
+    toast.add({
+      title: t('contactPage.form.success'),
+      icon: 'i-tabler-check',
+      color: 'success',
+    })
+
     // Reset form
     form.name = ''
     form.email = ''
     form.subject = ''
     form.message = ''
   } catch (error: unknown) {
-    submitStatus.value = 'error'
-    if (error instanceof Error) {
-      errorMessage.value = error.message
-    } else {
-      errorMessage.value = t('contactPage.form.errorGeneric')
-    }
+    const errorMsg = error instanceof Error ? error.message : t('contactPage.form.errorGeneric')
+    toast.add({
+      title: errorMsg,
+      icon: 'i-tabler-alert-circle',
+      color: 'error',
+    })
   } finally {
     isSubmitting.value = false
   }
-}
-
-function resetStatus() {
-  submitStatus.value = 'idle'
-  errorMessage.value = ''
 }
 </script>
 
@@ -78,37 +74,19 @@ function resetStatus() {
     <div class="mx-auto max-w-2xl">
       <!-- Header -->
       <div class="mb-8 text-center">
-        <h1 class="text-3xl font-bold text-primary sm:text-4xl">
+        <h1 class="text-primary-500 text-3xl font-bold sm:text-4xl">
           {{ t('contactPage.title') }}
         </h1>
-        <p class="mt-4 text-base-content/80">
+        <p class="text-muted mt-4">
           {{ t('contactPage.subtitle') }}
         </p>
       </div>
 
-      <!-- Success Alert -->
-      <div v-if="submitStatus === 'success'" class="alert alert-success mb-6 shadow-lg">
-        <Icon name="tabler:check" class="size-6" />
-        <span>{{ t('contactPage.form.success') }}</span>
-        <button class="btn btn-ghost btn-sm" @click="resetStatus">
-          <Icon name="tabler:x" class="size-4" />
-        </button>
-      </div>
-
-      <!-- Error Alert -->
-      <div v-if="submitStatus === 'error'" class="alert alert-error mb-6 shadow-lg">
-        <Icon name="tabler:alert-circle" class="size-6" />
-        <span>{{ errorMessage || t('contactPage.form.errorGeneric') }}</span>
-        <button class="btn btn-ghost btn-sm" @click="resetStatus">
-          <Icon name="tabler:x" class="size-4" />
-        </button>
-      </div>
-
       <!-- Contact Form -->
-      <form class="card-border card bg-base-100 shadow-lg" @submit.prevent="handleSubmit">
-        <div class="card-body gap-6">
-          <!-- Honeypot field - hidden from users, bots will fill it -->
-          <div class="absolute -left-[9999px] opacity-0" aria-hidden="true">
+      <UCard>
+        <form class="space-y-6" @submit.prevent="handleSubmit">
+          <!-- Honeypot field -->
+          <div class="sr-only" aria-hidden="true">
             <label for="website">Website</label>
             <input
               id="website"
@@ -121,113 +99,96 @@ function resetStatus() {
           </div>
 
           <!-- Name -->
-          <div class="form-control">
-            <label class="label" for="name">
-              <span class="label-text font-medium">{{ t('contactPage.form.name') }} *</span>
-            </label>
-            <input
-              id="name"
+          <UFormField :label="t('contactPage.form.name') + ' *'">
+            <UInput
               v-model="form.name"
               type="text"
               :placeholder="t('contactPage.form.namePlaceholder')"
-              class="input input-bordered w-full"
               required
               :disabled="isSubmitting"
+              class="w-full"
             />
-          </div>
+          </UFormField>
 
           <!-- Email -->
-          <div class="form-control">
-            <label class="label" for="email">
-              <span class="label-text font-medium">{{ t('contactPage.form.email') }} *</span>
-            </label>
-            <input
-              id="email"
+          <UFormField :label="t('contactPage.form.email') + ' *'">
+            <UInput
               v-model="form.email"
               type="email"
               :placeholder="t('contactPage.form.emailPlaceholder')"
-              class="input input-bordered w-full"
               required
               :disabled="isSubmitting"
+              class="w-full"
             />
-          </div>
+          </UFormField>
 
           <!-- Subject -->
-          <div class="form-control">
-            <label class="label" for="subject">
-              <span class="label-text font-medium">{{ t('contactPage.form.subject') }} *</span>
-            </label>
-            <input
-              id="subject"
+          <UFormField :label="t('contactPage.form.subject') + ' *'">
+            <UInput
               v-model="form.subject"
               type="text"
               :placeholder="t('contactPage.form.subjectPlaceholder')"
-              class="input input-bordered w-full"
               required
               :disabled="isSubmitting"
+              class="w-full"
             />
-          </div>
+          </UFormField>
 
           <!-- Message -->
-          <div class="form-control">
-            <label class="label" for="message">
-              <span class="label-text font-medium">{{ t('contactPage.form.message') }} *</span>
-            </label>
-            <textarea
-              id="message"
+          <UFormField :label="t('contactPage.form.message') + ' *'">
+            <UTextarea
               v-model="form.message"
               :placeholder="t('contactPage.form.messagePlaceholder')"
-              class="textarea textarea-bordered min-h-32 w-full"
-              rows="5"
+              :rows="5"
               required
               :disabled="isSubmitting"
-            ></textarea>
-          </div>
+              class="w-full"
+            />
+          </UFormField>
 
           <!-- Submit Button -->
-          <div class="card-actions mt-2">
-            <button
-              type="submit"
-              class="btn btn-primary w-full"
-              :disabled="!isFormValid || isSubmitting"
-            >
-              <span v-if="isSubmitting" class="loading loading-spinner loading-sm"></span>
-              <Icon v-else name="tabler:send" class="size-5" />
-              {{ isSubmitting ? t('contactPage.form.sending') : t('contactPage.form.submit') }}
-            </button>
-          </div>
+          <UButton
+            type="submit"
+            color="primary"
+            block
+            :loading="isSubmitting"
+            :disabled="!isFormValid || isSubmitting"
+            icon="i-tabler-send"
+          >
+            {{ isSubmitting ? t('contactPage.form.sending') : t('contactPage.form.submit') }}
+          </UButton>
 
           <!-- Privacy Note -->
-          <p class="text-center text-sm text-base-content/60">
+          <p class="text-dimmed text-center text-sm">
             {{ t('contactPage.form.privacyNote') }}
           </p>
-        </div>
-      </form>
+        </form>
+      </UCard>
 
       <!-- Alternative Contact -->
       <div class="mt-8 text-center">
-        <p class="text-base-content/70">
+        <p class="text-muted">
           {{ t('contactPage.alternative') }}
         </p>
         <div class="mt-4 flex flex-wrap justify-center gap-4">
-          <a
-            href="https://www.linkedin.com/in/ivansalidocobo/"
+          <UButton
+            to="https://www.linkedin.com/in/ivansalidocobo/"
             target="_blank"
-            rel="noopener noreferrer"
-            class="btn btn-outline"
+            color="neutral"
+            variant="outline"
+            icon="i-tabler-brand-linkedin"
           >
-            <Icon name="tabler:brand-linkedin" class="size-5" />
             LinkedIn
-          </a>
-          <a
-            href="https://www.instagram.com/ivansalidocobo/"
+          </UButton>
+          <UButton
+            to="https://www.instagram.com/ivansalidocobo/"
             target="_blank"
-            rel="noopener noreferrer"
-            class="btn btn-outline"
+            color="neutral"
+            variant="outline"
+            icon="i-tabler-brand-instagram"
           >
-            <Icon name="tabler:brand-instagram" class="size-5" />
             Instagram
-          </a>
+          </UButton>
         </div>
       </div>
     </div>
