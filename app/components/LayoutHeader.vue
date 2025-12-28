@@ -93,16 +93,17 @@ watch(
 
 <template>
   <!-- Modal de chistes -->
-  <UModal v-model:open="jokeModalOpen">
+  <UModal v-model:open="jokeModalOpen" :aria-label="t('joke.title')">
     <template #content>
       <UCard>
         <template #header>
           <div class="flex items-center justify-between">
-            <h3 class="text-lg font-semibold">{{ t('joke.title') }}</h3>
+            <h3 id="joke-modal-title" class="text-lg font-semibold">{{ t('joke.title') }}</h3>
             <UButton
               icon="i-tabler-x"
               color="neutral"
               variant="ghost"
+              :aria-label="t('joke.close')"
               @click="jokeModalOpen = false"
             />
           </div>
@@ -125,7 +126,7 @@ watch(
     <div class="hidden items-center justify-between gap-4 lg:flex">
       <!-- Foto de perfil -->
       <button
-        class="focus-visible:ring-primary-500 shrink-0 rounded-full transition-transform hover:scale-105 focus-visible:ring-2"
+        class="focus-visible:ring-primary-500 shrink-0 rounded-full transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:outline-none"
         :aria-label="t('header.jokeButton')"
         @click="showRandomJoke"
       >
@@ -182,39 +183,41 @@ watch(
     <!-- Layout Móvil -->
     <div class="lg:hidden">
       <!-- Fila superior: menú hamburguesa, foto centrada, controles -->
-      <div class="grid grid-cols-[auto_1fr_auto] items-center gap-2">
-        <!-- Botón menú móvil -->
-        <UButton
-          :icon="mobileMenuOpen ? 'i-tabler-x' : 'i-tabler-menu-2'"
-          color="neutral"
-          variant="ghost"
-          size="lg"
-          :aria-label="t('nav.mainNav')"
-          :aria-expanded="mobileMenuOpen"
-          @click="mobileMenuOpen = !mobileMenuOpen"
-        />
-
-        <!-- Foto de perfil centrada -->
-        <div class="flex justify-center">
-          <button
-            class="focus-visible:ring-primary-500 shrink-0 rounded-full transition-transform hover:scale-105 focus-visible:ring-2"
-            :aria-label="t('header.jokeButton')"
-            @click="showRandomJoke"
-          >
-            <NuxtImg
-              class="size-20 rounded-full object-cover sm:size-24"
-              src="/profile-pic.jpg"
-              :alt="t('header.profileAlt')"
-              width="128"
-              height="128"
-              format="webp"
-              quality="85"
-            />
-          </button>
+      <div class="flex items-center justify-between">
+        <!-- Contenedor izquierdo con ancho fijo igual al derecho -->
+        <div class="flex w-20 justify-start sm:w-24">
+          <!-- Botón menú móvil -->
+          <UButton
+            :icon="mobileMenuOpen ? 'i-tabler-x' : 'i-tabler-menu-2'"
+            color="neutral"
+            variant="ghost"
+            size="lg"
+            :aria-label="t('nav.mainNav')"
+            :aria-expanded="mobileMenuOpen"
+            aria-controls="mobile-menu"
+            @click="mobileMenuOpen = !mobileMenuOpen"
+          />
         </div>
 
-        <!-- Controles (tema e idioma) -->
-        <div class="flex items-center gap-2">
+        <!-- Foto de perfil centrada -->
+        <button
+          class="focus-visible:ring-primary-500 shrink-0 rounded-full transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:outline-none"
+          :aria-label="t('header.jokeButton')"
+          @click="showRandomJoke"
+        >
+          <NuxtImg
+            class="size-20 rounded-full object-cover sm:size-24"
+            src="/profile-pic.jpg"
+            :alt="t('header.profileAlt')"
+            width="128"
+            height="128"
+            format="webp"
+            quality="85"
+          />
+        </button>
+
+        <!-- Controles (tema e idioma) con ancho fijo igual al izquierdo -->
+        <div class="flex w-20 items-center justify-end gap-1 sm:w-24 sm:gap-2">
           <UButton
             :icon="isDark ? 'i-tabler-sun' : 'i-tabler-moon'"
             color="neutral"
@@ -262,9 +265,9 @@ watch(
   </header>
 
   <!-- Slideover móvil -->
-  <USlideover v-model:open="mobileMenuOpen" side="left" class="lg:hidden">
+  <USlideover id="mobile-menu" v-model:open="mobileMenuOpen" side="left" class="lg:hidden">
     <template #content>
-      <div class="flex h-full flex-col p-4">
+      <nav class="flex h-full flex-col p-4" :aria-label="t('nav.mainNav')">
         <!-- Cabecera del menú -->
         <div class="border-default mb-4 flex items-center justify-between border-b pb-4">
           <span class="text-primary-500 text-lg font-bold">{{ t('nav.mainNav') }}</span>
@@ -278,7 +281,7 @@ watch(
         </div>
 
         <!-- Enlaces de navegación -->
-        <nav class="flex-1 space-y-1">
+        <div class="flex-1 space-y-1">
           <NuxtLink
             v-for="tab in tabs"
             :key="tab.to"
@@ -291,11 +294,11 @@ watch(
             :aria-current="isActiveRoute(tab.to as string) ? 'page' : undefined"
             @click="closeMobileMenu"
           >
-            <UIcon :name="tab.icon" class="size-5" />
+            <UIcon :name="tab.icon" class="size-5" aria-hidden="true" />
             <span>{{ tab.label }}</span>
           </NuxtLink>
-        </nav>
-      </div>
+        </div>
+      </nav>
     </template>
   </USlideover>
 

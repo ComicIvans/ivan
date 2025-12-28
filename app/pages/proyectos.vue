@@ -103,7 +103,7 @@ const projects = computed(() => {
     <!-- Tech Stack Section -->
     <div class="mb-12">
       <h2 class="text-primary-400 mb-6 flex items-center gap-2 text-2xl font-bold">
-        <UIcon name="i-tabler-stack-2" class="size-7" />
+        <UIcon name="i-tabler-stack-2" class="size-7" aria-hidden="true" />
         {{ t('projects.stack.title') }}
       </h2>
 
@@ -115,7 +115,7 @@ const projects = computed(() => {
         <UCard v-for="tech in primaryTech" :key="tech.name" class="transition-all hover:shadow-lg">
           <div class="flex items-center gap-3">
             <div class="bg-primary-500/10 shrink-0 rounded-lg p-2">
-              <UIcon :name="tech.icon" class="text-primary-500 size-6" />
+              <UIcon :name="tech.icon" class="text-primary-500 size-6" aria-hidden="true" />
             </div>
             <h4 class="font-bold">{{ tech.name }}</h4>
           </div>
@@ -133,7 +133,7 @@ const projects = computed(() => {
           :key="tech.name"
           class="border-primary-500/20 bg-primary-500/5 hover:bg-primary-500/10 flex items-center gap-2 rounded-full border px-4 py-2 transition-colors"
         >
-          <UIcon :name="tech.icon" class="text-primary-500 size-5" />
+          <UIcon :name="tech.icon" class="text-primary-500 size-5" aria-hidden="true" />
           <span class="font-medium">{{ tech.name }}</span>
         </div>
       </div>
@@ -144,7 +144,7 @@ const projects = computed(() => {
     <!-- Projects Section -->
     <div>
       <h2 class="text-primary-400 mb-6 flex items-center gap-2 text-2xl font-bold">
-        <UIcon name="i-tabler-folder-code" class="size-7" />
+        <UIcon name="i-tabler-folder-code" class="size-7" aria-hidden="true" />
         {{ t('projects.list.title') }}
       </h2>
 
@@ -156,7 +156,7 @@ const projects = computed(() => {
         >
           <div class="flex items-start gap-4">
             <div class="bg-primary-500/10 shrink-0 rounded-xl p-3">
-              <UIcon :name="project.icon" class="text-primary-500 size-8" />
+              <UIcon :name="project.icon" class="text-primary-500 size-8" aria-hidden="true" />
             </div>
             <div class="flex-1">
               <h3 class="text-lg font-bold">{{ project.title }}</h3>

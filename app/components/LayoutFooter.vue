@@ -46,6 +46,7 @@ const socialLinks = [
               <ULink
                 to="https://github.com/ComicIvans/ivan"
                 target="_blank"
+                rel="noopener noreferrer"
                 class="text-primary-500 hover:underline"
               >
                 {{ t('footer.github') }}
@@ -80,6 +81,7 @@ const socialLinks = [
             v-else
             :to="link.href"
             target="_blank"
+            rel="noopener noreferrer"
             :icon="link.icon"
             color="neutral"
             variant="ghost"

@@ -57,7 +57,7 @@ const galleryEvents = computed(() => {
           <div class="bg-elevated relative aspect-video w-full overflow-hidden">
             <USkeleton class="absolute inset-0 rounded-none" />
             <div class="absolute inset-0 flex items-center justify-center">
-              <UIcon :name="event.icon" class="text-dimmed size-16" />
+              <UIcon :name="event.icon" class="text-dimmed size-16" aria-hidden="true" />
             </div>
             <UBadge color="neutral" size="sm" class="absolute right-2 bottom-2">
               {{ t('gallery.photoSoon') }}
@@ -67,7 +67,7 @@ const galleryEvents = computed(() => {
 
         <div>
           <h2 class="text-primary-400 flex items-center gap-2 text-lg font-bold">
-            <UIcon :name="event.icon" class="text-primary-500 size-5" />
+            <UIcon :name="event.icon" class="text-primary-500 size-5" aria-hidden="true" />
             {{ event.titulo }}
           </h2>
           <p class="text-primary-500 mt-1 text-sm font-medium">{{ event.fecha }}</p>
@@ -79,7 +79,7 @@ const galleryEvents = computed(() => {
     <!-- Nota informativa -->
     <UCard class="mt-8">
       <div class="flex items-center justify-center gap-3 text-center">
-        <UIcon name="i-tabler-camera" class="text-primary-500 size-6" />
+        <UIcon name="i-tabler-camera" class="text-primary-500 size-6" aria-hidden="true" />
         <p class="text-muted">
           {{ t('gallery.comingSoon') }}
         </p>

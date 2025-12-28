@@ -113,7 +113,7 @@ const highlights = computed(() => {
           :key="index"
           class="transition-all hover:shadow-lg"
         >
-          <div class="flex flex-col items-center text-center">
+          <article class="flex flex-col items-center text-center">
             <div
               class="bg-primary-500/10 mb-4 flex size-16 items-center justify-center rounded-full"
             >
@@ -125,7 +125,7 @@ const highlights = computed(() => {
             <p class="text-muted mt-2">
               {{ highlight.description }}
             </p>
-          </div>
+          </article>
         </UCard>
       </div>
     </div>

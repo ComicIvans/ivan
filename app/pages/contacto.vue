@@ -84,7 +84,9 @@ async function handleSubmit() {
 
       <!-- Contact Form -->
       <UCard>
-        <form class="space-y-6" @submit.prevent="handleSubmit">
+        <form class="space-y-6" @submit.prevent="handleSubmit" aria-describedby="form-description">
+          <p id="form-description" class="sr-only">{{ t('contactPage.subtitle') }}</p>
+          
           <!-- Honeypot field -->
           <div class="sr-only" aria-hidden="true">
             <label for="website">Website</label>
@@ -174,18 +176,22 @@ async function handleSubmit() {
           <UButton
             to="https://www.linkedin.com/in/ivansalidocobo/"
             target="_blank"
+            rel="noopener noreferrer"
             color="neutral"
             variant="outline"
             icon="i-tabler-brand-linkedin"
+            :aria-label="t('contact.linkedinLabel')"
           >
             LinkedIn
           </UButton>
           <UButton
             to="https://www.instagram.com/ivansalidocobo/"
             target="_blank"
+            rel="noopener noreferrer"
             color="neutral"
             variant="outline"
             icon="i-tabler-brand-instagram"
+            :aria-label="t('contact.instagramLabel')"
           >
             Instagram
           </UButton>

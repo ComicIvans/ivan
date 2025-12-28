@@ -111,7 +111,7 @@ const competencies = computed(() => {
     <!-- Academic Training -->
     <div class="mb-12">
       <h2 class="text-primary-400 mb-6 flex items-center gap-2 text-2xl font-bold">
-        <UIcon name="i-tabler-school" class="size-7" />
+        <UIcon name="i-tabler-school" class="size-7" aria-hidden="true" />
         {{ t('training.academic.title') }}
       </h2>
 
@@ -130,6 +130,7 @@ const competencies = computed(() => {
                 :name="item.icon"
                 class="size-8"
                 :class="item.current ? 'text-primary-500' : 'text-muted'"
+                aria-hidden="true"
               />
             </div>
             <div class="flex-1">
@@ -152,14 +153,14 @@ const competencies = computed(() => {
     <!-- Languages -->
     <div class="mb-12">
       <h2 class="text-primary-400 mb-6 flex items-center gap-2 text-2xl font-bold">
-        <UIcon name="i-tabler-language" class="size-7" />
+        <UIcon name="i-tabler-language" class="size-7" aria-hidden="true" />
         {{ t('training.languages.title') }}
       </h2>
 
       <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
         <UCard v-for="lang in languages" :key="lang.name">
           <div class="flex items-center gap-3">
-            <UIcon :name="lang.flag" class="size-10" />
+            <UIcon :name="lang.flag" class="size-10" aria-hidden="true" />
             <div>
               <h3 class="font-bold">{{ lang.name }}</h3>
               <p class="text-primary-500 text-sm">{{ lang.level }}</p>
@@ -182,7 +183,7 @@ const competencies = computed(() => {
     <!-- Other Certifications -->
     <div class="mb-12">
       <h2 class="text-primary-400 mb-6 flex items-center gap-2 text-2xl font-bold">
-        <UIcon name="i-tabler-certificate" class="size-7" />
+        <UIcon name="i-tabler-certificate" class="size-7" aria-hidden="true" />
         {{ t('training.other.title') }}
       </h2>
 
@@ -190,7 +191,7 @@ const competencies = computed(() => {
         <UCard>
           <div class="flex items-center gap-3">
             <div class="bg-primary-500/10 shrink-0 rounded-xl p-3">
-              <UIcon name="i-tabler-car" class="text-primary-500 size-6" />
+              <UIcon name="i-tabler-car" class="text-primary-500 size-6" aria-hidden="true" />
             </div>
             <div>
               <h3 class="font-bold">{{ t('training.other.drivingLicense.title') }}</h3>
@@ -208,7 +209,7 @@ const competencies = computed(() => {
     <!-- Transversal Competencies -->
     <div>
       <h2 class="text-primary-400 mb-6 flex items-center gap-2 text-2xl font-bold">
-        <UIcon name="i-tabler-bulb" class="size-7" />
+        <UIcon name="i-tabler-bulb" class="size-7" aria-hidden="true" />
         {{ t('training.competencies.title') }}
       </h2>
 
@@ -218,7 +219,7 @@ const competencies = computed(() => {
           :key="comp.name"
           class="border-primary-500/20 bg-primary-500/5 hover:bg-primary-500/10 flex items-center gap-2 rounded-full border px-4 py-2 transition-colors"
         >
-          <UIcon :name="comp.icon" class="text-primary-500 size-5" />
+          <UIcon :name="comp.icon" class="text-primary-500 size-5" aria-hidden="true" />
           <span class="font-medium">{{ comp.name }}</span>
         </div>
       </div>
