@@ -9,8 +9,8 @@ tags:
   - CEEINA
   - Formación
 cover:
-  src: /gallery/ceeina-2025/02.JPG
-  alt: Yo comenzando una de las charlas
+  src: /gallery/ceeina-2025/08.JPG
+  alt: Acto de apertura de las jornadas
 photos:
   - src: /gallery/ceeina-2025/01.JPG
   - src: /gallery/ceeina-2025/02.JPG

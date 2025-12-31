@@ -9,8 +9,8 @@ tags:
   - CREUP
   - Asamblea
 cover:
-  src: /gallery/creup-ago-78/06.JPG
-  alt: Yo sentado en una mesa durante la asamblea
+  src: /gallery/creup-ago-78/07.JPG
+  alt: Imagen de la asamblea en mitad de un debate
 photos:
   - src: /gallery/creup-ago-78/01.JPG
   - src: /gallery/creup-ago-78/02.JPG
