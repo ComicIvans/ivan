@@ -24,5 +24,5 @@ logs
 !.env.example
 
 # Gallery images
-!public/gallery/README.md
 public/gallery/*
+!public/gallery/README.md

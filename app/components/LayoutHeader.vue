@@ -179,7 +179,6 @@ watch(
           :alt="t('header.profileAlt')"
           width="128"
           height="128"
-          format="webp"
           quality="85"
         />
       </button>
@@ -254,7 +253,6 @@ watch(
             :alt="t('header.profileAlt')"
             width="128"
             height="128"
-            format="webp"
             quality="85"
           />
         </button>

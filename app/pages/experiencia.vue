@@ -98,7 +98,7 @@ const timelineItems = computed(() => {
       </UTimeline>
     </div>
 
-    <!-- Enlace a experiencia completa -->
+    <!-- Link to full experience -->
     <UCard class="mt-8">
       <div class="text-center">
         <p class="text-muted">

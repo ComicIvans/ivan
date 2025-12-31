@@ -7,7 +7,7 @@ useSeoMeta({
 })
 
 const techIcons: Record<string, string> = {
-  nuxt: 'i-simple-icons-nuxtdotjs',
+  nuxt: 'i-simple-icons-nuxt',
   vue: 'i-simple-icons-vuedotjs',
   linux: 'i-simple-icons-linux',
   docker: 'i-simple-icons-docker',
@@ -114,7 +114,9 @@ const projects = computed(() => {
       <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <UCard v-for="tech in primaryTech" :key="tech.name" class="transition-all hover:shadow-lg">
           <div class="flex items-center gap-3">
-            <div class="bg-primary-500/10 shrink-0 rounded-lg p-2">
+            <div
+              class="bg-primary-500/10 flex size-10 shrink-0 items-center justify-center rounded-lg"
+            >
               <UIcon :name="tech.icon" class="text-primary-500 size-6" aria-hidden="true" />
             </div>
             <h4 class="font-bold">{{ tech.name }}</h4>
@@ -155,7 +157,9 @@ const projects = computed(() => {
           class="transition-all hover:shadow-lg"
         >
           <div class="flex items-start gap-4">
-            <div class="bg-primary-500/10 shrink-0 rounded-xl p-3">
+            <div
+              class="bg-primary-500/10 flex size-16 shrink-0 items-center justify-center rounded-xl"
+            >
               <UIcon :name="project.icon" class="text-primary-500 size-8" aria-hidden="true" />
             </div>
             <div class="flex-1">

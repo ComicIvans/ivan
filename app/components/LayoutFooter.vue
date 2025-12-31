@@ -56,7 +56,7 @@ const socialLinks = [
         </p>
       </div>
 
-      <!-- Aviso legal -->
+      <!-- Legal notice -->
       <ULink
         :to="localePath('/legal')"
         class="text-sm opacity-70 transition-opacity hover:opacity-100 md:text-center"
@@ -64,7 +64,7 @@ const socialLinks = [
         {{ t('legal.title') }}
       </ULink>
 
-      <!-- Redes sociales -->
+      <!-- Social links -->
       <nav class="flex gap-3 md:justify-end" :aria-label="t('footer.socialNav')">
         <template v-for="link in socialLinks" :key="link.icon">
           <UButton

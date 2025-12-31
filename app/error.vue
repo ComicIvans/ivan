@@ -144,11 +144,11 @@ useSeoMeta({
 
 <style scoped>
 .main-content {
-  /* Padding para el dock en móvil */
+  /* Padding for the dock on mobile */
   padding-bottom: 4rem;
 }
 
-/* En desktop (con hover), no necesitamos padding extra */
+/* On desktop (with hover), we don't need extra padding */
 @media (hover: hover) and (min-width: 768px) {
   .main-content {
     padding-bottom: 0;

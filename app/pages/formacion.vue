@@ -39,9 +39,9 @@ const academicItems = computed(() => {
 })
 
 const languageFlags: Record<string, string> = {
-  english: 'i-emojione-flag-for-united-kingdom',
-  german: 'i-emojione-flag-for-germany',
-  spanish: 'i-emojione-flag-for-spain',
+  english: 'circle-flags:gb',
+  german: 'circle-flags:de',
+  spanish: 'circle-flags:es',
 }
 
 const languageProgress: Record<string, number> = {
@@ -123,7 +123,7 @@ const competencies = computed(() => {
         >
           <div class="flex flex-col gap-4 sm:flex-row sm:items-start">
             <div
-              class="shrink-0 self-start rounded-xl p-3"
+              class="flex size-14 shrink-0 items-center justify-center self-start rounded-xl"
               :class="item.current ? 'bg-primary-500/10' : 'bg-elevated'"
             >
               <UIcon
@@ -190,7 +190,9 @@ const competencies = computed(() => {
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         <UCard>
           <div class="flex items-center gap-3">
-            <div class="bg-primary-500/10 shrink-0 rounded-xl p-3">
+            <div
+              class="bg-primary-500/10 flex size-12 shrink-0 items-center justify-center rounded-xl"
+            >
               <UIcon name="i-tabler-car" class="text-primary-500 size-6" aria-hidden="true" />
             </div>
             <div>
