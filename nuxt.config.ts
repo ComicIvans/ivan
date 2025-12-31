@@ -24,8 +24,6 @@ export default defineNuxtConfig({
         : {},
   },
 
-  sourcemap: false,
-
   app: {
     head: {
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
@@ -42,6 +40,18 @@ export default defineNuxtConfig({
     'nuxt-umami',
     '@nuxt/content',
   ],
+
+  image: {
+    provider: process.env.NODE_ENV === 'development' ? undefined : 'ipxStatic', // Fix for Cloudflare Pages
+  },
+
+  nitro: {
+    // Fix for Cloudflare Pages
+    prerender: {
+      routes: ['/'],
+      crawlLinks: true,
+    },
+  },
 
   umami: {
     id: 'c3dac3c3-bdd7-46d3-886b-7c21c097a7b3',
@@ -68,17 +78,6 @@ export default defineNuxtConfig({
 
   ogImage: {
     enabled: true,
-    compatibility: {
-      dev: {
-        resvg: 'wasm',
-      },
-      runtime: {
-        resvg: 'wasm',
-      },
-      prerender: {
-        resvg: 'wasm',
-      },
-    },
   },
 
   i18n: {
