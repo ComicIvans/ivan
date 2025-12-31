@@ -9,7 +9,8 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "deploy": "pnpx nuxi build --preset=cloudflare_pages && pnpx wrangler pages deploy dist/"
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.9.0",
