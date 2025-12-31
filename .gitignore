@@ -22,3 +22,7 @@ logs
 .env
 .env.*
 !.env.example
+
+# Gallery images
+!public/gallery/README.md
+public/gallery/*

@@ -90,25 +90,25 @@ useSeoMeta({
         <div class="mx-auto w-11/12 max-w-7xl p-4 sm:p-6">
           <LayoutHeader />
 
-          <!-- Contenido del error -->
+          <!-- Error content -->
           <div class="flex min-h-[60vh] flex-col items-center justify-center text-center">
             <UCard class="max-w-md">
-              <!-- Código de error -->
+              <!-- Error code -->
               <h1 class="text-primary-500 text-9xl font-bold">
                 {{ error?.statusCode || 500 }}
               </h1>
 
-              <!-- Título del error -->
+              <!-- Error title -->
               <h2 class="mt-4 text-2xl font-semibold sm:text-3xl">
                 {{ errorTitle }}
               </h2>
 
-              <!-- Descripción del error -->
+              <!-- Error description -->
               <p class="text-muted mt-2">
                 {{ errorDescription }}
               </p>
 
-              <!-- Acciones -->
+              <!-- Actions -->
               <div class="mt-6 flex flex-wrap justify-center gap-4">
                 <UButton color="primary" icon="i-tabler-home" @click="goHome">
                   {{ $t('error.backHome') }}
@@ -118,7 +118,7 @@ useSeoMeta({
                 </UButton>
               </div>
 
-              <!-- Información adicional para desarrollo -->
+              <!-- Additional information for development -->
               <UCollapsible v-if="error?.message && isDev" class="mt-6">
                 <UButton variant="ghost" size="sm" class="w-full justify-between">
                   {{ $t('error.technicalDetails') }}

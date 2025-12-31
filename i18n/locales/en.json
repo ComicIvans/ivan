@@ -249,32 +249,43 @@
     "intro": "Highlights from events, conferences and student representation activities.",
     "photoSoon": "Photo coming soon",
     "comingSoon": "Photographs from these events will be added shortly.",
-    "events": [
-      {
-        "id": "enem-2025",
-        "title": "26th ENEM Granada",
-        "date": "22–27 July 2025",
-        "description": "National Meeting of Mathematics Students, where I served as Treasurer and Secretary of the Organising Committee. A special anniversary edition returning to its home city."
+    "filters": {
+      "searchPlaceholder": "Search events...",
+      "tags": "Tags",
+      "sortByDateDesc": "Most recent first",
+      "sortByDateAsc": "Oldest first",
+      "sortByTitleAsc": "Title (A-Z)",
+      "sortByTitleDesc": "Title (Z-A)",
+      "clearFilters": "Clear filters",
+      "resultsCount": "{count} event found | {count} events found"
+    },
+    "noResults": {
+      "title": "No events found",
+      "description": "Try adjusting your filters or search terms."
+    },
+    "eventNotFound": {
+      "title": "Event not found",
+      "description": "The event you are looking for does not exist or has been removed.",
+      "backToGallery": "Back to gallery"
+    },
+    "event": {
+      "about": "About the event",
+      "myParticipation": "My participation",
+      "links": "Links",
+      "photos": "Photo gallery",
+      "photosCount": "{count} photo | {count} photos",
+      "photoAlt": "Photo {number}",
+      "backToGallery": "Back to gallery",
+      "noPhotos": {
+        "title": "Photos coming soon",
+        "description": "Photos from this event will be added shortly."
       },
-      {
-        "id": "creup-riano",
-        "title": "CREUP Extended Executive Meeting in Riaño",
-        "date": "1–4 September 2025",
-        "description": "In-person strategic meeting to coordinate work across areas and define new lines of action, including the restructuring of the new website."
-      },
-      {
-        "id": "ceeina-2025",
-        "title": "4th CEEINA Conference",
-        "date": "16–21 September 2025",
-        "description": "Training event of the EINA Students’ Council in Munébrega (Zaragoza), where I delivered two sessions on ICT tools for representation and complaint management."
-      },
-      {
-        "id": "creup-ago-78",
-        "title": "78th CREUP General Assembly",
-        "date": "4–8 November 2025",
-        "description": "Ordinary General Assembly of CREUP held at the University of Barcelona, attended as Board Member for Digitalisation to report on activities and provide technical support."
+      "modal": {
+        "prev": "Previous photo",
+        "next": "Next photo",
+        "close": "Close"
       }
-    ]
+    }
   },
   "training": {
     "title": "Education and Skills",

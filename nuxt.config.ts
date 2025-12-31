@@ -40,6 +40,7 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@nuxt/eslint',
     'nuxt-umami',
+    '@nuxt/content',
   ],
 
   umami: {
@@ -77,12 +78,60 @@ export default defineNuxtConfig({
 
   ogImage: {
     enabled: true,
+    compatibility: {
+      dev: {
+        resvg: 'wasm',
+      },
+      runtime: {
+        resvg: 'wasm',
+      },
+      prerender: {
+        resvg: 'wasm',
+      },
+    },
   },
 
   icon: {
     serverBundle: 'remote',
     clientBundle: {
       scan: true,
+    },
+  },
+
+  // NuxtImage configuration for gallery optimization
+  image: {
+    quality: 80,
+    format: ['webp', 'jpg'],
+    screens: {
+      xs: 320,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+      '2xl': 1536,
+    },
+    presets: {
+      cover: {
+        modifiers: {
+          fit: 'cover',
+          width: 1200,
+          height: 630,
+        },
+      },
+      gallery: {
+        modifiers: {
+          fit: 'cover',
+          width: 400,
+          height: 300,
+        },
+      },
+      lightbox: {
+        modifiers: {
+          fit: 'inside',
+          width: 1920,
+          height: 1080,
+        },
+      },
     },
   },
 

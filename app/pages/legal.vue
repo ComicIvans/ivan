@@ -44,7 +44,7 @@ useSeoMeta({
       <div class="prose prose-neutral dark:prose-invert max-w-none">
         <h1 class="text-primary-500 text-2xl font-bold">{{ t('legal.title') }}</h1>
 
-        <!-- Información del sitio -->
+        <!-- Site information -->
         <section class="mt-8">
           <h2 class="text-primary-400 text-xl font-semibold">
             {{ t('legal.siteInfo.title') }}
@@ -139,7 +139,7 @@ useSeoMeta({
 
         <USeparator class="my-6" />
 
-        <!-- Derechos -->
+        <!-- Rights -->
         <section>
           <h2 class="text-primary-400 text-xl font-semibold">
             {{ t('legal.rights.title') }}
@@ -152,7 +152,7 @@ useSeoMeta({
           <p class="text-muted mt-2">{{ t('legal.rights.cookiesNote') }}</p>
         </section>
 
-        <!-- Última actualización -->
+        <!-- Last update -->
         <p class="text-dimmed mt-8 text-sm">
           {{ t('legal.lastUpdate') }}: {{ t('legal.updateDate') }}
         </p>

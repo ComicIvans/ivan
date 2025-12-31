@@ -1,4 +1,4 @@
-// Configuración centralizada de idiomas
+// Centralized locale configuration
 export interface LocaleConfig {
   code: string
   name: string

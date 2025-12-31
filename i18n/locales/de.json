@@ -249,32 +249,43 @@
     "intro": "Highlights aus Veranstaltungen, Konferenzen und Aktivitäten der studentischen Vertretung.",
     "photoSoon": "Foto folgt in Kürze",
     "comingSoon": "Fotos zu diesen Veranstaltungen werden in Kürze hinzugefügt.",
-    "events": [
-      {
-        "id": "enem-2025",
-        "title": "26. ENEM Granada",
-        "date": "22.–27. Juli 2025",
-        "description": "Nationales Treffen der Mathematikstudierenden, bei dem ich als Kassenwart und Sekretär im Organisationskomitee tätig war. Eine besondere Jubiläumsausgabe, die in ihre Heimatstadt zurückkehrte."
+    "filters": {
+      "searchPlaceholder": "Veranstaltungen suchen...",
+      "tags": "Tags",
+      "sortByDateDesc": "Neueste zuerst",
+      "sortByDateAsc": "Älteste zuerst",
+      "sortByTitleAsc": "Titel (A-Z)",
+      "sortByTitleDesc": "Titel (Z-A)",
+      "clearFilters": "Filter löschen",
+      "resultsCount": "{count} Veranstaltung gefunden | {count} Veranstaltungen gefunden"
+    },
+    "noResults": {
+      "title": "Keine Veranstaltungen gefunden",
+      "description": "Versuche, die Filter oder Suchbegriffe anzupassen."
+    },
+    "eventNotFound": {
+      "title": "Veranstaltung nicht gefunden",
+      "description": "Die gesuchte Veranstaltung existiert nicht oder wurde entfernt.",
+      "backToGallery": "Zurück zur Galerie"
+    },
+    "event": {
+      "about": "Über die Veranstaltung",
+      "myParticipation": "Meine Teilnahme",
+      "links": "Links",
+      "photos": "Fotogalerie",
+      "photosCount": "{count} Foto | {count} Fotos",
+      "photoAlt": "Foto {number}",
+      "backToGallery": "Zurück zur Galerie",
+      "noPhotos": {
+        "title": "Fotos folgen in Kürze",
+        "description": "Fotos zu dieser Veranstaltung werden in Kürze hinzugefügt."
       },
-      {
-        "id": "creup-riano",
-        "title": "Erweitertes CREUP-Exekutivtreffen in Riaño",
-        "date": "1.–4. September 2025",
-        "description": "Präsenztreffen zur strategischen Abstimmung zwischen Bereichen und zur Definition neuer Handlungsfelder, einschließlich der Neustrukturierung der neuen Website."
-      },
-      {
-        "id": "ceeina-2025",
-        "title": "4. CEEINA-Konferenz",
-        "date": "16.–21. September 2025",
-        "description": "Fortbildungsveranstaltung des EINA-Studierendenrats in Munébrega (Zaragoza), bei der ich zwei Sessions zu ICT-Tools für Vertretungsarbeit und Beschwerdemanagement gehalten habe."
-      },
-      {
-        "id": "creup-ago-78",
-        "title": "78. CREUP-Generalversammlung",
-        "date": "4.–8. November 2025",
-        "description": "Ordentliche Generalversammlung von CREUP an der Universität Barcelona, an der ich als Vorstandsmitglied für Digitalisierung teilnahm, um Bericht zu erstatten und technische Unterstützung zu leisten."
+      "modal": {
+        "prev": "Vorheriges Foto",
+        "next": "Nächstes Foto",
+        "close": "Schließen"
       }
-    ]
+    }
   },
   "training": {
     "title": "Ausbildung und Kompetenzen",

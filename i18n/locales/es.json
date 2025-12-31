@@ -273,32 +273,43 @@
     "intro": "Momentos destacados de eventos, congresos y actividades de representación estudiantil.",
     "photoSoon": "Foto próximamente",
     "comingSoon": "Las fotografías de estos eventos se añadirán próximamente.",
-    "events": [
-      {
-        "id": "enem-2025",
-        "title": "XXVI ENEM Granada",
-        "date": "22 - 27 de julio de 2025",
-        "description": "Encuentro Nacional de Estudiantes de Matemáticas del que fui Tesorero y Secretario del Comité Organizador. Un 25 aniversario en el que el evento volvió a su ciudad natal para dar una edición innovadora e inolvidable."
+    "filters": {
+      "searchPlaceholder": "Buscar eventos...",
+      "tags": "Etiquetas",
+      "sortByDateDesc": "Más recientes primero",
+      "sortByDateAsc": "Más antiguos primero",
+      "sortByTitleAsc": "Título (A-Z)",
+      "sortByTitleDesc": "Título (Z-A)",
+      "clearFilters": "Limpiar filtros",
+      "resultsCount": "{count} evento encontrado | {count} eventos encontrados"
+    },
+    "noResults": {
+      "title": "No se encontraron eventos",
+      "description": "Intenta ajustar los filtros o términos de búsqueda."
+    },
+    "eventNotFound": {
+      "title": "Evento no encontrado",
+      "description": "El evento que buscas no existe o ha sido eliminado.",
+      "backToGallery": "Volver a la galería"
+    },
+    "event": {
+      "about": "Sobre el evento",
+      "myParticipation": "Mi participación",
+      "links": "Enlaces",
+      "photos": "Galería de fotos",
+      "photosCount": "{count} foto | {count} fotos",
+      "photoAlt": "Foto {number}",
+      "backToGallery": "Volver a la galería",
+      "noPhotos": {
+        "title": "Fotos próximamente",
+        "description": "Las fotografías de este evento se añadirán pronto."
       },
-      {
-        "id": "creup-riano",
-        "title": "Reunión CEA CREUP en Riaño",
-        "date": "1 - 4 de septiembre de 2025",
-        "description": "Reunión de la Comisión Ejecutiva Ampliada de CREUP presencial donde pusimos en común el trabajo entre áreas y definimos nuevas líneas de actuación, incluyendo la estructuración de la nueva página web."
-      },
-      {
-        "id": "ceeina-2025",
-        "title": "IV Jornadas CEEINA",
-        "date": "16 - 21 de septiembre de 2025",
-        "description": "Jornadas de Formación del Consejo de Estudiantes de la EINA en Munébrega (Zaragoza) donde impartí dos formaciones: herramientas TIC en representación y gestión de quejas."
-      },
-      {
-        "id": "creup-ago-78",
-        "title": "78.ª AGO CREUP",
-        "date": "4 - 8 de noviembre de 2025",
-        "description": "Asamblea General Ordinaria de CREUP celebrada en la Universitat de Barcelona a la que asistí como Vocal de Digitalización para rendir cuentas y ofrecer asistencia técnica."
+      "modal": {
+        "prev": "Foto anterior",
+        "next": "Foto siguiente",
+        "close": "Cerrar"
       }
-    ]
+    }
   },
   "training": {
     "title": "Formación y Competencias",

@@ -14,6 +14,7 @@ Portfolio personal desarrollado con **Nuxt 4**, **Nuxt UI** y **TailwindCSS**.
 - **📱 Responsive perfecto** - diseño adaptativo con slideover en móvil y foto de perfil centrada
 - **⚡ Rendimiento optimizado** - SSR, lazy loading de imágenes con NuxtImg, iconos optimizados
 - **📄 Multi-página** - 8 páginas: Inicio, Experiencia, Proyectos, Galería, Formación, Representación, Contacto y Legal
+- **📸 Galería de eventos** - Sistema completo con Nuxt Content, filtros, búsqueda y paginación multiidioma
 - **✉️ Formulario de contacto** con validación y API endpoint
 - **🎭 Easter egg** - Modal de chistes aleatorios al hacer clic en la foto de perfil
 
@@ -30,6 +31,7 @@ Portfolio personal desarrollado con **Nuxt 4**, **Nuxt UI** y **TailwindCSS**.
 | [@formkit/auto-animate](https://auto-animate.formkit.com) | Animaciones automáticas            |
 | [Iconify](https://iconify.design)                         | Iconos (Tabler Icons)              |
 | [Nodemailer](https://nodemailer.com)                      | Envío de emails desde API          |
+| [@nuxt/content](https://content.nuxt.com)                 | Sistema de contenidos con Nuxt     |
 
 ## 📁 Estructura del Proyecto
 
@@ -41,8 +43,17 @@ app/
 │   ├── jokes-en.json      # Chistes en inglés (easter egg, lazy loaded)
 │   └── jokes-de.json      # Chistes en alemán (easter egg, lazy loaded)
 ├── components/
-│   ├── LayoutHeader.vue   # Header con navegación, tema, idioma y foto de perfil
-│   └── LayoutFooter.vue   # Footer con copyright, legal y redes sociales
+│   ├── LayoutFooter.vue   # Footer con copyright, legal y redes sociales
+│   └── content/
+│       ├── EventAbout.vue        # Componente MDC para sección "Sobre el evento"
+│       └── EventParticipation.vue # Componente MDC para sección "Mi participación"
+├── composables/
+│   ├── useGalleryCollection.ts # Gestión de colecciones de galería por idioma
+│   ├── useGalleryEvents.ts     # Consultas, filtros y paginación de eventos
+│   └── useGalleryImages.ts     # Utilidades para imágenes (alt text, src)e perfil
+│   └── LayoutF/
+│   │   ├── index.vue      # Listado de eventos con filtros y búsqueda
+│   │   └── [slug].vue     # Detalle de evento con galería y paginaciónociales
 ├── layouts/
 │   └── default.vue        # Layout principal con skip link y estructura semántica
 ├── pages/
@@ -58,6 +69,17 @@ app/
 │   ├── i18nAst.ts         # Utilidades para i18n AST (getI18nStaticValue)
 │   └── locales.ts         # Configuración de idiomas y carga de chistes
 ├── server/
+content/
+├── es/gallery/            # Eventos en español (contenido base)
+│   ├── ceeina-2025.md
+│   ├── creup-ago-78.md
+│   ├── creup-riano.md
+│   └── enem-2025.md
+├── en/gallery/            # Eventos en inglés (traducciones)
+│   └── ...
+├── favicon.svg            # Favicon SVG
+└── gallery/               # Imágenes de eventos organizadas por slug
+content.config.ts          # Configuración de colecciones Nuxt Content
 │   └── api/
 │       └── contact.post.ts # API endpoint para formulario de contacto
 i18n/
@@ -119,7 +141,24 @@ El sitio cumple con **WCAG 2.1 nivel AA**:
 - **Contraste de colores** optimizado en modo claro y oscuro
 - **Focus indicators** personalizados con `focus-visible:ring-2`
 - **Textos alternativos** descriptivos en todas las imágenes
-- **Estructura semántica** con headings jerárquicos (h1, h2, h3)
+- **� Sistema de Galería
+
+La galería de eventos utiliza **Nuxt Content** con:
+
+- **Colecciones multiidioma** (español como base, inglés y alemán como traducciones)
+- **Componentes MDC personalizados** (`EventAbout`, `EventParticipation`) para contenido estructurado
+- **Sistema de fallback** - español como contenido base, merge inteligente con traducciones
+- **Filtros avanzados**:
+  - Búsqueda por texto (título, descripción, ubicación, tags)
+  - Filtrado por etiquetas (múltiple selección)
+  - Ordenamiento por fecha o título (ascendente/descendente)
+- **Paginación** de eventos (6 por página) y fotos (12 por página)
+- **Modal de imágenes** con navegación por teclado (flechas, ESC)
+- **SEO optimizado** con meta tags personalizados por evento
+- **Alt text automático** para imágenes sin descripción
+- **Responsive** con grid adaptativo y lazy loading de imágenes
+
+## �Estructura semántica** con headings jerárquicos (h1, h2, h3)
 - **Formularios accesibles** con labels, validación y mensajes de error
 - **Componentes accesibles** nativos de Nuxt UI v3 (basados en Radix Vue)
 

@@ -49,13 +49,13 @@ const experiences = computed<Experience[]>(() => {
   })
 })
 
-// Encontrar el índice del rol actual para marcar los completados
+// Find current role index to mark completed ones
 const currentIndex = computed(() => {
   const idx = experiences.value.findIndex((exp) => exp.current)
   return idx >= 0 ? idx : experiences.value.length - 1
 })
 
-// Timeline items en formato UTimeline con slots personalizados
+// Timeline items in UTimeline format with custom slots
 const timelineItems = computed(() => {
   return experiences.value.map((exp, index) => ({
     date: exp.period,

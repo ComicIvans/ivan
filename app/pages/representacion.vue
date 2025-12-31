@@ -6,7 +6,7 @@ useSeoMeta({
   description: () => t('seo.pages.representation'),
 })
 
-// Iconos específicos para cada hito
+// Specific icons for each milestone
 const itemIcons: Record<string, string> = {
   'start-2020': 'i-tabler-rocket',
   'end-first-term': 'i-tabler-refresh',
@@ -49,7 +49,7 @@ const representationData = computed<RepresentationItem[]>(() => {
   })
 })
 
-// Timeline items en formato UTimeline
+// Timeline items in UTimeline format
 const timelineItems = computed(() => {
   return representationData.value.map((item, index) => ({
     date: item.date,

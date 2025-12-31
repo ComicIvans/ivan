@@ -6,7 +6,7 @@ const colorMode = useColorMode()
 const localePath = useLocalePath()
 const route = useRoute()
 
-// Chistes - carga lazy
+// Jokes - lazy loading
 const jokes = ref<string[]>([])
 const loadJokesForLocale = async () => {
   jokes.value = await loadJokes(locale.value)
@@ -15,35 +15,61 @@ const loadJokesForLocale = async () => {
 onMounted(loadJokesForLocale)
 watch(locale, loadJokesForLocale)
 
-// Modal de chistes
+// Joke modal state
 const jokeModalOpen = ref(false)
 const currentJoke = ref('')
 
-// Menú móvil
+// Mobile menu state
 const mobileMenuOpen = ref(false)
 
-// Navegación
+// Navigation tabs
 const tabs = computed(() => [
-  { label: t('nav.home'), icon: 'i-tabler-home', to: localePath('/') },
-  { label: t('nav.experience'), icon: 'i-tabler-briefcase', to: localePath('/experiencia') },
-  { label: t('nav.projects'), icon: 'i-tabler-code', to: localePath('/proyectos') },
-  { label: t('nav.gallery'), icon: 'i-tabler-photo', to: localePath('/galeria') },
-  { label: t('nav.training'), icon: 'i-tabler-school', to: localePath('/formacion') },
+  { label: t('nav.home'), icon: 'i-tabler-home', to: localePath('/'), basePath: '/' },
+  {
+    label: t('nav.experience'),
+    icon: 'i-tabler-briefcase',
+    to: localePath('/experiencia'),
+    basePath: '/experiencia',
+  },
+  {
+    label: t('nav.projects'),
+    icon: 'i-tabler-code',
+    to: localePath('/proyectos'),
+    basePath: '/proyectos',
+  },
+  {
+    label: t('nav.gallery'),
+    icon: 'i-tabler-photo',
+    to: localePath('/galeria'),
+    basePath: '/galeria',
+  },
+  {
+    label: t('nav.training'),
+    icon: 'i-tabler-school',
+    to: localePath('/formacion'),
+    basePath: '/formacion',
+  },
   {
     label: t('nav.representation'),
     icon: 'i-tabler-building-bank',
     to: localePath('/representacion'),
+    basePath: '/representacion',
   },
-  { label: t('nav.contact'), icon: 'i-tabler-mail', to: localePath('/contacto') },
+  {
+    label: t('nav.contact'),
+    icon: 'i-tabler-mail',
+    to: localePath('/contacto'),
+    basePath: '/contacto',
+  },
 ])
 
-// Tema
+// Theme toggle
 const isDark = computed(() => colorMode.value === 'dark')
 const toggleTheme = () => {
   colorMode.preference = isDark.value ? 'light' : 'dark'
 }
 
-// Configuración de idiomas para el select
+// Locale configuration for the select
 const currentLocale = computed(() => getLocaleConfig(locale.value))
 
 const localeItems = computed(() =>
@@ -63,12 +89,28 @@ const selectedLocale = computed({
   },
 })
 
-// Verificar si una ruta está activa
-const isActiveRoute = (path: string) => {
-  return route.path === path
+// Check if a route is active using basePath
+const isActiveRoute = (basePath: string) => {
+  // Get the localized path for the basePath
+  const localizedBasePath = localePath(basePath)
+
+  // For home page, use exact match only
+  if (basePath === '/') {
+    return route.path === localizedBasePath
+  }
+  // For other pages, check if current route starts with the localized path
+  return route.path.startsWith(localizedBasePath)
 }
 
-// Función para mostrar chiste aleatorio
+// Navigation items with computed active state
+const navigationItems = computed(() =>
+  tabs.value.map((tab) => ({
+    ...tab,
+    active: isActiveRoute(tab.basePath),
+  }))
+)
+
+// Show random joke
 const showRandomJoke = async () => {
   if (jokes.value.length === 0) {
     await loadJokesForLocale()
@@ -78,11 +120,12 @@ const showRandomJoke = async () => {
   jokeModalOpen.value = true
 }
 
+// Close mobile menu
 const closeMobileMenu = () => {
   mobileMenuOpen.value = false
 }
 
-// Cerrar menú al cambiar de ruta
+// Close menu on route change
 watch(
   () => route.path,
   () => {
@@ -92,7 +135,7 @@ watch(
 </script>
 
 <template>
-  <!-- Modal de chistes -->
+  <!-- Joke modal -->
   <UModal v-model:open="jokeModalOpen" :aria-label="t('joke.title')">
     <template #content>
       <UCard>
@@ -122,9 +165,9 @@ watch(
 
   <!-- Header -->
   <header class="mb-6">
-    <!-- Layout Desktop -->
+    <!-- Desktop Layout -->
     <div class="hidden items-center justify-between gap-4 lg:flex">
-      <!-- Foto de perfil -->
+      <!-- Profile photo -->
       <button
         class="focus-visible:ring-primary-500 shrink-0 rounded-full transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:outline-none"
         :aria-label="t('header.jokeButton')"
@@ -141,7 +184,7 @@ watch(
         />
       </button>
 
-      <!-- Título -->
+      <!-- Title -->
       <div class="flex-1">
         <h1 class="text-primary-500 text-3xl font-bold">
           {{ t('header.title') }}
@@ -151,7 +194,7 @@ watch(
         </p>
       </div>
 
-      <!-- Controles (tema e idioma) -->
+      <!-- Controls (theme and locale) -->
       <div class="flex items-center gap-2">
         <UButton
           :icon="isDark ? 'i-tabler-sun' : 'i-tabler-moon'"
@@ -180,13 +223,13 @@ watch(
       </div>
     </div>
 
-    <!-- Layout Móvil -->
+    <!-- Mobile Layout -->
     <div class="lg:hidden">
-      <!-- Fila superior: menú hamburguesa, foto centrada, controles -->
+      <!-- Top row: hamburger menu, centered photo, controls -->
       <div class="flex items-center justify-between">
-        <!-- Contenedor izquierdo con ancho fijo igual al derecho -->
+        <!-- Left container with fixed width equal to right -->
         <div class="flex w-20 justify-start sm:w-24">
-          <!-- Botón menú móvil -->
+          <!-- Mobile menu button -->
           <UButton
             :icon="mobileMenuOpen ? 'i-tabler-x' : 'i-tabler-menu-2'"
             color="neutral"
@@ -199,7 +242,7 @@ watch(
           />
         </div>
 
-        <!-- Foto de perfil centrada -->
+        <!-- Centered profile photo -->
         <button
           class="focus-visible:ring-primary-500 shrink-0 rounded-full transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:outline-none"
           :aria-label="t('header.jokeButton')"
@@ -216,7 +259,7 @@ watch(
           />
         </button>
 
-        <!-- Controles (tema e idioma) con ancho fijo igual al izquierdo -->
+        <!-- Controls (theme and locale) with fixed width equal to left -->
         <div class="flex w-20 items-center justify-end gap-1 sm:w-24 sm:gap-2">
           <UButton
             :icon="isDark ? 'i-tabler-sun' : 'i-tabler-moon'"
@@ -247,7 +290,7 @@ watch(
         </div>
       </div>
 
-      <!-- Título móvil -->
+      <!-- Mobile title -->
       <div class="mt-4 text-center">
         <h1 class="text-primary-500 text-xl font-bold">
           {{ t('header.title') }}
@@ -258,17 +301,22 @@ watch(
       </div>
     </div>
 
-    <!-- Navegación desktop (horizontal) -->
+    <!-- Desktop navigation (horizontal) -->
     <nav class="mt-4 hidden lg:block" :aria-label="t('nav.mainNav')">
-      <UNavigationMenu :items="tabs" highlight highlight-color="primary" class="justify-center" />
+      <UNavigationMenu
+        :items="navigationItems"
+        highlight
+        highlight-color="primary"
+        class="justify-center"
+      />
     </nav>
   </header>
 
-  <!-- Slideover móvil -->
+  <!-- Mobile slideover -->
   <USlideover id="mobile-menu" v-model:open="mobileMenuOpen" side="left" class="lg:hidden">
     <template #content>
       <nav class="flex h-full flex-col p-4" :aria-label="t('nav.mainNav')">
-        <!-- Cabecera del menú -->
+        <!-- Menu header -->
         <div class="border-default mb-4 flex items-center justify-between border-b pb-4">
           <span class="text-primary-500 text-lg font-bold">{{ t('nav.mainNav') }}</span>
           <UButton
@@ -280,7 +328,7 @@ watch(
           />
         </div>
 
-        <!-- Enlaces de navegación -->
+        <!-- Navigation links -->
         <div class="flex-1 space-y-1">
           <NuxtLink
             v-for="tab in tabs"
@@ -288,10 +336,10 @@ watch(
             :to="tab.to"
             class="flex items-center gap-3 rounded-lg px-4 py-3 transition-colors"
             :class="{
-              'bg-primary-500 text-white': isActiveRoute(tab.to as string),
-              'hover:bg-elevated': !isActiveRoute(tab.to as string),
+              'bg-primary-500 text-white': isActiveRoute(tab.basePath),
+              'hover:bg-elevated': !isActiveRoute(tab.basePath),
             }"
-            :aria-current="isActiveRoute(tab.to as string) ? 'page' : undefined"
+            :aria-current="isActiveRoute(tab.basePath) ? 'page' : undefined"
             @click="closeMobileMenu"
           >
             <UIcon :name="tab.icon" class="size-5" aria-hidden="true" />
