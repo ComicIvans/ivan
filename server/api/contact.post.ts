@@ -155,6 +155,7 @@ export default defineEventHandler(async (event) => {
       hasHost: !!config.smtpHost,
       hasUser: !!config.smtpUser,
       hasPass: !!config.smtpPass,
+      hasFromEmail: !!config.smtpFromEmail,
       hasToEmail: !!config.smtpToEmail,
     })
     throw createError({
@@ -195,7 +196,7 @@ Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })}
 
   try {
     const info = await transporter.sendMail({
-      from: `"Portfolio Contact" <${config.smtpUser}>`,
+      from: `"Portfolio Contact" <${config.smtpFromEmail}>`,
       to: config.smtpToEmail,
       replyTo: email,
       subject: `[Portfolio] ${subject}`,

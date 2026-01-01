@@ -9,6 +9,7 @@ export default defineNuxtConfig({
     smtpSecure: process.env.SMTP_SECURE,
     smtpUser: process.env.SMTP_USER,
     smtpPass: process.env.SMTP_PASS,
+    smtpFromEmail: process.env.SMTP_FROM_EMAIL,
     smtpToEmail: process.env.SMTP_TO_EMAIL,
     public: {
       siteUrl: process.env.NUXT_PUBLIC_SITE_URL,
