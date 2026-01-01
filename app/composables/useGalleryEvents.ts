@@ -122,12 +122,9 @@ function mergeEventData(base: GalleryEvent, override: Partial<GalleryEvent>): Ga
 export function useGalleryEvents(options: Ref<GalleryQueryOptions> = ref({})) {
   const { locale } = useI18n()
 
-  // Create a reactive key that changes when locale changes
-  const cacheKey = computed(() => `gallery-events-${locale.value}`)
-
   // Fetch all events with locale fallback
   const { data: allEvents, status } = useAsyncData(
-    cacheKey.value,
+    () => `gallery-events-${locale.value}`,
     async () => {
       // Always fetch Spanish events as base
       const baseEvents = (await queryCollection('gallery_es' as keyof Collections)
@@ -266,11 +263,9 @@ export function useGalleryEvent(eventSlug: Ref<string> | string) {
   const { locale } = useI18n()
   const slug = toRef(eventSlug)
 
-  // Create a reactive key that changes when locale or slug changes
-  const cacheKey = computed(() => `gallery-event-${locale.value}-${slug.value}`)
-
+  // Use a function for the key so useAsyncData can track it reactively
   const { data: event, status } = useAsyncData(
-    cacheKey.value,
+    () => `gallery-event-${locale.value}-${slug.value}`,
     async () => {
       // Always fetch base event from Spanish
       const basePath = `/es/${slug.value}`
