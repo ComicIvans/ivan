@@ -330,7 +330,7 @@ function onModalOpened() {
         <div v-if="selectedPhoto" ref="modalContentRef" class="relative" tabindex="-1">
           <!-- Image -->
           <div class="relative aspect-auto max-h-[80vh] overflow-hidden">
-            <NuxtImg
+            <img
               :src="getPhotoSrc(selectedPhoto.src)"
               :alt="
                 getPhotoAlt({
