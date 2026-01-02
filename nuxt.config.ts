@@ -82,4 +82,11 @@ export default defineNuxtConfig({
       redirectOn: 'root',
     },
   },
+
+  content: {
+    database: {
+      type: 'sqlite',
+      filename: '/data/nuxt-content.sqlite',
+    },
+  },
 })

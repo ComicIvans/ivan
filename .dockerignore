@@ -1,0 +1,11 @@
+node_modules
+.output
+.nuxt
+dist
+.git
+.DS_Store
+pnpm-debug.log
+npm-debug.log
+.pnpm-store
+.cache
+.turbo

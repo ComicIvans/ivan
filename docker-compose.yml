@@ -1,0 +1,15 @@
+services:
+  ivan:
+    image: ghcr.io/comicivans/ivan:latest
+    container_name: ivan
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      NODE_ENV: "production"
+      NITRO_PORT: "3000"
+      HOST: "0.0.0.0"
+    volumes:
+      - ivan_data:/data
+
+volumes:
+  ivan_data:

@@ -263,45 +263,56 @@ export function useGalleryEvent(eventSlug: Ref<string> | string) {
   const { locale } = useI18n()
   const slug = toRef(eventSlug)
 
-  // Use a function for the key so useAsyncData can track it reactively
-  const { data: event, status } = useAsyncData(
-    () => `gallery-event-${locale.value}-${slug.value}`,
-    async () => {
-      // Always fetch base event from Spanish
-      const basePath = `/es/${slug.value}`
-      const baseEvent = (await queryCollection('gallery_es' as keyof Collections)
-        .path(basePath)
-        .first()) as GalleryEvent | null
+  // Helper function to fetch the event data
+  async function fetchEventData(currentLocale: string, currentSlug: string) {
+    // Always fetch base event from Spanish
+    const basePath = `/es/${currentSlug}`
+    const baseEvent = (await queryCollection('gallery_es' as keyof Collections)
+      .path(basePath)
+      .first()) as GalleryEvent | null
 
-      // If no base event exists, return null
-      if (!baseEvent) {
-        return null
-      }
-
-      // If current locale is Spanish, return base event directly
-      if (locale.value === 'es') {
-        return baseEvent
-      }
-
-      // Try to fetch locale-specific translation
-      const localePath = `/${locale.value}/${slug.value}`
-      const collectionName = `gallery_${locale.value}` as keyof Collections
-      const localeEvent = (await queryCollection(collectionName)
-        .path(localePath)
-        .first()) as GalleryEvent | null
-
-      // Merge locale event over base if it exists
-      if (localeEvent) {
-        return mergeEventData(baseEvent, localeEvent)
-      }
-
-      // No translation available, use base event
-      return baseEvent
-    },
-    {
-      watch: [locale, slug],
+    // If no base event exists, return null
+    if (!baseEvent) {
+      return null
     }
-  )
+
+    // If current locale is Spanish, return base event directly
+    if (currentLocale === 'es') {
+      return baseEvent
+    }
+
+    // Try to fetch locale-specific translation
+    const localePath = `/${currentLocale}/${currentSlug}`
+    const collectionName = `gallery_${currentLocale}` as keyof Collections
+    const localeEvent = (await queryCollection(collectionName)
+      .path(localePath)
+      .first()) as GalleryEvent | null
+
+    // Merge locale event over base if it exists
+    if (localeEvent) {
+      return mergeEventData(baseEvent, localeEvent)
+    }
+
+    // No translation available, use base event
+    return baseEvent
+  }
+
+  // Use useAsyncData with watch to handle both SSR and locale changes
+  const {
+    data: event,
+    status,
+    refresh,
+  } = useAsyncData(`gallery-event-${slug.value}`, () => fetchEventData(locale.value, slug.value))
+
+  // Watch locale changes and refresh data
+  watch(locale, async () => {
+    await refresh()
+  })
+
+  // Watch slug changes and refresh data
+  watch(slug, async () => {
+    await refresh()
+  })
 
   return {
     event,
