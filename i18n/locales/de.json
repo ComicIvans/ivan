@@ -283,7 +283,11 @@
       "modal": {
         "prev": "Vorheriges Foto",
         "next": "Nächstes Foto",
-        "close": "Schließen"
+        "close": "Schließen",
+        "loading": "Bild wird geladen...",
+        "zoomIn": "Vergrößern",
+        "zoomOut": "Verkleinern",
+        "resetZoom": "Zoom zurücksetzen"
       }
     }
   },

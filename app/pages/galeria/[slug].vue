@@ -33,20 +33,71 @@ const paginatedPhotos = computed(() => {
   return event.value.photos.slice(start, end)
 })
 
+// Track loading state for each individual image using reactive object
+const imageLoadingStates = reactive<Record<string, boolean>>({})
+
+// Reset loading states when page changes
+watch(currentPhotoPage, () => {
+  // Clear all states
+  Object.keys(imageLoadingStates).forEach((key) => delete imageLoadingStates[key])
+})
+
+function onImageLoad(index: number) {
+  const key = `${currentPhotoPage.value}-${index}`
+  imageLoadingStates[key] = false
+}
+
+function isImageLoading(index: number) {
+  const key = `${currentPhotoPage.value}-${index}`
+  // Si no existe la key, significa que aún no se ha registrado la carga
+  return imageLoadingStates[key] !== false
+}
+
 // Photo modal state
 const selectedPhoto = ref<{ src: string; alt?: string; description?: string } | null>(null)
 const selectedPhotoIndex = ref(0)
 const isModalOpen = ref(false)
+const isModalImageLoading = ref(false)
+
+const isTouchDevice = ref(false)
+const touchControlsVisible = ref(true)
+
+const showZoomControls = computed(() => !isTouchDevice.value)
+const showOverlayControls = computed(() => !isTouchDevice.value || touchControlsVisible.value)
+const showNavigationControls = computed(() => showOverlayControls.value)
+
+// Zoom state
+const zoomLevel = ref(1)
+const minZoom = 1
+const maxZoom = 3
+const zoomStep = 0.2
+
+// Pan state for zoomed images
+const panX = ref(0)
+const panY = ref(0)
+const isPanning = ref(false)
+const panStartX = ref(0)
+const panStartY = ref(0)
+const imageContainerRef = ref<HTMLElement | null>(null)
+const modalImageRef = ref<HTMLImageElement | null>(null)
 
 function openPhotoModal(photo: { src: string; alt?: string; description?: string }, index: number) {
   selectedPhoto.value = photo
   selectedPhotoIndex.value = index
+  isModalImageLoading.value = true
+  zoomLevel.value = 1
+  panX.value = 0
+  panY.value = 0
   isModalOpen.value = true
+  touchControlsVisible.value = true
 }
 
 function closePhotoModal() {
   isModalOpen.value = false
   selectedPhoto.value = null
+  zoomLevel.value = 1
+  panX.value = 0
+  panY.value = 0
 }
 
 // Photo navigation in modal
@@ -56,6 +107,10 @@ function nextPhoto() {
   const newIndex = (selectedPhotoIndex.value + 1) % totalPhotos
   selectedPhotoIndex.value = newIndex
   selectedPhoto.value = event.value.photos[newIndex] ?? null
+  isModalImageLoading.value = true
+  zoomLevel.value = 1
+  panX.value = 0
+  panY.value = 0
 }
 
 function prevPhoto() {
@@ -64,6 +119,144 @@ function prevPhoto() {
   const newIndex = selectedPhotoIndex.value === 0 ? totalPhotos - 1 : selectedPhotoIndex.value - 1
   selectedPhotoIndex.value = newIndex
   selectedPhoto.value = event.value.photos[newIndex] ?? null
+  isModalImageLoading.value = true
+  zoomLevel.value = 1
+  panX.value = 0
+  panY.value = 0
+}
+
+// Handle modal image load
+function onModalImageLoad() {
+  isModalImageLoading.value = false
+}
+
+// Zoom functions
+function handleWheel(e: WheelEvent) {
+  if (!isModalOpen.value || !imageContainerRef.value) return
+
+  const delta = e.deltaY > 0 ? -zoomStep : zoomStep
+  const newZoom = Math.max(minZoom, Math.min(maxZoom, zoomLevel.value + delta))
+
+  if (newZoom !== zoomLevel.value) {
+    // Si estamos reduciendo el zoom, centrar la imagen gradualmente
+    if (newZoom < zoomLevel.value) {
+      const zoomRatio = newZoom / zoomLevel.value
+      panX.value *= zoomRatio
+      panY.value *= zoomRatio
+
+      if (newZoom === minZoom) {
+        panX.value = 0
+        panY.value = 0
+      }
+    } else {
+      // Al aumentar zoom, dirigirlo hacia el cursor
+      const imgElement = imageContainerRef.value.querySelector('img')
+      if (imgElement) {
+        const imgRect = imgElement.getBoundingClientRect()
+
+        // Posición del cursor relativa al centro de la imagen (que ya está escalada)
+        const imgCenterX = imgRect.left + imgRect.width / 2
+        const imgCenterY = imgRect.top + imgRect.height / 2
+        const offsetX = e.clientX - imgCenterX
+        const offsetY = e.clientY - imgCenterY
+
+        // Ajustar el pan para que el punto bajo el cursor se mantenga fijo
+        const zoomRatio = newZoom / zoomLevel.value
+        panX.value = panX.value * zoomRatio + offsetX * (1 - zoomRatio)
+        panY.value = panY.value * zoomRatio + offsetY * (1 - zoomRatio)
+      }
+    }
+
+    zoomLevel.value = newZoom
+    constrainPan()
+  }
+}
+
+function resetZoom() {
+  zoomLevel.value = 1
+  panX.value = 0
+  panY.value = 0
+}
+
+function zoomIn() {
+  const newZoom = Math.min(maxZoom, zoomLevel.value + zoomStep)
+  if (newZoom !== zoomLevel.value) {
+    zoomLevel.value = newZoom
+    constrainPan()
+  }
+}
+
+function zoomOut() {
+  const newZoom = Math.max(minZoom, zoomLevel.value - zoomStep)
+  if (newZoom !== zoomLevel.value) {
+    // Centrar gradualmente al reducir zoom
+    const zoomRatio = newZoom / zoomLevel.value
+    panX.value *= zoomRatio
+    panY.value *= zoomRatio
+
+    if (newZoom === minZoom) {
+      panX.value = 0
+      panY.value = 0
+    }
+
+    zoomLevel.value = newZoom
+    constrainPan()
+  }
+}
+
+// Constrain pan to image boundaries
+function constrainPan() {
+  if (zoomLevel.value <= 1) {
+    panX.value = 0
+    panY.value = 0
+    return
+  }
+
+  const imgElement = imageContainerRef.value?.querySelector('img')
+  if (!imgElement || !imageContainerRef.value) return
+
+  // getBoundingClientRect() nos da el tamaño YA escalado por CSS transform
+  const imgRect = imgElement.getBoundingClientRect()
+  const containerRect = imageContainerRef.value.getBoundingClientRect()
+
+  // Cuánto sobresale la imagen escalada fuera del contenedor (en cada dirección)
+  const overflowX = Math.max(0, (imgRect.width - containerRect.width) / 2)
+  const overflowY = Math.max(0, (imgRect.height - containerRect.height) / 2)
+
+  // El CSS aplica: transform: scale(zoom) translate(panX/zoom, panY/zoom)
+  // Esto significa que el desplazamiento real en pixels es: panX (no panX/zoom * zoom)
+  // Pero el translate se aplica en el espacio pre-escalado, así que:
+  // desplazamiento_real = (panX / zoom) * zoom = panX
+  // Por tanto, los límites de pan son directamente el overflow
+  const maxPanX = overflowX
+  const maxPanY = overflowY
+
+  panX.value = Math.max(-maxPanX, Math.min(maxPanX, panX.value))
+  panY.value = Math.max(-maxPanY, Math.min(maxPanY, panY.value))
+}
+
+// Pan functions
+function handleMouseDown(e: MouseEvent) {
+  if (zoomLevel.value <= 1) return
+  isPanning.value = true
+  panStartX.value = e.clientX - panX.value
+  panStartY.value = e.clientY - panY.value
+}
+
+function handleMouseMove(e: MouseEvent) {
+  if (!isPanning.value || zoomLevel.value <= 1) return
+  panX.value = e.clientX - panStartX.value
+  panY.value = e.clientY - panStartY.value
+  constrainPan()
+}
+
+function handleMouseUp() {
+  isPanning.value = false
+}
+
+function handleModalTap() {
+  if (!isTouchDevice.value) return
+  touchControlsVisible.value = !touchControlsVisible.value
 }
 
 // Keyboard shortcuts for navigation
@@ -72,11 +265,24 @@ function handleKeydown(e: KeyboardEvent) {
   if (e.key === 'ArrowRight') nextPhoto()
   if (e.key === 'ArrowLeft') prevPhoto()
   if (e.key === 'Escape') closePhotoModal()
+  if (e.key === '+' || e.key === '=') {
+    e.preventDefault()
+    zoomIn()
+  }
+  if (e.key === '-') {
+    e.preventDefault()
+    zoomOut()
+  }
+  if (e.key === '0') {
+    e.preventDefault()
+    resetZoom()
+  }
 }
 
 // Register keyboard events
 onMounted(() => {
   window.addEventListener('keydown', handleKeydown)
+  isTouchDevice.value = 'ontouchstart' in window || window.navigator.maxTouchPoints > 0
 })
 
 onUnmounted(() => {
@@ -201,13 +407,14 @@ function onModalOpened() {
       <!-- Cover image -->
       <UCard v-if="event.cover" class="mb-8 overflow-hidden">
         <template #header>
-          <div class="aspect-video overflow-hidden">
+          <div class="flex h-fit items-center justify-center overflow-hidden">
             <NuxtImg
               :src="getPhotoSrc(event.cover.src)"
               :alt="getCoverAlt(event.title, event.cover.alt)"
-              class="size-full object-cover"
-              width="1200"
-              height="675"
+              class="h-auto w-full object-contain"
+              height="720"
+              fit="contain"
+              densities="x1 x2"
             />
           </div>
         </template>
@@ -251,9 +458,10 @@ function onModalOpened() {
           :aria-label="t('gallery.event.photos')"
           class="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"
         >
+          <!-- Each photo with individual skeleton -->
           <button
             v-for="(photo, index) in paginatedPhotos"
-            :key="index"
+            :key="`${currentPhotoPage}-${index}`"
             type="button"
             role="listitem"
             :aria-label="
@@ -266,6 +474,7 @@ function onModalOpened() {
             class="group focus:ring-primary-500 relative aspect-square cursor-pointer overflow-hidden rounded-lg focus:ring-2 focus:ring-offset-2 focus:outline-none"
             @click="openPhotoModal(photo, (currentPhotoPage - 1) * photosPerPage + index)"
           >
+            <!-- Image always rendered to trigger load event -->
             <NuxtImg
               :src="getPhotoSrc(photo.src)"
               :alt="
@@ -279,7 +488,12 @@ function onModalOpened() {
               loading="lazy"
               width="300"
               height="300"
+              @load="onImageLoad(index)"
             />
+
+            <!-- Skeleton overlay while loading -->
+            <USkeleton v-if="isImageLoading(index)" class="absolute inset-0 size-full rounded-lg" />
+
             <div
               class="absolute inset-0 flex items-center justify-center bg-black/0 transition-all group-hover:bg-black/40"
             >
@@ -325,11 +539,37 @@ function onModalOpened() {
     </template>
 
     <!-- Image modal -->
-    <UModal v-model:open="isModalOpen" :ui="{ content: 'max-w-5xl' }" @after-enter="onModalOpened">
+    <UModal
+      v-model:open="isModalOpen"
+      :ui="{ content: 'max-w-[95vw] max-h-[95vh]' }"
+      @after-enter="onModalOpened"
+    >
       <template #content>
         <div v-if="selectedPhoto" ref="modalContentRef" class="relative" tabindex="-1">
-          <!-- Image -->
-          <div class="relative aspect-auto max-h-[80vh] overflow-hidden">
+          <!-- Image container with loading state -->
+          <div
+            ref="imageContainerRef"
+            class="relative flex items-center justify-center overflow-hidden bg-black/90"
+            style="max-height: 80vh"
+            @wheel.prevent="handleWheel"
+            @mousedown="handleMouseDown"
+            @mousemove="handleMouseMove"
+            @mouseup="handleMouseUp"
+            @mouseleave="handleMouseUp"
+            @click="handleModalTap"
+          >
+            <!-- Loading spinner -->
+            <div
+              v-if="isModalImageLoading"
+              class="absolute inset-0 z-10 flex items-center justify-center bg-black/80"
+            >
+              <div class="flex flex-col items-center gap-4">
+                <UIcon name="i-tabler-loader-2" class="size-12 animate-spin text-white" />
+                <span class="text-sm text-white/70">{{ t('gallery.event.modal.loading') }}</span>
+              </div>
+            </div>
+
+            <!-- Image with zoom -->
             <NuxtImg
               :src="getPhotoSrc(selectedPhoto.src)"
               :alt="
@@ -339,10 +579,61 @@ function onModalOpened() {
                   customAlt: selectedPhoto.alt,
                 })
               "
-              class="size-full object-contain"
+              class="max-h-[80vh] max-w-full object-contain select-none"
+              :class="{
+                'cursor-grab': zoomLevel > 1 && !isPanning,
+                'cursor-grabbing': isPanning,
+                'transition-transform duration-200': !isPanning,
+              }"
+              :style="{
+                transform: `scale(${zoomLevel}) translate(${panX / zoomLevel}px, ${panY / zoomLevel}px)`,
+              }"
               width="1920"
               height="1080"
+              fit="inside"
+              quality="85"
+              preload
+              @load="onModalImageLoad"
+              @dragstart.prevent
             />
+          </div>
+
+          <!-- Zoom indicator -->
+          <div
+            v-if="zoomLevel > 1"
+            class="absolute top-4 left-4 rounded-full bg-black/50 px-3 py-1.5 text-sm text-white"
+          >
+            {{ Math.round(zoomLevel * 100) }}%
+          </div>
+
+          <!-- Zoom controls -->
+          <div v-if="showZoomControls" class="absolute top-4 left-1/2 flex -translate-x-1/2 gap-2">
+            <button
+              type="button"
+              class="flex items-center justify-center rounded-full bg-black/50 p-2 text-white transition-colors hover:bg-black/70 focus:ring-2 focus:ring-white focus:outline-none disabled:opacity-50"
+              :disabled="zoomLevel <= minZoom"
+              :aria-label="t('gallery.event.modal.zoomOut')"
+              @click.stop="zoomOut"
+            >
+              <UIcon name="i-tabler-zoom-out" class="size-5" />
+            </button>
+            <button
+              type="button"
+              class="flex items-center justify-center rounded-full bg-black/50 p-2 text-white transition-colors hover:bg-black/70 focus:ring-2 focus:ring-white focus:outline-none"
+              :aria-label="t('gallery.event.modal.resetZoom')"
+              @click.stop="resetZoom"
+            >
+              <UIcon name="i-tabler-zoom-reset" class="size-5" />
+            </button>
+            <button
+              type="button"
+              class="flex items-center justify-center rounded-full bg-black/50 p-2 text-white transition-colors hover:bg-black/70 focus:ring-2 focus:ring-white focus:outline-none disabled:opacity-50"
+              :disabled="zoomLevel >= maxZoom"
+              :aria-label="t('gallery.event.modal.zoomIn')"
+              @click.stop="zoomIn"
+            >
+              <UIcon name="i-tabler-zoom-in" class="size-5" />
+            </button>
           </div>
 
           <!-- Navigation controls -->
@@ -350,7 +641,8 @@ function onModalOpened() {
             type="button"
             class="absolute top-1/2 left-4 flex -translate-y-1/2 items-center justify-center rounded-full bg-black/50 p-3 text-white transition-colors hover:bg-black/70 focus:ring-2 focus:ring-white focus:outline-none"
             :aria-label="t('gallery.event.modal.prev')"
-            @click="prevPhoto"
+            v-if="showNavigationControls"
+            @click.stop="prevPhoto"
           >
             <UIcon name="i-tabler-chevron-left" class="size-8" />
           </button>
@@ -358,23 +650,26 @@ function onModalOpened() {
             type="button"
             class="absolute top-1/2 right-4 flex -translate-y-1/2 items-center justify-center rounded-full bg-black/50 p-3 text-white transition-colors hover:bg-black/70 focus:ring-2 focus:ring-white focus:outline-none"
             :aria-label="t('gallery.event.modal.next')"
-            @click="nextPhoto"
+            v-if="showNavigationControls"
+            @click.stop="nextPhoto"
           >
             <UIcon name="i-tabler-chevron-right" class="size-8" />
           </button>
 
           <!-- Close button -->
           <button
+            v-if="showOverlayControls"
             type="button"
             class="absolute top-4 right-4 flex items-center justify-center rounded-full bg-black/50 p-3 text-white transition-colors hover:bg-black/70 focus:ring-2 focus:ring-white focus:outline-none"
             :aria-label="t('gallery.event.modal.close')"
-            @click="closePhotoModal"
+            @click.stop="closePhotoModal"
           >
             <UIcon name="i-tabler-x" class="size-6" />
           </button>
 
           <!-- Counter -->
           <div
+            v-if="showOverlayControls"
             class="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-black/50 px-4 py-2 text-white"
             aria-live="polite"
           >
