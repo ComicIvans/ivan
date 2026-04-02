@@ -1,11 +1,8 @@
 <script setup lang="ts">
-const { t, tm, rt } = useI18n()
+const { t, tm, rt } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
 
-useSeoMeta({
-  title: () => t('experience.title'),
-  description: () => t('seo.pages.experience'),
-})
+usePageSeo('experience.title', 'seo.pages.experience')
 
 const roleIcons: Record<string, string> = {
   'creup-digitalization': 'i-tabler-server-2',
@@ -81,7 +78,12 @@ const timelineItems = computed(() => {
 
     <!-- Timeline -->
     <div class="mx-auto max-w-2xl">
-      <UTimeline :items="timelineItems" :model-value="currentIndex" color="primary">
+      <UTimeline
+        :items="timelineItems"
+        :model-value="currentIndex"
+        color="primary"
+        :ui="{ date: 'text-toned text-sm/5 font-medium' }"
+      >
         <template v-for="(exp, index) in experiences" :key="index" #[`exp-${index}-title`]>
           <span class="text-highlighted text-base font-semibold">{{ exp.title }}</span>
         </template>
@@ -91,7 +93,7 @@ const timelineItems = computed(() => {
           #[`exp-${index}-description`]
         >
           <div class="flex flex-col gap-1">
-            <span class="text-primary-500 text-sm font-medium">{{ exp.org }}</span>
+            <span class="text-toned text-sm font-medium">{{ exp.org }}</span>
             <p class="text-muted text-sm">{{ exp.description }}</p>
           </div>
         </template>

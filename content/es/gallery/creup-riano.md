@@ -9,7 +9,7 @@ tags:
   - CREUP
   - Reunión
 cover:
-  src: /gallery/creup-riano/01.JPG
+  src: /gallery/creup-riano/cover.webp
   alt: Paisaje de Riaño
 photos:
   - src: /gallery/creup-riano/01.JPG

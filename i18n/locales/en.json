@@ -251,7 +251,9 @@
     "comingSoon": "Photographs from these events will be added shortly.",
     "filters": {
       "searchPlaceholder": "Search events...",
+      "searchLabel": "Search events in the gallery",
       "tags": "Tags",
+      "sortLabel": "Sort events",
       "sortByDateDesc": "Most recent first",
       "sortByDateAsc": "Oldest first",
       "sortByTitleAsc": "Title (A-Z)",
@@ -285,6 +287,7 @@
         "next": "Next photo",
         "close": "Close",
         "loading": "Loading image...",
+        "position": "Photo {current} of {total}",
         "zoomIn": "Zoom in",
         "zoomOut": "Zoom out",
         "resetZoom": "Reset zoom"
@@ -530,11 +533,22 @@
       "subjectPlaceholder": "What would you like to talk about?",
       "message": "Message",
       "messagePlaceholder": "Write your message here...",
+      "messageLength": "{count}/{max} characters",
       "submit": "Send message",
       "sending": "Sending...",
       "success": "Message sent successfully! I will reply as soon as possible.",
       "errorGeneric": "An error occurred while sending the message. Please try again.",
       "privacyNote": "Your information will be treated confidentially and used only to respond to your enquiry.",
+      "apiErrors": {
+        "rateLimited": "You have sent too many messages in a short period. Please try again later.",
+        "missingFields": "Some required fields are missing.",
+        "nameLength": "Name must be between 2 and 100 characters.",
+        "subjectLength": "Subject must be between 3 and 200 characters.",
+        "messageLength": "Message must be between 10 and 5000 characters.",
+        "prohibitedContent": "The message contains content that could not be accepted.",
+        "serviceUnavailable": "The email service is not available right now.",
+        "sendFailed": "The message could not be sent. Please try again later."
+      },
       "errors": {
         "nameRequired": "Name is required",
         "nameMin": "Name must be at least 2 characters",

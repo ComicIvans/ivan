@@ -9,7 +9,7 @@ tags:
   - CREUP
   - Asamblea
 cover:
-  src: /gallery/creup-ago-78/07.JPG
+  src: /gallery/creup-ago-78/cover.webp
   alt: Imagen de la asamblea en mitad de un debate
 photos:
   - src: /gallery/creup-ago-78/01.JPG

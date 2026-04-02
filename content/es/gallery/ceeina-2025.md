@@ -9,7 +9,7 @@ tags:
   - CEEINA
   - Formación
 cover:
-  src: /gallery/ceeina-2025/08.JPG
+  src: /gallery/ceeina-2025/cover.webp
   alt: Acto de apertura de las jornadas
 photos:
   - src: /gallery/ceeina-2025/01.JPG

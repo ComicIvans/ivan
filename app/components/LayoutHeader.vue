@@ -1,28 +1,18 @@
 <script setup lang="ts">
 import { localesConfig, getLocaleConfig, loadJokes, type LocaleCode } from '~/utils/locales'
 
-const { t, locale } = useI18n()
+const { t, locale } = useI18n({ useScope: 'global' })
 const colorMode = useColorMode()
 const localePath = useLocalePath()
 const route = useRoute()
+const isClientReady = ref(false)
 
-// Jokes - lazy loading
 const jokes = ref<string[]>([])
-const loadJokesForLocale = async () => {
-  jokes.value = await loadJokes(locale.value)
-}
-
-onMounted(loadJokesForLocale)
-watch(locale, loadJokesForLocale)
-
-// Joke modal state
+const loadedJokesLocale = ref<string | null>(null)
 const jokeModalOpen = ref(false)
 const currentJoke = ref('')
-
-// Mobile menu state
 const mobileMenuOpen = ref(false)
 
-// Navigation tabs
 const tabs = computed(() => [
   { label: t('nav.home'), icon: 'i-tabler-home', to: localePath('/'), basePath: '/' },
   {
@@ -63,20 +53,37 @@ const tabs = computed(() => [
   },
 ])
 
-// Theme toggle
 const isDark = computed(() => colorMode.value === 'dark')
+const themeToggleIcon = computed(() => {
+  if (!isClientReady.value) {
+    return 'i-tabler-moon'
+  }
+
+  return isDark.value ? 'i-tabler-sun' : 'i-tabler-moon'
+})
+
 const toggleTheme = () => {
   colorMode.preference = isDark.value ? 'light' : 'dark'
 }
 
-// Locale configuration for the select
 const currentLocale = computed(() => getLocaleConfig(locale.value))
+const homePath = computed(() => localePath('/'))
 
 const localeItems = computed(() =>
   localesConfig.map((lang) => ({
     label: lang.name,
     value: lang.code,
     icon: lang.icon.replace(':', '-').replace('tabler', 'i-tabler'),
+  }))
+)
+
+const localeMenuItems = computed(() =>
+  localeItems.value.map((item) => ({
+    label: item.label,
+    icon: item.icon,
+    onSelect: () => {
+      selectedLocale.value = item.value
+    },
   }))
 )
 
@@ -89,20 +96,16 @@ const selectedLocale = computed({
   },
 })
 
-// Check if a route is active using basePath
 const isActiveRoute = (basePath: string) => {
-  // Get the localized path for the basePath
   const localizedBasePath = localePath(basePath)
 
-  // For home page, use exact match only
   if (basePath === '/') {
     return route.path === localizedBasePath
   }
-  // For other pages, check if current route starts with the localized path
+
   return route.path.startsWith(localizedBasePath)
 }
 
-// Navigation items with computed active state
 const navigationItems = computed(() =>
   tabs.value.map((tab) => ({
     ...tab,
@@ -110,33 +113,54 @@ const navigationItems = computed(() =>
   }))
 )
 
-// Show random joke
+async function loadJokesForLocale(localeCode = locale.value) {
+  if (loadedJokesLocale.value === localeCode && jokes.value.length > 0) {
+    return
+  }
+
+  jokes.value = await loadJokes(localeCode)
+  loadedJokesLocale.value = localeCode
+}
+
 const showRandomJoke = async () => {
-  if (jokes.value.length === 0) {
+  if (loadedJokesLocale.value !== locale.value || jokes.value.length === 0) {
     await loadJokesForLocale()
   }
+
   const jokeList = jokes.value
   currentJoke.value = jokeList[Math.floor(Math.random() * jokeList.length)] || t('joke.error')
   jokeModalOpen.value = true
 }
 
-// Close mobile menu
 const closeMobileMenu = () => {
   mobileMenuOpen.value = false
 }
 
-// Close menu on route change
 watch(
   () => route.path,
   () => {
     closeMobileMenu()
   }
 )
+
+watch(locale, () => {
+  jokes.value = []
+  loadedJokesLocale.value = null
+})
+
+onMounted(() => {
+  isClientReady.value = true
+})
 </script>
 
 <template>
   <!-- Joke modal -->
-  <UModal v-model:open="jokeModalOpen" :aria-label="t('joke.title')">
+  <UModal
+    v-model:open="jokeModalOpen"
+    :title="t('joke.title')"
+    :description="currentJoke || undefined"
+    :aria-label="t('joke.title')"
+  >
     <template #content>
       <UCard>
         <template #header>
@@ -174,20 +198,24 @@ watch(
         @click="showRandomJoke"
       >
         <NuxtImg
-          class="size-24 rounded-full object-cover"
-          src="/profile-pic.jpg"
+          class="hero-portrait size-24 rounded-full object-cover shadow-lg"
+          src="/profile-pic.webp"
           :alt="t('header.profileAlt')"
-          width="128"
-          height="128"
-          quality="85"
+          width="192"
+          height="192"
+          sizes="96px"
+          format="webp"
+          quality="78"
         />
       </button>
 
-      <!-- Title -->
       <div class="flex-1">
-        <h1 class="text-primary-500 text-3xl font-bold">
+        <NuxtLink
+          :to="homePath"
+          class="text-highlighted hover:text-primary-700 dark:hover:text-primary-400 text-3xl font-bold transition-colors"
+        >
           {{ t('header.title') }}
-        </h1>
+        </NuxtLink>
         <p class="text-muted text-base">
           {{ t('header.subtitle') }}
         </p>
@@ -196,7 +224,7 @@ watch(
       <!-- Controls (theme and locale) -->
       <div class="flex items-center gap-2">
         <UButton
-          :icon="isDark ? 'i-tabler-sun' : 'i-tabler-moon'"
+          :icon="themeToggleIcon"
           color="neutral"
           variant="ghost"
           size="lg"
@@ -204,21 +232,18 @@ watch(
           @click="toggleTheme"
         />
 
-        <USelect
-          v-model="selectedLocale"
-          :items="localeItems"
-          value-key="value"
-          class="w-36"
-          :aria-label="t('language.toggle')"
-        >
-          <template #leading="{ modelValue }">
-            <UIcon
-              v-if="modelValue"
-              :name="localeItems.find((l) => l.value === modelValue)?.icon || ''"
-              class="size-5"
-            />
-          </template>
-        </USelect>
+        <UDropdownMenu :items="localeMenuItems" :content="{ align: 'end' }">
+          <UButton
+            :label="currentLocale.name"
+            :icon="currentLocale.icon.replace(':', '-').replace('tabler', 'i-tabler')"
+            trailing-icon="i-tabler-chevron-down"
+            color="neutral"
+            variant="ghost"
+            size="lg"
+            class="min-w-32 justify-between"
+            :aria-label="t('language.toggle')"
+          />
+        </UDropdownMenu>
       </div>
     </div>
 
@@ -248,19 +273,21 @@ watch(
           @click="showRandomJoke"
         >
           <NuxtImg
-            class="size-20 rounded-full object-cover sm:size-24"
-            src="/profile-pic.jpg"
+            class="hero-portrait size-20 rounded-full object-cover shadow-lg sm:size-24"
+            src="/profile-pic.webp"
             :alt="t('header.profileAlt')"
-            width="128"
-            height="128"
-            quality="85"
+            width="192"
+            height="192"
+            sizes="(min-width: 640px) 96px, 80px"
+            format="webp"
+            quality="78"
           />
         </button>
 
         <!-- Controls (theme and locale) with fixed width equal to left -->
         <div class="flex w-20 items-center justify-end gap-1 sm:w-24 sm:gap-2">
           <UButton
-            :icon="isDark ? 'i-tabler-sun' : 'i-tabler-moon'"
+            :icon="themeToggleIcon"
             color="neutral"
             variant="ghost"
             size="lg"
@@ -268,15 +295,7 @@ watch(
             @click="toggleTheme"
           />
 
-          <UDropdownMenu
-            :items="
-              localeItems.map((item) => ({
-                label: item.label,
-                icon: item.icon,
-                onSelect: () => (selectedLocale = item.value),
-              }))
-            "
-          >
+          <UDropdownMenu :items="localeMenuItems" :content="{ align: 'end' }">
             <UButton
               :icon="currentLocale.icon.replace(':', '-').replace('tabler', 'i-tabler')"
               color="neutral"
@@ -288,11 +307,13 @@ watch(
         </div>
       </div>
 
-      <!-- Mobile title -->
       <div class="mt-4 text-center">
-        <h1 class="text-primary-500 text-xl font-bold">
+        <NuxtLink
+          :to="homePath"
+          class="text-highlighted hover:text-primary-700 dark:hover:text-primary-400 text-xl font-bold transition-colors"
+        >
           {{ t('header.title') }}
-        </h1>
+        </NuxtLink>
         <p class="text-muted text-sm">
           {{ t('header.subtitle') }}
         </p>
@@ -311,12 +332,19 @@ watch(
   </header>
 
   <!-- Mobile slideover -->
-  <USlideover id="mobile-menu" v-model:open="mobileMenuOpen" side="left" class="lg:hidden">
+  <USlideover
+    id="mobile-menu"
+    v-model:open="mobileMenuOpen"
+    side="left"
+    :title="t('nav.mainNav')"
+    :description="t('header.subtitle')"
+    class="lg:hidden"
+  >
     <template #content>
       <nav class="flex h-full flex-col p-4" :aria-label="t('nav.mainNav')">
         <!-- Menu header -->
         <div class="border-default mb-4 flex items-center justify-between border-b pb-4">
-          <span class="text-primary-500 text-lg font-bold">{{ t('nav.mainNav') }}</span>
+          <span class="text-highlighted text-lg font-bold">{{ t('nav.mainNav') }}</span>
           <UButton
             icon="i-tabler-x"
             color="neutral"

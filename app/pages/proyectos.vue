@@ -1,10 +1,7 @@
 <script setup lang="ts">
-const { t, tm, rt } = useI18n()
+const { t, tm, rt } = useI18n({ useScope: 'global' })
 
-useSeoMeta({
-  title: () => t('projects.title'),
-  description: () => t('seo.pages.projects'),
-})
+usePageSeo('projects.title', 'seo.pages.projects')
 
 const techIcons: Record<string, string> = {
   nuxt: 'i-simple-icons-nuxt',
@@ -25,7 +22,7 @@ const primaryTech = computed(() => {
   const itemsData = tm('projects.stack.primary.items') as unknown
   const items = Array.isArray(itemsData) ? itemsData : []
   return items.map((item: unknown) => {
-    const itemData = (item as Record<string, any>) || {}
+    const itemData = (item as Record<string, unknown>) || {}
     const id = getI18nStaticValue(itemData.id)
     const name = getI18nStaticValue(itemData.name)
     const description = getI18nStaticValue(itemData.description)
@@ -42,7 +39,7 @@ const secondaryTech = computed(() => {
   const itemsData = tm('projects.stack.secondary.items') as unknown
   const items = Array.isArray(itemsData) ? itemsData : []
   return items.map((item: unknown) => {
-    const itemData = (item as Record<string, any>) || {}
+    const itemData = (item as Record<string, unknown>) || {}
     const id = getI18nStaticValue(itemData.id)
     const name = getI18nStaticValue(itemData.name)
     return {
@@ -72,7 +69,7 @@ const projects = computed(() => {
   const items = Array.isArray(itemsData) ? itemsData : []
 
   return items.map((item: unknown) => {
-    const itemData = (item as Record<string, any>) || {}
+    const itemData = (item as Record<string, unknown>) || {}
     const id = getI18nStaticValue(itemData.id)
     const title = getI18nStaticValue(itemData.title)
     const description = getI18nStaticValue(itemData.description)
@@ -102,7 +99,7 @@ const projects = computed(() => {
 
     <!-- Tech Stack Section -->
     <div class="mb-12">
-      <h2 class="text-primary-400 mb-6 flex items-center gap-2 text-2xl font-bold">
+      <h2 class="text-highlighted mb-6 flex items-center gap-2 text-2xl font-bold">
         <UIcon name="i-tabler-stack-2" class="size-7" aria-hidden="true" />
         {{ t('projects.stack.title') }}
       </h2>
@@ -111,8 +108,8 @@ const projects = computed(() => {
       <h3 class="text-muted mb-4 text-lg font-semibold">
         {{ t('projects.stack.primary.title') }}
       </h3>
-      <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <UCard v-for="tech in primaryTech" :key="tech.name" class="transition-all hover:shadow-lg">
+      <div class="section-stagger mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <UCard v-for="tech in primaryTech" :key="tech.name" class="motion-card">
           <div class="flex items-center gap-3">
             <div
               class="bg-primary-500/10 flex size-10 shrink-0 items-center justify-center rounded-lg"
@@ -145,17 +142,13 @@ const projects = computed(() => {
 
     <!-- Projects Section -->
     <div>
-      <h2 class="text-primary-400 mb-6 flex items-center gap-2 text-2xl font-bold">
+      <h2 class="text-highlighted mb-6 flex items-center gap-2 text-2xl font-bold">
         <UIcon name="i-tabler-folder-code" class="size-7" aria-hidden="true" />
         {{ t('projects.list.title') }}
       </h2>
 
-      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <UCard
-          v-for="project in projects"
-          :key="project.title"
-          class="transition-all hover:shadow-lg"
-        >
+      <div class="section-stagger grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <UCard v-for="project in projects" :key="project.title" class="motion-card">
           <div class="flex items-start gap-4">
             <div
               class="bg-primary-500/10 flex size-16 shrink-0 items-center justify-center rounded-xl"

@@ -1,252 +1,133 @@
-# 👨‍💻 Portfolio de Iván Salido Cobo
+# Iván
 
-Portfolio personal desarrollado con **Nuxt 4**, **Nuxt UI** y **TailwindCSS**.
+Portfolio personal de Iván Salido Cobo construido con Nuxt 4, Nuxt UI y Nuxt Content. Incluye una web pública multidioma, una galería editorial gestionada desde Markdown y un formulario de contacto con envío por SMTP.
 
-🌐 **URLS de producción:** [ivan.wupp.dev](https://ivan.wupp.dev) e [isalidocobo.page](https://isalidocobo.page)
+URLs de producción:
 
-## ✨ Características
+- [ivan.wupp.dev](https://ivan.wupp.dev)
+- [isalidocobo.page](https://isalidocobo.page)
 
-- **🎨 Diseño moderno** con Nuxt UI y tema personalizado rojo/coral
-- **🌙 Modo oscuro/claro** con transiciones suaves y persistencia de preferencias
-- **🌍 Internacionalización** (Español, Inglés y Alemán)
-- **♿ Accesibilidad mejorada** (WCAG 2.1 AA)
-- **🔍 SEO optimizado** con meta tags dinámicos y Open Graph
-- **📱 Responsive completo** (mobile-first)
-- **⚡ Rendimiento optimizado** (SSR, lazy loading, Nuxt Image)
-- **📄 Multi-página** (Inicio, Experiencia, Proyectos, Galería, Formación, Representación, Contacto y Legal)
-- **📸 Galería de eventos** con Nuxt Content (filtros, búsqueda y paginación)
-- **✉️ Formulario de contacto** con API endpoint
-- **🎭 Easter egg** con modal de chistes aleatorios
+## Qué incluye
 
-## 🛠️ Stack Tecnológico
+- Web pública SSR con SEO, accesibilidad e i18n.
+- Páginas de presentación, experiencia, proyectos, formación, representación, contacto y legal.
+- Galería de eventos con contenido en Markdown, fallback al contenido base en español y optimización de imágenes.
+- Formulario de contacto protegido con honeypot, rate limiting básico y validación del servidor.
+- Despliegue con Docker y script de publicación en VPS.
 
-| Tecnología    | Uso                      |
-| ------------- | ------------------------ |
-| Nuxt 4        | Framework Vue con SSR    |
-| Nuxt UI       | Sistema de componentes   |
-| TailwindCSS   | Estilos utility-first    |
-| @nuxt/image   | Optimización de imágenes |
-| @nuxt/content | Sistema de contenidos    |
-| @nuxtjs/i18n  | Internacionalización     |
-| @nuxtjs/seo   | SEO                      |
-| Nodemailer    | Envío de emails          |
-| Docker        | Build y despliegue       |
-| Nginx         | Reverse proxy            |
+## Stack
 
-## 📁 Estructura del Proyecto
+- Nuxt 4 + Nitro
+- Nuxt UI + Tailwind CSS
+- `@nuxtjs/i18n`
+- `@nuxt/content`
+- `@nuxtjs/seo`
+- `@nuxt/image`
+- Nodemailer
 
-```
-ivan/
-├── app/                               # Aplicación Nuxt (frontend)
-│   ├── assets/                        # Assets procesados por Vite
-│   │   ├── css/
-│   │   │   └── main.css               # Estilos globales, tema y animaciones
-│   │   ├── jokes-es.json              # Chistes en español
-│   │   ├── jokes-en.json              # Chistes en inglés
-│   │   └── jokes-de.json              # Chistes en alemán
-│   ├── components/                    # Componentes reutilizables
-│   │   ├── LayoutFooter.vue           # Footer con enlaces legales y redes
-│   │   ├── LayoutHeader.vue           # Header con navegación principal
-│   │   └── content/                   # Componentes MDC para Nuxt Content
-│   │       ├── EventAbout.vue         # Sección "Sobre el evento"
-│   │       └── EventParticipation.vue # Sección "Mi participación"
-│   ├── composables/                   # Lógica reutilizable
-│   │   ├── useGalleryCollection.ts    # Gestión de colecciones por idioma
-│   │   ├── useGalleryEvents.ts        # Filtros, búsqueda y paginación
-│   │   └── useGalleryImages.ts        # Utilidades para imágenes (src, alt)
-│   ├── layouts/                       # Layouts globales
-│   │   └── default.vue                # Layout principal con estructura semántica
-│   ├── pages/                         # Rutas automáticas de Nuxt
-│   │   ├── index.vue                  # Página de inicio
-│   │   ├── experiencia.vue            # Experiencia profesional
-│   │   ├── proyectos.vue              # Proyectos y stack
-│   │   ├── galeria.vue                # Galería de eventos
-│   │   ├── formacion.vue              # Formación académica
-│   │   ├── representacion.vue         # Cargos de representación
-│   │   ├── contacto.vue               # Formulario de contacto
-│   │   └── legal.vue                  # Aviso legal y privacidad
-│   └── utils/                         # Utilidades auxiliares
-│       ├── i18nAst.ts                 # Utilidades para i18n
-│       ├── locales.ts                 # Configuración de idiomas y chistes
-│       └── nuxtUiLocale.ts            # Configuración de idioma para Nuxt UI
-│
-├── content/                           # Contenido gestionado por Nuxt Content
-│   ├── es/
-│   │   └── gallery/                   # Eventos base en español
-│   │       ├── ceeina-2025.md
-│   │       ├── creup-ago-78.md
-│   │       ├── creup-riano.md
-│   │       └── enem-2025.md
-│   ├── en/
-│   │   └── gallery/                   # Traducciones de eventos (inglés)
-│   │       └── ...
-│   └── ...
-│
-├── content.config.ts                  # Configuración de colecciones Nuxt Content
-│
-├── server/                            # Código ejecutado solo en servidor
-│   └── api/
-│       └── contact.post.ts            # Endpoint API del formulario de contacto
-│
-├── i18n/                              # Configuración de internacionalización
-│   └── locales/
-│       ├── es.json                    # Traducciones español
-│       ├── en.json                    # Traducciones inglés
-│       └── de.json                    # Traducciones alemán
-│
-├── public/                            # Assets estáticos servidos tal cual
-│   ├── profile-pic.jpg                # Foto de perfil
-│   ├── full-pic.jpg                   # Imagen hero
-│   └── favicon.svg                    # Favicon público (formato .svg)
-│   └── favicon.ico                    # Favicon público (formato .ico)
-│
-├── Dockerfile                         # Imagen Docker de producción (multi-stage)
-├── docker-compose.yml                 # Orquestación local y VPS
-├── .dockerignore                      # Exclusiones para build Docker
-├── deploy.sh                          # Script de build + push + deploy remoto
-├── .env.example                       # Template de variables de entorno
-├── package.json                       # Scripts, dependencias y deploy
-└── pnpm-lock.yaml                     # Lockfile de dependencias
-```
+## Requisitos
 
-## 🛠️ Desarrollo
+- Node.js compatible con Nuxt 4
+- `pnpm`
+- Docker y Docker Compose para el despliegue local o en VPS
+- Linux o WSL para usar los scripts de despliegue
 
-### Requisitos
+## Desarrollo local
 
-- Node.js ≥ 18
-- pnpm
-- Docker
-- **Linux o WSL (obligatorio para scripts de deploy)**
+1. Instala dependencias:
 
-### Instalación
-
-```bash
+```sh
 pnpm install
 ```
 
-### Desarrollo
+2. Crea tu `.env` a partir de `.env.example`.
 
-```bash
+3. Ejecuta la aplicación:
+
+```sh
 pnpm dev
 ```
 
-Disponible en `http://localhost:3000`.
+4. Comprueba calidad cuando cambies lógica o estructura:
 
----
-
-## 🐳 Docker y Despliegue
-
-El proyecto está preparado para **desplegarse con Docker** usando una imagen optimizada y `docker compose`.
-
-### Archivos de despliegue
-
-- **Dockerfile** → build multi-stage (Node 24 + pnpm)
-- **.dockerignore** → exclusiones para el build
-- **docker-compose.yml** → ejecución local y en VPS
-- **deploy.sh** → build, push a GHCR y despliegue remoto
-
----
-
-## 🔐 Variables de entorno (`.env`)
-
-Las siguientes variables se cargan desde un archivo `.env` (no versionado).
-
-### `.env.example`
-
-```env
-VPS_HOST=
-REMOTE_DIR=
+```sh
+pnpm lint
+pnpm typecheck
 ```
 
-### Variables usadas
+## Variables de entorno
 
-- **VPS_HOST** → usuario y host del VPS
-- **REMOTE_DIR** → directorio donde vive `docker-compose.yml` en el VPS
+### Aplicación
 
-Copia el archivo y rellénalo:
+- `SITE_URL`
 
-```bash
-cp .env.example .env
+### SMTP
+
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_SECURE`
+- `SMTP_USER`
+- `SMTP_PASS`
+- `SMTP_FROM_EMAIL`
+- `SMTP_TO_EMAIL`
+
+### Analítica
+
+- `NUXT_UMAMI_HOST`
+- `NUXT_UMAMI_ID`
+
+Las variables de Umami son opcionales. Si faltan, la analítica queda desactivada.
+
+### Despliegue
+
+- `VPS_HOST`
+- `REMOTE_DIR`
+
+## Scripts útiles
+
+- `pnpm dev`
+- `pnpm build`
+- `pnpm preview`
+- `pnpm lint`
+- `pnpm lint:fix`
+- `pnpm typecheck`
+- `pnpm deploy:local`
+- `pnpm deploy`
+
+## Despliegue
+
+### Local
+
+Construye la imagen y levanta el contenedor con `docker compose`:
+
+```sh
+pnpm deploy:local
 ```
 
----
+### Producción
 
-## 🚀 Scripts de Deploy
+Ejecuta `deploy.sh`, que construye la imagen, la publica en GHCR y actualiza el despliegue remoto:
 
-En el `package.json` existen **dos scripts de despliegue**.
-
-> ⚠️ **La imagen de docker está fija a este repositorio**.
-
-### Deploy local (sin push)
-
-Construye la imagen Docker localmente y levanta el contenedor con Docker Compose.
-
-```bash
-pnpm run deploy:local
+```sh
+pnpm deploy
 ```
 
-### Deploy a producción
+## Estructura principal
 
-Ejecuta `deploy.sh`, que:
-1. Construye la imagen Docker
-2. La sube a GitHub Container Registry
-3. Se conecta al VPS
-4. Hace `docker compose pull` y `up -d`
+- `app/` — componentes, layouts, páginas, composables y estilos globales.
+- `content/` — contenido editorial de la galería por idioma.
+- `i18n/locales/` — mensajes de traducción.
+- `server/api/` — endpoints del servidor, incluido el formulario de contacto.
+- `server/utils/` — utilidades de configuración y soporte del servidor.
+- `public/` — imágenes y assets estáticos.
+- `modules/` — ajustes locales de módulos de Nuxt.
 
-```bash
-pnpm run deploy
-```
+## Contenido y localización
 
----
+- El español es el idioma base del sitio.
+- Las traducciones de galería pueden sobrescribir parcialmente el contenido base; si falta algo, se conserva la versión en español.
+- El texto visible al usuario debe salir de `i18n` o del contenido localizado, no de cadenas sueltas en componentes.
 
-## ♿ Accesibilidad
+## Licencia
 
-Cumple **WCAG 2.1 AA**:
-
-- Skip link
-- ARIA labels y roles semánticos
-- Navegación por teclado
-- Contraste optimizado
-- Textos alternativos en imágenes
-
----
-
-## 📸 Galería de Eventos
-
-Implementada con **Nuxt Content**:
-
-- Colecciones multiidioma
-- Componentes MDC personalizados
-- Filtros y búsqueda
-- Paginación
-- Modal accesible
-- SEO por evento
-- Optimización de imágenes con IPX
-
----
-
-## 🎨 Diseño y UX
-
-- Paleta rojo/coral personalizada
-- Animaciones suaves
-- Layout mobile-first
-- Iconos Tabler vía Iconify
-- Componentes reutilizables con Nuxt UI
-
----
-
-## 📧 Formulario de Contacto
-
-- Validación en cliente
-- Honeypot anti-spam
-- API `/api/contact`
-- Envío de emails con Nodemailer
-- Feedback visual
-- Cumplimiento RGPD
-
----
-
-## 📄 Licencia
-
-MIT  
-Código disponible en GitHub: https://github.com/ComicIvans/ivan
+MIT

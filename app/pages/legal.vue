@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { t, tm, rt } = useI18n()
+const { t, tm, rt } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
 
 const cookieItems = computed(() => {
@@ -31,11 +31,7 @@ const rightsItems = computed(() => {
   return items.map((item) => rt(item))
 })
 
-useSeoMeta({
-  title: () => t('legal.title'),
-  description: () => t('seo.pages.legal'),
-  ogType: 'website',
-})
+usePageSeo('legal.title', 'seo.pages.legal')
 </script>
 
 <template>
@@ -46,7 +42,7 @@ useSeoMeta({
 
         <!-- Site information -->
         <section class="mt-8">
-          <h2 class="text-primary-400 text-xl font-semibold">
+          <h2 class="text-highlighted text-xl font-semibold">
             {{ t('legal.siteInfo.title') }}
           </h2>
           <p class="text-muted mt-2">{{ t('legal.siteInfo.description') }}</p>
@@ -57,7 +53,7 @@ useSeoMeta({
             <li>
               <strong>{{ t('legal.siteInfo.email') }}:</strong>
               <span class="mr-1" />
-              <ULink :to="localePath('/contacto')" class="text-primary-500 hover:underline">
+              <ULink :to="localePath('/contacto')" class="inline-link">
                 {{ t('legal.siteInfo.contactForm') }}
               </ULink>
             </li>
@@ -72,7 +68,7 @@ useSeoMeta({
 
         <!-- Cookies -->
         <section>
-          <h2 class="text-primary-400 text-xl font-semibold">
+          <h2 class="text-highlighted text-xl font-semibold">
             {{ t('legal.cookies.title') }}
           </h2>
           <p class="text-muted mt-2">{{ t('legal.cookies.description') }}</p>
@@ -95,7 +91,7 @@ useSeoMeta({
 
         <!-- Formulario de contacto -->
         <section>
-          <h2 class="text-primary-400 text-xl font-semibold">
+          <h2 class="text-highlighted text-xl font-semibold">
             {{ t('legal.contactForm.title') }}
           </h2>
           <p class="text-muted mt-2">{{ t('legal.contactForm.description') }}</p>
@@ -128,7 +124,7 @@ useSeoMeta({
 
         <!-- Privacidad -->
         <section>
-          <h2 class="text-primary-400 text-xl font-semibold">
+          <h2 class="text-highlighted text-xl font-semibold">
             {{ t('legal.privacy.title') }}
           </h2>
           <p class="text-muted mt-2">{{ t('legal.privacy.description') }}</p>
@@ -141,7 +137,7 @@ useSeoMeta({
 
         <!-- Rights -->
         <section>
-          <h2 class="text-primary-400 text-xl font-semibold">
+          <h2 class="text-highlighted text-xl font-semibold">
             {{ t('legal.rights.title') }}
           </h2>
           <p class="text-muted mt-2">{{ t('legal.rights.description') }}</p>

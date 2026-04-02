@@ -1,10 +1,7 @@
 <script setup lang="ts">
-const { t, tm, rt } = useI18n()
+const { t, tm, rt } = useI18n({ useScope: 'global' })
 
-useSeoMeta({
-  title: () => t('representation.title'),
-  description: () => t('seo.pages.representation'),
-})
+usePageSeo('representation.title', 'seo.pages.representation')
 
 // Specific icons for each milestone
 const itemIcons: Record<string, string> = {
@@ -74,7 +71,7 @@ const timelineItems = computed(() => {
     </div>
 
     <!-- Timeline -->
-    <div class="mx-auto max-w-2xl" role="list" :aria-label="t('representation.timelineLabel')">
+    <div class="mx-auto max-w-2xl" :aria-label="t('representation.timelineLabel')">
       <UTimeline :items="timelineItems" color="neutral">
         <template v-for="(item, index) in representationData" :key="index" #[`item-${index}-title`]>
           <span class="text-highlighted text-base font-semibold">{{ item.title }}</span>

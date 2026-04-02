@@ -1,15 +1,12 @@
 import { defineContentConfig, defineCollection, z } from '@nuxt/content'
 
-// Common schema for gallery events
 const eventSchema = z.object({
-  // Required fields
   title: z.string(),
   location: z.string(),
-  date: z.string(), // Event date (YYYY-MM-DD)
-  duration: z.string().optional(), // E.g. "3 days", "1 week"
+  date: z.string(),
+  duration: z.string().optional(),
   description: z.string(),
 
-  // Related links
   links: z
     .array(
       z.object({
@@ -19,7 +16,6 @@ const eventSchema = z.object({
     )
     .optional(),
 
-  // SEO
   seo: z
     .object({
       title: z.string().optional(),
@@ -27,18 +23,15 @@ const eventSchema = z.object({
     })
     .optional(),
 
-  // Tags for filtering
   tags: z.array(z.string()).default([]),
 
-  // Cover image
   cover: z
     .object({
       src: z.string(),
-      alt: z.string().optional(), // Alt optional, auto-generated if not specified
+      alt: z.string().optional(),
     })
     .optional(),
 
-  // Photo gallery
   photos: z
     .array(
       z.object({
@@ -49,16 +42,13 @@ const eventSchema = z.object({
     )
     .default([]),
 
-  // Icon to display in the list
   icon: z.string().optional(),
 
-  // Publication status
   draft: z.boolean().default(false),
 })
 
 export default defineContentConfig({
   collections: {
-    // Spanish events collection (default language)
     gallery_es: defineCollection({
       type: 'page',
       source: {
@@ -68,7 +58,6 @@ export default defineContentConfig({
       schema: eventSchema,
     }),
 
-    // English events collection
     gallery_en: defineCollection({
       type: 'page',
       source: {
@@ -78,7 +67,6 @@ export default defineContentConfig({
       schema: eventSchema,
     }),
 
-    // German events collection
     gallery_de: defineCollection({
       type: 'page',
       source: {

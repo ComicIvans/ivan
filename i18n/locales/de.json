@@ -251,7 +251,9 @@
     "comingSoon": "Fotos zu diesen Veranstaltungen werden in Kürze hinzugefügt.",
     "filters": {
       "searchPlaceholder": "Veranstaltungen suchen...",
+      "searchLabel": "Veranstaltungen in der Galerie suchen",
       "tags": "Tags",
+      "sortLabel": "Veranstaltungen sortieren",
       "sortByDateDesc": "Neueste zuerst",
       "sortByDateAsc": "Älteste zuerst",
       "sortByTitleAsc": "Titel (A-Z)",
@@ -285,6 +287,7 @@
         "next": "Nächstes Foto",
         "close": "Schließen",
         "loading": "Bild wird geladen...",
+        "position": "Foto {current} von {total}",
         "zoomIn": "Vergrößern",
         "zoomOut": "Verkleinern",
         "resetZoom": "Zoom zurücksetzen"
@@ -530,11 +533,22 @@
       "subjectPlaceholder": "Worüber möchtest du sprechen?",
       "message": "Nachricht",
       "messagePlaceholder": "Schreibe deine Nachricht hier...",
+      "messageLength": "{count}/{max} Zeichen",
       "submit": "Nachricht senden",
       "sending": "Wird gesendet...",
       "success": "Nachricht erfolgreich gesendet! Ich melde mich so schnell wie möglich bei dir.",
       "errorGeneric": "Beim Senden der Nachricht ist ein Fehler aufgetreten. Bitte versuche es erneut.",
       "privacyNote": "Deine Informationen werden vertraulich behandelt und nur verwendet, um auf deine Anfrage zu antworten.",
+      "apiErrors": {
+        "rateLimited": "Du hast in kurzer Zeit zu viele Nachrichten gesendet. Bitte versuche es später erneut.",
+        "missingFields": "Es fehlen noch Pflichtfelder.",
+        "nameLength": "Der Name muss zwischen 2 und 100 Zeichen lang sein.",
+        "subjectLength": "Der Betreff muss zwischen 3 und 200 Zeichen lang sein.",
+        "messageLength": "Die Nachricht muss zwischen 10 und 5000 Zeichen lang sein.",
+        "prohibitedContent": "Die Nachricht enthält Inhalte, die nicht akzeptiert werden konnten.",
+        "serviceUnavailable": "Der E-Mail-Dienst ist derzeit nicht verfügbar.",
+        "sendFailed": "Die Nachricht konnte nicht gesendet werden. Bitte versuche es später erneut."
+      },
       "errors": {
         "nameRequired": "Name ist erforderlich",
         "nameMin": "Name muss mindestens 2 Zeichen lang sein",

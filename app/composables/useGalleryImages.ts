@@ -40,7 +40,7 @@ export function generateImageAlt(options: {
  * Hook to use image utilities in components
  */
 export function useGalleryImages() {
-  const { t } = useI18n()
+  const { t } = useI18n({ useScope: 'global' })
 
   /**
    * Gets the photo src (pass-through, extension must be included)

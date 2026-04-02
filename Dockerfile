@@ -8,7 +8,7 @@ WORKDIR /app
 
 RUN corepack enable
 
-# Toolchain para compilar addons nativos (better-sqlite3, etc.)
+# Toolchain required for native addons such as better-sqlite3.
 RUN apt-get update && apt-get install -y --no-install-recommends \
   python3 make g++ \
   && rm -rf /var/lib/apt/lists/*
@@ -28,7 +28,7 @@ RUN pnpm run build
 
 
 ############################
-# Runner (mínimo)
+# Minimal runtime image
 ############################
 FROM node:24-slim AS runner
 WORKDIR /app
@@ -39,21 +39,21 @@ ENV HOST=0.0.0.0
 
 RUN corepack enable
 
-# Solo lo necesario para instalar prod deps (sin toolchain)
+# Only install production dependencies in the runtime image.
 COPY package.json pnpm-lock.yaml ./
 
-# Importante: --ignore-scripts para que NO ejecute "postinstall: nuxt prepare"
+# Skip postinstall scripts in the runtime image.
 RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
   pnpm config set store-dir /pnpm/store \
   && pnpm install --prod --frozen-lockfile --ignore-scripts
 
-# Copiamos el build ya hecho
+# Copy the prebuilt server output.
 COPY --from=builder /app/.output ./.output
 
-# Usuario no-root
+# Use a non-root user at runtime.
 RUN useradd -m -u 1001 nodeuser
 
-# Crear carpeta para base de datos y dar permisos
+# Create the content database directory with the right ownership.
 RUN mkdir -p /data && chown -R nodeuser:nodeuser /data
 
 USER nodeuser

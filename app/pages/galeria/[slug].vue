@@ -1,25 +1,22 @@
 <script setup lang="ts">
-const { t } = useI18n()
+const { t, locale } = useI18n({ useScope: 'global' })
 const route = useRoute()
 const localePath = useLocalePath()
 
-// Gallery image utilities
 const { getPhotoSrc, getPhotoAlt, getCoverAlt } = useGalleryImages()
 
-// Get event slug from route
 const eventSlug = computed(() => route.params.slug as string)
 
-// Fetch event data
 const { event, isLoading } = useGalleryEvent(eventSlug)
 
-// SEO Meta
-useSeoMeta({
-  title: () => event.value?.seo?.title || event.value?.title || t('gallery.title'),
-  description: () =>
-    event.value?.seo?.description || event.value?.description || t('seo.pages.gallery'),
-})
+usePageSeo(
+  () => event.value?.seo?.title || event.value?.title || t('gallery.title'),
+  () => event.value?.seo?.description || event.value?.description || t('seo.pages.gallery'),
+  {
+    ogImage: () => event.value?.cover?.src,
+  }
+)
 
-// Photo pagination
 const photosPerPage = 12
 const currentPhotoPage = ref(1)
 
@@ -33,27 +30,22 @@ const paginatedPhotos = computed(() => {
   return event.value.photos.slice(start, end)
 })
 
-// Track loading state for each individual image using reactive object
-const imageLoadingStates = reactive<Record<string, boolean>>({})
+const loadedImages = reactive(new Set<string>())
 
-// Reset loading states when page changes
 watch(currentPhotoPage, () => {
-  // Clear all states
-  Object.keys(imageLoadingStates).forEach((key) => delete imageLoadingStates[key])
+  loadedImages.clear()
 })
 
 function onImageLoad(index: number) {
   const key = `${currentPhotoPage.value}-${index}`
-  imageLoadingStates[key] = false
+  loadedImages.add(key)
 }
 
 function isImageLoading(index: number) {
   const key = `${currentPhotoPage.value}-${index}`
-  // Si no existe la key, significa que aún no se ha registrado la carga
-  return imageLoadingStates[key] !== false
+  return !loadedImages.has(key)
 }
 
-// Photo modal state
 const selectedPhoto = ref<{ src: string; alt?: string; description?: string } | null>(null)
 const selectedPhotoIndex = ref(0)
 const isModalOpen = ref(false)
@@ -79,7 +71,15 @@ const isPanning = ref(false)
 const panStartX = ref(0)
 const panStartY = ref(0)
 const imageContainerRef = ref<HTMLElement | null>(null)
-const modalImageRef = ref<HTMLImageElement | null>(null)
+const selectedPhotoAlt = computed(() =>
+  selectedPhoto.value
+    ? getPhotoAlt({
+        eventTitle: event.value?.title || '',
+        photoIndex: selectedPhotoIndex.value,
+        customAlt: selectedPhoto.value.alt,
+      })
+    : ''
+)
 
 function openPhotoModal(photo: { src: string; alt?: string; description?: string }, index: number) {
   selectedPhoto.value = photo
@@ -100,7 +100,6 @@ function closePhotoModal() {
   panY.value = 0
 }
 
-// Photo navigation in modal
 function nextPhoto() {
   if (!event.value?.photos) return
   const totalPhotos = event.value.photos.length
@@ -125,12 +124,10 @@ function prevPhoto() {
   panY.value = 0
 }
 
-// Handle modal image load
 function onModalImageLoad() {
   isModalImageLoading.value = false
 }
 
-// Zoom functions
 function handleWheel(e: WheelEvent) {
   if (!isModalOpen.value || !imageContainerRef.value) return
 
@@ -204,7 +201,6 @@ function zoomOut() {
   }
 }
 
-// Constrain pan to image boundaries
 function constrainPan() {
   if (zoomLevel.value <= 1) {
     panX.value = 0
@@ -215,19 +211,12 @@ function constrainPan() {
   const imgElement = imageContainerRef.value?.querySelector('img')
   if (!imgElement || !imageContainerRef.value) return
 
-  // getBoundingClientRect() nos da el tamaño YA escalado por CSS transform
   const imgRect = imgElement.getBoundingClientRect()
   const containerRect = imageContainerRef.value.getBoundingClientRect()
 
-  // Cuánto sobresale la imagen escalada fuera del contenedor (en cada dirección)
   const overflowX = Math.max(0, (imgRect.width - containerRect.width) / 2)
   const overflowY = Math.max(0, (imgRect.height - containerRect.height) / 2)
 
-  // El CSS aplica: transform: scale(zoom) translate(panX/zoom, panY/zoom)
-  // Esto significa que el desplazamiento real en pixels es: panX (no panX/zoom * zoom)
-  // Pero el translate se aplica en el espacio pre-escalado, así que:
-  // desplazamiento_real = (panX / zoom) * zoom = panX
-  // Por tanto, los límites de pan son directamente el overflow
   const maxPanX = overflowX
   const maxPanY = overflowY
 
@@ -235,7 +224,6 @@ function constrainPan() {
   panY.value = Math.max(-maxPanY, Math.min(maxPanY, panY.value))
 }
 
-// Pan functions
 function handleMouseDown(e: MouseEvent) {
   if (zoomLevel.value <= 1) return
   isPanning.value = true
@@ -259,7 +247,6 @@ function handleModalTap() {
   touchControlsVisible.value = !touchControlsVisible.value
 }
 
-// Keyboard shortcuts for navigation
 function handleKeydown(e: KeyboardEvent) {
   if (!isModalOpen.value) return
   if (e.key === 'ArrowRight') nextPhoto()
@@ -279,7 +266,6 @@ function handleKeydown(e: KeyboardEvent) {
   }
 }
 
-// Register keyboard events
 onMounted(() => {
   window.addEventListener('keydown', handleKeydown)
   isTouchDevice.value = 'ontouchstart' in window || window.navigator.maxTouchPoints > 0
@@ -289,30 +275,37 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handleKeydown)
 })
 
-// Format date for display
 function formatDate(dateStr: string) {
   const date = new Date(dateStr)
-  return new Intl.DateTimeFormat(useI18n().locale.value, {
+  return new Intl.DateTimeFormat(locale.value, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   }).format(date)
 }
 
-// Get event icon with fallback
 function getEventIcon() {
   return event.value?.icon || 'i-tabler-photo'
 }
 
-// Modal content reference for focus management
 const modalContentRef = ref<HTMLElement | null>(null)
 
-// Remove focus from buttons when modal opens
 function onModalOpened() {
   nextTick(() => {
     modalContentRef.value?.focus()
   })
 }
+
+watch(eventSlug, () => {
+  currentPhotoPage.value = 1
+  closePhotoModal()
+})
+
+watch(isModalOpen, (open) => {
+  if (!open) {
+    handleMouseUp()
+  }
+})
 </script>
 
 <template>
@@ -408,13 +401,14 @@ function onModalOpened() {
       <UCard v-if="event.cover" class="mb-8 overflow-hidden">
         <template #header>
           <div class="flex h-fit items-center justify-center overflow-hidden">
-            <NuxtImg
+            <img
               :src="getPhotoSrc(event.cover.src)"
               :alt="getCoverAlt(event.title, event.cover.alt)"
               class="h-auto w-full object-contain"
+              decoding="async"
+              fetchpriority="high"
+              width="1280"
               height="720"
-              fit="contain"
-              densities="x1 x2"
             />
           </div>
         </template>
@@ -432,12 +426,7 @@ function onModalOpened() {
         <ul class="space-y-2">
           <li v-for="link in event.links" :key="link.url" class="flex items-center gap-2">
             <UIcon name="i-tabler-external-link" class="text-primary-500 size-4" />
-            <a
-              :href="link.url"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-primary-500 hover:text-primary-600 hover:underline"
-            >
+            <a :href="link.url" target="_blank" rel="noopener noreferrer" class="inline-link">
               {{ link.label }}
             </a>
           </li>
@@ -461,7 +450,7 @@ function onModalOpened() {
           <!-- Each photo with individual skeleton -->
           <button
             v-for="(photo, index) in paginatedPhotos"
-            :key="`${currentPhotoPage}-${index}`"
+            :key="photo.src"
             type="button"
             role="listitem"
             :aria-label="
@@ -471,7 +460,7 @@ function onModalOpened() {
                 customAlt: photo.alt,
               })
             "
-            class="group focus:ring-primary-500 relative aspect-square cursor-pointer overflow-hidden rounded-lg focus:ring-2 focus:ring-offset-2 focus:outline-none"
+            class="motion-link-card group focus:ring-primary-500 relative aspect-square cursor-pointer overflow-hidden rounded-lg focus:ring-2 focus:ring-offset-2 focus:outline-none"
             @click="openPhotoModal(photo, (currentPhotoPage - 1) * photosPerPage + index)"
           >
             <!-- Image always rendered to trigger load event -->
@@ -484,10 +473,15 @@ function onModalOpened() {
                   customAlt: photo.alt,
                 })
               "
-              class="size-full object-cover transition-transform duration-300 group-hover:scale-110"
+              class="motion-link-media size-full object-cover"
               loading="lazy"
               width="300"
               height="300"
+              sizes="(min-width: 1024px) 22vw, (min-width: 768px) 30vw, 45vw"
+              densities="x1 x2"
+              placeholder
+              format="webp"
+              quality="72"
               @load="onImageLoad(index)"
             />
 
@@ -541,6 +535,15 @@ function onModalOpened() {
     <!-- Image modal -->
     <UModal
       v-model:open="isModalOpen"
+      :title="selectedPhotoAlt || t('gallery.event.photos')"
+      :description="
+        selectedPhoto?.description ||
+        t('gallery.event.modal.position', {
+          current: selectedPhotoIndex + 1,
+          total: event?.photos.length,
+        })
+      "
+      :aria-label="selectedPhotoAlt || t('gallery.event.photos')"
       :ui="{ content: 'max-w-[95vw] max-h-[95vh]' }"
       @after-enter="onModalOpened"
     >
@@ -572,13 +575,7 @@ function onModalOpened() {
             <!-- Image with zoom -->
             <NuxtImg
               :src="getPhotoSrc(selectedPhoto.src)"
-              :alt="
-                getPhotoAlt({
-                  eventTitle: event?.title || '',
-                  photoIndex: selectedPhotoIndex,
-                  customAlt: selectedPhoto.alt,
-                })
-              "
+              :alt="selectedPhotoAlt"
               class="max-h-[80vh] max-w-full object-contain select-none"
               :class="{
                 'cursor-grab': zoomLevel > 1 && !isPanning,
@@ -638,19 +635,19 @@ function onModalOpened() {
 
           <!-- Navigation controls -->
           <button
+            v-if="showNavigationControls"
             type="button"
             class="absolute top-1/2 left-4 flex -translate-y-1/2 items-center justify-center rounded-full bg-black/50 p-3 text-white transition-colors hover:bg-black/70 focus:ring-2 focus:ring-white focus:outline-none"
             :aria-label="t('gallery.event.modal.prev')"
-            v-if="showNavigationControls"
             @click.stop="prevPhoto"
           >
             <UIcon name="i-tabler-chevron-left" class="size-8" />
           </button>
           <button
+            v-if="showNavigationControls"
             type="button"
             class="absolute top-1/2 right-4 flex -translate-y-1/2 items-center justify-center rounded-full bg-black/50 p-3 text-white transition-colors hover:bg-black/70 focus:ring-2 focus:ring-white focus:outline-none"
             :aria-label="t('gallery.event.modal.next')"
-            v-if="showNavigationControls"
             @click.stop="nextPhoto"
           >
             <UIcon name="i-tabler-chevron-right" class="size-8" />
@@ -673,12 +670,21 @@ function onModalOpened() {
             class="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-black/50 px-4 py-2 text-white"
             aria-live="polite"
           >
-            {{ selectedPhotoIndex + 1 }} / {{ event?.photos.length }}
+            {{
+              t('gallery.event.modal.position', {
+                current: selectedPhotoIndex + 1,
+                total: event?.photos.length,
+              })
+            }}
           </div>
 
           <!-- Photo description -->
-          <div v-if="selectedPhoto.description" class="bg-muted/90 p-4">
-            <p class="text-center">{{ selectedPhoto.description }}</p>
+          <div
+            v-if="selectedPhoto.description || event?.photos.length"
+            class="bg-muted/90 flex flex-col gap-2 p-4 text-center"
+          >
+            <p class="text-sm font-medium">{{ selectedPhotoAlt }}</p>
+            <p v-if="selectedPhoto.description">{{ selectedPhoto.description }}</p>
           </div>
         </div>
       </template>

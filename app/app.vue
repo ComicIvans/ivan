@@ -1,43 +1,80 @@
 <script setup lang="ts">
+import { defaultLocale } from '~~/shared/constants/locales'
+import { profileName, profileSameAs } from '~~/shared/constants/profile'
 import { getOgLocale } from '~/utils/locales'
 import { getNuxtUiLocale } from '~/utils/nuxtUiLocale'
 
-const { t, locale, localeCodes } = useI18n()
+const { t, locale, localeCodes } = useI18n({ useScope: 'global' })
 const siteConfig = useSiteConfig()
+const localeHead = useLocaleHead({ seo: true })
+const siteUrl = computed(() => String(siteConfig.url ?? ''))
 
 const nuxtUiLocale = computed(() => getNuxtUiLocale(locale.value))
+const availableLocaleCodes = computed(() => localeCodes.value.map((code) => String(code)))
+const alternateOgLocales = computed(() =>
+  localeCodes.value.filter((code) => code !== locale.value).map((code) => getOgLocale(code))
+)
+const dir = computed(() => nuxtUiLocale.value.dir)
+const pageTransition = {
+  name: 'page-shell',
+  mode: 'out-in' as const,
+}
+
+useHead(() => ({
+  htmlAttrs: {
+    lang: localeHead.value.htmlAttrs?.lang ?? locale.value,
+    dir: (localeHead.value.htmlAttrs?.dir ?? dir.value) as 'auto' | 'ltr' | 'rtl',
+  },
+  link: [
+    ...(localeHead.value.link ?? []).filter((link) => link.rel !== 'icon'),
+    { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+  ],
+  meta: [
+    ...(localeHead.value.meta ?? []),
+    { name: 'theme-color', content: '#f87171' },
+    { name: 'author', content: profileName },
+  ],
+}))
 
 useSeoMeta({
   titleTemplate: (title) => (title ? `${title} | ${t('seo.title')}` : t('seo.title')),
+  description: () => t('seo.description'),
+  ogUrl: () => siteUrl.value,
   ogType: 'profile',
+  ogTitle: () => t('seo.title'),
+  ogDescription: () => t('seo.description'),
   ogSiteName: siteConfig.name,
   ogLocale: () => getOgLocale(locale.value),
+  ogLocaleAlternate: () => alternateOgLocales.value,
   twitterCard: 'summary_large_image',
+  twitterTitle: () => t('seo.title'),
+  twitterDescription: () => t('seo.description'),
+  author: profileName,
   themeColor: '#f87171',
 })
 
-// OG Image configuration
-defineOgImage({
-  component: 'NuxtSeo',
+defineOgImage('NuxtSeoSatori', {
   siteLogo: '/favicon.ico',
   theme: '#f87171',
   colorMode: 'light',
-} as Record<string, unknown>)
+})
 
-// Schema.org structured data
 useSchemaOrg([
   defineWebSite({
-    name: siteConfig.name,
-    url: siteConfig.url,
-    inLanguage: () => localeCodes.value.toString(),
+    '@id': () => `${siteUrl.value}#website`,
+    name: () => String(siteConfig.name ?? profileName),
+    url: () => siteUrl.value,
+    description: () => t('seo.description'),
+    inLanguage: availableLocaleCodes.value,
   }),
   definePerson({
-    name: 'Iván Salido Cobo',
+    '@id': () => `${siteUrl.value}#person`,
+    name: profileName,
     givenName: 'Iván',
     familyName: 'Salido Cobo',
     gender: 'Male',
-    url: siteConfig.url,
-    image: `${siteConfig.url}/profile-pic.jpg`,
+    url: () => siteUrl.value,
+    image: () => `${siteUrl.value}/profile-pic.webp`,
     description: () => t('seo.description'),
     nationality: {
       '@type': 'Country',
@@ -53,11 +90,7 @@ useSchemaOrg([
         postalCode: '16639',
       },
     },
-    sameAs: [
-      'https://www.linkedin.com/in/ivansalidocobo/',
-      'https://www.instagram.com/ivansalidocobo/',
-      'https://github.com/ComicIvans/',
-    ],
+    sameAs: profileSameAs,
     jobTitle: () => t('schema.jobTitle'),
     worksFor: [
       {
@@ -90,7 +123,7 @@ useSchemaOrg([
       {
         '@type': 'Language',
         name: 'Spanish',
-        alternateName: 'es',
+        alternateName: defaultLocale,
       },
       {
         '@type': 'Language',
@@ -111,7 +144,7 @@ useSchemaOrg([
   <UApp :locale="nuxtUiLocale">
     <NuxtRouteAnnouncer />
     <NuxtLayout>
-      <NuxtPage />
+      <NuxtPage :transition="pageTransition" />
     </NuxtLayout>
   </UApp>
 </template>

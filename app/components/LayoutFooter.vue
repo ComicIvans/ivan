@@ -1,37 +1,39 @@
 <script setup lang="ts">
-const { t } = useI18n()
+import { profileRepositoryUrl, socialProfiles } from '~~/shared/constants/profile'
+
+const { t } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
 
-const socialLinks = [
+const socialLinks = computed(() => [
   {
     icon: 'i-tabler-mail',
     to: localePath('/contacto'),
-    label: () => t('footer.contactLabel'),
+    label: t('footer.contactLabel'),
     external: false,
   },
   {
     icon: 'i-tabler-brand-linkedin',
-    href: 'https://www.linkedin.com/in/ivansalidocobo/',
-    label: () => t('footer.linkedinLabel'),
+    href: socialProfiles.linkedin,
+    label: t('footer.linkedinLabel'),
     external: true,
   },
   {
     icon: 'i-tabler-brand-instagram',
-    href: 'https://www.instagram.com/ivansalidocobo/',
-    label: () => t('footer.instagramLabel'),
+    href: socialProfiles.instagram,
+    label: t('footer.instagramLabel'),
     external: true,
   },
   {
     icon: 'i-tabler-brand-github',
-    href: 'https://github.com/ComicIvans/',
-    label: () => t('footer.githubLabel'),
+    href: socialProfiles.github,
+    label: t('footer.githubLabel'),
     external: true,
   },
-]
+])
 </script>
 
 <template>
-  <footer class="bg-elevated text-muted p-4 pb-28 md:pb-4" role="contentinfo">
+  <footer class="bg-elevated text-muted p-4 pb-6 md:pb-4" role="contentinfo">
     <div
       class="mx-auto flex w-11/12 max-w-7xl flex-col items-center gap-4 text-center md:grid md:grid-cols-3 md:items-center"
     >
@@ -41,13 +43,13 @@ const socialLinks = [
       >
         <UIcon name="i-tabler-copyright" class="size-5 shrink-0" aria-hidden="true" />
         <p class="text-sm">
-          <i18n-t keypath="footer.copyright" tag="span">
+          <i18n-t keypath="footer.copyright" tag="span" scope="global">
             <template #link>
               <ULink
-                to="https://github.com/ComicIvans/ivan"
+                :to="profileRepositoryUrl"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="text-primary-500 hover:underline"
+                class="inline-link"
               >
                 {{ t('footer.github') }}
               </ULink>
@@ -57,10 +59,7 @@ const socialLinks = [
       </div>
 
       <!-- Legal notice -->
-      <ULink
-        :to="localePath('/legal')"
-        class="text-sm opacity-70 transition-opacity hover:opacity-100 md:text-center"
-      >
+      <ULink :to="localePath('/legal')" class="muted-link text-sm md:text-center">
         {{ t('legal.title') }}
       </ULink>
 
@@ -75,7 +74,7 @@ const socialLinks = [
             variant="ghost"
             size="lg"
             class="social-icon"
-            :aria-label="link.label()"
+            :aria-label="link.label"
           />
           <UButton
             v-else
@@ -87,7 +86,7 @@ const socialLinks = [
             variant="ghost"
             size="lg"
             class="social-icon"
-            :aria-label="link.label()"
+            :aria-label="link.label"
           />
         </template>
       </nav>

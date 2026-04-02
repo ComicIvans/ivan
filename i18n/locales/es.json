@@ -275,7 +275,9 @@
     "comingSoon": "Las fotografías de estos eventos se añadirán próximamente.",
     "filters": {
       "searchPlaceholder": "Buscar eventos...",
+      "searchLabel": "Buscar eventos en la galería",
       "tags": "Etiquetas",
+      "sortLabel": "Ordenar eventos",
       "sortByDateDesc": "Más recientes primero",
       "sortByDateAsc": "Más antiguos primero",
       "sortByTitleAsc": "Título (A-Z)",
@@ -309,6 +311,7 @@
         "next": "Foto siguiente",
         "close": "Cerrar",
         "loading": "Cargando imagen...",
+        "position": "Foto {current} de {total}",
         "zoomIn": "Aumentar zoom",
         "zoomOut": "Reducir zoom",
         "resetZoom": "Restablecer zoom"
@@ -554,11 +557,22 @@
       "subjectPlaceholder": "¿Sobre qué quieres hablar?",
       "message": "Mensaje",
       "messagePlaceholder": "Escribe tu mensaje aquí...",
+      "messageLength": "{count}/{max} caracteres",
       "submit": "Enviar mensaje",
       "sending": "Enviando...",
       "success": "¡Mensaje enviado correctamente! Te responderé lo antes posible.",
       "errorGeneric": "Ha ocurrido un error al enviar el mensaje. Por favor, inténtalo de nuevo.",
       "privacyNote": "Tu información será tratada de forma confidencial y solo se usará para responder a tu consulta.",
+      "apiErrors": {
+        "rateLimited": "Has enviado demasiados mensajes en poco tiempo. Vuelve a intentarlo más tarde.",
+        "missingFields": "Faltan campos obligatorios por completar.",
+        "nameLength": "El nombre debe tener entre 2 y 100 caracteres.",
+        "subjectLength": "El asunto debe tener entre 3 y 200 caracteres.",
+        "messageLength": "El mensaje debe tener entre 10 y 5000 caracteres.",
+        "prohibitedContent": "El mensaje contiene contenido que no he podido aceptar.",
+        "serviceUnavailable": "El servicio de correo no está disponible en este momento.",
+        "sendFailed": "No he podido enviar el mensaje. Inténtalo de nuevo más tarde."
+      },
       "errors": {
         "nameRequired": "El nombre es obligatorio",
         "nameMin": "El nombre debe tener al menos 2 caracteres",

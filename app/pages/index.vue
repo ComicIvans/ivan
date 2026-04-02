@@ -1,10 +1,14 @@
 <script setup lang="ts">
-const { t, tm, rt } = useI18n()
+import { socialProfiles } from '~~/shared/constants/profile'
+
+const { t, tm, rt } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
 
-useSeoMeta({
-  title: () => t('seo.pageTitle'),
-  description: () => t('seo.description'),
+usePageSeo('seo.pageTitle', 'seo.description')
+
+defineOgImage('NuxtSeoSatori', {
+  title: t('seo.pageTitle'),
+  description: t('seo.description'),
 })
 
 const highlightIcons: Record<string, string> = {
@@ -18,7 +22,7 @@ const highlights = computed(() => {
   const items = Array.isArray(itemsData) ? itemsData : []
 
   return items.map((item: unknown) => {
-    const itemData = (item as Record<string, any>) || {}
+    const itemData = (item as Record<string, unknown>) || {}
     const id = getI18nStaticValue(itemData.id)
     const title = getI18nStaticValue(itemData.title)
     const description = getI18nStaticValue(itemData.description)
@@ -36,18 +40,21 @@ const highlights = computed(() => {
 <template>
   <section role="region" :aria-label="t('nav.home')" class="section-enter">
     <!-- Hero Section -->
-    <div class="bg-default rounded-2xl py-12">
+    <div class="hero-panel py-12">
       <div class="flex flex-col items-center gap-8 text-center lg:flex-row lg:text-left">
         <figure class="shrink-0">
           <NuxtImg
-            src="/full-pic.jpg"
-            class="max-w-45 rounded-2xl shadow-xl sm:max-w-55 xl:max-w-70"
+            src="/full-pic.webp"
+            class="hero-portrait max-w-45 rounded-2xl shadow-xl sm:max-w-55 xl:max-w-70"
             :alt="t('header.profileAlt')"
             loading="eager"
             width="560"
             height="746"
+            sizes="(min-width: 1280px) 560px, (min-width: 1024px) 420px, (min-width: 640px) 320px, 280px"
+            densities="x1 x2"
+            preload
             format="webp"
-            quality="85"
+            quality="82"
           />
         </figure>
         <div class="max-w-2xl">
@@ -56,7 +63,7 @@ const highlights = computed(() => {
           </h1>
           <p
             v-if="t('home.hero.subtitle')"
-            class="text-primary-400 mt-2 text-lg font-medium sm:text-xl lg:text-2xl"
+            class="text-toned mt-2 text-lg font-medium sm:text-xl lg:text-2xl"
           >
             {{ t('home.hero.subtitle') }}
           </p>
@@ -76,7 +83,7 @@ const highlights = computed(() => {
               {{ t('home.cta.contact') }}
             </UButton>
             <UButton
-              to="https://www.linkedin.com/in/ivansalidocobo/"
+              :to="socialProfiles.linkedin"
               target="_blank"
               color="neutral"
               variant="outline"
@@ -86,7 +93,7 @@ const highlights = computed(() => {
               LinkedIn
             </UButton>
             <UButton
-              to="https://www.instagram.com/ivansalidocobo/"
+              :to="socialProfiles.instagram"
               target="_blank"
               color="neutral"
               variant="outline"
@@ -107,19 +114,15 @@ const highlights = computed(() => {
       <h2 class="text-primary-500 mb-8 text-center text-2xl font-bold sm:text-3xl">
         {{ t('home.highlights.title') }}
       </h2>
-      <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
-        <UCard
-          v-for="(highlight, index) in highlights"
-          :key="index"
-          class="transition-all hover:shadow-lg"
-        >
+      <div class="section-stagger grid grid-cols-1 gap-6 md:grid-cols-3">
+        <UCard v-for="(highlight, index) in highlights" :key="index" class="motion-card">
           <article class="flex flex-col items-center text-center">
             <div
               class="bg-primary-500/10 mb-4 flex size-16 items-center justify-center rounded-full"
             >
               <UIcon :name="highlight.icon" class="text-primary-500 size-8" aria-hidden="true" />
             </div>
-            <h3 class="text-primary-400 text-lg font-semibold">
+            <h3 class="text-highlighted text-lg font-semibold">
               {{ highlight.title }}
             </h3>
             <p class="text-muted mt-2">

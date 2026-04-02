@@ -1,10 +1,7 @@
 <script setup lang="ts">
-const { t, tm, rt } = useI18n()
+const { t, tm, rt } = useI18n({ useScope: 'global' })
 
-useSeoMeta({
-  title: () => t('training.title'),
-  description: () => t('seo.pages.training'),
-})
+usePageSeo('training.title', 'seo.pages.training')
 
 const academicIcons: Record<string, string> = {
   mugeps: 'i-tabler-briefcase',
@@ -20,7 +17,7 @@ const academicItems = computed(() => {
   const itemsData = tm('training.academic.items') as unknown
   const items = Array.isArray(itemsData) ? itemsData : []
   return items.map((item: unknown) => {
-    const itemData = (item as Record<string, any>) || {}
+    const itemData = (item as Record<string, unknown>) || {}
     const id = getI18nStaticValue(itemData.id)
     const title = getI18nStaticValue(itemData.title)
     const org = getI18nStaticValue(itemData.organization)
@@ -54,7 +51,7 @@ const languages = computed(() => {
   const itemsData = tm('training.languages.items') as unknown
   const items = Array.isArray(itemsData) ? itemsData : []
   return items.map((item: unknown) => {
-    const itemData = (item as Record<string, any>) || {}
+    const itemData = (item as Record<string, unknown>) || {}
     const id = getI18nStaticValue(itemData.id)
     const name = getI18nStaticValue(itemData.name)
     const level = getI18nStaticValue(itemData.level)
@@ -88,7 +85,7 @@ const competencies = computed(() => {
   const itemsData = tm('training.competencies.items') as unknown
   const items = Array.isArray(itemsData) ? itemsData : []
   return items.map((item: unknown) => {
-    const itemData = (item as Record<string, any>) || {}
+    const itemData = (item as Record<string, unknown>) || {}
     const id = getI18nStaticValue(itemData.id)
     const name = getI18nStaticValue(itemData.name)
     return {
@@ -110,17 +107,13 @@ const competencies = computed(() => {
 
     <!-- Academic Training -->
     <div class="mb-12">
-      <h2 class="text-primary-400 mb-6 flex items-center gap-2 text-2xl font-bold">
+      <h2 class="text-highlighted mb-6 flex items-center gap-2 text-2xl font-bold">
         <UIcon name="i-tabler-school" class="size-7" aria-hidden="true" />
         {{ t('training.academic.title') }}
       </h2>
 
-      <div class="space-y-6">
-        <UCard
-          v-for="(item, index) in academicItems"
-          :key="index"
-          class="transition-all hover:shadow-lg"
-        >
+      <div class="section-stagger space-y-6">
+        <UCard v-for="(item, index) in academicItems" :key="index" class="motion-card">
           <div class="flex flex-col gap-4 sm:flex-row sm:items-start">
             <div
               class="flex size-14 shrink-0 items-center justify-center self-start rounded-xl"
@@ -140,7 +133,7 @@ const competencies = computed(() => {
                   {{ item.period }}
                 </UBadge>
               </div>
-              <p class="text-primary-400 mt-1 font-medium">{{ item.org }}</p>
+              <p class="text-toned mt-1 font-medium">{{ item.org }}</p>
               <p class="text-muted mt-2">{{ item.description }}</p>
             </div>
           </div>
@@ -152,18 +145,18 @@ const competencies = computed(() => {
 
     <!-- Languages -->
     <div class="mb-12">
-      <h2 class="text-primary-400 mb-6 flex items-center gap-2 text-2xl font-bold">
+      <h2 class="text-highlighted mb-6 flex items-center gap-2 text-2xl font-bold">
         <UIcon name="i-tabler-language" class="size-7" aria-hidden="true" />
         {{ t('training.languages.title') }}
       </h2>
 
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <UCard v-for="lang in languages" :key="lang.name">
+      <div class="section-stagger grid grid-cols-1 gap-4 md:grid-cols-3">
+        <UCard v-for="lang in languages" :key="lang.name" class="motion-card">
           <div class="flex items-center gap-3">
             <UIcon :name="lang.flag" class="size-10" aria-hidden="true" />
             <div>
               <h3 class="font-bold">{{ lang.name }}</h3>
-              <p class="text-primary-500 text-sm">{{ lang.level }}</p>
+              <p class="text-toned text-sm">{{ lang.level }}</p>
             </div>
           </div>
           <p class="text-muted mt-2 text-sm">{{ lang.description }}</p>
@@ -182,13 +175,13 @@ const competencies = computed(() => {
 
     <!-- Other Certifications -->
     <div class="mb-12">
-      <h2 class="text-primary-400 mb-6 flex items-center gap-2 text-2xl font-bold">
+      <h2 class="text-highlighted mb-6 flex items-center gap-2 text-2xl font-bold">
         <UIcon name="i-tabler-certificate" class="size-7" aria-hidden="true" />
         {{ t('training.other.title') }}
       </h2>
 
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <UCard>
+      <div class="section-stagger grid grid-cols-1 gap-4 md:grid-cols-2">
+        <UCard class="motion-card">
           <div class="flex items-center gap-3">
             <div
               class="bg-primary-500/10 flex size-12 shrink-0 items-center justify-center rounded-xl"
@@ -210,16 +203,16 @@ const competencies = computed(() => {
 
     <!-- Transversal Competencies -->
     <div>
-      <h2 class="text-primary-400 mb-6 flex items-center gap-2 text-2xl font-bold">
+      <h2 class="text-highlighted mb-6 flex items-center gap-2 text-2xl font-bold">
         <UIcon name="i-tabler-bulb" class="size-7" aria-hidden="true" />
         {{ t('training.competencies.title') }}
       </h2>
 
-      <div class="flex flex-wrap gap-3">
+      <div class="section-stagger flex flex-wrap gap-3">
         <div
           v-for="comp in competencies"
           :key="comp.name"
-          class="border-primary-500/20 bg-primary-500/5 hover:bg-primary-500/10 flex items-center gap-2 rounded-full border px-4 py-2 transition-colors"
+          class="border-primary-500/20 bg-primary-500/5 motion-card flex items-center gap-2 rounded-full border px-4 py-2 transition-colors"
         >
           <UIcon :name="comp.icon" class="text-primary-500 size-5" aria-hidden="true" />
           <span class="font-medium">{{ comp.name }}</span>

@@ -1,22 +1,47 @@
+import type { H3Event } from 'h3'
 import { defineEventHandler, readBody, createError, getHeader } from 'h3'
 import nodemailer from 'nodemailer'
+import {
+  getRequiredSiteUrl,
+  getRequiredSmtpFromEmail,
+  getRequiredSmtpToEmail,
+  getRequiredSmtpTransportConfig,
+} from '../utils/runtimeConfig'
 
 interface ContactFormData {
   name: string
   email: string
   subject: string
   message: string
-  // Honeypot field - should be empty
   website?: string
 }
 
-// Simple in-memory rate limiting
 const rateLimitMap = new Map<string, { count: number; firstRequest: number }>()
-const RATE_LIMIT_WINDOW = 60 * 60 * 1000 // 1 hour in ms
+const RATE_LIMIT_WINDOW = 60 * 60 * 1000
 const MAX_REQUESTS_PER_WINDOW = 5
+const CONTACT_ERROR_CODES = {
+  invalidEmail: 'CONTACT_INVALID_EMAIL',
+  messageLength: 'CONTACT_MESSAGE_LENGTH',
+  missingFields: 'CONTACT_MISSING_FIELDS',
+  nameLength: 'CONTACT_NAME_LENGTH',
+  prohibitedContent: 'CONTACT_PROHIBITED_CONTENT',
+  rateLimited: 'CONTACT_RATE_LIMITED',
+  sendFailed: 'CONTACT_SEND_FAILED',
+  serviceUnavailable: 'CONTACT_SERVICE_UNAVAILABLE',
+  subjectLength: 'CONTACT_SUBJECT_LENGTH',
+} as const
+
+function cleanupRateLimitMap(now: number) {
+  for (const [ip, record] of rateLimitMap.entries()) {
+    if (now - record.firstRequest > RATE_LIMIT_WINDOW) {
+      rateLimitMap.delete(ip)
+    }
+  }
+}
 
 function isRateLimited(ip: string): boolean {
   const now = Date.now()
+  cleanupRateLimitMap(now)
   const record = rateLimitMap.get(ip)
 
   if (!record) {
@@ -24,13 +49,11 @@ function isRateLimited(ip: string): boolean {
     return false
   }
 
-  // Reset if window has passed
   if (now - record.firstRequest > RATE_LIMIT_WINDOW) {
     rateLimitMap.set(ip, { count: 1, firstRequest: now })
     return false
   }
 
-  // Increment and check
   record.count++
   if (record.count > MAX_REQUESTS_PER_WINDOW) {
     return true
@@ -39,28 +62,26 @@ function isRateLimited(ip: string): boolean {
   return false
 }
 
-// Sanitize input to prevent injection attacks
-function sanitizeInput(input: string): string {
-  return input
-    .replace(/[<>]/g, '') // Remove HTML tags
-    .trim()
-    .slice(0, 5000) // Limit length
+function getClientIp(event: H3Event): string {
+  return getHeader(event, 'x-real-ip')?.trim() || event.node.req.socket.remoteAddress || 'unknown'
 }
 
-// Validate email more strictly
+function sanitizeInput(input: string): string {
+  return input.replace(/[<>]/g, '').trim().slice(0, 5000)
+}
+
 function isValidEmail(email: string): boolean {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
   return emailRegex.test(email) && email.length <= 254
 }
 
-// Check for spam patterns
 function hasSpamPatterns(text: string): boolean {
   const spamPatterns = [
     /\[url=/i,
     /\[link=/i,
     /<a\s+href/i,
-    /http[s]?:\/\/[^\s]{50,}/i, // Very long URLs
-    /(.)\1{10,}/i, // Repeated characters
+    /http[s]?:\/\/[^\s]{50,}/i,
+    /(.)\1{10,}/i,
     /viagra|cialis|casino|lottery|winner|bitcoin|crypto|investment|earn money/i,
   ]
 
@@ -68,117 +89,82 @@ function hasSpamPatterns(text: string): boolean {
 }
 
 export default defineEventHandler(async (event) => {
-  // Get client IP for rate limiting
-  const clientIp =
-    getHeader(event, 'x-forwarded-for')?.split(',')[0]?.trim() ||
-    getHeader(event, 'x-real-ip') ||
-    'unknown'
+  const clientIp = getClientIp(event)
 
-  // Check rate limit
   if (isRateLimited(clientIp)) {
     throw createError({
       statusCode: 429,
-      statusMessage: 'Too many requests. Please try again later.',
+      statusMessage: CONTACT_ERROR_CODES.rateLimited,
     })
   }
 
   const body = await readBody<ContactFormData>(event)
 
-  // Honeypot check - if filled, it's a bot
   if (body.website && body.website.trim() !== '') {
-    // Silently accept but don't send (fool the bot)
     return {
       success: true,
-      message: 'Message received',
     }
   }
 
-  // Validate required fields
   if (!body.name || !body.email || !body.subject || !body.message) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Missing required fields',
+      statusMessage: CONTACT_ERROR_CODES.missingFields,
     })
   }
 
-  // Sanitize inputs
   const name = sanitizeInput(body.name)
   const email = sanitizeInput(body.email)
   const subject = sanitizeInput(body.subject)
   const message = sanitizeInput(body.message)
 
-  // Validate field lengths
   if (name.length < 2 || name.length > 100) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Name must be between 2 and 100 characters',
+      statusMessage: CONTACT_ERROR_CODES.nameLength,
     })
   }
 
   if (subject.length < 3 || subject.length > 200) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Subject must be between 3 and 200 characters',
+      statusMessage: CONTACT_ERROR_CODES.subjectLength,
     })
   }
 
   if (message.length < 10 || message.length > 5000) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Message must be between 10 and 5000 characters',
+      statusMessage: CONTACT_ERROR_CODES.messageLength,
     })
   }
 
-  // Validate email format
   if (!isValidEmail(email)) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Invalid email format',
+      statusMessage: CONTACT_ERROR_CODES.invalidEmail,
     })
   }
 
-  // Check for spam patterns
   const fullText = `${name} ${subject} ${message}`
   if (hasSpamPatterns(fullText)) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Message contains prohibited content',
+      statusMessage: CONTACT_ERROR_CODES.prohibitedContent,
     })
   }
 
-  // Get runtime config for SMTP settings
-  const config = useRuntimeConfig()
+  const siteUrl = getRequiredSiteUrl(event, CONTACT_ERROR_CODES.serviceUnavailable)
+  const fromEmail = getRequiredSmtpFromEmail(event, CONTACT_ERROR_CODES.serviceUnavailable)
+  const toEmail = getRequiredSmtpToEmail(event, CONTACT_ERROR_CODES.serviceUnavailable)
 
-  // Validate SMTP configuration
-  if (!config.smtpHost || !config.smtpUser || !config.smtpPass || !config.smtpToEmail) {
-    console.error('SMTP configuration missing:', {
-      hasHost: !!config.smtpHost,
-      hasUser: !!config.smtpUser,
-      hasPass: !!config.smtpPass,
-      hasFromEmail: !!config.smtpFromEmail,
-      hasToEmail: !!config.smtpToEmail,
-    })
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Email service not configured',
-    })
-  }
-
-  // Create nodemailer transporter with timeouts to prevent NGINX connection issues
   const transporter = nodemailer.createTransport({
-    host: config.smtpHost,
-    port: Number(config.smtpPort),
-    secure: config.smtpSecure === 'true',
-    auth: {
-      user: config.smtpUser,
-      pass: config.smtpPass,
-    },
-    connectionTimeout: 10000, // 10 seconds
+    ...getRequiredSmtpTransportConfig(event, CONTACT_ERROR_CODES.serviceUnavailable),
+    connectionTimeout: 10000,
     greetingTimeout: 10000,
-    socketTimeout: 30000, // 30 seconds
+    socketTimeout: 30000,
   })
 
-  // Build email content
   const emailContent = `
 Nuevo mensaje de contacto desde el portfolio
 
@@ -190,14 +176,14 @@ Nuevo mensaje de contacto desde el portfolio
 ${message}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Enviado desde: ${config.public.siteUrl}
+Enviado desde: ${siteUrl}
 Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })}
   `.trim()
 
   try {
     const info = await transporter.sendMail({
-      from: `"Portfolio Contact" <${config.smtpFromEmail}>`,
-      to: config.smtpToEmail,
+      from: `"Portfolio Contact" <${fromEmail}>`,
+      to: toEmail,
       replyTo: email,
       subject: `[Portfolio] ${subject}`,
       text: emailContent,
@@ -207,12 +193,9 @@ Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })}
 
     return {
       success: true,
-      message: 'Email sent successfully',
-      messageId: info.messageId,
     }
   } catch (error) {
     console.error('Error sending email:', error)
-    // Log detailed error information
     if (error instanceof Error) {
       console.error('Error details:', {
         message: error.message,
@@ -221,7 +204,7 @@ Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })}
     }
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to send email. Please try again later.',
+      statusMessage: CONTACT_ERROR_CODES.sendFailed,
     })
   }
 })

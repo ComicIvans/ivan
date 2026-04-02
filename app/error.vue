@@ -6,7 +6,7 @@ const props = defineProps<{
   error: NuxtError
 }>()
 
-const { t, locale } = useI18n()
+const { t, locale } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
 
 const nuxtUiLocale = computed(() => getNuxtUiLocale(locale.value))
@@ -77,81 +77,45 @@ useSeoMeta({
 
 <template>
   <UApp :locale="nuxtUiLocale">
-    <div class="bg-default flex min-h-screen min-w-screen flex-col">
-      <!-- Skip link para accesibilidad -->
-      <a
-        href="#main-content"
-        class="skip-link focus:bg-primary-500 sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:rounded focus:px-4 focus:py-2 focus:text-white"
-      >
-        {{ $t('nav.skipLink') }}
-      </a>
+    <LayoutShell>
+      <div class="flex min-h-[60vh] flex-col items-center justify-center text-center">
+        <UCard class="max-w-md">
+          <h1 class="text-primary-500 text-9xl font-bold">
+            {{ error?.statusCode || 500 }}
+          </h1>
 
-      <main id="main-content" class="main-content grow" role="main">
-        <div class="mx-auto w-11/12 max-w-7xl p-4 sm:p-6">
-          <LayoutHeader />
+          <h2 class="mt-4 text-2xl font-semibold sm:text-3xl">
+            {{ errorTitle }}
+          </h2>
 
-          <!-- Error content -->
-          <div class="flex min-h-[60vh] flex-col items-center justify-center text-center">
-            <UCard class="max-w-md">
-              <!-- Error code -->
-              <h1 class="text-primary-500 text-9xl font-bold">
-                {{ error?.statusCode || 500 }}
-              </h1>
+          <p class="text-muted mt-2">
+            {{ errorDescription }}
+          </p>
 
-              <!-- Error title -->
-              <h2 class="mt-4 text-2xl font-semibold sm:text-3xl">
-                {{ errorTitle }}
-              </h2>
-
-              <!-- Error description -->
-              <p class="text-muted mt-2">
-                {{ errorDescription }}
-              </p>
-
-              <!-- Actions -->
-              <div class="mt-6 flex flex-wrap justify-center gap-4">
-                <UButton color="primary" icon="i-tabler-home" @click="goHome">
-                  {{ $t('error.backHome') }}
-                </UButton>
-                <UButton variant="outline" icon="i-tabler-refresh" @click="handleError">
-                  {{ $t('error.tryAgain') }}
-                </UButton>
-              </div>
-
-              <!-- Additional information for development -->
-              <UCollapsible v-if="error?.message && isDev" class="mt-6">
-                <UButton variant="ghost" size="sm" class="w-full justify-between">
-                  {{ $t('error.technicalDetails') }}
-                  <template #trailing>
-                    <UIcon name="i-tabler-chevron-down" class="size-4" />
-                  </template>
-                </UButton>
-                <template #content>
-                  <pre class="bg-elevated mt-2 overflow-auto rounded p-4 text-left text-xs">{{
-                    error.message
-                  }}</pre>
-                </template>
-              </UCollapsible>
-            </UCard>
+          <div class="mt-6 flex flex-wrap justify-center gap-4">
+            <UButton color="primary" icon="i-tabler-home" @click="goHome">
+              {{ $t('error.backHome') }}
+            </UButton>
+            <UButton variant="outline" icon="i-tabler-refresh" @click="handleError">
+              {{ $t('error.tryAgain') }}
+            </UButton>
           </div>
-        </div>
-      </main>
 
-      <LayoutFooter />
-    </div>
+          <UCollapsible v-if="error?.message && isDev" class="mt-6">
+            <UButton variant="ghost" size="sm" class="w-full justify-between">
+              {{ $t('error.technicalDetails') }}
+              <template #trailing>
+                <UIcon name="i-tabler-chevron-down" class="size-4" />
+              </template>
+            </UButton>
+            <template #content>
+              <pre class="bg-elevated mt-2 overflow-auto rounded p-4 text-left text-xs">{{
+                error.message
+              }}</pre>
+            </template>
+          </UCollapsible>
+        </UCard>
+      </div>
+    </LayoutShell>
   </UApp>
 </template>
-
-<style scoped>
-.main-content {
-  /* Padding for the dock on mobile */
-  padding-bottom: 4rem;
-}
-
-/* On desktop (with hover), we don't need extra padding */
-@media (hover: hover) and (min-width: 768px) {
-  .main-content {
-    padding-bottom: 0;
-  }
-}
-</style>

@@ -1,22 +1,19 @@
 <script setup lang="ts">
-const { t } = useI18n()
+import { socialProfiles } from '~~/shared/constants/profile'
+
+const { t } = useI18n({ useScope: 'global' })
 const toast = useToast()
 
-useSeoMeta({
-  title: () => t('contactPage.seo.title'),
-  description: () => t('contactPage.seo.description'),
-})
+usePageSeo('contactPage.seo.title', 'contactPage.seo.description')
 
-// Form state
 const form = reactive({
   name: '',
   email: '',
   subject: '',
   message: '',
-  website: '', // Honeypot field
+  website: '',
 })
 
-// Track which fields have been touched (user interacted with them)
 const touched = reactive({
   name: false,
   email: false,
@@ -27,7 +24,18 @@ const touched = reactive({
 const isSubmitting = ref(false)
 const formSubmitted = ref(false)
 
-// Validation rules
+const apiErrorMessages = computed<Record<string, string>>(() => ({
+  CONTACT_INVALID_EMAIL: t('contactPage.form.errors.emailInvalid'),
+  CONTACT_MESSAGE_LENGTH: t('contactPage.form.apiErrors.messageLength'),
+  CONTACT_MISSING_FIELDS: t('contactPage.form.apiErrors.missingFields'),
+  CONTACT_NAME_LENGTH: t('contactPage.form.apiErrors.nameLength'),
+  CONTACT_PROHIBITED_CONTENT: t('contactPage.form.apiErrors.prohibitedContent'),
+  CONTACT_RATE_LIMITED: t('contactPage.form.apiErrors.rateLimited'),
+  CONTACT_SEND_FAILED: t('contactPage.form.apiErrors.sendFailed'),
+  CONTACT_SERVICE_UNAVAILABLE: t('contactPage.form.apiErrors.serviceUnavailable'),
+  CONTACT_SUBJECT_LENGTH: t('contactPage.form.apiErrors.subjectLength'),
+}))
+
 const validations = computed(() => ({
   name: {
     valid: form.name.trim().length >= 2 && form.name.trim().length <= 100,
@@ -65,12 +73,10 @@ const validations = computed(() => ({
   },
 }))
 
-// Check if field should show error (touched or form submitted)
 function shouldShowError(field: keyof typeof touched): boolean {
   return (touched[field] || formSubmitted.value) && !validations.value[field].valid
 }
 
-// Get error message for a field
 function getFieldError(field: keyof typeof touched): string | undefined {
   return shouldShowError(field) ? validations.value[field].error : undefined
 }
@@ -79,11 +85,37 @@ const isFormValid = computed(() => {
   return Object.values(validations.value).every((v) => v.valid)
 })
 
+function resolveContactErrorMessage(error: unknown): string {
+  const fetchError = error as {
+    data?: { message?: string; statusMessage?: string }
+    statusMessage?: string
+    message?: string
+  }
+
+  const possibleCodes = [
+    fetchError.data?.statusMessage,
+    fetchError.statusMessage,
+    fetchError.data?.message,
+    fetchError.message,
+  ]
+
+  for (const possibleCode of possibleCodes) {
+    if (typeof possibleCode === 'string') {
+      const localizedMessage = apiErrorMessages.value[possibleCode]
+
+      if (localizedMessage) {
+        return localizedMessage
+      }
+    }
+  }
+
+  return t('contactPage.form.errorGeneric')
+}
+
 async function handleSubmit() {
   formSubmitted.value = true
 
   if (!isFormValid.value || isSubmitting.value) {
-    // Focus the first invalid field
     const firstInvalidField = Object.keys(validations.value).find(
       (key) => !validations.value[key as keyof typeof validations.value].valid
     )
@@ -114,27 +146,16 @@ async function handleSubmit() {
       color: 'success',
     })
 
-    // Reset form
     form.name = ''
     form.email = ''
     form.subject = ''
     form.message = ''
+    form.website = ''
     formSubmitted.value = false
     Object.keys(touched).forEach((key) => (touched[key as keyof typeof touched] = false))
   } catch (error: unknown) {
-    // FetchError has the message in data.message or statusMessage
-    const fetchError = error as {
-      data?: { message?: string }
-      statusMessage?: string
-      message?: string
-    }
-    const errorMsg =
-      fetchError.data?.message ||
-      fetchError.statusMessage ||
-      fetchError.message ||
-      t('contactPage.form.errorGeneric')
     toast.add({
-      title: errorMsg,
+      title: resolveContactErrorMessage(error),
       icon: 'i-tabler-alert-circle',
       color: 'error',
     })
@@ -159,7 +180,7 @@ async function handleSubmit() {
 
       <!-- Contact Form -->
       <UCard>
-        <form class="space-y-6" @submit.prevent="handleSubmit" aria-describedby="form-description">
+        <form class="space-y-6" aria-describedby="form-description" @submit.prevent="handleSubmit">
           <p id="form-description" class="sr-only">{{ t('contactPage.subtitle') }}</p>
 
           <!-- Honeypot field -->
@@ -180,11 +201,16 @@ async function handleSubmit() {
             <UInput
               id="contact-name"
               v-model="form.name"
+              name="name"
               type="text"
               :placeholder="t('contactPage.form.namePlaceholder')"
+              autocomplete="name"
+              minlength="2"
+              maxlength="100"
               required
               :disabled="isSubmitting"
               :color="shouldShowError('name') ? 'error' : undefined"
+              :aria-invalid="shouldShowError('name')"
               class="w-full"
               @blur="touched.name = true"
             />
@@ -195,11 +221,16 @@ async function handleSubmit() {
             <UInput
               id="contact-email"
               v-model="form.email"
+              name="email"
               type="email"
               :placeholder="t('contactPage.form.emailPlaceholder')"
+              autocomplete="email"
+              inputmode="email"
+              maxlength="254"
               required
               :disabled="isSubmitting"
               :color="shouldShowError('email') ? 'error' : undefined"
+              :aria-invalid="shouldShowError('email')"
               class="w-full"
               @blur="touched.email = true"
             />
@@ -213,11 +244,16 @@ async function handleSubmit() {
             <UInput
               id="contact-subject"
               v-model="form.subject"
+              name="subject"
               type="text"
               :placeholder="t('contactPage.form.subjectPlaceholder')"
+              autocomplete="off"
+              minlength="3"
+              maxlength="200"
               required
               :disabled="isSubmitting"
               :color="shouldShowError('subject') ? 'error' : undefined"
+              :aria-invalid="shouldShowError('subject')"
               class="w-full"
               @blur="touched.subject = true"
             />
@@ -231,17 +267,31 @@ async function handleSubmit() {
             <UTextarea
               id="contact-message"
               v-model="form.message"
+              name="message"
               :placeholder="t('contactPage.form.messagePlaceholder')"
               :rows="5"
+              minlength="10"
+              maxlength="5000"
+              autocomplete="off"
+              spellcheck="true"
               required
               :disabled="isSubmitting"
               :color="shouldShowError('message') ? 'error' : undefined"
+              :aria-invalid="shouldShowError('message')"
               class="w-full"
               @blur="touched.message = true"
             />
             <template #hint>
-              <span :class="form.message.trim().length < 10 ? 'text-error' : 'text-muted'">
-                {{ form.message.trim().length }}/5000
+              <span
+                :class="form.message.trim().length < 10 ? 'text-error' : 'text-muted'"
+                aria-live="polite"
+              >
+                {{
+                  t('contactPage.form.messageLength', {
+                    count: form.message.trim().length,
+                    max: 5000,
+                  })
+                }}
               </span>
             </template>
           </UFormField>
@@ -252,7 +302,7 @@ async function handleSubmit() {
             color="primary"
             block
             :loading="isSubmitting"
-            :disabled="!isFormValid || isSubmitting"
+            :disabled="isSubmitting"
             icon="i-tabler-send"
           >
             {{ isSubmitting ? t('contactPage.form.sending') : t('contactPage.form.submit') }}
@@ -272,7 +322,7 @@ async function handleSubmit() {
         </p>
         <div class="mt-4 flex flex-wrap justify-center gap-4">
           <UButton
-            to="https://www.linkedin.com/in/ivansalidocobo/"
+            :to="socialProfiles.linkedin"
             target="_blank"
             rel="noopener noreferrer"
             color="neutral"
@@ -283,7 +333,7 @@ async function handleSubmit() {
             LinkedIn
           </UButton>
           <UButton
-            to="https://www.instagram.com/ivansalidocobo/"
+            :to="socialProfiles.instagram"
             target="_blank"
             rel="noopener noreferrer"
             color="neutral"

@@ -1,16 +1,11 @@
 <script setup lang="ts">
-const { t } = useI18n()
+const { t, locale } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
 
-// Gallery image utilities
 const { getPhotoSrc, getCoverAlt } = useGalleryImages()
 
-useSeoMeta({
-  title: () => t('gallery.title'),
-  description: () => t('seo.pages.gallery'),
-})
+usePageSeo('gallery.title', 'seo.pages.gallery')
 
-// Filter state
 const searchQuery = ref('')
 const selectedTags = ref<string[]>([])
 const sortBy = ref<'date' | 'title'>('date')
@@ -18,7 +13,6 @@ const sortOrder = ref<'asc' | 'desc'>('desc')
 const currentPage = ref(1)
 const perPage = ref(6)
 
-// Reactive query options
 const queryOptions = computed(() => ({
   search: searchQuery.value,
   tags: selectedTags.value,
@@ -28,10 +22,8 @@ const queryOptions = computed(() => ({
   perPage: perPage.value,
 }))
 
-// Fetch events with filters
 const { events, allTags, totalPages, totalEvents, isLoading } = useGalleryEvents(queryOptions)
 
-// Sort options
 const sortOptions = computed(() => [
   { label: t('gallery.filters.sortByDateDesc'), value: 'date-desc' },
   { label: t('gallery.filters.sortByDateAsc'), value: 'date-asc' },
@@ -41,19 +33,16 @@ const sortOptions = computed(() => [
 
 const selectedSort = ref('date-desc')
 
-// Update sort when selection changes
 watch(selectedSort, (newValue) => {
   const [field, order] = newValue.split('-') as ['date' | 'title', 'asc' | 'desc']
   sortBy.value = field
   sortOrder.value = order
 })
 
-// Reset page when filters change
 watch([searchQuery, selectedTags, sortBy, sortOrder], () => {
   currentPage.value = 1
 })
 
-// Toggle tag selection
 function toggleTag(tag: string) {
   const index = selectedTags.value.indexOf(tag)
   if (index === -1) {
@@ -63,7 +52,6 @@ function toggleTag(tag: string) {
   }
 }
 
-// Clear all filters
 function clearFilters() {
   searchQuery.value = ''
   selectedTags.value = []
@@ -71,7 +59,6 @@ function clearFilters() {
   currentPage.value = 1
 }
 
-// Check if there are active filters
 const hasActiveFilters = computed(() => {
   return (
     searchQuery.value !== '' || selectedTags.value.length > 0 || selectedSort.value !== 'date-desc'
@@ -82,10 +69,9 @@ function getEventIcon(event: { icon?: string }) {
   return event.icon || 'i-tabler-photo'
 }
 
-// Format date for display
 function formatDate(dateStr: string) {
   const date = new Date(dateStr)
-  return new Intl.DateTimeFormat(useI18n().locale.value, {
+  return new Intl.DateTimeFormat(locale.value, {
     year: 'numeric',
     month: 'long',
   }).format(date)
@@ -113,13 +99,19 @@ function formatDate(dateStr: string) {
           <UInput
             v-model="searchQuery"
             :placeholder="t('gallery.filters.searchPlaceholder')"
+            :aria-label="t('gallery.filters.searchLabel')"
             icon="i-tabler-search"
             class="flex-1"
             size="lg"
           />
 
-          <!-- Sort -->
-          <USelect v-model="selectedSort" :items="sortOptions" class="w-full sm:w-64" size="lg" />
+          <USelect
+            v-model="selectedSort"
+            :items="sortOptions"
+            :aria-label="t('gallery.filters.sortLabel')"
+            class="w-full sm:w-64"
+            size="lg"
+          />
         </div>
 
         <!-- Tags -->
@@ -150,12 +142,12 @@ function formatDate(dateStr: string) {
           </button>
         </div>
 
-        <!-- Clear filters button -->
-        <div v-if="hasActiveFilters" class="flex items-center justify-between">
+        <div class="flex flex-wrap items-center justify-between gap-3" aria-live="polite">
           <span class="text-muted text-sm">
             {{ t('gallery.filters.resultsCount', { count: totalEvents }) }}
           </span>
           <UButton
+            v-if="hasActiveFilters"
             variant="ghost"
             color="neutral"
             size="sm"
@@ -200,18 +192,19 @@ function formatDate(dateStr: string) {
         v-for="event in events"
         :key="event.id"
         :to="localePath(`/galeria/${event.path.split('/').pop()}`)"
-        class="group"
+        :aria-label="`${event.title}. ${formatDate(event.date)}`"
+        class="motion-link-card group block focus:outline-none"
       >
-        <UCard class="h-full overflow-hidden transition-all group-hover:shadow-lg">
-          <!-- Cover image -->
+        <UCard class="h-full overflow-hidden">
           <template #header>
             <div class="bg-elevated relative aspect-video w-full overflow-hidden">
               <template v-if="event.cover">
-                <NuxtImg
+                <img
                   :src="getPhotoSrc(event.cover.src)"
                   :alt="getCoverAlt(event.title, event.cover.alt)"
-                  class="size-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  class="motion-link-media size-full object-cover"
                   loading="lazy"
+                  decoding="async"
                   width="400"
                   height="225"
                 />
@@ -244,7 +237,7 @@ function formatDate(dateStr: string) {
           </template>
 
           <div>
-            <h2 class="text-primary-400 flex items-center gap-2 text-lg font-bold">
+            <h2 class="text-highlighted flex items-center gap-2 text-lg font-bold">
               <UIcon
                 :name="getEventIcon(event)"
                 class="text-primary-500 size-5 shrink-0"
@@ -254,7 +247,7 @@ function formatDate(dateStr: string) {
             </h2>
             <div class="mt-1 flex items-center gap-2 text-sm">
               <UIcon name="i-tabler-calendar" class="text-primary-500 size-4 shrink-0" />
-              <span class="text-primary-500 font-medium">{{ formatDate(event.date) }}</span>
+              <span class="text-toned font-medium">{{ formatDate(event.date) }}</span>
             </div>
             <div v-if="event.location" class="mt-1 flex items-center gap-2 text-sm">
               <UIcon name="i-tabler-map-pin" class="text-muted size-4 shrink-0" />

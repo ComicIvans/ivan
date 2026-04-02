@@ -3,7 +3,7 @@ set -euo pipefail
 
 IMAGE="ghcr.io/comicivans/ivan:latest"
 
-# Cargar variables desde .env si existe
+# Load variables from .env when present.
 if [ -f ".env" ]; then
   set -a
   source .env
@@ -17,7 +17,6 @@ command -v docker >/dev/null 2>&1 || { echo "ERROR: docker no está instalado en
 command -v ssh >/dev/null 2>&1 || { echo "ERROR: ssh no está disponible en local"; exit 1; }
 
 echo "== Build + push: $IMAGE =="
-# Si no tienes buildx configurado: docker buildx create --use
 docker buildx build \
   --platform linux/amd64 \
   -t "$IMAGE" \
