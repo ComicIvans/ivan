@@ -24,11 +24,9 @@ export default defineNuxtConfig({
         '@nuxt/ui > prosemirror-gapcursor',
       ],
     },
-    server: isDev
-      ? {
-          allowedHosts: true,
-        }
-      : {},
+    server: {
+      allowedHosts: isDev ? ['.trycloudflare.com'] : [],
+    },
   },
 
   runtimeConfig: {
@@ -175,9 +173,23 @@ export default defineNuxtConfig({
   },
 
   content: {
-    database: {
-      type: 'sqlite',
-      filename: '/data/nuxt-content.sqlite',
+    ...(isDev
+      ? {}
+      : {
+          database: {
+            type: 'sqlite',
+            filename: '/data/nuxt-content.sqlite',
+          },
+        }),
+  },
+
+  hooks: {
+    'nitro:config': (nitroConfig) => {
+      if (!isDev) return
+
+      nitroConfig.runtimeConfig ||= {}
+      nitroConfig.runtimeConfig.content ||= {}
+      nitroConfig.runtimeConfig.content.integrityCheck = false
     },
   },
 
