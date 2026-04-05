@@ -165,6 +165,22 @@ const updateMobileActiveIndicator = () => {
     : null
 }
 
+const getDesktopTabClass = (basePath: string) => {
+  if (!isActiveRoute(basePath)) {
+    return 'text-toned hover:bg-elevated hover:text-highlighted'
+  }
+
+  return desktopActiveIndicatorStyle.value ? 'text-white' : 'text-primary-700 dark:text-primary-400'
+}
+
+const getMobileTabClass = (basePath: string) => {
+  if (!isActiveRoute(basePath)) {
+    return 'text-highlighted hover:bg-elevated'
+  }
+
+  return mobileActiveIndicatorStyle.value ? 'text-white' : 'text-primary-700 dark:text-primary-400'
+}
+
 const syncActiveIndicators = async () => {
   await nextTick()
   updateDesktopActiveIndicator()
@@ -543,10 +559,7 @@ onBeforeUnmount(() => {
               <NuxtLink
                 :to="tab.to"
                 class="flex items-center gap-3 rounded-xl px-4 py-3 transition-colors"
-                :class="{
-                  'text-white': isActiveRoute(tab.basePath),
-                  'text-highlighted hover:bg-elevated': !isActiveRoute(tab.basePath),
-                }"
+                :class="getMobileTabClass(tab.basePath)"
                 :aria-current="isActiveRoute(tab.basePath) ? 'page' : undefined"
                 @click="closeMobileMenu"
               >
@@ -580,10 +593,7 @@ onBeforeUnmount(() => {
             <NuxtLink
               :to="tab.to"
               class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors"
-              :class="{
-                'text-white': isActiveRoute(tab.basePath),
-                'text-toned hover:bg-elevated hover:text-highlighted': !isActiveRoute(tab.basePath),
-              }"
+              :class="getDesktopTabClass(tab.basePath)"
               :aria-current="isActiveRoute(tab.basePath) ? 'page' : undefined"
             >
               <UIcon :name="tab.icon" class="size-4" aria-hidden="true" />
