@@ -14,8 +14,6 @@ seo:
 ::event-about
 The 78th Ordinary General Assembly of CREUP (Coordinator of Student Representatives of Public Universities) took place at the University of Barcelona from November 4 to 8, 2025.
 
-<br/>
-
 This assembly represented one of the main deliberative spaces for student representation at the national level. During the event, the Executive Committee was renewed and key issues of major relevance to the Spanish public university system were discussed, including:
 - **Digital sovereignty of universities**
 - **University governance**
@@ -24,15 +22,11 @@ This assembly represented one of the main deliberative spaces for student repres
 - **Educational quality**
 - **Scholarships and financial aid**
 
-<br/>
-
 The meeting was attended by representatives from 33 Spanish public universities, bringing together a total of 114 students.
 ::
 
 ::event-participation
 I attended the assembly as **Board Member for Digitalisation and Transparency**, as part of the Extended Executive Committee, presenting the work carried out during the previous months.
-
-<br/>
 
 In addition, I actively contributed to the development of the assembly by providing logistical support to the organization and assisting with attendance control for the representatives.
 ::

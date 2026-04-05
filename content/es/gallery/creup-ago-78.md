@@ -33,8 +33,6 @@ seo:
 ::event-about
 La 78.ª Asamblea General Ordinaria de CREUP (Coordinadora de Representantes de Estudiantes de Universidades Públicas) tuvo lugar en la Universidad de Barcelona entre los días 4 y 8 de noviembre de 2025.
 
-<br/>
-
 Esta asamblea constituyó uno de los principales espacios de deliberación de la representación estudiantil a nivel estatal. Durante su desarrollo se llevó a cabo la renovación de la Comisión Ejecutiva y se debatieron cuestiones de especial relevancia para el sistema universitario público español, entre las que destacaron:
 - **Soberanía digital de las universidades**
 - **Gobernanza universitaria**
@@ -43,15 +41,11 @@ Esta asamblea constituyó uno de los principales espacios de deliberación de la
 - **Calidad educativa**
 - **Becas y ayudas al estudio**
 
-<br/>
-
 El encuentro contó con la participación de representantes de 33 universidades públicas españolas, reuniendo a un total de 114 estudiantes.
 ::
 
 ::event-participation
 Asistí a la asamblea en calidad de **Vocal de Digitalización y Transparencia**, como parte de la Comisión Ejecutiva Ampliada, presentando el trabajo realizado durante los meses previos.
-
-<br/>
 
 Además, colaboré activamente en el desarrollo de la asamblea, prestando apoyo logístico a la organización y participando en las tareas de control de asistencia de los representantes.
 ::

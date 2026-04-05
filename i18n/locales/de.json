@@ -277,6 +277,7 @@
       "photos": "Fotogalerie",
       "photosCount": "{count} Foto | {count} Fotos",
       "photoAlt": "Foto {number}",
+      "breadcrumb": "Navigationspfad der Veranstaltung",
       "backToGallery": "Zurück zur Galerie",
       "noPhotos": {
         "title": "Fotos folgen in Kürze",

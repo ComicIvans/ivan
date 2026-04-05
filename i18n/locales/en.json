@@ -277,6 +277,7 @@
       "photos": "Photo gallery",
       "photosCount": "{count} photo | {count} photos",
       "photoAlt": "Photo {number}",
+      "breadcrumb": "Event breadcrumb",
       "backToGallery": "Back to gallery",
       "noPhotos": {
         "title": "Photos coming soon",
