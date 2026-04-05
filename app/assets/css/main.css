@@ -3,6 +3,12 @@
 
 html {
   scroll-behavior: smooth;
+  --motion-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-page-distance: 0.75rem;
+  --motion-section-distance: 0.5rem;
+  --motion-page-duration: 280ms;
+  --motion-section-duration: 260ms;
+  --motion-section-stagger: 45ms;
 }
 
 body {
@@ -54,7 +60,7 @@ textarea,
     content: '';
     position: absolute;
     inset: 0;
-    z-index: -1;
+    z-index: -2;
     pointer-events: none;
     background:
       radial-gradient(circle at 12% 8%, rgb(248 113 113 / 0.12), transparent 24rem),
@@ -69,36 +75,41 @@ textarea,
       linear-gradient(180deg, rgb(10 15 29 / 0.88), rgb(15 23 42 / 0.88));
   }
 
-  .hero-panel {
-    @apply border-default relative overflow-hidden rounded-[2rem] border bg-default/80 px-6 py-10 shadow-sm shadow-black/5 backdrop-blur-xl dark:bg-elevated/75 dark:shadow-black/30 sm:px-8 sm:py-12;
-  }
-
-  .hero-panel::after {
-    content: '';
-    position: absolute;
-    inset: auto -10% -35% auto;
-    width: 18rem;
-    height: 18rem;
+  .pointer-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 22rem;
+    height: 22rem;
     border-radius: 9999px;
-    background: radial-gradient(circle, rgb(248 113 113 / 0.14), transparent 68%);
     pointer-events: none;
+    z-index: 30;
+    opacity: 0;
+    transform: translate3d(calc(var(--glow-x, 50vw) - 11rem), calc(var(--glow-y, 40vh) - 11rem), 0);
+    transition: opacity 180ms ease;
+    background: radial-gradient(
+      circle,
+      rgb(248 113 113 / 0.12),
+      rgb(251 191 36 / 0.06) 44%,
+      transparent 74%
+    );
+    filter: blur(42px);
+    will-change: transform, opacity;
   }
 
-  .dark .hero-panel::after {
-    background: radial-gradient(circle, rgb(248 113 113 / 0.1), transparent 68%);
-  }
-
-  .hero-portrait {
-    @apply transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transform-none;
-    animation: floatPortrait 6s ease-in-out infinite;
-  }
-
-  .hero-portrait:hover {
-    transform: translate3d(0, -0.25rem, 0) scale(1.01);
+  .dark .pointer-glow {
+    background: radial-gradient(
+      circle,
+      rgb(248 113 113 / 0.16),
+      rgb(59 130 246 / 0.08) 44%,
+      transparent 74%
+    );
   }
 
   .motion-card {
-    @apply transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transform-none motion-reduce:transition-none;
+    transition:
+      transform 300ms var(--motion-emphasized),
+      box-shadow 300ms var(--motion-emphasized);
   }
 
   .motion-card:hover {
@@ -106,7 +117,9 @@ textarea,
   }
 
   .motion-card-strong {
-    @apply transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transform-none motion-reduce:transition-none;
+    transition:
+      transform 300ms var(--motion-emphasized),
+      box-shadow 300ms var(--motion-emphasized);
   }
 
   .motion-card-strong:hover {
@@ -114,7 +127,9 @@ textarea,
   }
 
   .motion-link-card {
-    @apply transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transform-none motion-reduce:transition-none;
+    transition:
+      transform 300ms var(--motion-emphasized),
+      box-shadow 300ms var(--motion-emphasized);
   }
 
   .motion-link-card:hover {
@@ -122,7 +137,7 @@ textarea,
   }
 
   .motion-link-media {
-    @apply transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transform-none motion-reduce:transition-none;
+    transition: transform 500ms var(--motion-emphasized);
   }
 
   .motion-link-card:hover .motion-link-media {
@@ -130,31 +145,31 @@ textarea,
   }
 
   .section-enter {
-    animation: fadeSlideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: fadeSlideUp var(--motion-section-duration) var(--motion-emphasized) forwards;
   }
 
   .section-stagger > * {
-    animation: fadeSlideUp 0.52s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: fadeSlideUp calc(var(--motion-section-duration) + 20ms) var(--motion-emphasized) both;
   }
 
   .section-stagger > *:nth-child(2) {
-    animation-delay: 70ms;
+    animation-delay: var(--motion-section-stagger);
   }
 
   .section-stagger > *:nth-child(3) {
-    animation-delay: 140ms;
+    animation-delay: calc(var(--motion-section-stagger) * 2);
   }
 
   .section-stagger > *:nth-child(4) {
-    animation-delay: 210ms;
+    animation-delay: calc(var(--motion-section-stagger) * 3);
   }
 
   .section-stagger > *:nth-child(5) {
-    animation-delay: 280ms;
+    animation-delay: calc(var(--motion-section-stagger) * 4);
   }
 
   .section-stagger > *:nth-child(6) {
-    animation-delay: 350ms;
+    animation-delay: calc(var(--motion-section-stagger) * 5);
   }
 
   .inline-link {
@@ -168,36 +183,42 @@ textarea,
   .page-shell-enter-active,
   .page-shell-leave-active {
     transition:
-      opacity 220ms ease,
-      transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+      opacity calc(var(--motion-page-duration) - 60ms) ease,
+      transform var(--motion-page-duration) var(--motion-emphasized);
+  }
+
+  .page-shell-node {
+    min-height: 100%;
+  }
+
+  .page-shell-frame {
+    transition:
+      opacity calc(var(--motion-page-duration) - 100ms) ease,
+      transform calc(var(--motion-page-duration) - 40ms) var(--motion-emphasized);
+    will-change: opacity, transform;
+  }
+
+  .page-nav-pending {
+    opacity: 0;
+    transform: translate3d(0, var(--motion-page-distance), 0);
+    pointer-events: none;
   }
 
   .page-shell-enter-from,
   .page-shell-leave-to {
     opacity: 0;
-    transform: translate3d(0, 0.75rem, 0);
+    transform: translate3d(0, var(--motion-page-distance), 0);
   }
 
   @keyframes fadeSlideUp {
     from {
       opacity: 0;
-      transform: translate3d(0, 1rem, 0);
+      transform: translate3d(0, var(--motion-section-distance), 0);
     }
 
     to {
       opacity: 1;
       transform: translate3d(0, 0, 0);
-    }
-  }
-
-  @keyframes floatPortrait {
-    0%,
-    100% {
-      transform: translate3d(0, 0, 0);
-    }
-
-    50% {
-      transform: translate3d(0, -0.35rem, 0);
     }
   }
 
@@ -207,6 +228,24 @@ textarea,
 
   .social-icon:hover {
     transform: scale(1.25);
+  }
+}
+
+@media (max-width: 1023px), (hover: none), (pointer: coarse) {
+  .pointer-glow {
+    display: none;
+  }
+}
+
+@media (max-width: 1023px) {
+  .section-enter {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .section-stagger > * {
+    animation: none;
   }
 }
 
@@ -239,11 +278,20 @@ textarea,
     transition: none !important;
   }
 
+  .page-shell-node,
+  .page-shell-frame {
+    transition: none !important;
+  }
+
   .page-shell-enter-from,
   .page-shell-leave-to,
-  .hero-portrait,
+  .page-nav-pending,
   .social-icon:hover {
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  .pointer-glow {
+    display: none !important;
   }
 }

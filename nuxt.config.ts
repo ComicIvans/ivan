@@ -22,7 +22,6 @@ export default defineNuxtConfig({
         '@nuxt/ui > prosemirror-model',
         '@nuxt/ui > prosemirror-view',
         '@nuxt/ui > prosemirror-gapcursor',
-        '@formkit/auto-animate/vue',
       ],
     },
     server: isDev
@@ -84,7 +83,6 @@ export default defineNuxtConfig({
     '@nuxt/a11y',
     '@nuxtjs/seo',
     '@nuxt/image',
-    '@formkit/auto-animate/nuxt',
     '@nuxtjs/i18n',
     '@nuxt/eslint',
     ...(hasUmami ? ['nuxt-umami'] : []),
@@ -93,7 +91,7 @@ export default defineNuxtConfig({
   ],
 
   icon: {
-    collections: ['tabler', 'circle-flags', 'lucide', 'simple-icons'],
+    collections: ['tabler', 'circle-flags', 'simple-icons'],
   },
 
   ...(hasUmami

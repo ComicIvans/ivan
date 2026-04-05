@@ -8,6 +8,8 @@ const { t, locale, localeCodes } = useI18n({ useScope: 'global' })
 const siteConfig = useSiteConfig()
 const localeHead = useLocaleHead({ seo: true })
 const siteUrl = computed(() => String(siteConfig.url ?? ''))
+const router = useRouter()
+const pendingPageFullPath = useState<string | null>('page-nav-pending-path', () => null)
 
 const nuxtUiLocale = computed(() => getNuxtUiLocale(locale.value))
 const availableLocaleCodes = computed(() => localeCodes.value.map((code) => String(code)))
@@ -15,9 +17,13 @@ const alternateOgLocales = computed(() =>
   localeCodes.value.filter((code) => code !== locale.value).map((code) => getOgLocale(code))
 )
 const dir = computed(() => nuxtUiLocale.value.dir)
-const pageTransition = {
-  name: 'page-shell',
-  mode: 'out-in' as const,
+const pageTransitionsEnabled = ref(false)
+
+let removeRoutePendingHook: (() => void) | null = null
+let removeRouteErrorHook: (() => void) | null = null
+
+const clearPendingPagePath = () => {
+  pendingPageFullPath.value = null
 }
 
 useHead(() => ({
@@ -57,6 +63,25 @@ defineOgImage('NuxtSeoSatori', {
   siteLogo: '/favicon.ico',
   theme: '#f87171',
   colorMode: 'light',
+})
+
+onMounted(() => {
+  pageTransitionsEnabled.value = true
+
+  removeRoutePendingHook = router.beforeEach((to, from) => {
+    if (to.fullPath !== from.fullPath) {
+      pendingPageFullPath.value = from.fullPath
+    }
+  })
+
+  removeRouteErrorHook = router.onError(() => {
+    clearPendingPagePath()
+  })
+})
+
+onBeforeUnmount(() => {
+  removeRoutePendingHook?.()
+  removeRouteErrorHook?.()
 })
 
 useSchemaOrg([
@@ -144,7 +169,24 @@ useSchemaOrg([
   <UApp :locale="nuxtUiLocale">
     <NuxtRouteAnnouncer />
     <NuxtLayout>
-      <NuxtPage :transition="pageTransition" />
+      <NuxtPage v-slot="{ Component, route }">
+        <Transition
+          v-if="pageTransitionsEnabled"
+          name="page-shell"
+          mode="out-in"
+          @after-leave="clearPendingPagePath"
+        >
+          <div :key="route.fullPath" class="page-shell-node">
+            <div
+              class="page-shell-frame"
+              :class="{ 'page-nav-pending': pendingPageFullPath === route.fullPath }"
+            >
+              <component :is="Component" />
+            </div>
+          </div>
+        </Transition>
+        <component :is="Component" v-else />
+      </NuxtPage>
     </NuxtLayout>
   </UApp>
 </template>

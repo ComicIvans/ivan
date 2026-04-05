@@ -40,21 +40,21 @@ const highlights = computed(() => {
 <template>
   <section role="region" :aria-label="t('nav.home')" class="section-enter">
     <!-- Hero Section -->
-    <div class="hero-panel py-12">
+    <div class="home-hero-panel py-12">
       <div class="flex flex-col items-center gap-8 text-center lg:flex-row lg:text-left">
         <figure class="shrink-0">
           <NuxtImg
             src="/full-pic.webp"
-            class="hero-portrait max-w-45 rounded-2xl shadow-xl sm:max-w-55 xl:max-w-70"
+            class="home-hero-portrait home-hero-portrait-float max-w-45 rounded-2xl shadow-xl sm:max-w-55 xl:max-w-70"
             :alt="t('header.profileAlt')"
             loading="eager"
+            fetchpriority="high"
             width="560"
             height="746"
-            sizes="(min-width: 1280px) 560px, (min-width: 1024px) 420px, (min-width: 640px) 320px, 280px"
-            densities="x1 x2"
+            sizes="(min-width: 1280px) 280px, (min-width: 640px) 220px, 180px"
             preload
             format="webp"
-            quality="82"
+            quality="78"
           />
         </figure>
         <div class="max-w-2xl">
@@ -107,7 +107,7 @@ const highlights = computed(() => {
       </div>
     </div>
 
-    <USeparator class="my-8" />
+    <div class="border-default my-8 border-t" aria-hidden="true" />
 
     <!-- Highlights Section -->
     <div>
@@ -134,3 +134,63 @@ const highlights = computed(() => {
     </div>
   </section>
 </template>
+
+<style scoped>
+@reference '../assets/css/main.css';
+
+.home-hero-panel {
+  @apply border-default bg-default/80 dark:bg-elevated/75 relative overflow-hidden rounded-[2rem] border px-6 py-10 shadow-sm shadow-black/5 backdrop-blur-xl sm:px-8 sm:py-12 dark:shadow-black/30;
+}
+
+.home-hero-panel::after {
+  content: '';
+  position: absolute;
+  inset: auto -10% -35% auto;
+  width: 18rem;
+  height: 18rem;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgb(248 113 113 / 0.14), transparent 68%);
+  pointer-events: none;
+}
+
+:global(.dark) .home-hero-panel::after {
+  background: radial-gradient(circle, rgb(248 113 113 / 0.1), transparent 68%);
+}
+
+.home-hero-portrait {
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.home-hero-portrait:hover {
+  transform: translate3d(0, -0.25rem, 0) scale(1.01);
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .home-hero-portrait-float {
+    animation: homeFloatPortrait 6s ease-in-out infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hero-portrait,
+  .home-hero-portrait:hover {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .home-hero-portrait-float {
+    animation: none !important;
+  }
+}
+
+@keyframes homeFloatPortrait {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -0.35rem, 0);
+  }
+}
+</style>
