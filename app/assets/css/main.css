@@ -94,7 +94,6 @@ textarea,
       transparent 74%
     );
     filter: blur(42px);
-    will-change: transform, opacity;
   }
 
   .dark .pointer-glow {
@@ -195,7 +194,6 @@ textarea,
     transition:
       opacity calc(var(--motion-page-duration) - 100ms) ease,
       transform calc(var(--motion-page-duration) - 40ms) var(--motion-emphasized);
-    will-change: opacity, transform;
   }
 
   .page-nav-pending {
