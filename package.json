@@ -13,7 +13,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "nuxt typecheck",
-    "deploy:local": "docker buildx build --platform linux/amd64 -t ghcr.io/comicivans/ivan:latest --load . && docker compose up -d",
+    "deploy:local": "bash ./deploy-local.sh",
     "deploy": "bash ./deploy.sh"
   },
   "dependencies": {

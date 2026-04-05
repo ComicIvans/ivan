@@ -82,6 +82,8 @@ Las variables de Umami son opcionales. Si faltan, la analítica queda desactivad
 
 - `VPS_HOST`
 - `REMOTE_DIR`
+- `IMAGE` (opcional, por defecto `ghcr.io/comicivans/ivan:latest`)
+- `DOCKER_PLATFORM` (opcional, por defecto `linux/amd64`)
 
 ## Scripts útiles
 
@@ -98,15 +100,17 @@ Las variables de Umami son opcionales. Si faltan, la analítica queda desactivad
 
 ### Local
 
-Construye la imagen y levanta el contenedor con `docker compose`:
+Construye la imagen local con los `build-arg` disponibles (`SITE_URL` y, opcionalmente, Umami) y levanta el contenedor con `docker compose`:
 
 ```sh
 pnpm deploy:local
 ```
 
+`deploy-local.sh` requiere que exista `.env` y que `SITE_URL` esté definido.
+
 ### Producción
 
-Ejecuta `deploy.sh`, que construye la imagen, la publica en GHCR y actualiza el despliegue remoto:
+Ejecuta `deploy.sh`, que carga variables desde `.env` (si existe), construye y publica la imagen (con `docker buildx` cuando está disponible) y actualiza el despliegue remoto:
 
 ```sh
 pnpm deploy

@@ -3,9 +3,14 @@ node_modules
 .nuxt
 dist
 .git
+.gitignore
+.env
+.env.*
+!.env.example
 .DS_Store
 pnpm-debug.log
 npm-debug.log
 .pnpm-store
 .cache
 .turbo
+.codex
