@@ -151,12 +151,19 @@ watch(eventSlug, () => {
   <section role="region" :aria-label="event?.title || t('gallery.title')" class="section-enter">
     <!-- Breadcrumb -->
     <nav class="mb-6" :aria-label="t('gallery.event.breadcrumb')">
-      <UBreadcrumb
-        :items="[
-          { label: t('gallery.title'), to: localePath('/galeria') },
-          { label: event?.title || '...' },
-        ]"
-      />
+      <ol class="text-muted flex min-w-0 items-center gap-1.5 text-sm">
+        <li class="shrink-0">
+          <NuxtLink :to="localePath('/galeria')" class="hover:text-default transition-colors">
+            {{ t('gallery.title') }}
+          </NuxtLink>
+        </li>
+        <li class="flex shrink-0" aria-hidden="true">
+          <UIcon name="i-lucide-chevron-right" class="size-4" />
+        </li>
+        <li class="min-w-0 flex-1 truncate font-semibold text-[rgb(15_23_42)] dark:text-white">
+          {{ event?.title || '...' }}
+        </li>
+      </ol>
     </nav>
 
     <!-- Loading state -->

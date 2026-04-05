@@ -67,11 +67,6 @@ const suppressCarouselTransition = ref(false)
 const pendingNavigationDirection = ref<-1 | 0 | 1>(0)
 const navigationRequestId = ref(0)
 
-const lastTapAt = ref(0)
-const lastTapX = ref(0)
-const lastTapY = ref(0)
-const touchGestureMoved = ref(false)
-
 let gestureMediaQuery: MediaQueryList | null = null
 let reducedMotionMediaQuery: MediaQueryList | null = null
 let visualViewportResizeHandler: (() => void) | null = null
@@ -225,7 +220,6 @@ function resetTouchState() {
   lastTouchX.value = 0
   lastTouchY.value = 0
   isPanning.value = false
-  lastTapAt.value = 0
   resetCarouselPointerState()
 }
 
@@ -482,6 +476,49 @@ const imageStageStyle = computed(() => {
   }
 })
 
+const fallbackImageStageStyle = computed(() => {
+  if (imageStageStyle.value) {
+    return imageStageStyle.value
+  }
+
+  const width = viewportWidth.value || 1280
+  const height = viewportHeight.value || 720
+  const isCompactViewport = width < 768
+  const aspectRatio = Math.max(
+    0.55,
+    Math.min(2, props.initialAspectRatio || props.aspectRatios?.[selectedPhotoIndex.value] || 1)
+  )
+
+  const horizontalPadding = isCompactViewport ? 8 : 20
+  const verticalPadding = isCompactViewport ? 8 : 12
+  const topChrome = isCompactViewport ? 24 : 36
+  const bottomChrome = selectedPhoto.value?.description
+    ? isCompactViewport
+      ? 64
+      : 84
+    : isCompactViewport
+      ? 40
+      : 48
+
+  const maxStageWidth = Math.max(220, width - horizontalPadding * 2)
+  const maxStageHeight = Math.max(260, height - topChrome - bottomChrome - verticalPadding * 2)
+
+  let stageWidth = Math.min(maxStageWidth, maxStageHeight * aspectRatio)
+  let stageHeight = stageWidth / aspectRatio
+
+  if (stageHeight > maxStageHeight) {
+    stageHeight = maxStageHeight
+    stageWidth = stageHeight * aspectRatio
+  }
+
+  return {
+    width: `${stageWidth}px`,
+    height: `${stageHeight}px`,
+    maxWidth: '100%',
+    maxHeight: '100%',
+  }
+})
+
 const metaPanelStyle = computed(() => ({
   maxWidth: imageStageStyle.value?.width ?? 'min(100%, 42rem)',
 }))
@@ -627,19 +664,19 @@ function handlePointerUp(event: PointerEvent) {
   const threshold = Math.min(140, Math.max(56, width * 0.16))
 
   releaseCarouselPointer(event)
+  carouselPointerId.value = null
 
   if (
     isCarouselDragging.value &&
     Math.abs(deltaX) > threshold &&
     Math.abs(deltaX) > Math.abs(deltaY) * 1.2
   ) {
-    carouselPointerId.value = null
     isCarouselDragging.value = false
     requestPhotoNavigation(deltaX < 0 ? 1 : -1)
-  } else {
-    carouselPointerId.value = null
-    snapCarouselBack()
+    return
   }
+
+  snapCarouselBack()
 }
 
 function handlePointerCancel(event: PointerEvent) {
@@ -678,31 +715,10 @@ function getTouchMidpoint(touches: TouchList) {
   }
 }
 
-function maybeToggleTapZoom(clientX: number, clientY: number) {
-  const now = Date.now()
-  const isSameArea =
-    Math.abs(clientX - lastTapX.value) < 24 && Math.abs(clientY - lastTapY.value) < 24
-  const isDoubleTap = now - lastTapAt.value < 280 && isSameArea
-
-  lastTapAt.value = now
-  lastTapX.value = clientX
-  lastTapY.value = clientY
-
-  if (!isDoubleTap) return
-
-  if (zoomLevel.value > minZoom) {
-    resetZoom()
-    return
-  }
-
-  applyZoom(Math.min(maxZoom.value, 2.8), { clientX, clientY })
-}
-
 function handleTouchStart(event: TouchEvent) {
   if (!isOpen.value) return
 
   if (event.touches.length === 2) {
-    touchGestureMoved.value = true
     resetCarouselPointerState()
     isPinching.value = true
     pinchStartDistance.value = getTouchDistance(event.touches)
@@ -716,7 +732,6 @@ function handleTouchStart(event: TouchEvent) {
   const touch = event.touches[0]
   if (!touch) return
 
-  touchGestureMoved.value = false
   lastTouchX.value = touch.clientX
   lastTouchY.value = touch.clientY
   isPanning.value = true
@@ -741,13 +756,6 @@ function handleTouchMove(event: TouchEvent) {
   const touch = event.touches[0]
   if (!touch) return
 
-  if (
-    Math.abs(touch.clientX - lastTouchX.value) > 6 ||
-    Math.abs(touch.clientY - lastTouchY.value) > 6
-  ) {
-    touchGestureMoved.value = true
-  }
-
   panX.value += touch.clientX - lastTouchX.value
   panY.value += touch.clientY - lastTouchY.value
   lastTouchX.value = touch.clientX
@@ -758,19 +766,6 @@ function handleTouchMove(event: TouchEvent) {
 
 function handleTouchEnd(event: TouchEvent) {
   if (!isOpen.value) return
-
-  if (
-    event.changedTouches.length === 1 &&
-    event.touches.length === 0 &&
-    supportsSwipeNavigation.value &&
-    !touchGestureMoved.value &&
-    !isCarouselDragging.value
-  ) {
-    const touch = event.changedTouches[0]
-    if (touch) {
-      maybeToggleTapZoom(touch.clientX, touch.clientY)
-    }
-  }
 
   if (event.touches.length === 2) {
     pinchStartDistance.value = getTouchDistance(event.touches)
@@ -794,7 +789,6 @@ function handleTouchEnd(event: TouchEvent) {
 
   isPanning.value = false
   isPinching.value = false
-  touchGestureMoved.value = false
 }
 
 function handleModalSlideLoad(index: number, event: Event) {
@@ -910,10 +904,12 @@ onUnmounted(() => {
     :title="selectedPhotoAlt || t('gallery.event.photos')"
     :description="modalDescription"
     :aria-label="selectedPhotoAlt || t('gallery.event.photos')"
+    :transition="false"
     :ui="{
-      overlay: 'bg-black/22 backdrop-blur-sm',
+      overlay:
+        'bg-black/22 backdrop-blur-sm data-[state=open]:animate-[fade-in_180ms_ease-out] data-[state=closed]:animate-[fade-out_120ms_ease-in]',
       content:
-        'w-[calc(100vw-0.5rem)] max-w-[96rem] overflow-visible border-0 bg-transparent p-0 shadow-none ring-0 md:w-[calc(100vw-1.5rem)]',
+        'w-[calc(100vw-0.5rem)] max-w-[96rem] overflow-visible border-0 bg-transparent p-0 shadow-none ring-0 data-[state=open]:animate-[scale-in_180ms_ease-out] data-[state=closed]:animate-[scale-out_120ms_ease-in] md:w-[calc(100vw-1.5rem)]',
     }"
     @after-enter="onModalOpened"
   >
@@ -942,6 +938,7 @@ onUnmounted(() => {
           @touchcancel="handleTouchEnd"
         >
           <button
+            v-if="!supportsSwipeNavigation"
             type="button"
             class="absolute inset-0 z-0 block bg-transparent"
             :aria-label="t('gallery.event.modal.close')"
@@ -953,9 +950,13 @@ onUnmounted(() => {
             class="relative z-10 flex items-center justify-center px-6 py-10"
             @click.stop
           >
-            <div class="gallery-lightbox-loading-pill" role="status" aria-live="polite">
-              <span class="gallery-lightbox-spinner animate-spin" aria-hidden="true" />
-              <span>{{ t('gallery.event.modal.loading') }}</span>
+            <div class="gallery-lightbox-loading-shell" :style="fallbackImageStageStyle">
+              <div class="gallery-lightbox-loading-overlay">
+                <div class="gallery-lightbox-loading-pill" role="status" aria-live="polite">
+                  <span class="gallery-lightbox-spinner animate-spin" aria-hidden="true" />
+                  <span>{{ t('gallery.event.modal.loading') }}</span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -963,14 +964,21 @@ onUnmounted(() => {
             v-if="imageStageStyle"
             class="gallery-lightbox-frame relative z-10"
             :style="imageStageStyle"
+            :aria-busy="isCurrentPhotoLoading"
             @click.stop
           >
             <div
               ref="imageStageRef"
-              class="gallery-lightbox-stage h-full w-full overflow-hidden rounded-[1rem] md:rounded-[1.2rem]"
+              class="gallery-lightbox-stage relative h-full w-full overflow-hidden rounded-[1rem] md:rounded-[1.2rem]"
             >
               <div
-                class="flex h-full w-[300%]"
+                class="gallery-lightbox-loading-surface absolute inset-0 z-0 transition-opacity duration-150"
+                :class="isCurrentPhotoLoading ? 'opacity-100' : 'opacity-0'"
+                aria-hidden="true"
+              />
+
+              <div
+                class="relative z-10 flex h-full w-[300%]"
                 :style="carouselTrackStyle"
                 @transitionend="handleCarouselTransitionEnd"
               >
@@ -989,6 +997,8 @@ onUnmounted(() => {
                       'cursor-grab': slide.offset === 0 && zoomLevel > minZoom && !isPanning,
                       'cursor-grabbing': slide.offset === 0 && isPanning,
                       'pointer-events-none': slide.offset !== 0,
+                      'opacity-0':
+                        slide.offset === 0 && isCurrentPhotoLoading && !hasLoadedPhoto(slide.index),
                       'gallery-lightbox-image': slide.offset === 0,
                     }"
                     :style="slide.offset === 0 ? activeImageStyle : undefined"
@@ -1013,9 +1023,8 @@ onUnmounted(() => {
             </div>
 
             <button
-              v-if="!supportsSwipeNavigation"
               type="button"
-              class="gallery-lightbox-chrome gallery-lightbox-close-button focus-visible:ring-primary-300 absolute top-4 right-4 z-20 hidden rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:flex"
+              class="gallery-lightbox-chrome gallery-lightbox-close-button gallery-lightbox-dismiss focus-visible:ring-primary-300 absolute z-20 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-black"
               :aria-label="t('gallery.event.modal.close')"
               @pointerdown.stop
               @pointerup.stop
@@ -1111,6 +1120,7 @@ onUnmounted(() => {
           class="relative mt-3 px-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:px-0 md:pb-0"
         >
           <button
+            v-if="!supportsSwipeNavigation"
             type="button"
             class="absolute inset-0 z-0 block bg-transparent"
             :aria-label="t('gallery.event.modal.close')"
@@ -1118,12 +1128,41 @@ onUnmounted(() => {
           />
 
           <div
-            class="relative z-10 mx-auto flex w-fit max-w-full flex-col items-center rounded-[1.1rem] border border-black/10 bg-[rgb(255_255_255_/_0.96)] px-4 py-3 text-center text-[rgb(15_23_42)] shadow-[0_12px_40px_rgb(15_23_42_/_0.12)] dark:border-white/10 dark:bg-[rgb(15_23_42_/_0.9)] dark:text-white"
+            class="relative z-10 mx-auto flex w-full max-w-full flex-col items-center rounded-[1.1rem] border border-black/10 bg-[rgb(255_255_255_/_0.96)] px-4 py-3 text-center text-[rgb(15_23_42)] shadow-[0_12px_40px_rgb(15_23_42_/_0.12)] md:w-fit dark:border-white/10 dark:bg-[rgb(15_23_42_/_0.9)] dark:text-white"
             :style="metaPanelStyle"
             @click.stop
           >
+            <div class="mb-3 flex w-full items-center justify-center gap-3 md:hidden">
+              <button
+                v-if="totalPhotos > 1"
+                type="button"
+                class="gallery-lightbox-meta-nav focus-visible:ring-primary-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[rgb(15_23_42)]"
+                :aria-label="t('gallery.event.modal.prev')"
+                @click.stop="prevPhoto"
+              >
+                <UIcon name="i-tabler-chevron-left" class="size-5" />
+              </button>
+
+              <div
+                class="w-fit rounded-full bg-black/6 px-3 py-1.5 text-xs font-medium text-[rgb(51_65_85)] dark:bg-white/10 dark:text-white/78"
+                aria-live="polite"
+              >
+                {{ modalPositionLabel }}
+              </div>
+
+              <button
+                v-if="totalPhotos > 1"
+                type="button"
+                class="gallery-lightbox-meta-nav focus-visible:ring-primary-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[rgb(15_23_42)]"
+                :aria-label="t('gallery.event.modal.next')"
+                @click.stop="nextPhoto"
+              >
+                <UIcon name="i-tabler-chevron-right" class="size-5" />
+              </button>
+            </div>
+
             <div
-              class="mb-2 w-fit rounded-full bg-black/6 px-3 py-1.5 text-xs font-medium text-[rgb(51_65_85)] dark:bg-white/10 dark:text-white/78"
+              class="mb-2 hidden w-fit rounded-full bg-black/6 px-3 py-1.5 text-xs font-medium text-[rgb(51_65_85)] md:block dark:bg-white/10 dark:text-white/78"
               aria-live="polite"
             >
               {{ modalPositionLabel }}
@@ -1150,7 +1189,34 @@ onUnmounted(() => {
 }
 
 .gallery-lightbox-stage {
-  background: transparent;
+  background:
+    radial-gradient(circle at top, rgb(255 255 255 / 0.05), transparent 48%),
+    linear-gradient(180deg, rgb(15 23 42 / 0.12), rgb(15 23 42 / 0.18));
+}
+
+.gallery-lightbox-loading-shell {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  background:
+    linear-gradient(135deg, rgb(15 23 42 / 0.82), rgb(30 41 59 / 0.72)),
+    linear-gradient(90deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.08));
+  box-shadow: 0 20px 60px rgb(15 23 42 / 0.28);
+}
+
+.gallery-lightbox-loading-surface {
+  background:
+    linear-gradient(135deg, rgb(15 23 42 / 0.84), rgb(30 41 59 / 0.72)),
+    linear-gradient(90deg, rgb(255 255 255 / 0.03), rgb(255 255 255 / 0.08));
+}
+
+.gallery-lightbox-loading-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
 }
 
 .gallery-lightbox-loading-pill {
@@ -1176,7 +1242,9 @@ onUnmounted(() => {
 }
 
 .gallery-lightbox-image {
-  transition: transform 220ms var(--motion-emphasized);
+  transition:
+    transform 220ms var(--motion-emphasized),
+    opacity 140ms ease;
   will-change: transform;
 }
 
@@ -1229,6 +1297,13 @@ onUnmounted(() => {
   height: 3rem;
 }
 
+.gallery-lightbox-dismiss {
+  top: 0.75rem;
+  right: 0.75rem;
+  box-shadow: 0 10px 30px rgb(15 23 42 / 0.24);
+  backdrop-filter: blur(10px);
+}
+
 .gallery-lightbox-nav {
   position: absolute;
   top: 50%;
@@ -1246,6 +1321,55 @@ onUnmounted(() => {
 
 .gallery-lightbox-control:disabled {
   opacity: 0.42;
+}
+
+@media (max-width: 767px) {
+  .gallery-lightbox-dismiss {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  .gallery-lightbox-frame {
+    width: min(100%, calc(100vw - 1rem)) !important;
+  }
+
+  .gallery-lightbox-meta-nav {
+    display: inline-flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    background: rgb(15 23 42 / 0.08);
+    color: rgb(15 23 42);
+    transition: background-color 180ms ease;
+  }
+
+  .gallery-lightbox-meta-nav:hover {
+    background: rgb(15 23 42 / 0.14);
+  }
+
+  .gallery-lightbox-meta-nav:focus-visible {
+    outline: none;
+  }
+
+  :global(.dark) .gallery-lightbox-meta-nav {
+    background: rgb(255 255 255 / 0.1);
+    color: white;
+  }
+
+  :global(.dark) .gallery-lightbox-meta-nav:hover {
+    background: rgb(255 255 255 / 0.16);
+  }
+
+  .gallery-lightbox-close-button {
+    width: 2.75rem;
+    height: 2.75rem;
+    background: rgb(0 0 0 / 0.58);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
