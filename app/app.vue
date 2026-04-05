@@ -31,10 +31,7 @@ useHead(() => ({
     lang: localeHead.value.htmlAttrs?.lang ?? locale.value,
     dir: (localeHead.value.htmlAttrs?.dir ?? dir.value) as 'auto' | 'ltr' | 'rtl',
   },
-  link: [
-    ...(localeHead.value.link ?? []).filter((link) => link.rel !== 'icon'),
-    { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
-  ],
+  link: [...(localeHead.value.link ?? [])],
   meta: [
     ...(localeHead.value.meta ?? []),
     { name: 'theme-color', content: '#f87171' },
