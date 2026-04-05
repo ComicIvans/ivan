@@ -18,9 +18,18 @@ const emit = defineEmits<{
 
 const { t } = useI18n({ useScope: 'global' })
 const { getPhotoSrc, getPhotoAlt } = useGalleryImages()
+const image = useImage()
 
 const minZoom = 1
 const zoomStep = 0.25
+const lightboxImageWidth = 1600
+const lightboxImageQuality = 70
+const lightboxImageFormat = 'webp'
+const lightboxImageModifiers = {
+  width: lightboxImageWidth,
+  quality: lightboxImageQuality,
+  format: lightboxImageFormat,
+} as const
 
 const modalContentRef = ref<HTMLElement | null>(null)
 const imageContainerRef = ref<HTMLElement | null>(null)
@@ -55,6 +64,8 @@ const isCarouselDragging = ref(false)
 const carouselTransitionEnabled = ref(false)
 const pendingCarouselDirection = ref<-1 | 0 | 1>(0)
 const suppressCarouselTransition = ref(false)
+const pendingNavigationDirection = ref<-1 | 0 | 1>(0)
+const navigationRequestId = ref(0)
 
 const lastTapAt = ref(0)
 const lastTapX = ref(0)
@@ -89,6 +100,10 @@ function getModalPhoto(index: number) {
   return props.photos[getWrappedPhotoIndex(index)] ?? null
 }
 
+function getLightboxPhotoSrc(src: string) {
+  return image(getPhotoSrc(src), lightboxImageModifiers)
+}
+
 function getActiveModalImage() {
   return imageStageRef.value?.querySelector(
     '[data-slide-active="true"] img'
@@ -104,11 +119,15 @@ function markPhotoAsLoaded(index: number, image?: HTMLImageElement | null) {
   }
 }
 
+function hasLoadedPhoto(index: number) {
+  return loadedPhotos.has(getWrappedPhotoIndex(index))
+}
+
 function preloadPhoto(index: number) {
   const normalizedIndex = getWrappedPhotoIndex(index)
   const photo = getModalPhoto(normalizedIndex)
 
-  if (!photo || loadedPhotos.has(normalizedIndex) || preloadedImages.has(normalizedIndex)) {
+  if (!photo || hasLoadedPhoto(normalizedIndex)) {
     return Promise.resolve()
   }
 
@@ -150,7 +169,7 @@ function preloadPhoto(index: number) {
     image.onerror = () => {
       void finalize(false)
     }
-    image.src = getPhotoSrc(photo.src)
+    image.src = getLightboxPhotoSrc(photo.src)
 
     if (image.complete && image.naturalWidth > 0) {
       void finalize(true)
@@ -216,6 +235,8 @@ function resetInteractionState() {
   pendingCarouselDirection.value = 0
   carouselTransitionEnabled.value = false
   suppressCarouselTransition.value = false
+  pendingNavigationDirection.value = 0
+  navigationRequestId.value += 1
 }
 
 function clearPreloads() {
@@ -267,18 +288,43 @@ function animateCarousel(direction: -1 | 1) {
 }
 
 function nextPhoto() {
-  const targetIndex = getWrappedPhotoIndex(selectedPhotoIndex.value + 1)
-  preloadPhoto(targetIndex).then(() => {
-    if (targetIndex !== getWrappedPhotoIndex(selectedPhotoIndex.value + 1) || !isOpen.value) return
-    animateCarousel(1)
-  })
+  requestPhotoNavigation(1)
 }
 
 function prevPhoto() {
-  const targetIndex = getWrappedPhotoIndex(selectedPhotoIndex.value - 1)
+  requestPhotoNavigation(-1)
+}
+
+function requestPhotoNavigation(direction: -1 | 1) {
+  if (
+    totalPhotos.value < 2 ||
+    isCarouselTransitioning() ||
+    pendingNavigationDirection.value !== 0
+  ) {
+    return
+  }
+
+  const targetIndex = getWrappedPhotoIndex(selectedPhotoIndex.value + direction)
+
+  if (hasLoadedPhoto(targetIndex)) {
+    animateCarousel(direction)
+    return
+  }
+
+  pendingNavigationDirection.value = direction
+  carouselDragOffsetX.value = 0
+  isCarouselDragging.value = false
+
+  const requestId = ++navigationRequestId.value
+
   preloadPhoto(targetIndex).then(() => {
-    if (targetIndex !== getWrappedPhotoIndex(selectedPhotoIndex.value - 1) || !isOpen.value) return
-    animateCarousel(-1)
+    if (navigationRequestId.value !== requestId || !isOpen.value) return
+
+    pendingNavigationDirection.value = 0
+
+    if (targetIndex !== getWrappedPhotoIndex(selectedPhotoIndex.value + direction)) return
+
+    animateCarousel(direction)
   })
 }
 
@@ -310,10 +356,11 @@ const modalPositionLabel = computed(() =>
 const modalDescription = computed(
   () => selectedPhoto.value?.description || modalPositionLabel.value
 )
-const isCurrentPhotoLoading = computed(() => !loadedPhotos.has(selectedPhotoIndex.value))
+const isCurrentPhotoLoading = computed(() => !hasLoadedPhoto(selectedPhotoIndex.value))
+const isNavigationLoading = computed(() => pendingNavigationDirection.value !== 0)
+const isLightboxLoading = computed(() => isCurrentPhotoLoading.value || isNavigationLoading.value)
 const showDesktopChrome = computed(
-  () =>
-    !supportsSwipeNavigation.value && Boolean(imageStageStyle.value) && !isCurrentPhotoLoading.value
+  () => !supportsSwipeNavigation.value && Boolean(imageStageStyle.value) && !isLightboxLoading.value
 )
 const showZoomBadge = computed(() => showDesktopChrome.value && zoomLevel.value > minZoom)
 
@@ -588,9 +635,7 @@ function handlePointerUp(event: PointerEvent) {
   ) {
     carouselPointerId.value = null
     isCarouselDragging.value = false
-    carouselTransitionEnabled.value = true
-    pendingCarouselDirection.value = deltaX < 0 ? 1 : -1
-    carouselDragOffsetX.value = 0
+    requestPhotoNavigation(deltaX < 0 ? 1 : -1)
   } else {
     carouselPointerId.value = null
     snapCarouselBack()
@@ -909,7 +954,7 @@ onUnmounted(() => {
             @click.stop
           >
             <div class="gallery-lightbox-loading-pill" role="status" aria-live="polite">
-              <UIcon name="i-tabler-loader-2" class="size-5 animate-spin" />
+              <span class="gallery-lightbox-spinner animate-spin" aria-hidden="true" />
               <span>{{ t('gallery.event.modal.loading') }}</span>
             </div>
           </div>
@@ -935,7 +980,7 @@ onUnmounted(() => {
                   class="flex h-full w-1/3 shrink-0 items-center justify-center"
                   :data-slide-active="slide.offset === 0 ? 'true' : 'false'"
                 >
-                  <img
+                  <NuxtImg
                     v-if="slide.photo"
                     :src="getPhotoSrc(slide.photo.src)"
                     :alt="slide.alt"
@@ -947,7 +992,11 @@ onUnmounted(() => {
                       'gallery-lightbox-image': slide.offset === 0,
                     }"
                     :style="slide.offset === 0 ? activeImageStyle : undefined"
+                    :width="lightboxImageWidth"
+                    :quality="lightboxImageQuality"
+                    :format="lightboxImageFormat"
                     decoding="async"
+                    :loading="slide.offset === 0 ? 'eager' : 'lazy'"
                     :fetchpriority="slide.offset === 0 ? 'high' : 'low'"
                     @load="handleModalSlideLoad(slide.index, $event)"
                     @dragstart.prevent="() => undefined"
@@ -978,11 +1027,11 @@ onUnmounted(() => {
             </button>
 
             <div
-              v-if="isCurrentPhotoLoading"
+              v-if="isLightboxLoading"
               class="absolute inset-0 z-10 flex items-center justify-center rounded-[1rem] bg-black/58 backdrop-blur-[2px] md:rounded-[1.2rem]"
             >
               <div class="gallery-lightbox-loading-pill" role="status" aria-live="polite">
-                <UIcon name="i-tabler-loader-2" class="size-5 animate-spin" />
+                <span class="gallery-lightbox-spinner animate-spin" aria-hidden="true" />
                 <span>{{ t('gallery.event.modal.loading') }}</span>
               </div>
             </div>
@@ -1114,6 +1163,16 @@ onUnmounted(() => {
   color: white;
   line-height: 1;
   box-shadow: 0 12px 32px rgb(15 23 42 / 0.28);
+}
+
+.gallery-lightbox-spinner {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid rgb(255 255 255 / 0.28);
+  border-top-color: rgb(255 255 255);
+  border-radius: 9999px;
+  flex-shrink: 0;
 }
 
 .gallery-lightbox-image {

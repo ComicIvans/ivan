@@ -199,14 +199,15 @@ function formatDate(dateStr: string) {
           <template #header>
             <div class="bg-elevated relative aspect-video w-full overflow-hidden">
               <template v-if="event.cover">
-                <img
+                <NuxtImg
                   :src="getPhotoSrc(event.cover.src)"
                   :alt="getCoverAlt(event.title, event.cover.alt)"
                   class="motion-link-media size-full object-cover"
                   loading="lazy"
-                  decoding="async"
                   width="400"
                   height="225"
+                  format="webp"
+                  quality="72"
                 />
               </template>
               <template v-else>

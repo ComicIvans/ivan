@@ -240,14 +240,15 @@ watch(eventSlug, () => {
       <UCard v-if="event.cover" class="mb-8 overflow-hidden">
         <template #header>
           <div class="flex h-fit items-center justify-center overflow-hidden">
-            <img
+            <NuxtImg
               :src="getPhotoSrc(event.cover.src)"
               :alt="getCoverAlt(event.title, event.cover.alt)"
               class="h-auto w-full object-contain"
-              decoding="async"
               fetchpriority="high"
               width="1280"
               height="720"
+              format="webp"
+              quality="74"
             />
           </div>
         </template>
