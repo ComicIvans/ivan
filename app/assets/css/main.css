@@ -26,7 +26,7 @@ body {
     linear-gradient(180deg, rgb(10 15 29 / 0.98), rgb(15 23 42 / 0.98));
 }
 
-:focus-visible {
+:where(a[href], button):focus-visible {
   outline: 2px solid rgb(248 113 113);
   outline-offset: 3px;
 }
