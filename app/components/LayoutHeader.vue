@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import { defineAsyncComponent, nextTick, type CSSProperties } from 'vue'
-import { getLocaleConfig, localesConfig, loadJokes, type LocaleCode } from '~/utils/locales'
+import {
+  getLocaleConfig,
+  getLocaleSwitchPath,
+  localesConfig,
+  loadJokes,
+  type LocaleCode,
+} from '~/utils/locales'
 
 const { t, locale } = useI18n({ useScope: 'global' })
 const colorMode = useColorMode()
 const localePath = useLocalePath()
+const switchLocalePath = useSwitchLocalePath()
 const route = useRoute()
 const isClientReady = ref(false)
 
@@ -81,9 +88,21 @@ const toggleTheme = () => {
 
 const homePath = computed(() => localePath('/'))
 
+const normalizeRoutePath = (path: string) => {
+  if (path !== '/' && path.endsWith('/')) {
+    return path.slice(0, -1)
+  }
+
+  return path
+}
+
 const switchLocale = (code: string) => {
   if (code !== locale.value) {
-    navigateTo(localePath(route.path, code as LocaleCode))
+    const targetLocale = code as LocaleCode
+    const localizedPath = switchLocalePath(targetLocale)
+    const fallbackPath = getLocaleSwitchPath(route.fullPath, targetLocale)
+
+    navigateTo(localizedPath && localizedPath !== route.fullPath ? localizedPath : fallbackPath)
   }
 }
 
@@ -95,13 +114,14 @@ const selectedLocale = computed({
 })
 
 const isActiveRoute = (basePath: string) => {
-  const localizedBasePath = localePath(basePath)
+  const localizedBasePath = normalizeRoutePath(localePath(basePath))
+  const currentPath = normalizeRoutePath(route.path)
 
   if (basePath === '/') {
-    return route.path === localizedBasePath
+    return currentPath === localizedBasePath
   }
 
-  return route.path.startsWith(localizedBasePath)
+  return currentPath === localizedBasePath || currentPath.startsWith(`${localizedBasePath}/`)
 }
 
 const activeTabBasePath = computed(() => {
