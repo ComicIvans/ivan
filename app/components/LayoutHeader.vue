@@ -318,40 +318,43 @@ onBeforeUnmount(() => {
         </p>
       </div>
 
-      <nav
-        v-if="mobileMenuOpen"
-        id="mobile-menu"
-        class="border-default bg-default/95 mt-4 rounded-2xl border p-3 shadow-sm backdrop-blur-sm"
-        :aria-label="t('nav.mainNav')"
-      >
-        <div ref="mobileNavRef" class="relative">
-          <div
-            v-if="mobileActiveIndicatorStyle"
-            aria-hidden="true"
-            class="bg-primary-500 pointer-events-none absolute top-0 left-0 z-0 rounded-xl shadow-sm transition-[transform,width,height] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
-            :style="mobileActiveIndicatorStyle"
-          />
-          <ul class="space-y-1">
-            <li
-              v-for="tab in tabs"
-              :key="tab.to"
-              :ref="(element: Element | null) => setMobileTabRef(tab.basePath, element)"
-              class="relative z-10"
-            >
-              <NuxtLink
-                :to="tab.to"
-                class="flex items-center gap-3 rounded-xl px-4 py-3 transition-colors"
-                :class="getMobileTabClass(tab.basePath)"
-                :aria-current="isActiveRoute(tab.basePath) ? 'page' : undefined"
-                @click="closeMobileMenu"
-              >
-                <UIcon :name="tab.icon" class="size-5" aria-hidden="true" />
-                <span>{{ tab.label }}</span>
-              </NuxtLink>
-            </li>
-          </ul>
+      <Transition name="mobile-menu" @after-enter="syncActiveIndicators">
+        <div v-if="mobileMenuOpen" class="mobile-menu-reveal mt-4">
+          <nav
+            id="mobile-menu"
+            class="border-default bg-default/95 rounded-2xl border p-3 shadow-sm backdrop-blur-sm"
+            :aria-label="t('nav.mainNav')"
+          >
+            <div ref="mobileNavRef" class="relative">
+              <div
+                v-if="mobileActiveIndicatorStyle"
+                aria-hidden="true"
+                class="bg-primary-500 pointer-events-none absolute top-0 left-0 z-0 rounded-xl shadow-sm transition-[transform,width,height] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+                :style="mobileActiveIndicatorStyle"
+              />
+              <ul class="space-y-1">
+                <li
+                  v-for="tab in tabs"
+                  :key="tab.to"
+                  :ref="(element: Element | null) => setMobileTabRef(tab.basePath, element)"
+                  class="relative z-10"
+                >
+                  <NuxtLink
+                    :to="tab.to"
+                    class="flex items-center gap-3 rounded-xl px-4 py-3 transition-colors"
+                    :class="getMobileTabClass(tab.basePath)"
+                    :aria-current="isActiveRoute(tab.basePath) ? 'page' : undefined"
+                    @click="closeMobileMenu"
+                  >
+                    <UIcon :name="tab.icon" class="size-5" aria-hidden="true" />
+                    <span>{{ tab.label }}</span>
+                  </NuxtLink>
+                </li>
+              </ul>
+            </div>
+          </nav>
         </div>
-      </nav>
+      </Transition>
     </div>
 
     <nav class="mt-4 hidden lg:block" :aria-label="t('nav.mainNav')">
@@ -425,6 +428,40 @@ onBeforeUnmount(() => {
 
   50% {
     transform: translate3d(0, -0.35rem, 0);
+  }
+}
+
+/* Animated mobile menu reveal: the panel grows from 0 height via
+   grid-template-rows (CSS-only, smooth) while fading in. */
+.mobile-menu-reveal {
+  display: grid;
+  grid-template-rows: 1fr;
+}
+
+.mobile-menu-reveal > nav {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.mobile-menu-enter-active,
+.mobile-menu-leave-active {
+  transition:
+    grid-template-rows 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 220ms ease,
+    margin-top 280ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mobile-menu-enter-from,
+.mobile-menu-leave-to {
+  grid-template-rows: 0fr;
+  margin-top: 0;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu-enter-active,
+  .mobile-menu-leave-active {
+    transition: none;
   }
 }
 </style>
