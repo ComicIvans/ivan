@@ -13,19 +13,19 @@ const socialLinks = computed(() => [
   },
   {
     icon: 'i-tabler-brand-linkedin',
-    href: socialProfiles.linkedin,
+    to: socialProfiles.linkedin,
     label: t('footer.linkedinLabel'),
     external: true,
   },
   {
     icon: 'i-tabler-brand-instagram',
-    href: socialProfiles.instagram,
+    to: socialProfiles.instagram,
     label: t('footer.instagramLabel'),
     external: true,
   },
   {
     icon: 'i-tabler-brand-github',
-    href: socialProfiles.github,
+    to: socialProfiles.github,
     label: t('footer.githubLabel'),
     external: true,
   },
@@ -65,30 +65,19 @@ const socialLinks = computed(() => [
 
       <!-- Social links -->
       <nav class="flex gap-3 md:justify-end" :aria-label="t('footer.socialNav')">
-        <template v-for="link in socialLinks" :key="link.icon">
-          <UButton
-            v-if="!link.external"
-            :to="link.to"
-            :icon="link.icon"
-            color="neutral"
-            variant="ghost"
-            size="lg"
-            class="social-icon"
-            :aria-label="link.label"
-          />
-          <UButton
-            v-else
-            :to="link.href"
-            target="_blank"
-            rel="noopener noreferrer"
-            :icon="link.icon"
-            color="neutral"
-            variant="ghost"
-            size="lg"
-            class="social-icon"
-            :aria-label="link.label"
-          />
-        </template>
+        <UButton
+          v-for="link in socialLinks"
+          :key="link.icon"
+          :to="link.to"
+          :target="link.external ? '_blank' : undefined"
+          :rel="link.external ? 'noopener noreferrer' : undefined"
+          :icon="link.icon"
+          color="neutral"
+          variant="ghost"
+          size="lg"
+          class="social-icon"
+          :aria-label="link.label"
+        />
       </nav>
     </div>
   </footer>

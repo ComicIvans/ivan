@@ -3,31 +3,7 @@ import { defineAsyncComponent } from 'vue'
 
 const CursorGlow = defineAsyncComponent(() => import('~/components/CursorGlow.vue'))
 
-const showCursorGlow = ref(false)
-
-let desktopPointerQuery: MediaQueryList | null = null
-let reducedMotionQuery: MediaQueryList | null = null
-
-const updateCursorGlowVisibility = () => {
-  showCursorGlow.value = Boolean(desktopPointerQuery?.matches) && !reducedMotionQuery?.matches
-}
-
-onMounted(() => {
-  desktopPointerQuery = window.matchMedia(
-    '(min-width: 1024px) and (hover: hover) and (pointer: fine)'
-  )
-  reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-
-  desktopPointerQuery.addEventListener('change', updateCursorGlowVisibility)
-  reducedMotionQuery.addEventListener('change', updateCursorGlowVisibility)
-
-  updateCursorGlowVisibility()
-})
-
-onBeforeUnmount(() => {
-  desktopPointerQuery?.removeEventListener('change', updateCursorGlowVisibility)
-  reducedMotionQuery?.removeEventListener('change', updateCursorGlowVisibility)
-})
+const showCursorGlow = useDesktopPointerSupport()
 </script>
 
 <template>
@@ -47,7 +23,7 @@ onBeforeUnmount(() => {
       <LayoutHeader />
     </div>
 
-    <main id="main-content" class="grow" role="main">
+    <main id="main-content" class="grow">
       <div class="mx-auto w-11/12 max-w-7xl px-4 pb-6 sm:px-6 sm:pb-8">
         <slot />
       </div>

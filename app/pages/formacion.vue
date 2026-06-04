@@ -1,5 +1,13 @@
 <script setup lang="ts">
-const { t, tm, rt } = useI18n({ useScope: 'global' })
+const { t } = useI18n({ useScope: 'global' })
+
+defineI18nRoute({
+  paths: {
+    es: '/formacion',
+    en: '/education',
+    de: '/ausbildung',
+  },
+})
 
 usePageSeo('training.title', 'seo.pages.training')
 
@@ -13,26 +21,17 @@ const academicIcons: Record<string, string> = {
 
 const currentAcademic = ['mugeps']
 
-const academicItems = computed(() => {
-  const itemsData = tm('training.academic.items') as unknown
-  const items = Array.isArray(itemsData) ? itemsData : []
-  return items.map((item: unknown) => {
-    const itemData = (item as Record<string, unknown>) || {}
-    const id = getI18nStaticValue(itemData.id)
-    const title = getI18nStaticValue(itemData.title)
-    const org = getI18nStaticValue(itemData.organization)
-    const period = getI18nStaticValue(itemData.period)
-    const description = getI18nStaticValue(itemData.description)
-    return {
-      id,
-      title: rt(title),
-      org: rt(org),
-      period: rt(period),
-      description: rt(description),
-      icon: academicIcons[id] || 'i-tabler-certificate',
-      current: currentAcademic.includes(id),
-    }
-  })
+const academicItems = useI18nList('training.academic.items', ({ raw, value, tr }) => {
+  const id = value(raw.id)
+  return {
+    id,
+    title: tr(raw.title),
+    org: tr(raw.organization),
+    period: tr(raw.period),
+    description: tr(raw.description),
+    icon: academicIcons[id] || 'i-tabler-certificate',
+    current: currentAcademic.includes(id),
+  }
 })
 
 const languageFlags: Record<string, string> = {
@@ -47,24 +46,16 @@ const languageProgress: Record<string, number> = {
   spanish: 100,
 }
 
-const languages = computed(() => {
-  const itemsData = tm('training.languages.items') as unknown
-  const items = Array.isArray(itemsData) ? itemsData : []
-  return items.map((item: unknown) => {
-    const itemData = (item as Record<string, unknown>) || {}
-    const id = getI18nStaticValue(itemData.id)
-    const name = getI18nStaticValue(itemData.name)
-    const level = getI18nStaticValue(itemData.level)
-    const description = getI18nStaticValue(itemData.description)
-    return {
-      id,
-      name: rt(name),
-      level: rt(level),
-      description: rt(description),
-      flag: languageFlags[id] || 'i-tabler-flag',
-      progress: languageProgress[id] || 50,
-    }
-  })
+const languages = useI18nList('training.languages.items', ({ raw, value, tr }) => {
+  const id = value(raw.id)
+  return {
+    id,
+    name: tr(raw.name),
+    level: tr(raw.level),
+    description: tr(raw.description),
+    flag: languageFlags[id] || 'i-tabler-flag',
+    progress: languageProgress[id] || 50,
+  }
 })
 
 const competencyIcons: Record<string, string> = {
@@ -81,23 +72,14 @@ const competencyIcons: Record<string, string> = {
   'strategic-thinking': 'i-tabler-brain',
 }
 
-const competencies = computed(() => {
-  const itemsData = tm('training.competencies.items') as unknown
-  const items = Array.isArray(itemsData) ? itemsData : []
-  return items.map((item: unknown) => {
-    const itemData = (item as Record<string, unknown>) || {}
-    const id = getI18nStaticValue(itemData.id)
-    const name = getI18nStaticValue(itemData.name)
-    return {
-      name: rt(name),
-      icon: competencyIcons[id] || 'i-tabler-star',
-    }
-  })
-})
+const competencies = useI18nList('training.competencies.items', ({ raw, value, tr }) => ({
+  name: tr(raw.name),
+  icon: competencyIcons[value(raw.id)] || 'i-tabler-star',
+}))
 </script>
 
 <template>
-  <section role="region" :aria-label="t('training.title')" class="section-enter">
+  <section :aria-label="t('training.title')" class="section-enter">
     <!-- Header -->
     <div class="mb-8 text-center">
       <h1 class="text-primary-500 text-4xl font-bold lg:text-5xl">

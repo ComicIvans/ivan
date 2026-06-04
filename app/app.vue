@@ -8,6 +8,7 @@ const { t, locale, localeCodes } = useI18n({ useScope: 'global' })
 const siteConfig = useSiteConfig()
 const localeHead = useLocaleHead({ seo: true })
 const siteUrl = computed(() => String(siteConfig.url ?? ''))
+const route = useRoute()
 const router = useRouter()
 const pendingPageFullPath = useState<string | null>('page-nav-pending-path', () => null)
 
@@ -42,7 +43,7 @@ useHead(() => ({
 useSeoMeta({
   titleTemplate: (title) => (title ? `${title} | ${t('seo.title')}` : t('seo.title')),
   description: () => t('seo.description'),
-  ogUrl: () => siteUrl.value,
+  ogUrl: () => `${siteUrl.value}${route.path}`,
   ogType: 'profile',
   ogTitle: () => t('seo.title'),
   ogDescription: () => t('seo.description'),
@@ -166,17 +167,17 @@ useSchemaOrg([
   <UApp :locale="nuxtUiLocale">
     <NuxtRouteAnnouncer />
     <NuxtLayout>
-      <NuxtPage v-slot="{ Component, route }">
+      <NuxtPage v-slot="{ Component, route: pageRoute }">
         <Transition
           v-if="pageTransitionsEnabled"
           name="page-shell"
           mode="out-in"
           @after-leave="clearPendingPagePath"
         >
-          <div :key="route.fullPath" class="page-shell-node">
+          <div :key="pageRoute.fullPath" class="page-shell-node">
             <div
               class="page-shell-frame"
-              :class="{ 'page-nav-pending': pendingPageFullPath === route.fullPath }"
+              :class="{ 'page-nav-pending': pendingPageFullPath === pageRoute.fullPath }"
             >
               <component :is="Component" />
             </div>

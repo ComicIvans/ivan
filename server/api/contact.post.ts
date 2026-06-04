@@ -1,153 +1,75 @@
-import type { H3Event } from 'h3'
-import { defineEventHandler, readBody, createError, getHeader } from 'h3'
-import nodemailer from 'nodemailer'
+import { defineEventHandler, readBody, createError } from 'h3'
 import {
   getRequiredSiteUrl,
   getRequiredSmtpFromEmail,
   getRequiredSmtpToEmail,
-  getRequiredSmtpTransportConfig,
 } from '../utils/runtimeConfig'
+import { enforceRateLimit } from '../utils/rateLimit'
+import { getSmtpTransporter } from '../utils/smtp'
+import { validatePublicBody } from '../utils/validatePublicBody'
+import { contactFormSchema } from '~~/shared/utils/contactValidation'
+import { CONTACT_MIN_SUBMIT_DELAY_MS } from '~~/shared/utils/contactShared'
 
-interface ContactFormData {
-  name: string
-  email: string
-  subject: string
-  message: string
-  website?: string
-}
-
-const rateLimitMap = new Map<string, { count: number; firstRequest: number }>()
-const RATE_LIMIT_WINDOW = 60 * 60 * 1000
-const MAX_REQUESTS_PER_WINDOW = 5
 const CONTACT_ERROR_CODES = {
-  invalidEmail: 'CONTACT_INVALID_EMAIL',
-  messageLength: 'CONTACT_MESSAGE_LENGTH',
-  missingFields: 'CONTACT_MISSING_FIELDS',
-  nameLength: 'CONTACT_NAME_LENGTH',
+  validation: 'CONTACT_VALIDATION',
   prohibitedContent: 'CONTACT_PROHIBITED_CONTENT',
   rateLimited: 'CONTACT_RATE_LIMITED',
   sendFailed: 'CONTACT_SEND_FAILED',
   serviceUnavailable: 'CONTACT_SERVICE_UNAVAILABLE',
-  subjectLength: 'CONTACT_SUBJECT_LENGTH',
 } as const
 
-function cleanupRateLimitMap(now: number) {
-  for (const [ip, record] of rateLimitMap.entries()) {
-    if (now - record.firstRequest > RATE_LIMIT_WINDOW) {
-      rateLimitMap.delete(ip)
-    }
-  }
-}
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now()
-  cleanupRateLimitMap(now)
-  const record = rateLimitMap.get(ip)
-
-  if (!record) {
-    rateLimitMap.set(ip, { count: 1, firstRequest: now })
-    return false
-  }
-
-  if (now - record.firstRequest > RATE_LIMIT_WINDOW) {
-    rateLimitMap.set(ip, { count: 1, firstRequest: now })
-    return false
-  }
-
-  record.count++
-  if (record.count > MAX_REQUESTS_PER_WINDOW) {
-    return true
-  }
-
-  return false
-}
-
-function getClientIp(event: H3Event): string {
-  return getHeader(event, 'x-real-ip')?.trim() || event.node.req.socket.remoteAddress || 'unknown'
-}
-
-function sanitizeInput(input: string): string {
-  return input.replace(/[<>]/g, '').trim().slice(0, 5000)
-}
-
-function isValidEmail(email: string): boolean {
-  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-  return emailRegex.test(email) && email.length <= 254
-}
+// Structural spam signals only. Ambiguous keyword matching (crypto, investment,
+// winner, ...) was removed: it blocked legitimate messages from a cybersecurity
+// professional. The honeypot, submit-timing check and rate limiter carry the load.
+const SPAM_PATTERNS = [/\[url=/i, /\[link=/i, /<a\s+href/i, /https?:\/\/[^\s]{256,}/i, /(.)\1{10,}/]
 
 function hasSpamPatterns(text: string): boolean {
-  const spamPatterns = [
-    /\[url=/i,
-    /\[link=/i,
-    /<a\s+href/i,
-    /http[s]?:\/\/[^\s]{50,}/i,
-    /(.)\1{10,}/i,
-    /viagra|cialis|casino|lottery|winner|bitcoin|crypto|investment|earn money/i,
-  ]
+  return SPAM_PATTERNS.some((pattern) => pattern.test(text))
+}
 
-  return spamPatterns.some((pattern) => pattern.test(text))
+// Email header fields must never contain CR/LF/NUL (header injection).
+function assertNoHeaderInjection(value: string) {
+  if (/[\r\n\0]/.test(value)) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: CONTACT_ERROR_CODES.validation,
+    })
+  }
 }
 
 export default defineEventHandler(async (event) => {
-  const clientIp = getClientIp(event)
+  await enforceRateLimit(event, {
+    namespace: 'contact',
+    maxRequests: 5,
+    windowMs: 60 * 60 * 1000,
+    errorMessage: CONTACT_ERROR_CODES.rateLimited,
+  })
 
-  if (isRateLimited(clientIp)) {
-    throw createError({
-      statusCode: 429,
-      statusMessage: CONTACT_ERROR_CODES.rateLimited,
-    })
-  }
+  const body = validatePublicBody(
+    contactFormSchema,
+    await readBody(event),
+    CONTACT_ERROR_CODES.validation
+  )
 
-  const body = await readBody<ContactFormData>(event)
-
+  // Honeypot: silently accept (don't reveal the trap to bots).
   if (body.website && body.website.trim() !== '') {
-    return {
-      success: true,
-    }
+    return { success: true }
   }
 
-  if (!body.name || !body.email || !body.subject || !body.message) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: CONTACT_ERROR_CODES.missingFields,
-    })
+  // Submit-timing check: genuine humans take longer than a couple of seconds.
+  if (
+    typeof body.startedAt === 'number' &&
+    Date.now() - body.startedAt < CONTACT_MIN_SUBMIT_DELAY_MS
+  ) {
+    return { success: true }
   }
 
-  const name = sanitizeInput(body.name)
-  const email = sanitizeInput(body.email)
-  const subject = sanitizeInput(body.subject)
-  const message = sanitizeInput(body.message)
+  const { name, email, subject, message } = body
 
-  if (name.length < 2 || name.length > 100) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: CONTACT_ERROR_CODES.nameLength,
-    })
-  }
+  assertNoHeaderInjection(email)
+  assertNoHeaderInjection(subject)
 
-  if (subject.length < 3 || subject.length > 200) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: CONTACT_ERROR_CODES.subjectLength,
-    })
-  }
-
-  if (message.length < 10 || message.length > 5000) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: CONTACT_ERROR_CODES.messageLength,
-    })
-  }
-
-  if (!isValidEmail(email)) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: CONTACT_ERROR_CODES.invalidEmail,
-    })
-  }
-
-  const fullText = `${name} ${subject} ${message}`
-  if (hasSpamPatterns(fullText)) {
+  if (hasSpamPatterns(`${name} ${subject} ${message}`)) {
     throw createError({
       statusCode: 400,
       statusMessage: CONTACT_ERROR_CODES.prohibitedContent,
@@ -158,12 +80,7 @@ export default defineEventHandler(async (event) => {
   const fromEmail = getRequiredSmtpFromEmail(event, CONTACT_ERROR_CODES.serviceUnavailable)
   const toEmail = getRequiredSmtpToEmail(event, CONTACT_ERROR_CODES.serviceUnavailable)
 
-  const transporter = nodemailer.createTransport({
-    ...getRequiredSmtpTransportConfig(event, CONTACT_ERROR_CODES.serviceUnavailable),
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 30000,
-  })
+  const transporter = getSmtpTransporter(event, CONTACT_ERROR_CODES.serviceUnavailable)
 
   const emailContent = `
 Nuevo mensaje de contacto desde el portfolio
@@ -181,7 +98,7 @@ Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })}
   `.trim()
 
   try {
-    const info = await transporter.sendMail({
+    await transporter.sendMail({
       from: `"Portfolio Contact" <${fromEmail}>`,
       to: toEmail,
       replyTo: email,
@@ -189,19 +106,9 @@ Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })}
       text: emailContent,
     })
 
-    console.log('Email sent successfully:', info.messageId)
-
-    return {
-      success: true,
-    }
+    return { success: true }
   } catch (error) {
-    console.error('Error sending email:', error)
-    if (error instanceof Error) {
-      console.error('Error details:', {
-        message: error.message,
-        stack: error.stack,
-      })
-    }
+    console.error('Error sending contact email:', error)
     throw createError({
       statusCode: 500,
       statusMessage: CONTACT_ERROR_CODES.sendFailed,

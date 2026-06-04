@@ -1,13 +1,33 @@
 <script setup lang="ts">
+import { defineAsyncComponent } from 'vue'
+
+const GalleryLightbox = defineAsyncComponent(
+  () => import('~/components/gallery/GalleryLightbox.vue')
+)
+
 const { t, locale } = useI18n({ useScope: 'global' })
 const route = useRoute()
 const localePath = useLocalePath()
 
-const { getPhotoSrc, getPhotoAlt, getCoverAlt } = useGalleryImages()
+const { getPhotoAlt, getCoverAlt } = useGalleryImages()
+const {
+  aspectRatios: photoAspectRatios,
+  recordFromImage,
+  preload: preloadPhotoAspectRatio,
+  reset: resetPreloader,
+} = usePhotoPreloader()
+
+defineI18nRoute({
+  paths: {
+    es: '/galeria/[slug]',
+    en: '/gallery/[slug]',
+    de: '/galerie/[slug]',
+  },
+})
 
 const eventSlug = computed(() => route.params.slug as string)
 
-const { event, isLoading } = useGalleryEvent(eventSlug)
+const { event, isLoading } = await useGalleryEvent(eventSlug)
 
 usePageSeo(
   () => event.value?.seo?.title || event.value?.title || t('gallery.title'),
@@ -16,6 +36,16 @@ usePageSeo(
     ogImage: () => event.value?.cover?.src,
   }
 )
+
+useSchemaOrg([
+  defineEvent({
+    name: () => event.value?.title || t('gallery.title'),
+    startDate: () => event.value?.date,
+    location: () => event.value?.location,
+    description: () => event.value?.description,
+    image: () => event.value?.cover?.src,
+  }),
+])
 
 const photosPerPage = 12
 const currentPhotoPage = ref(1)
@@ -31,8 +61,6 @@ const paginatedPhotos = computed(() => {
 })
 
 const loadedImages = reactive(new Set<string>())
-const photoAspectRatios = ref<Record<number, number>>({})
-const photoAspectRatioPreloads = new Map<number, Promise<number | null>>()
 
 watch(currentPhotoPage, () => {
   loadedImages.clear()
@@ -41,11 +69,7 @@ watch(currentPhotoPage, () => {
 function onImageLoad(pageIndex: number, absoluteIndex: number, event?: Event) {
   const key = `${currentPhotoPage.value}-${pageIndex}`
   loadedImages.add(key)
-
-  const image = event?.target as HTMLImageElement | null
-  if (image?.naturalWidth && image.naturalHeight) {
-    photoAspectRatios.value[absoluteIndex] = image.naturalWidth / image.naturalHeight
-  }
+  recordFromImage(absoluteIndex, event?.target as HTMLImageElement | null)
 }
 
 function isImageLoading(index: number) {
@@ -55,51 +79,10 @@ function isImageLoading(index: number) {
 
 const selectedPhotoIndex = ref(0)
 const isModalOpen = ref(false)
+const hasOpenedLightbox = ref(false)
 const initialModalAspectRatio = ref<number | null>(null)
 const initialModalAspectRatioIndex = ref<number | null>(null)
-
-function preloadPhotoAspectRatio(index: number, src: string) {
-  const knownRatio = photoAspectRatios.value[index]
-  if (knownRatio && Number.isFinite(knownRatio)) {
-    return Promise.resolve(knownRatio)
-  }
-
-  const existingPreload = photoAspectRatioPreloads.get(index)
-  if (existingPreload) {
-    return existingPreload
-  }
-
-  if (!import.meta.client) {
-    return Promise.resolve(null)
-  }
-
-  const preload = new Promise<number | null>((resolve) => {
-    const image = new Image()
-    const finalize = () => {
-      const ratio =
-        image.naturalWidth && image.naturalHeight ? image.naturalWidth / image.naturalHeight : null
-
-      if (ratio) {
-        photoAspectRatios.value[index] = ratio
-      }
-
-      photoAspectRatioPreloads.delete(index)
-      resolve(ratio)
-    }
-
-    image.decoding = 'async'
-    image.onload = finalize
-    image.onerror = finalize
-    image.src = getPhotoSrc(src)
-
-    if (image.complete) {
-      finalize()
-    }
-  })
-
-  photoAspectRatioPreloads.set(index, preload)
-  return preload
-}
+let lastModalTrigger: HTMLElement | null = null
 
 function openPhotoModal(
   event: MouseEvent,
@@ -107,11 +90,13 @@ function openPhotoModal(
   index: number
 ) {
   const trigger = event.currentTarget as HTMLElement | null
+  lastModalTrigger = trigger
   const image = trigger?.querySelector('img')
   initialModalAspectRatio.value =
     image?.naturalWidth && image?.naturalHeight ? image.naturalWidth / image.naturalHeight : null
   initialModalAspectRatioIndex.value = index
   selectedPhotoIndex.value = index
+  hasOpenedLightbox.value = true
   isModalOpen.value = true
 
   void preloadPhotoAspectRatio(index, photo.src).then((ratio) => {
@@ -121,6 +106,13 @@ function openPhotoModal(
     initialModalAspectRatioIndex.value = index
   })
 }
+
+// Restore focus to the thumbnail that opened the lightbox when it closes.
+watch(isModalOpen, (open, wasOpen) => {
+  if (wasOpen && !open && lastModalTrigger) {
+    nextTick(() => lastModalTrigger?.focus())
+  }
+})
 
 function formatDate(dateStr: string) {
   const date = new Date(dateStr)
@@ -142,13 +134,12 @@ watch(eventSlug, () => {
   isModalOpen.value = false
   initialModalAspectRatio.value = null
   initialModalAspectRatioIndex.value = null
-  photoAspectRatios.value = {}
-  photoAspectRatioPreloads.clear()
+  resetPreloader()
 })
 </script>
 
 <template>
-  <section role="region" :aria-label="event?.title || t('gallery.title')" class="section-enter">
+  <section :aria-label="event?.title || t('gallery.title')" class="section-enter">
     <!-- Breadcrumb -->
     <nav class="mb-6" :aria-label="t('gallery.event.breadcrumb')">
       <ol class="text-muted flex min-w-0 items-center gap-1.5 text-sm">
@@ -158,9 +149,9 @@ watch(eventSlug, () => {
           </NuxtLink>
         </li>
         <li class="flex shrink-0" aria-hidden="true">
-          <UIcon name="i-lucide-chevron-right" class="size-4" />
+          <UIcon name="i-tabler-chevron-right" class="size-4" />
         </li>
-        <li class="min-w-0 flex-1 truncate font-semibold text-[rgb(15_23_42)] dark:text-white">
+        <li class="text-highlighted min-w-0 flex-1 truncate font-semibold">
           {{ event?.title || '...' }}
         </li>
       </ol>
@@ -248,7 +239,7 @@ watch(eventSlug, () => {
         <template #header>
           <div class="flex h-fit items-center justify-center overflow-hidden">
             <NuxtImg
-              :src="getPhotoSrc(event.cover.src)"
+              :src="event.cover.src"
               :alt="getCoverAlt(event.title, event.cover.alt)"
               class="h-auto w-full object-contain"
               fetchpriority="high"
@@ -309,7 +300,7 @@ watch(eventSlug, () => {
             >
               <!-- Image always rendered to trigger load event -->
               <NuxtImg
-                :src="getPhotoSrc(photo.src)"
+                :src="photo.src"
                 :alt="
                   getPhotoAlt({
                     eventTitle: event.title,
@@ -380,8 +371,9 @@ watch(eventSlug, () => {
       </div>
     </template>
 
-    <GalleryLightbox
-      v-if="event?.photos.length"
+    <component
+      :is="GalleryLightbox"
+      v-if="hasOpenedLightbox && event?.photos.length"
       v-model:open="isModalOpen"
       v-model:index="selectedPhotoIndex"
       :photos="event.photos"

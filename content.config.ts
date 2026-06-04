@@ -1,4 +1,5 @@
 import { defineContentConfig, defineCollection, z } from '@nuxt/content'
+import { siteLocales } from './shared/constants/locales'
 
 const eventSchema = z.object({
   title: z.string(),
@@ -47,33 +48,22 @@ const eventSchema = z.object({
   draft: z.boolean().default(false),
 })
 
+// One gallery collection per locale, generated from siteLocales so adding a
+// locale requires no change here.
+const galleryCollections = Object.fromEntries(
+  siteLocales.map(({ code }) => [
+    `gallery_${code}`,
+    defineCollection({
+      type: 'page',
+      source: {
+        include: `${code}/gallery/**/*.md`,
+        prefix: `/${code}`,
+      },
+      schema: eventSchema,
+    }),
+  ])
+)
+
 export default defineContentConfig({
-  collections: {
-    gallery_es: defineCollection({
-      type: 'page',
-      source: {
-        include: 'es/gallery/**/*.md',
-        prefix: '/es',
-      },
-      schema: eventSchema,
-    }),
-
-    gallery_en: defineCollection({
-      type: 'page',
-      source: {
-        include: 'en/gallery/**/*.md',
-        prefix: '/en',
-      },
-      schema: eventSchema,
-    }),
-
-    gallery_de: defineCollection({
-      type: 'page',
-      source: {
-        include: 'de/gallery/**/*.md',
-        prefix: '/de',
-      },
-      schema: eventSchema,
-    }),
-  },
+  collections: galleryCollections,
 })

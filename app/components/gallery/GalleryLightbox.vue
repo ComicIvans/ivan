@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
 import type { GalleryEvent } from '~~/shared/types/gallery'
 
 const props = defineProps<{
@@ -17,7 +18,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n({ useScope: 'global' })
-const { getPhotoSrc, getPhotoAlt } = useGalleryImages()
+const { getPhotoAlt } = useGalleryImages()
 const image = useImage()
 
 const minZoom = 1
@@ -32,6 +33,19 @@ const lightboxImageModifiers = {
 } as const
 
 const modalContentRef = ref<HTMLElement | null>(null)
+
+// Trap keyboard focus within the lightbox while it is open. Escape is handled by
+// the component's own keydown handler, so the trap must not deactivate on it.
+const { activate: activateFocusTrap, deactivate: deactivateFocusTrap } = useFocusTrap(
+  modalContentRef,
+  {
+    immediate: false,
+    escapeDeactivates: false,
+    allowOutsideClick: true,
+    fallbackFocus: () => modalContentRef.value as HTMLElement,
+  }
+)
+
 const imageContainerRef = ref<HTMLElement | null>(null)
 const imageStageRef = ref<HTMLElement | null>(null)
 
@@ -96,7 +110,7 @@ function getModalPhoto(index: number) {
 }
 
 function getLightboxPhotoSrc(src: string) {
-  return image(getPhotoSrc(src), lightboxImageModifiers)
+  return image(src, lightboxImageModifiers)
 }
 
 function getActiveModalImage() {
@@ -844,7 +858,9 @@ watch(
 watch(isOpen, (open) => {
   if (open) {
     preloadNeighborhood()
+    nextTick(() => activateFocusTrap())
   } else {
+    deactivateFocusTrap()
     handleMouseUp()
     resetInteractionState()
   }
@@ -886,6 +902,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
+  deactivateFocusTrap()
   gestureMediaQuery?.removeEventListener('change', updateSwipeNavigationSupport)
   reducedMotionMediaQuery?.removeEventListener('change', updateReducedMotionPreference)
   window.removeEventListener('resize', updateViewportSize)
@@ -990,7 +1007,7 @@ onUnmounted(() => {
                 >
                   <NuxtImg
                     v-if="slide.photo"
-                    :src="getPhotoSrc(slide.photo.src)"
+                    :src="slide.photo.src"
                     :alt="slide.alt"
                     class="block h-full w-full object-contain object-center select-none"
                     :class="{

@@ -9,6 +9,33 @@ const hasUmami = Boolean(process.env.NUXT_UMAMI_ID && process.env.NUXT_UMAMI_HOS
 const siteUrl = requireConfigUrl(process.env.SITE_URL, 'SITE_URL')
 const siteImageHostname = new URL(siteUrl).hostname
 
+const umamiOrigin = (() => {
+  if (!process.env.NUXT_UMAMI_HOST) return null
+  try {
+    return new URL(process.env.NUXT_UMAMI_HOST).origin
+  } catch {
+    return null
+  }
+})()
+
+// Report-only CSP (phase 1): emitted as Content-Security-Policy-Report-Only so it
+// never blocks, only reports violations to /api/csp-report. nuxt-security does not
+// substitute the SSR nonce in report-only mode, so inline scripts/styles are allowed
+// via 'unsafe-inline' to avoid false positives; tighten + flip to enforced later.
+const cspReportOnlyValue = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "frame-ancestors 'self'",
+  "form-action 'self'",
+  `script-src 'self' 'unsafe-inline'${umamiOrigin ? ` ${umamiOrigin}` : ''}`,
+  "style-src 'self' 'unsafe-inline'",
+  `img-src 'self' data: blob: ${siteImageHostname}`,
+  "font-src 'self' data:",
+  `connect-src 'self'${umamiOrigin ? ` ${umamiOrigin}` : ''}`,
+  'report-uri /api/csp-report',
+].join('; ')
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: isDev },
@@ -51,9 +78,26 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
+    // Report-only CSP for all routes in production (phase 1, non-blocking).
+    ...(isDev
+      ? {}
+      : {
+          '/**': {
+            headers: {
+              'Content-Security-Policy-Report-Only': cspReportOnlyValue,
+            },
+          },
+        }),
     '/api/**': {
       headers: {
         'X-Robots-Tag': 'noindex, nofollow, noarchive',
+      },
+    },
+    // Contact body is validated by our zod schema; the generic XSS validator
+    // produces false 400s on legitimate free-text messages.
+    '/api/contact': {
+      security: {
+        xssValidator: false,
       },
     },
     '/_ipx/**': {
@@ -79,17 +123,42 @@ export default defineNuxtConfig({
   },
 
   modules: [
+    'nuxt-security',
     '@nuxt/ui',
     '@nuxt/icon',
     '@nuxt/a11y',
     '@nuxtjs/seo',
     '@nuxt/image',
     '@nuxtjs/i18n',
+    '@vueuse/nuxt',
     '@nuxt/eslint',
     ...(hasUmami ? ['nuxt-umami'] : []),
     '@nuxt/content',
     './modules/fix-mdc-optimize-deps',
   ],
+
+  security: {
+    // Own file-based limiter (server/utils/rateLimit.ts) is used instead.
+    rateLimiter: false,
+    headers: {
+      // CSP handled in report-only mode via routeRules below (phase 1).
+      contentSecurityPolicy: false,
+      crossOriginEmbedderPolicy: false,
+      crossOriginResourcePolicy: 'cross-origin',
+      strictTransportSecurity: {
+        maxAge: 31536000,
+        includeSubdomains: true,
+      },
+      xContentTypeOptions: 'nosniff',
+      xFrameOptions: 'SAMEORIGIN',
+      referrerPolicy: 'strict-origin-when-cross-origin',
+      permissionsPolicy: {
+        camera: [],
+        microphone: [],
+        geolocation: [],
+      },
+    },
+  },
 
   icon: {
     collections: ['tabler', 'circle-flags', 'simple-icons'],
@@ -143,7 +212,7 @@ export default defineNuxtConfig({
   sitemap: {
     autoLastmod: true,
     xsl: false,
-    zeroRuntime: true,
+    sources: ['/api/__sitemap__/urls'],
   },
 
   // Robots configuration
@@ -158,6 +227,7 @@ export default defineNuxtConfig({
 
   i18n: {
     baseUrl: siteUrl,
+    strategy: 'prefix_except_default',
     locales: siteLocales.map(({ code, language, name, file }) => ({
       code,
       language,
@@ -199,6 +269,19 @@ export default defineNuxtConfig({
     prerender: {
       crawlLinks: false,
       failOnError: false,
+    },
+    // File-based storage for the contact rate limiter (persisted on the /data volume).
+    storage: {
+      ratelimit: {
+        driver: 'fs',
+        base: process.env.RATE_LIMIT_DIR || '/data/ratelimit',
+      },
+    },
+    devStorage: {
+      ratelimit: {
+        driver: 'fs',
+        base: './.data/ratelimit',
+      },
     },
   },
 

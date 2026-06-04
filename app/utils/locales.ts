@@ -58,17 +58,16 @@ export const getLocaleSwitchPath = (currentPath: string, targetLocale: LocaleCod
   return `${localizedPath}${suffix}`
 }
 
+const jokeImports: Record<string, () => Promise<{ default: string[] }>> = {
+  de: () => import('~/assets/jokes-de.json'),
+  en: () => import('~/assets/jokes-en.json'),
+  es: () => import('~/assets/jokes-es.json'),
+}
+
 export const loadJokes = async (locale: string): Promise<string[]> => {
   try {
-    switch (locale) {
-      case 'de':
-        return (await import('~/assets/jokes-de.json')).default
-      case 'en':
-        return (await import('~/assets/jokes-en.json')).default
-      case defaultLocale:
-      default:
-        return (await import('~/assets/jokes-es.json')).default
-    }
+    const load = jokeImports[locale] ?? jokeImports[defaultLocale]!
+    return (await load()).default
   } catch {
     return []
   }

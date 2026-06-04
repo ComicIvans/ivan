@@ -21,6 +21,7 @@ interface UsePageSeoOptions {
   canonicalPath?: SeoValue
   ogImage?: SeoValue
   ogType?: SeoValue<SeoOgType>
+  robots?: SeoValue
 }
 
 const resolveLiteralValue = <T extends string>(value: SeoValue<T> | undefined): T | undefined => {
@@ -61,8 +62,11 @@ export function usePageSeo(
   })
 
   const ogType = () => resolveLiteralValue(options.ogType) ?? 'website'
+  const robots = () => resolveLiteralValue(options.robots)
   const languageTag = computed(() => getLocaleConfig(locale.value).language)
 
+  // Canonical + hreflang are owned solely by useLocaleHead({ seo: true }) in
+  // app.vue. We intentionally do NOT emit a second canonical link here.
   useSeoMeta({
     title,
     description,
@@ -71,15 +75,12 @@ export function usePageSeo(
     ogUrl: () => canonicalUrl.value,
     ogImage: () => ogImage.value,
     ogType,
+    robots,
     twitterCard: () => (ogImage.value ? 'summary_large_image' : 'summary'),
     twitterTitle: title,
     twitterDescription: description,
     twitterImage: () => ogImage.value,
   })
-
-  useHead(() => ({
-    link: canonicalUrl.value ? [{ rel: 'canonical', href: canonicalUrl.value }] : [],
-  }))
 
   useSchemaOrg([
     defineWebPage({

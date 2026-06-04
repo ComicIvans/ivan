@@ -1,20 +1,19 @@
 <script setup lang="ts">
+// This component is only mounted on desktop-class pointers without reduced
+// motion (gated by LayoutShell via useDesktopPointerSupport), so it does not
+// re-check those media queries itself.
 const glowRef = ref<HTMLElement | null>(null)
 
 let rafId = 0
-let mediaQuery: MediaQueryList | null = null
-let reducedMotionQuery: MediaQueryList | null = null
 let currentX = 0
 let currentY = 0
 let nextX = 0
 let nextY = 0
 
 const setGlowVisible = (visible: boolean) => {
-  if (!glowRef.value) {
-    return
+  if (glowRef.value) {
+    glowRef.value.style.opacity = visible ? '1' : '0'
   }
-
-  glowRef.value.style.opacity = visible ? '1' : '0'
 }
 
 const renderGlow = () => {
@@ -51,22 +50,8 @@ const queueRender = () => {
   rafId = window.requestAnimationFrame(renderGlow)
 }
 
-const updateGlowAvailability = () => {
-  const isEnabled = Boolean(mediaQuery?.matches) && !reducedMotionQuery?.matches
-
-  if (!glowRef.value) {
-    return
-  }
-
-  glowRef.value.hidden = !isEnabled
-
-  if (!isEnabled) {
-    setGlowVisible(false)
-  }
-}
-
 const handlePointerMove = (event: PointerEvent) => {
-  if (!glowRef.value || glowRef.value.hidden) {
+  if (!glowRef.value) {
     return
   }
 
@@ -93,14 +78,6 @@ const handleVisibilityChange = () => {
 }
 
 onMounted(() => {
-  mediaQuery = window.matchMedia('(min-width: 1024px) and (hover: hover) and (pointer: fine)')
-  reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-
-  mediaQuery.addEventListener('change', updateGlowAvailability)
-  reducedMotionQuery.addEventListener('change', updateGlowAvailability)
-
-  updateGlowAvailability()
-
   window.addEventListener('pointermove', handlePointerMove, { passive: true })
   window.addEventListener('pointerdown', handlePointerMove, { passive: true })
   window.addEventListener('blur', handlePointerLeave)
@@ -109,9 +86,6 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  mediaQuery?.removeEventListener('change', updateGlowAvailability)
-  reducedMotionQuery?.removeEventListener('change', updateGlowAvailability)
-
   window.removeEventListener('pointermove', handlePointerMove)
   window.removeEventListener('pointerdown', handlePointerMove)
   window.removeEventListener('blur', handlePointerLeave)
@@ -125,5 +99,5 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="glowRef" class="pointer-glow" aria-hidden="true" hidden />
+  <div ref="glowRef" class="pointer-glow" aria-hidden="true" style="opacity: 0" />
 </template>

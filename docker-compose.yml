@@ -4,10 +4,15 @@ services:
     container_name: ivan
     ports:
       - "127.0.0.1:3000:3000"
+    # Runtime secrets (SMTP_*) are read from .env at container start.
+    # Build-time vars (SITE_URL, NUXT_UMAMI_*) are baked into the image instead.
+    env_file:
+      - .env
     environment:
       NODE_ENV: "production"
       NITRO_PORT: "3000"
       HOST: "0.0.0.0"
+    # /data persists the Nuxt Content DB and the contact rate-limiter store.
     volumes:
       - ivan_data:/data
 

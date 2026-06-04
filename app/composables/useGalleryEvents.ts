@@ -15,6 +15,7 @@ export function useGalleryEvents(options: Ref<GalleryQueryOptions> = ref({})) {
       }),
     {
       watch: [locale],
+      getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key] ?? nuxtApp.static.data[key],
     }
   )
 
@@ -96,11 +97,15 @@ export function useGalleryEvents(options: Ref<GalleryQueryOptions> = ref({})) {
  * Composable to fetch a specific event by its slug
  * Loads Spanish content as base and merges with current locale translation
  */
-export function useGalleryEvent(eventSlug: Ref<string> | string) {
+export async function useGalleryEvent(eventSlug: Ref<string> | string) {
   const { locale } = useI18n({ useScope: 'global' })
   const slug = toRef(eventSlug)
 
-  const { data: event, status } = useAsyncData(
+  const {
+    data: event,
+    status,
+    error,
+  } = await useAsyncData(
     () => `gallery-event-${locale.value}-${slug.value}`,
     () => {
       if (!slug.value) {
@@ -113,12 +118,24 @@ export function useGalleryEvent(eventSlug: Ref<string> | string) {
     },
     {
       watch: [locale, slug],
+      getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key] ?? nuxtApp.static.data[key],
     }
   )
+
+  // A missing event must surface as a real 404 (the slug API throws 404), both on
+  // initial SSR and on subsequent client navigations/locale switches.
+  watchEffect(() => {
+    if (error.value) {
+      showError(
+        createError({ statusCode: 404, statusMessage: 'GALLERY_EVENT_NOT_FOUND', fatal: true })
+      )
+    }
+  })
 
   return {
     event,
     status,
+    error,
     isLoading: computed(() => status.value === 'pending'),
   }
 }

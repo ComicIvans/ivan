@@ -43,11 +43,6 @@ export function useGalleryImages() {
   const { t } = useI18n({ useScope: 'global' })
 
   /**
-   * Gets the photo src (pass-through, extension must be included)
-   */
-  const getPhotoSrc = (src: string) => src
-
-  /**
    * Gets the photo alt, generating it automatically if needed
    */
   const getPhotoAlt = (options: {
@@ -67,7 +62,6 @@ export function useGalleryImages() {
   }
 
   return {
-    getPhotoSrc,
     getPhotoAlt,
     getCoverAlt,
     generateImageAlt,

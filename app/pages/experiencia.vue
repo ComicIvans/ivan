@@ -1,6 +1,14 @@
 <script setup lang="ts">
-const { t, tm, rt } = useI18n({ useScope: 'global' })
+const { t } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
+
+defineI18nRoute({
+  paths: {
+    es: '/experiencia',
+    en: '/experience',
+    de: '/erfahrung',
+  },
+})
 
 usePageSeo('experience.title', 'seo.pages.experience')
 
@@ -23,27 +31,17 @@ interface Experience {
   current: boolean
 }
 
-const experiences = computed<Experience[]>(() => {
-  const rolesData = tm('experience.roles') as unknown
-  const roles = Array.isArray(rolesData) ? rolesData : []
-
-  return roles.map((role: unknown) => {
-    const roleData = (role as Record<string, unknown>) || {}
-    const id = getI18nStaticValue(roleData.id)
-    const title = getI18nStaticValue(roleData.title)
-    const org = getI18nStaticValue(roleData.organization)
-    const period = getI18nStaticValue(roleData.period)
-    const description = getI18nStaticValue(roleData.description)
-    return {
-      id,
-      title: rt(title),
-      org: rt(org),
-      period: rt(period),
-      description: rt(description),
-      icon: roleIcons[id] || 'i-tabler-briefcase',
-      current: currentRoles.includes(id),
-    }
-  })
+const experiences = useI18nList<Experience>('experience.roles', ({ raw, value, tr }) => {
+  const id = value(raw.id)
+  return {
+    id,
+    title: tr(raw.title),
+    org: tr(raw.organization),
+    period: tr(raw.period),
+    description: tr(raw.description),
+    icon: roleIcons[id] || 'i-tabler-briefcase',
+    current: currentRoles.includes(id),
+  }
 })
 
 // Find current role index to mark completed ones
@@ -65,7 +63,7 @@ const timelineItems = computed(() => {
 </script>
 
 <template>
-  <section role="region" :aria-label="t('experience.title')" class="section-enter">
+  <section :aria-label="t('experience.title')" class="section-enter">
     <!-- Header -->
     <div class="mb-8 text-center">
       <h1 class="text-primary-500 text-4xl font-bold lg:text-5xl">

@@ -1,5 +1,13 @@
 <script setup lang="ts">
-const { t, tm, rt } = useI18n({ useScope: 'global' })
+const { t } = useI18n({ useScope: 'global' })
+
+defineI18nRoute({
+  paths: {
+    es: '/proyectos',
+    en: '/projects',
+    de: '/projekte',
+  },
+})
 
 usePageSeo('projects.title', 'seo.pages.projects')
 
@@ -18,36 +26,23 @@ const techIcons: Record<string, string> = {
   node: 'i-simple-icons-nodedotjs',
 }
 
-const primaryTech = computed(() => {
-  const itemsData = tm('projects.stack.primary.items') as unknown
-  const items = Array.isArray(itemsData) ? itemsData : []
-  return items.map((item: unknown) => {
-    const itemData = (item as Record<string, unknown>) || {}
-    const id = getI18nStaticValue(itemData.id)
-    const name = getI18nStaticValue(itemData.name)
-    const description = getI18nStaticValue(itemData.description)
-    return {
-      id,
-      name: rt(name),
-      description: rt(description),
-      icon: techIcons[id] || 'i-tabler-code',
-    }
-  })
+const primaryTech = useI18nList('projects.stack.primary.items', ({ raw, value, tr }) => {
+  const id = value(raw.id)
+  return {
+    id,
+    name: tr(raw.name),
+    description: tr(raw.description),
+    icon: techIcons[id] || 'i-tabler-code',
+  }
 })
 
-const secondaryTech = computed(() => {
-  const itemsData = tm('projects.stack.secondary.items') as unknown
-  const items = Array.isArray(itemsData) ? itemsData : []
-  return items.map((item: unknown) => {
-    const itemData = (item as Record<string, unknown>) || {}
-    const id = getI18nStaticValue(itemData.id)
-    const name = getI18nStaticValue(itemData.name)
-    return {
-      id,
-      name: rt(name),
-      icon: techIcons[id] || 'i-tabler-code',
-    }
-  })
+const secondaryTech = useI18nList('projects.stack.secondary.items', ({ raw, value, tr }) => {
+  const id = value(raw.id)
+  return {
+    id,
+    name: tr(raw.name),
+    icon: techIcons[id] || 'i-tabler-code',
+  }
 })
 
 const projectIcons: Record<string, string> = {
@@ -57,39 +52,32 @@ const projectIcons: Record<string, string> = {
   ceebi: 'i-tabler-calendar-event',
 }
 
+// Language-neutral technology / category tags shown across all locales.
 const projectTags: Record<string, string[]> = {
   server: ['Linux', 'Docker', 'Self-hosted', 'Nginx'],
   firmas: ['Python', 'Vue.js', 'Full-stack'],
-  'win-ens': ['PowerShell', 'ENS', 'Windows', 'Ciberseguridad'],
-  ceebi: ['Vue.js', 'Web', 'Eventos'],
+  'win-ens': ['PowerShell', 'ENS', 'Windows', 'Cybersecurity'],
+  ceebi: ['Vue.js', 'Web', 'Events'],
 }
 
-const projects = computed(() => {
-  const itemsData = tm('projects.list.items') as unknown
-  const items = Array.isArray(itemsData) ? itemsData : []
+const projects = useI18nList('projects.list.items', ({ raw, value, tr }) => {
+  const id = value(raw.id)
+  const link = value(raw.link)
 
-  return items.map((item: unknown) => {
-    const itemData = (item as Record<string, unknown>) || {}
-    const id = getI18nStaticValue(itemData.id)
-    const title = getI18nStaticValue(itemData.title)
-    const description = getI18nStaticValue(itemData.description)
-    const link = getI18nStaticValue(itemData.link)
-
-    return {
-      id,
-      title: rt(title),
-      description: rt(description),
-      link: link.startsWith('http') ? link : `https://${link}`,
-      linkText: link,
-      icon: projectIcons[id] || 'i-tabler-folder-code',
-      tags: projectTags[id] || [],
-    }
-  })
+  return {
+    id,
+    title: tr(raw.title),
+    description: tr(raw.description),
+    link: link.startsWith('http') ? link : `https://${link}`,
+    linkText: link,
+    icon: projectIcons[id] || 'i-tabler-folder-code',
+    tags: projectTags[id] || [],
+  }
 })
 </script>
 
 <template>
-  <section role="region" :aria-label="t('projects.title')" class="section-enter">
+  <section :aria-label="t('projects.title')" class="section-enter">
     <!-- Header -->
     <div class="mb-8 text-center">
       <h1 class="text-primary-500 text-4xl font-bold lg:text-5xl">

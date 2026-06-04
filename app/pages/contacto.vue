@@ -1,89 +1,44 @@
 <script setup lang="ts">
+import type { FormSubmitEvent } from '@nuxt/ui'
 import { socialProfiles } from '~~/shared/constants/profile'
+import { contactFormSchema, type ContactFormData } from '~~/shared/utils/contactValidation'
+import { CONTACT_FIELD_LIMITS } from '~~/shared/utils/contactShared'
 
 const { t } = useI18n({ useScope: 'global' })
 const toast = useToast()
 
+defineI18nRoute({
+  paths: {
+    es: '/contacto',
+    en: '/contact',
+    de: '/kontakt',
+  },
+})
+
 usePageSeo('contactPage.seo.title', 'contactPage.seo.description')
 
-const form = reactive({
+const form = reactive<ContactFormData>({
   name: '',
   email: '',
   subject: '',
   message: '',
   website: '',
-})
-
-const touched = reactive({
-  name: false,
-  email: false,
-  subject: false,
-  message: false,
+  startedAt: undefined,
 })
 
 const isSubmitting = ref(false)
-const formSubmitted = ref(false)
+
+onMounted(() => {
+  form.startedAt = Date.now()
+})
 
 const apiErrorMessages = computed<Record<string, string>>(() => ({
-  CONTACT_INVALID_EMAIL: t('contactPage.form.errors.emailInvalid'),
-  CONTACT_MESSAGE_LENGTH: t('contactPage.form.apiErrors.messageLength'),
-  CONTACT_MISSING_FIELDS: t('contactPage.form.apiErrors.missingFields'),
-  CONTACT_NAME_LENGTH: t('contactPage.form.apiErrors.nameLength'),
+  CONTACT_VALIDATION: t('contactPage.form.apiErrors.missingFields'),
   CONTACT_PROHIBITED_CONTENT: t('contactPage.form.apiErrors.prohibitedContent'),
   CONTACT_RATE_LIMITED: t('contactPage.form.apiErrors.rateLimited'),
   CONTACT_SEND_FAILED: t('contactPage.form.apiErrors.sendFailed'),
   CONTACT_SERVICE_UNAVAILABLE: t('contactPage.form.apiErrors.serviceUnavailable'),
-  CONTACT_SUBJECT_LENGTH: t('contactPage.form.apiErrors.subjectLength'),
 }))
-
-const validations = computed(() => ({
-  name: {
-    valid: form.name.trim().length >= 2 && form.name.trim().length <= 100,
-    error:
-      form.name.trim().length === 0
-        ? t('contactPage.form.errors.nameRequired')
-        : form.name.trim().length < 2
-          ? t('contactPage.form.errors.nameMin')
-          : t('contactPage.form.errors.nameMax'),
-  },
-  email: {
-    valid: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim()),
-    error:
-      form.email.trim().length === 0
-        ? t('contactPage.form.errors.emailRequired')
-        : t('contactPage.form.errors.emailInvalid'),
-  },
-  subject: {
-    valid: form.subject.trim().length >= 3 && form.subject.trim().length <= 200,
-    error:
-      form.subject.trim().length === 0
-        ? t('contactPage.form.errors.subjectRequired')
-        : form.subject.trim().length < 3
-          ? t('contactPage.form.errors.subjectMin')
-          : t('contactPage.form.errors.subjectMax'),
-  },
-  message: {
-    valid: form.message.trim().length >= 10 && form.message.trim().length <= 5000,
-    error:
-      form.message.trim().length === 0
-        ? t('contactPage.form.errors.messageRequired')
-        : form.message.trim().length < 10
-          ? t('contactPage.form.errors.messageMin')
-          : t('contactPage.form.errors.messageMax'),
-  },
-}))
-
-function shouldShowError(field: keyof typeof touched): boolean {
-  return (touched[field] || formSubmitted.value) && !validations.value[field].valid
-}
-
-function getFieldError(field: keyof typeof touched): string | undefined {
-  return shouldShowError(field) ? validations.value[field].error : undefined
-}
-
-const isFormValid = computed(() => {
-  return Object.values(validations.value).every((v) => v.valid)
-})
 
 function resolveContactErrorMessage(error: unknown): string {
   const fetchError = error as {
@@ -112,17 +67,8 @@ function resolveContactErrorMessage(error: unknown): string {
   return t('contactPage.form.errorGeneric')
 }
 
-async function handleSubmit() {
-  formSubmitted.value = true
-
-  if (!isFormValid.value || isSubmitting.value) {
-    const firstInvalidField = Object.keys(validations.value).find(
-      (key) => !validations.value[key as keyof typeof validations.value].valid
-    )
-    if (firstInvalidField) {
-      const element = document.getElementById(`contact-${firstInvalidField}`)
-      element?.focus()
-    }
+async function onSubmit(event: FormSubmitEvent<ContactFormData>) {
+  if (isSubmitting.value) {
     return
   }
 
@@ -131,13 +77,7 @@ async function handleSubmit() {
   try {
     await $fetch('/api/contact', {
       method: 'POST',
-      body: {
-        name: form.name.trim(),
-        email: form.email.trim(),
-        subject: form.subject.trim(),
-        message: form.message.trim(),
-        website: form.website,
-      },
+      body: event.data,
     })
 
     toast.add({
@@ -151,8 +91,7 @@ async function handleSubmit() {
     form.subject = ''
     form.message = ''
     form.website = ''
-    formSubmitted.value = false
-    Object.keys(touched).forEach((key) => (touched[key as keyof typeof touched] = false))
+    form.startedAt = Date.now()
   } catch (error: unknown) {
     toast.add({
       title: resolveContactErrorMessage(error),
@@ -166,7 +105,7 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <section role="region" :aria-label="t('contactPage.title')" class="section-enter">
+  <section :aria-label="t('contactPage.title')" class="section-enter">
     <div class="mx-auto max-w-2xl">
       <!-- Header -->
       <div class="mb-8 text-center">
@@ -180,11 +119,17 @@ async function handleSubmit() {
 
       <!-- Contact Form -->
       <UCard>
-        <form class="space-y-6" aria-describedby="form-description" @submit.prevent="handleSubmit">
+        <UForm
+          :schema="contactFormSchema"
+          :state="form"
+          class="space-y-6"
+          aria-describedby="form-description"
+          @submit="onSubmit"
+        >
           <p id="form-description" class="sr-only">{{ t('contactPage.subtitle') }}</p>
 
           <!-- Honeypot field -->
-          <div class="sr-only" aria-hidden="true">
+          <div class="hidden" aria-hidden="true">
             <label for="website">Website</label>
             <input
               id="website"
@@ -197,7 +142,7 @@ async function handleSubmit() {
           </div>
 
           <!-- Name -->
-          <UFormField :label="t('contactPage.form.name') + ' *'" :error="getFieldError('name')">
+          <UFormField name="name" :label="t('contactPage.form.name') + ' *'">
             <UInput
               id="contact-name"
               v-model="form.name"
@@ -205,19 +150,14 @@ async function handleSubmit() {
               type="text"
               :placeholder="t('contactPage.form.namePlaceholder')"
               autocomplete="name"
-              minlength="2"
-              maxlength="100"
-              required
+              :maxlength="CONTACT_FIELD_LIMITS.name.max"
               :disabled="isSubmitting"
-              :color="shouldShowError('name') ? 'error' : undefined"
-              :aria-invalid="shouldShowError('name')"
               class="w-full"
-              @blur="touched.name = true"
             />
           </UFormField>
 
           <!-- Email -->
-          <UFormField :label="t('contactPage.form.email') + ' *'" :error="getFieldError('email')">
+          <UFormField name="email" :label="t('contactPage.form.email') + ' *'">
             <UInput
               id="contact-email"
               v-model="form.email"
@@ -226,21 +166,14 @@ async function handleSubmit() {
               :placeholder="t('contactPage.form.emailPlaceholder')"
               autocomplete="email"
               inputmode="email"
-              maxlength="254"
-              required
+              :maxlength="CONTACT_FIELD_LIMITS.emailMax"
               :disabled="isSubmitting"
-              :color="shouldShowError('email') ? 'error' : undefined"
-              :aria-invalid="shouldShowError('email')"
               class="w-full"
-              @blur="touched.email = true"
             />
           </UFormField>
 
           <!-- Subject -->
-          <UFormField
-            :label="t('contactPage.form.subject') + ' *'"
-            :error="getFieldError('subject')"
-          >
+          <UFormField name="subject" :label="t('contactPage.form.subject') + ' *'">
             <UInput
               id="contact-subject"
               v-model="form.subject"
@@ -248,48 +181,39 @@ async function handleSubmit() {
               type="text"
               :placeholder="t('contactPage.form.subjectPlaceholder')"
               autocomplete="off"
-              minlength="3"
-              maxlength="200"
-              required
+              :maxlength="CONTACT_FIELD_LIMITS.subject.max"
               :disabled="isSubmitting"
-              :color="shouldShowError('subject') ? 'error' : undefined"
-              :aria-invalid="shouldShowError('subject')"
               class="w-full"
-              @blur="touched.subject = true"
             />
           </UFormField>
 
           <!-- Message -->
-          <UFormField
-            :label="t('contactPage.form.message') + ' *'"
-            :error="getFieldError('message')"
-          >
+          <UFormField name="message" :label="t('contactPage.form.message') + ' *'">
             <UTextarea
               id="contact-message"
               v-model="form.message"
               name="message"
               :placeholder="t('contactPage.form.messagePlaceholder')"
               :rows="5"
-              minlength="10"
-              maxlength="5000"
+              :maxlength="CONTACT_FIELD_LIMITS.message.max"
               autocomplete="off"
               spellcheck="true"
-              required
               :disabled="isSubmitting"
-              :color="shouldShowError('message') ? 'error' : undefined"
-              :aria-invalid="shouldShowError('message')"
               class="w-full"
-              @blur="touched.message = true"
             />
             <template #hint>
               <span
-                :class="form.message.trim().length < 10 ? 'text-error' : 'text-muted'"
+                :class="
+                  form.message.trim().length < CONTACT_FIELD_LIMITS.message.min
+                    ? 'text-error'
+                    : 'text-muted'
+                "
                 aria-live="polite"
               >
                 {{
                   t('contactPage.form.messageLength', {
                     count: form.message.trim().length,
-                    max: 5000,
+                    max: CONTACT_FIELD_LIMITS.message.max,
                   })
                 }}
               </span>
@@ -312,7 +236,7 @@ async function handleSubmit() {
           <p class="text-dimmed text-center text-sm">
             {{ t('contactPage.form.privacyNote') }}
           </p>
-        </form>
+        </UForm>
       </UCard>
 
       <!-- Alternative Contact -->

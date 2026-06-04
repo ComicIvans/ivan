@@ -6,8 +6,6 @@ export interface GalleryEvent {
   date: string
   duration?: string
   description: string
-  about?: string
-  participation?: string
   links?: Array<{
     label: string
     url: string

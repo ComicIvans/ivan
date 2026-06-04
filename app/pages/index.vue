@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { socialProfiles } from '~~/shared/constants/profile'
 
-const { t, tm, rt } = useI18n({ useScope: 'global' })
+const { t } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
 
 usePageSeo('seo.pageTitle', 'seo.description')
@@ -17,28 +17,19 @@ const highlightIcons: Record<string, string> = {
   events: 'i-tabler-calendar-event',
 }
 
-const highlights = computed(() => {
-  const itemsData = tm('home.highlights.items') as unknown
-  const items = Array.isArray(itemsData) ? itemsData : []
-
-  return items.map((item: unknown) => {
-    const itemData = (item as Record<string, unknown>) || {}
-    const id = getI18nStaticValue(itemData.id)
-    const title = getI18nStaticValue(itemData.title)
-    const description = getI18nStaticValue(itemData.description)
-
-    return {
-      id,
-      title: rt(title),
-      description: rt(description),
-      icon: highlightIcons[id] || 'i-tabler-star',
-    }
-  })
+const highlights = useI18nList('home.highlights.items', ({ raw, value, tr }) => {
+  const id = value(raw.id)
+  return {
+    id,
+    title: tr(raw.title),
+    description: tr(raw.description),
+    icon: highlightIcons[id] || 'i-tabler-star',
+  }
 })
 </script>
 
 <template>
-  <section role="region" :aria-label="t('nav.home')" class="section-enter">
+  <section :aria-label="t('nav.home')" class="section-enter">
     <!-- Hero Section -->
     <div class="home-hero-panel py-12">
       <div class="flex flex-col items-center gap-8 text-center lg:flex-row lg:text-left">

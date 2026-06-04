@@ -31,11 +31,19 @@ const rightsItems = computed(() => {
   return items.map((item) => rt(item))
 })
 
-usePageSeo('legal.title', 'seo.pages.legal')
+defineI18nRoute({
+  paths: {
+    es: '/legal',
+    en: '/legal',
+    de: '/impressum',
+  },
+})
+
+usePageSeo('legal.title', 'seo.pages.legal', { robots: 'noindex, follow' })
 </script>
 
 <template>
-  <section role="region" :aria-label="t('legal.title')" class="section-enter">
+  <section :aria-label="t('legal.title')" class="section-enter">
     <UCard class="mx-auto max-w-4xl">
       <div class="prose prose-neutral dark:prose-invert max-w-none">
         <h1 class="text-primary-500 text-2xl font-bold">{{ t('legal.title') }}</h1>

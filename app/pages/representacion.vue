@@ -1,5 +1,13 @@
 <script setup lang="ts">
-const { t, tm, rt } = useI18n({ useScope: 'global' })
+const { t } = useI18n({ useScope: 'global' })
+
+defineI18nRoute({
+  paths: {
+    es: '/representacion',
+    en: '/representation',
+    de: '/vertretung',
+  },
+})
 
 usePageSeo('representation.title', 'seo.pages.representation')
 
@@ -23,28 +31,22 @@ interface RepresentationItem {
   icon: string
 }
 
-const representationData = computed<RepresentationItem[]>(() => {
-  const timelineData = tm('representation.timeline') as unknown
-  const timeline = Array.isArray(timelineData) ? timelineData : []
-
-  return timeline.map((item: unknown) => {
-    const itemData = (item as Record<string, unknown>) || {}
-    const id = getI18nStaticValue(itemData.id)
-    const date = getI18nStaticValue(itemData.date)
-    const title = getI18nStaticValue(itemData.title)
-    const description = getI18nStaticValue(itemData.description)
-    const highlights = (itemData.highlights as unknown[]) || []
+const representationData = useI18nList<RepresentationItem>(
+  'representation.timeline',
+  ({ raw, value, tr }) => {
+    const id = value(raw.id)
+    const highlights = (raw.highlights as unknown[]) || []
 
     return {
       id,
-      date: rt(date),
-      title: rt(title),
-      description: rt(description),
-      highlights: highlights.map((h) => rt(getI18nStaticValue(h))),
+      date: tr(raw.date),
+      title: tr(raw.title),
+      description: tr(raw.description),
+      highlights: highlights.map((highlight) => tr(highlight)),
       icon: itemIcons[id] || 'i-tabler-point',
     }
-  })
-})
+  }
+)
 
 // Timeline items in UTimeline format
 const timelineItems = computed(() => {
@@ -59,7 +61,7 @@ const timelineItems = computed(() => {
 </script>
 
 <template>
-  <section role="region" :aria-label="t('representation.title')" class="section-enter">
+  <section :aria-label="t('representation.title')" class="section-enter">
     <!-- Header -->
     <div class="mb-8 text-center">
       <h1 class="text-primary-500 text-4xl font-bold lg:text-5xl">

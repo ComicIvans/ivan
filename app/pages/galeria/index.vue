@@ -2,7 +2,15 @@
 const { t, locale } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
 
-const { getPhotoSrc, getCoverAlt } = useGalleryImages()
+const { getCoverAlt } = useGalleryImages()
+
+defineI18nRoute({
+  paths: {
+    es: '/galeria',
+    en: '/gallery',
+    de: '/galerie',
+  },
+})
 
 usePageSeo('gallery.title', 'seo.pages.gallery')
 
@@ -79,7 +87,7 @@ function formatDate(dateStr: string) {
 </script>
 
 <template>
-  <section role="region" :aria-label="t('gallery.title')" class="section-enter">
+  <section :aria-label="t('gallery.title')" class="section-enter">
     <!-- Header -->
     <div class="mb-8 text-center">
       <h1 class="text-primary-500 text-4xl font-bold lg:text-5xl">
@@ -200,7 +208,7 @@ function formatDate(dateStr: string) {
             <div class="bg-elevated relative aspect-video w-full overflow-hidden">
               <template v-if="event.cover">
                 <NuxtImg
-                  :src="getPhotoSrc(event.cover.src)"
+                  :src="event.cover.src"
                   :alt="getCoverAlt(event.title, event.cover.alt)"
                   class="motion-link-media size-full object-cover"
                   loading="lazy"
@@ -219,7 +227,12 @@ function formatDate(dateStr: string) {
                     aria-hidden="true"
                   />
                 </div>
-                <UBadge color="neutral" size="sm" class="absolute right-2 bottom-2">
+                <UBadge
+                  v-if="event.photos.length === 0"
+                  color="neutral"
+                  size="sm"
+                  class="absolute right-2 bottom-2"
+                >
                   {{ t('gallery.photoSoon') }}
                 </UBadge>
               </template>
