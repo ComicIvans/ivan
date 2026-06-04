@@ -67,6 +67,13 @@ load_env_file ".env"
 require_command docker
 require_command ssh
 
+# Log in to GHCR locally (needed to push a private image). Uses a here-string so
+# the token never appears in the process list.
+if [ -n "${GHCR_USERNAME:-}" ] && [ -n "${GHCR_TOKEN:-}" ]; then
+  log "GHCR login (local)"
+  docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin <<<"$GHCR_TOKEN"
+fi
+
 log "Build and push: $IMAGE"
 build_and_push_image
 
@@ -75,6 +82,14 @@ ssh "$VPS_HOST" bash -s <<EOF
 set -euo pipefail
 
 cd "$REMOTE_DIR"
+
+if [ -n '${GHCR_USERNAME:-}' ] && [ -n '${GHCR_TOKEN:-}' ]; then
+  echo "== GHCR login (VPS) =="
+  __ghcr_user='${GHCR_USERNAME:-}'
+  __ghcr_token='${GHCR_TOKEN:-}'
+  docker login ghcr.io -u "\$__ghcr_user" --password-stdin <<<"\$__ghcr_token"
+  unset __ghcr_user __ghcr_token
+fi
 
 echo "== Recreate de contenedores =="
 docker compose up -d --pull always --remove-orphans
