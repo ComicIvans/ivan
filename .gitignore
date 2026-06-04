@@ -17,6 +17,12 @@ logs
 .DS_Store
 .fleet
 .idea
+.claude
+
+# Working/process docs (not part of the codebase)
+PLAN.md
+recommendations.md
+code_review.md
 
 # Local env files
 .env
