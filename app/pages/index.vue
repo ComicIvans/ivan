@@ -1,21 +1,11 @@
 <script setup lang="ts">
 import { socialProfiles } from '~~/shared/constants/profile'
+import { highlightIcons } from '~/constants/icons'
 
 const { t } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
 
 usePageSeo('seo.pageTitle', 'seo.description')
-
-defineOgImage('NuxtSeoSatori', {
-  title: t('seo.pageTitle'),
-  description: t('seo.description'),
-})
-
-const highlightIcons: Record<string, string> = {
-  governance: 'i-tabler-building-bank',
-  infrastructure: 'i-tabler-server-2',
-  events: 'i-tabler-calendar-event',
-}
 
 const highlights = useI18nList('home.highlights.items', ({ raw, value, tr }) => {
   const id = value(raw.id)
@@ -73,26 +63,28 @@ const highlights = useI18nList('home.highlights.items', ({ raw, value, tr }) => 
             >
               {{ t('home.cta.contact') }}
             </UButton>
-            <UButton
-              :to="socialProfiles.linkedin"
-              target="_blank"
-              color="neutral"
-              variant="outline"
-              icon="i-tabler-brand-linkedin"
-              :aria-label="t('contact.linkedinLabel')"
-            >
-              LinkedIn
-            </UButton>
-            <UButton
-              :to="socialProfiles.instagram"
-              target="_blank"
-              color="neutral"
-              variant="outline"
-              icon="i-tabler-brand-instagram"
-              :aria-label="t('contact.instagramLabel')"
-            >
-              Instagram
-            </UButton>
+            <div class="flex gap-3">
+              <UButton
+                :to="socialProfiles.linkedin"
+                target="_blank"
+                color="neutral"
+                variant="outline"
+                icon="i-tabler-brand-linkedin"
+                :aria-label="t('contact.linkedinLabel')"
+              >
+                LinkedIn
+              </UButton>
+              <UButton
+                :to="socialProfiles.instagram"
+                target="_blank"
+                color="neutral"
+                variant="outline"
+                icon="i-tabler-brand-instagram"
+                :aria-label="t('contact.instagramLabel')"
+              >
+                Instagram
+              </UButton>
+            </div>
           </div>
         </div>
       </div>
@@ -106,7 +98,12 @@ const highlights = useI18nList('home.highlights.items', ({ raw, value, tr }) => 
         {{ t('home.highlights.title') }}
       </h2>
       <div class="section-stagger grid grid-cols-1 gap-6 md:grid-cols-3">
-        <UCard v-for="(highlight, index) in highlights" :key="index" class="motion-card">
+        <UCard
+          v-for="(highlight, index) in highlights"
+          :key="index"
+          :style="{ '--stagger-index': index }"
+          class="motion-card"
+        >
           <article class="flex flex-col items-center text-center">
             <div
               class="bg-primary-500/10 mb-4 flex size-16 items-center justify-center rounded-full"

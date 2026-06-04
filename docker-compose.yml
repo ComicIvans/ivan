@@ -12,6 +12,10 @@ services:
       NODE_ENV: "production"
       NITRO_PORT: "3000"
       HOST: "0.0.0.0"
+      # Force search-engine indexability at runtime, independent of the build's
+      # NODE_ENV. Without this the baked default (indexable only when NODE_ENV is
+      # production at build time) can leave the deployed site as noindex.
+      NUXT_SITE_INDEXABLE: "true"
     # /data persists the Nuxt Content DB and the contact rate-limiter store.
     volumes:
       - ivan_data:/data

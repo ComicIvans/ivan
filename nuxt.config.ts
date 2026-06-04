@@ -198,14 +198,14 @@ export default defineNuxtConfig({
     indexable: !isDev,
   },
 
-  // OG image defaults
+  // OG image defaults. Runtime generation (Satori) is required because routes
+  // are SSR and not prerendered; zeroRuntime would emit no og:image at all.
   ogImage: {
     defaults: {
       width: 1200,
       height: 630,
     },
     enabled: true,
-    zeroRuntime: true,
   },
 
   // Sitemap configuration

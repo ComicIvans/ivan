@@ -5,9 +5,10 @@ const GalleryLightbox = defineAsyncComponent(
   () => import('~/components/gallery/GalleryLightbox.vue')
 )
 
-const { t, locale } = useI18n({ useScope: 'global' })
+const { t } = useI18n({ useScope: 'global' })
 const route = useRoute()
 const localePath = useLocalePath()
+const { formatDate } = useDateFormatter()
 
 const { getPhotoAlt, getCoverAlt } = useGalleryImages()
 const {
@@ -31,10 +32,7 @@ const { event, isLoading } = await useGalleryEvent(eventSlug)
 
 usePageSeo(
   () => event.value?.seo?.title || event.value?.title || t('gallery.title'),
-  () => event.value?.seo?.description || event.value?.description || t('seo.pages.gallery'),
-  {
-    ogImage: () => event.value?.cover?.src,
-  }
+  () => event.value?.seo?.description || event.value?.description || t('seo.pages.gallery')
 )
 
 useSchemaOrg([
@@ -113,15 +111,6 @@ watch(isModalOpen, (open, wasOpen) => {
     nextTick(() => lastModalTrigger?.focus())
   }
 })
-
-function formatDate(dateStr: string) {
-  const date = new Date(dateStr)
-  return new Intl.DateTimeFormat(locale.value, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(date)
-}
 
 function getEventIcon() {
   return event.value?.icon || 'i-tabler-photo'

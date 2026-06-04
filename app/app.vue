@@ -57,12 +57,6 @@ useSeoMeta({
   themeColor: '#f87171',
 })
 
-defineOgImage('NuxtSeoSatori', {
-  siteLogo: '/favicon.ico',
-  theme: '#f87171',
-  colorMode: 'light',
-})
-
 onMounted(() => {
   pageTransitionsEnabled.value = true
 

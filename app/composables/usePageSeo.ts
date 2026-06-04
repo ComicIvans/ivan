@@ -65,6 +65,17 @@ export function usePageSeo(
   const robots = () => resolveLiteralValue(options.robots)
   const languageTag = computed(() => getLocaleConfig(locale.value).language)
 
+  // OG image: when the page supplies a real image (e.g. a gallery cover) emit it
+  // directly via useSeoMeta below. Otherwise render the branded Satori template
+  // with this page's own title/description (the og-image module then owns the
+  // og:image / twitter:image tags).
+  if (!ogImage.value) {
+    defineOgImage('OgPortfolio', {
+      title: title() ?? '',
+      description: description() ?? '',
+    })
+  }
+
   // Canonical + hreflang are owned solely by useLocaleHead({ seo: true }) in
   // app.vue. We intentionally do NOT emit a second canonical link here.
   useSeoMeta({
@@ -76,7 +87,7 @@ export function usePageSeo(
     ogImage: () => ogImage.value,
     ogType,
     robots,
-    twitterCard: () => (ogImage.value ? 'summary_large_image' : 'summary'),
+    twitterCard: 'summary_large_image',
     twitterTitle: title,
     twitterDescription: description,
     twitterImage: () => ogImage.value,
