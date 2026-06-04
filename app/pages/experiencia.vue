@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { roleIcons } from '~/constants/icons'
+
 const { t } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
 
@@ -11,13 +13,6 @@ defineI18nRoute({
 })
 
 usePageSeo('experience.title', 'seo.pages.experience')
-
-const roleIcons: Record<string, string> = {
-  'creup-digitalization': 'i-tabler-server-2',
-  'enem-treasurer': 'i-tabler-calculator',
-  'ugr-council': 'i-tabler-building-bank',
-  'dge-treasurer': 'i-tabler-coins',
-}
 
 const currentRoles = ['creup-digitalization']
 

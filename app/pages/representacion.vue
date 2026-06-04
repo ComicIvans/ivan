@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { representationIcons } from '~/constants/icons'
+
 const { t } = useI18n({ useScope: 'global' })
 
 defineI18nRoute({
@@ -10,17 +12,6 @@ defineI18nRoute({
 })
 
 usePageSeo('representation.title', 'seo.pages.representation')
-
-// Specific icons for each milestone
-const itemIcons: Record<string, string> = {
-  'start-2020': 'i-tabler-rocket',
-  'end-first-term': 'i-tabler-refresh',
-  'external-relations': 'i-tabler-world',
-  'academic-vicecoord': 'i-tabler-school',
-  'creup-digitalization': 'i-tabler-server-2',
-  'dge-advisor': 'i-tabler-shield-check',
-  'upv-delegate': 'i-tabler-users',
-}
 
 interface RepresentationItem {
   id: string
@@ -43,7 +34,7 @@ const representationData = useI18nList<RepresentationItem>(
       title: tr(raw.title),
       description: tr(raw.description),
       highlights: highlights.map((highlight) => tr(highlight)),
-      icon: itemIcons[id] || 'i-tabler-point',
+      icon: representationIcons[id] || 'i-tabler-point',
     }
   }
 )

@@ -122,15 +122,12 @@ export async function useGalleryEvent(eventSlug: Ref<string> | string) {
     }
   )
 
-  // A missing event must surface as a real 404 (the slug API throws 404), both on
-  // initial SSR and on subsequent client navigations/locale switches.
-  watchEffect(() => {
-    if (error.value) {
-      showError(
-        createError({ statusCode: 404, statusMessage: 'GALLERY_EVENT_NOT_FOUND', fatal: true })
-      )
-    }
-  })
+  // A missing event must surface as a real 404 (the slug API throws 404). The
+  // composable is awaited in the page, so throwing here renders Nuxt's error
+  // page with a 404 status on both SSR and client navigation.
+  if (error.value) {
+    throw createError({ statusCode: 404, statusMessage: 'GALLERY_EVENT_NOT_FOUND' })
+  }
 
   return {
     event,

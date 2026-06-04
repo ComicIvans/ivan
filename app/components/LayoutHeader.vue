@@ -1,17 +1,10 @@
 <script setup lang="ts">
-import { defineAsyncComponent, nextTick, type CSSProperties } from 'vue'
-import {
-  getLocaleConfig,
-  getLocaleSwitchPath,
-  localesConfig,
-  loadJokes,
-  type LocaleCode,
-} from '~/utils/locales'
+import { defineAsyncComponent } from 'vue'
+import { loadJokes } from '~/utils/locales'
 
 const { t, locale } = useI18n({ useScope: 'global' })
 const colorMode = useColorMode()
 const localePath = useLocalePath()
-const switchLocalePath = useSwitchLocalePath()
 const route = useRoute()
 const isClientReady = ref(false)
 
@@ -20,17 +13,7 @@ const loadedJokesLocale = ref<string | null>(null)
 const jokeModalOpen = ref(false)
 const currentJoke = ref('')
 const mobileMenuOpen = ref(false)
-const desktopLocaleMenuOpen = ref(false)
-const mobileLocaleMenuOpen = ref(false)
-const desktopLocaleMenuRef = ref<HTMLElement | null>(null)
-const mobileLocaleMenuRef = ref<HTMLElement | null>(null)
-const desktopNavRef = ref<HTMLElement | null>(null)
-const mobileNavRef = ref<HTMLElement | null>(null)
 const HeaderJokeModal = defineAsyncComponent(() => import('~/components/HeaderJokeModal.vue'))
-const desktopTabRefs = new Map<string, HTMLElement>()
-const mobileTabRefs = new Map<string, HTMLElement>()
-const desktopActiveIndicatorStyle = ref<Partial<CSSProperties> | null>(null)
-const mobileActiveIndicatorStyle = ref<Partial<CSSProperties> | null>(null)
 
 const tabs = computed(() => [
   { label: t('nav.home'), icon: 'i-tabler-home', to: localePath('/'), basePath: '/' },
@@ -73,7 +56,6 @@ const tabs = computed(() => [
 ])
 
 const isDark = computed(() => colorMode.value === 'dark')
-const currentLocale = computed(() => getLocaleConfig(locale.value))
 const themeToggleIcon = computed(() => {
   if (!isClientReady.value) {
     return 'i-tabler-moon'
@@ -96,23 +78,6 @@ const normalizeRoutePath = (path: string) => {
   return path
 }
 
-const switchLocale = (code: string) => {
-  if (code !== locale.value) {
-    const targetLocale = code as LocaleCode
-    const localizedPath = switchLocalePath(targetLocale)
-    const fallbackPath = getLocaleSwitchPath(route.fullPath, targetLocale)
-
-    navigateTo(localizedPath && localizedPath !== route.fullPath ? localizedPath : fallbackPath)
-  }
-}
-
-const selectedLocale = computed({
-  get: () => locale.value,
-  set: (code: string) => {
-    switchLocale(code)
-  },
-})
-
 const isActiveRoute = (basePath: string) => {
   const localizedBasePath = normalizeRoutePath(localePath(basePath))
   const currentPath = normalizeRoutePath(route.path)
@@ -128,62 +93,23 @@ const activeTabBasePath = computed(() => {
   return tabs.value.find((tab) => isActiveRoute(tab.basePath))?.basePath ?? null
 })
 
-const setDesktopTabRef = (basePath: string, element: Element | null) => {
-  if (element instanceof HTMLElement) {
-    desktopTabRefs.set(basePath, element)
-    return
-  }
+const mobileIndicatorActiveBasePath = computed(() =>
+  mobileMenuOpen.value ? activeTabBasePath.value : null
+)
 
-  desktopTabRefs.delete(basePath)
-}
+const {
+  containerRef: desktopNavRef,
+  setTabRef: setDesktopTabRef,
+  indicatorStyle: desktopActiveIndicatorStyle,
+  update: updateDesktopIndicator,
+} = useActiveTabIndicator(activeTabBasePath)
 
-const setMobileTabRef = (basePath: string, element: Element | null) => {
-  if (element instanceof HTMLElement) {
-    mobileTabRefs.set(basePath, element)
-    return
-  }
-
-  mobileTabRefs.delete(basePath)
-}
-
-const createIndicatorStyle = (
-  container: HTMLElement | null,
-  activeItem: HTMLElement | null
-): Partial<CSSProperties> | null => {
-  if (!container || !activeItem) {
-    return null
-  }
-
-  const containerRect = container.getBoundingClientRect()
-  const activeItemRect = activeItem.getBoundingClientRect()
-
-  return {
-    width: `${activeItemRect.width}px`,
-    height: `${activeItemRect.height}px`,
-    transform: `translate3d(${activeItemRect.left - containerRect.left}px, ${activeItemRect.top - containerRect.top}px, 0)`,
-  }
-}
-
-const updateDesktopActiveIndicator = () => {
-  const activeBasePath = activeTabBasePath.value
-
-  desktopActiveIndicatorStyle.value = activeBasePath
-    ? createIndicatorStyle(desktopNavRef.value, desktopTabRefs.get(activeBasePath) ?? null)
-    : null
-}
-
-const updateMobileActiveIndicator = () => {
-  if (!mobileMenuOpen.value) {
-    mobileActiveIndicatorStyle.value = null
-    return
-  }
-
-  const activeBasePath = activeTabBasePath.value
-
-  mobileActiveIndicatorStyle.value = activeBasePath
-    ? createIndicatorStyle(mobileNavRef.value, mobileTabRefs.get(activeBasePath) ?? null)
-    : null
-}
+const {
+  containerRef: mobileNavRef,
+  setTabRef: setMobileTabRef,
+  indicatorStyle: mobileActiveIndicatorStyle,
+  update: updateMobileIndicator,
+} = useActiveTabIndicator(mobileIndicatorActiveBasePath)
 
 const getDesktopTabClass = (basePath: string) => {
   if (!isActiveRoute(basePath)) {
@@ -202,9 +128,8 @@ const getMobileTabClass = (basePath: string) => {
 }
 
 const syncActiveIndicators = async () => {
-  await nextTick()
-  updateDesktopActiveIndicator()
-  updateMobileActiveIndicator()
+  await updateDesktopIndicator()
+  await updateMobileIndicator()
 }
 
 async function loadJokesForLocale(localeCode = locale.value) {
@@ -226,86 +151,18 @@ const showRandomJoke = async () => {
   jokeModalOpen.value = true
 }
 
-const closeMobileOverlays = () => {
-  mobileMenuOpen.value = false
-  mobileLocaleMenuOpen.value = false
-}
-
-const closeLocaleMenus = () => {
-  desktopLocaleMenuOpen.value = false
-  mobileLocaleMenuOpen.value = false
-}
-
 const closeMobileMenu = () => {
   mobileMenuOpen.value = false
 }
 
-const toggleDesktopLocaleMenu = () => {
-  desktopLocaleMenuOpen.value = !desktopLocaleMenuOpen.value
-}
-
 const toggleMobileMenu = () => {
-  const nextState = !mobileMenuOpen.value
-  mobileMenuOpen.value = nextState
-
-  if (nextState) {
-    mobileLocaleMenuOpen.value = false
-  }
-}
-
-const toggleMobileLocaleMenu = () => {
-  const nextState = !mobileLocaleMenuOpen.value
-  mobileLocaleMenuOpen.value = nextState
-
-  if (nextState) {
-    mobileMenuOpen.value = false
-    desktopLocaleMenuOpen.value = false
-  }
-}
-
-const selectDesktopLocale = (code: string) => {
-  desktopLocaleMenuOpen.value = false
-  switchLocale(code)
-}
-
-const selectMobileLocale = (code: string) => {
-  mobileLocaleMenuOpen.value = false
-  switchLocale(code)
-}
-
-const handleDocumentPointerDown = (event: PointerEvent) => {
-  const target = event.target as Node | null
-
-  if (
-    desktopLocaleMenuOpen.value &&
-    desktopLocaleMenuRef.value &&
-    target &&
-    !desktopLocaleMenuRef.value.contains(target)
-  ) {
-    desktopLocaleMenuOpen.value = false
-  }
-
-  if (
-    mobileLocaleMenuOpen.value &&
-    mobileLocaleMenuRef.value &&
-    target &&
-    !mobileLocaleMenuRef.value.contains(target)
-  ) {
-    mobileLocaleMenuOpen.value = false
-  }
-}
-
-const handleDocumentKeydown = (event: KeyboardEvent) => {
-  if (event.key === 'Escape') {
-    closeLocaleMenus()
-  }
+  mobileMenuOpen.value = !mobileMenuOpen.value
 }
 
 watch(
   () => route.path,
   () => {
-    closeMobileOverlays()
-    closeLocaleMenus()
+    closeMobileMenu()
     void syncActiveIndicators()
   }
 )
@@ -314,7 +171,6 @@ watch(locale, () => {
   jokes.value = []
   loadedJokesLocale.value = null
   jokeModalOpen.value = false
-  closeLocaleMenus()
   void syncActiveIndicators()
 })
 
@@ -331,15 +187,11 @@ const handleWindowResize = () => {
 
 onMounted(() => {
   isClientReady.value = true
-  document.addEventListener('pointerdown', handleDocumentPointerDown)
-  document.addEventListener('keydown', handleDocumentKeydown)
   window.addEventListener('resize', handleWindowResize, { passive: true })
   void syncActiveIndicators()
 })
 
 onBeforeUnmount(() => {
-  document.removeEventListener('pointerdown', handleDocumentPointerDown)
-  document.removeEventListener('keydown', handleDocumentKeydown)
   window.removeEventListener('resize', handleWindowResize)
 })
 </script>
@@ -397,56 +249,7 @@ onBeforeUnmount(() => {
           <UIcon :name="themeToggleIcon" class="size-5" aria-hidden="true" />
         </button>
 
-        <div ref="desktopLocaleMenuRef" class="relative">
-          <button
-            type="button"
-            class="border-default bg-default text-highlighted focus-visible:ring-primary-500 flex min-w-36 cursor-pointer list-none items-center justify-between gap-3 rounded-full border px-4 py-2 text-sm font-medium focus-visible:ring-2 focus-visible:outline-none"
-            :aria-label="t('language.toggle')"
-            :aria-expanded="desktopLocaleMenuOpen"
-            aria-controls="desktop-locale-menu"
-            @click="toggleDesktopLocaleMenu"
-          >
-            <span class="flex items-center gap-2">
-              <UIcon :name="currentLocale.icon" class="size-4" aria-hidden="true" />
-              <span>{{ currentLocale.name }}</span>
-            </span>
-            <UIcon
-              name="i-tabler-chevron-down"
-              class="size-4 transition-transform duration-200"
-              :class="{ 'rotate-180': desktopLocaleMenuOpen }"
-              aria-hidden="true"
-            />
-          </button>
-
-          <Transition
-            enter-active-class="transition duration-180 ease-out"
-            enter-from-class="translate-y-2 scale-95 opacity-0"
-            enter-to-class="translate-y-0 scale-100 opacity-100"
-            leave-active-class="transition duration-140 ease-in"
-            leave-from-class="translate-y-0 scale-100 opacity-100"
-            leave-to-class="translate-y-2 scale-95 opacity-0"
-          >
-            <div
-              v-if="desktopLocaleMenuOpen"
-              id="desktop-locale-menu"
-              class="border-default bg-default absolute top-full right-0 z-20 mt-2 min-w-40 origin-top-right rounded-2xl border p-2 shadow-lg"
-            >
-              <ul class="space-y-1">
-                <li v-for="lang in localesConfig" :key="lang.code">
-                  <button
-                    type="button"
-                    class="text-highlighted hover:bg-elevated focus-visible:ring-primary-500 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm focus-visible:ring-2 focus-visible:outline-none"
-                    :class="{ 'bg-elevated': lang.code === selectedLocale }"
-                    @click="selectDesktopLocale(lang.code)"
-                  >
-                    <UIcon :name="lang.icon" class="size-4" aria-hidden="true" />
-                    <span>{{ lang.name }}</span>
-                  </button>
-                </li>
-              </ul>
-            </div>
-          </Transition>
-        </div>
+        <HeaderLocaleSwitcher variant="full" menu-id="desktop-locale-menu" />
       </div>
     </div>
 
@@ -490,47 +293,7 @@ onBeforeUnmount(() => {
         </button>
 
         <div class="flex items-center justify-end gap-2">
-          <div ref="mobileLocaleMenuRef" class="relative">
-            <button
-              type="button"
-              class="focus-visible:ring-primary-500 inline-flex size-10 items-center justify-center rounded-full focus-visible:ring-2 focus-visible:outline-none"
-              :aria-label="t('language.toggle')"
-              :aria-expanded="mobileLocaleMenuOpen"
-              aria-controls="mobile-locale-menu"
-              @click="toggleMobileLocaleMenu"
-            >
-              <UIcon :name="currentLocale.icon" class="size-5" aria-hidden="true" />
-            </button>
-
-            <Transition
-              enter-active-class="transition duration-180 ease-out"
-              enter-from-class="translate-y-2 scale-95 opacity-0"
-              enter-to-class="translate-y-0 scale-100 opacity-100"
-              leave-active-class="transition duration-140 ease-in"
-              leave-from-class="translate-y-0 scale-100 opacity-100"
-              leave-to-class="translate-y-2 scale-95 opacity-0"
-            >
-              <div
-                v-if="mobileLocaleMenuOpen"
-                id="mobile-locale-menu"
-                class="border-default bg-default absolute top-full right-0 z-20 mt-2 min-w-40 origin-top-right rounded-2xl border p-2 shadow-lg"
-              >
-                <ul class="space-y-1">
-                  <li v-for="lang in localesConfig" :key="lang.code">
-                    <button
-                      type="button"
-                      class="text-highlighted hover:bg-elevated focus-visible:ring-primary-500 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm focus-visible:ring-2 focus-visible:outline-none"
-                      :class="{ 'bg-elevated': lang.code === selectedLocale }"
-                      @click="selectMobileLocale(lang.code)"
-                    >
-                      <UIcon :name="lang.icon" class="size-4" aria-hidden="true" />
-                      <span>{{ lang.name }}</span>
-                    </button>
-                  </li>
-                </ul>
-              </div>
-            </Transition>
-          </div>
+          <HeaderLocaleSwitcher variant="compact" menu-id="mobile-locale-menu" />
 
           <button
             type="button"
@@ -602,7 +365,7 @@ onBeforeUnmount(() => {
           class="bg-primary-500 pointer-events-none absolute top-0 left-0 z-0 rounded-full shadow-sm transition-[transform,width,height] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
           :style="desktopActiveIndicatorStyle"
         />
-        <ul class="flex flex-wrap items-center justify-center gap-2">
+        <ul class="flex flex-wrap items-center justify-center gap-1">
           <li
             v-for="tab in tabs"
             :key="tab.to"
@@ -611,7 +374,7 @@ onBeforeUnmount(() => {
           >
             <NuxtLink
               :to="tab.to"
-              class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors"
+              class="inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors"
               :class="getDesktopTabClass(tab.basePath)"
               :aria-current="isActiveRoute(tab.basePath) ? 'page' : undefined"
             >

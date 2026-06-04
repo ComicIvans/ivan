@@ -147,28 +147,12 @@ textarea,
     animation: fadeSlideUp var(--motion-section-duration) var(--motion-emphasized) forwards;
   }
 
+  /* Stagger delay is driven by --stagger-index set per child in the template,
+     so there is no fixed child-count limit. Falls back to nth-child for any
+     child that does not set the variable. */
   .section-stagger > * {
     animation: fadeSlideUp calc(var(--motion-section-duration) + 20ms) var(--motion-emphasized) both;
-  }
-
-  .section-stagger > *:nth-child(2) {
-    animation-delay: var(--motion-section-stagger);
-  }
-
-  .section-stagger > *:nth-child(3) {
-    animation-delay: calc(var(--motion-section-stagger) * 2);
-  }
-
-  .section-stagger > *:nth-child(4) {
-    animation-delay: calc(var(--motion-section-stagger) * 3);
-  }
-
-  .section-stagger > *:nth-child(5) {
-    animation-delay: calc(var(--motion-section-stagger) * 4);
-  }
-
-  .section-stagger > *:nth-child(6) {
-    animation-delay: calc(var(--motion-section-stagger) * 5);
+    animation-delay: calc(var(--stagger-index, 0) * var(--motion-section-stagger));
   }
 
   .inline-link {

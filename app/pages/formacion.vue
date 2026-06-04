@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { academicIcons, competencyIcons, languageFlags } from '~/constants/icons'
+
 const { t } = useI18n({ useScope: 'global' })
 
 defineI18nRoute({
@@ -10,14 +12,6 @@ defineI18nRoute({
 })
 
 usePageSeo('training.title', 'seo.pages.training')
-
-const academicIcons: Record<string, string> = {
-  mugeps: 'i-tabler-briefcase',
-  'cybersecurity-master': 'i-tabler-shield-lock',
-  'math-degree': 'i-tabler-math-function',
-  'data-analyst': 'i-simple-icons-googlecloud',
-  'math-conferences': 'i-tabler-presentation',
-}
 
 const currentAcademic = ['mugeps']
 
@@ -33,12 +27,6 @@ const academicItems = useI18nList('training.academic.items', ({ raw, value, tr }
     current: currentAcademic.includes(id),
   }
 })
-
-const languageFlags: Record<string, string> = {
-  english: 'circle-flags:gb',
-  german: 'circle-flags:de',
-  spanish: 'circle-flags:es',
-}
 
 const languageProgress: Record<string, number> = {
   english: 85,
@@ -57,20 +45,6 @@ const languages = useI18nList('training.languages.items', ({ raw, value, tr }) =
     progress: languageProgress[id] || 50,
   }
 })
-
-const competencyIcons: Record<string, string> = {
-  'project-management': 'i-tabler-list-check',
-  'team-leadership': 'i-tabler-users',
-  governance: 'i-tabler-building-bank',
-  communication: 'i-tabler-speakerphone',
-  systems: 'i-tabler-server-2',
-  'cybersecurity-management': 'i-tabler-shield-lock',
-  compliance: 'i-tabler-shield-check',
-  automation: 'i-tabler-robot',
-  'data-analysis': 'i-tabler-chart-dots',
-  'problem-solving': 'i-tabler-puzzle',
-  'strategic-thinking': 'i-tabler-brain',
-}
 
 const competencies = useI18nList('training.competencies.items', ({ raw, value, tr }) => ({
   name: tr(raw.name),
@@ -95,7 +69,12 @@ const competencies = useI18nList('training.competencies.items', ({ raw, value, t
       </h2>
 
       <div class="section-stagger space-y-6">
-        <UCard v-for="(item, index) in academicItems" :key="index" class="motion-card">
+        <UCard
+          v-for="(item, index) in academicItems"
+          :key="index"
+          :style="{ '--stagger-index': index }"
+          class="motion-card"
+        >
           <div class="flex flex-col gap-4 sm:flex-row sm:items-start">
             <div
               class="flex size-14 shrink-0 items-center justify-center self-start rounded-xl"
@@ -133,7 +112,12 @@ const competencies = useI18nList('training.competencies.items', ({ raw, value, t
       </h2>
 
       <div class="section-stagger grid grid-cols-1 gap-4 md:grid-cols-3">
-        <UCard v-for="lang in languages" :key="lang.name" class="motion-card">
+        <UCard
+          v-for="(lang, index) in languages"
+          :key="lang.name"
+          :style="{ '--stagger-index': index }"
+          class="motion-card"
+        >
           <div class="flex items-center gap-3">
             <UIcon :name="lang.flag" class="size-10" aria-hidden="true" />
             <div>
@@ -192,8 +176,9 @@ const competencies = useI18nList('training.competencies.items', ({ raw, value, t
 
       <div class="section-stagger flex flex-wrap gap-3">
         <div
-          v-for="comp in competencies"
+          v-for="(comp, index) in competencies"
           :key="comp.name"
+          :style="{ '--stagger-index': index }"
           class="border-primary-500/20 bg-primary-500/5 motion-card flex items-center gap-2 rounded-full border px-4 py-2 transition-colors"
         >
           <UIcon :name="comp.icon" class="text-primary-500 size-5" aria-hidden="true" />

@@ -1,8 +1,10 @@
 <script setup lang="ts">
-const { t, locale } = useI18n({ useScope: 'global' })
+const { t } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
 
 const { getCoverAlt } = useGalleryImages()
+const { formatDate } = useDateFormatter()
+const formatMonthYear = (dateStr: string) => formatDate(dateStr, { year: 'numeric', month: 'long' })
 
 defineI18nRoute({
   paths: {
@@ -75,14 +77,6 @@ const hasActiveFilters = computed(() => {
 
 function getEventIcon(event: { icon?: string }) {
   return event.icon || 'i-tabler-photo'
-}
-
-function formatDate(dateStr: string) {
-  const date = new Date(dateStr)
-  return new Intl.DateTimeFormat(locale.value, {
-    year: 'numeric',
-    month: 'long',
-  }).format(date)
 }
 </script>
 
@@ -200,7 +194,7 @@ function formatDate(dateStr: string) {
         v-for="event in events"
         :key="event.id"
         :to="localePath(`/galeria/${event.path.split('/').pop()}`)"
-        :aria-label="`${event.title}. ${formatDate(event.date)}`"
+        :aria-label="`${event.title}. ${formatMonthYear(event.date)}`"
         class="motion-link-card group block focus:outline-none"
       >
         <UCard class="h-full overflow-hidden">
@@ -261,7 +255,7 @@ function formatDate(dateStr: string) {
             </h2>
             <div class="mt-1 flex items-center gap-2 text-sm">
               <UIcon name="i-tabler-calendar" class="text-primary-500 size-4 shrink-0" />
-              <span class="text-toned font-medium">{{ formatDate(event.date) }}</span>
+              <span class="text-toned font-medium">{{ formatMonthYear(event.date) }}</span>
             </div>
             <div v-if="event.location" class="mt-1 flex items-center gap-2 text-sm">
               <UIcon name="i-tabler-map-pin" class="text-muted size-4 shrink-0" />

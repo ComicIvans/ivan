@@ -58,29 +58,6 @@ const loadedPhotos = reactive(new Set<number>())
 const photoPreloads = new Map<number, Promise<void>>()
 const preloadedImages = new Map<number, HTMLImageElement>()
 
-const zoomLevel = ref(1)
-const panX = ref(0)
-const panY = ref(0)
-const isPanning = ref(false)
-const panStartX = ref(0)
-const panStartY = ref(0)
-const lastTouchX = ref(0)
-const lastTouchY = ref(0)
-const pinchStartDistance = ref(0)
-const pinchStartZoom = ref(1)
-const isPinching = ref(false)
-
-const carouselPointerId = ref<number | null>(null)
-const carouselStartX = ref(0)
-const carouselStartY = ref(0)
-const carouselDragOffsetX = ref(0)
-const isCarouselDragging = ref(false)
-const carouselTransitionEnabled = ref(false)
-const pendingCarouselDirection = ref<-1 | 0 | 1>(0)
-const suppressCarouselTransition = ref(false)
-const pendingNavigationDirection = ref<-1 | 0 | 1>(0)
-const navigationRequestId = ref(0)
-
 let gestureMediaQuery: MediaQueryList | null = null
 let reducedMotionMediaQuery: MediaQueryList | null = null
 let visualViewportResizeHandler: (() => void) | null = null
@@ -119,12 +96,12 @@ function getActiveModalImage() {
   ) as HTMLImageElement | null
 }
 
-function markPhotoAsLoaded(index: number, image?: HTMLImageElement | null) {
+function markPhotoAsLoaded(index: number, loadedImage?: HTMLImageElement | null) {
   const normalizedIndex = getWrappedPhotoIndex(index)
   loadedPhotos.add(normalizedIndex)
 
-  if (image?.naturalWidth && image.naturalHeight) {
-    preloadedImages.set(normalizedIndex, image)
+  if (loadedImage?.naturalWidth && loadedImage.naturalHeight) {
+    preloadedImages.set(normalizedIndex, loadedImage)
   }
 }
 
@@ -150,7 +127,7 @@ function preloadPhoto(index: number) {
   }
 
   const preloadPromise = new Promise<void>((resolve) => {
-    const image = new Image()
+    const preloadImage = new Image()
     let settled = false
 
     const finalize = async (loaded: boolean) => {
@@ -159,28 +136,28 @@ function preloadPhoto(index: number) {
 
       if (loaded) {
         try {
-          await image.decode()
+          await preloadImage.decode()
         } catch {
           // Ignore decode failures and use the already loaded bitmap.
         }
 
-        markPhotoAsLoaded(normalizedIndex, image)
+        markPhotoAsLoaded(normalizedIndex, preloadImage)
       }
 
       photoPreloads.delete(normalizedIndex)
       resolve()
     }
 
-    image.decoding = 'async'
-    image.onload = () => {
+    preloadImage.decoding = 'async'
+    preloadImage.onload = () => {
       void finalize(true)
     }
-    image.onerror = () => {
+    preloadImage.onerror = () => {
       void finalize(false)
     }
-    image.src = getLightboxPhotoSrc(photo.src)
+    preloadImage.src = getLightboxPhotoSrc(photo.src)
 
-    if (image.complete && image.naturalWidth > 0) {
+    if (preloadImage.complete && preloadImage.naturalWidth > 0) {
       void finalize(true)
     }
   })
@@ -212,137 +189,84 @@ function updateReducedMotionPreference() {
   prefersReducedMotion.value = reducedMotionMediaQuery?.matches ?? false
 }
 
-function resetZoom() {
-  zoomLevel.value = minZoom
-  panX.value = 0
-  panY.value = 0
-  isPanning.value = false
-}
-
-function resetCarouselPointerState() {
-  carouselPointerId.value = null
-  carouselStartX.value = 0
-  carouselStartY.value = 0
-  carouselDragOffsetX.value = 0
-  isCarouselDragging.value = false
-}
-
-function resetTouchState() {
-  isPinching.value = false
-  pinchStartDistance.value = 0
-  pinchStartZoom.value = zoomLevel.value
-  lastTouchX.value = 0
-  lastTouchY.value = 0
-  isPanning.value = false
-  resetCarouselPointerState()
-}
-
-function resetInteractionState() {
-  resetZoom()
-  resetTouchState()
-  pendingCarouselDirection.value = 0
-  carouselTransitionEnabled.value = false
-  suppressCarouselTransition.value = false
-  pendingNavigationDirection.value = 0
-  navigationRequestId.value += 1
-}
-
 function clearPreloads() {
   loadedPhotos.clear()
   photoPreloads.clear()
   preloadedImages.clear()
 }
 
+// Zoom/pan and carousel are mutually dependent (carousel resets zoom before a
+// navigation; zoom blocks while the carousel transitions and clears the carousel
+// pointer on touch reset). The cross-references below are lazy getters so the two
+// composables can be wired together despite the cycle.
+const zoom = useZoomPan({
+  minZoom,
+  zoomStep,
+  maxZoom,
+  imageStageRef,
+  imageContainerRef,
+  isOpen,
+  getActiveModalImage,
+  isCarouselTransitioning: () => carousel.isCarouselTransitioning(),
+  resetCarouselPointer: () => carousel.resetCarouselPointerState(),
+})
+
+const carousel = useCarouselNavigation({
+  totalPhotos,
+  selectedPhotoIndex,
+  getWrappedPhotoIndex,
+  hasLoadedPhoto,
+  preloadPhoto,
+  isOpen,
+  supportsSwipeNavigation,
+  prefersReducedMotion,
+  imageStageRef,
+  imageContainerRef,
+  isZoomed: () => zoom.zoomLevel.value > minZoom,
+  resetInteraction: () => {
+    zoom.resetZoom()
+    zoom.resetTouchState()
+  },
+})
+
+const {
+  zoomLevel,
+  isPanning,
+  activeImageStyle,
+  resetZoom,
+  zoomIn,
+  zoomOut,
+  constrainPan,
+  handleWheel,
+  handleMouseDown,
+  handleMouseMove,
+  handleMouseUp,
+  handleTouchStart,
+  handleTouchMove,
+  handleTouchEnd,
+} = zoom
+
+const {
+  pendingNavigationDirection,
+  carouselTrackStyle,
+  handleCarouselTransitionEnd,
+  nextPhoto,
+  prevPhoto,
+  handlePointerDown,
+  handlePointerMove,
+  handlePointerUp,
+  handlePointerCancel,
+} = carousel
+
+function resetInteractionState() {
+  zoom.resetZoom()
+  zoom.resetTouchState()
+  carousel.resetCarouselFlags()
+}
+
 function close() {
   isOpen.value = false
   resetInteractionState()
-}
-
-function finalizeCarouselNavigation(direction: -1 | 1) {
-  selectedPhotoIndex.value = getWrappedPhotoIndex(selectedPhotoIndex.value + direction)
-  suppressCarouselTransition.value = true
-  pendingCarouselDirection.value = 0
-  carouselTransitionEnabled.value = false
-  carouselDragOffsetX.value = 0
-
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      suppressCarouselTransition.value = false
-    })
-  })
-}
-
-function handleCarouselTransitionEnd() {
-  if (pendingCarouselDirection.value === 0) {
-    carouselTransitionEnabled.value = false
-    return
-  }
-
-  finalizeCarouselNavigation(pendingCarouselDirection.value)
-}
-
-function isCarouselTransitioning() {
-  return carouselTransitionEnabled.value && !suppressCarouselTransition.value
-}
-
-function animateCarousel(direction: -1 | 1) {
-  if (totalPhotos.value < 2) return
-
-  resetZoom()
-  resetTouchState()
-  carouselTransitionEnabled.value = true
-  pendingCarouselDirection.value = direction
-  carouselDragOffsetX.value = 0
-}
-
-function nextPhoto() {
-  requestPhotoNavigation(1)
-}
-
-function prevPhoto() {
-  requestPhotoNavigation(-1)
-}
-
-function requestPhotoNavigation(direction: -1 | 1) {
-  if (
-    totalPhotos.value < 2 ||
-    isCarouselTransitioning() ||
-    pendingNavigationDirection.value !== 0
-  ) {
-    return
-  }
-
-  const targetIndex = getWrappedPhotoIndex(selectedPhotoIndex.value + direction)
-
-  if (hasLoadedPhoto(targetIndex)) {
-    animateCarousel(direction)
-    return
-  }
-
-  pendingNavigationDirection.value = direction
-  carouselDragOffsetX.value = 0
-  isCarouselDragging.value = false
-
-  const requestId = ++navigationRequestId.value
-
-  preloadPhoto(targetIndex).then(() => {
-    if (navigationRequestId.value !== requestId || !isOpen.value) return
-
-    pendingNavigationDirection.value = 0
-
-    if (targetIndex !== getWrappedPhotoIndex(selectedPhotoIndex.value + direction)) return
-
-    animateCarousel(direction)
-  })
-}
-
-function snapCarouselBack() {
-  if (!isCarouselDragging.value && carouselDragOffsetX.value === 0) return
-
-  isCarouselDragging.value = false
-  carouselTransitionEnabled.value = true
-  pendingCarouselDirection.value = 0
-  carouselDragOffsetX.value = 0
 }
 
 const selectedPhoto = computed(() => getModalPhoto(selectedPhotoIndex.value))
@@ -394,30 +318,6 @@ const modalSlides = computed(() => {
     }
   })
 })
-
-const carouselTrackStyle = computed(() => {
-  const slideTranslate = 100 / 3
-  const baseTranslate =
-    pendingCarouselDirection.value === 1
-      ? `-${slideTranslate * 2}%`
-      : pendingCarouselDirection.value === -1
-        ? '0%'
-        : `-${slideTranslate}%`
-
-  return {
-    transform: `translate3d(calc(${baseTranslate} + ${carouselDragOffsetX.value}px), 0, 0)`,
-    transition:
-      suppressCarouselTransition.value || !carouselTransitionEnabled.value
-        ? 'none'
-        : prefersReducedMotion.value
-          ? 'transform 0.01ms linear'
-          : 'transform 360ms var(--motion-emphasized)',
-  }
-})
-
-const activeImageStyle = computed(() => ({
-  transform: `scale(${zoomLevel.value}) translate(${panX.value / zoomLevel.value}px, ${panY.value / zoomLevel.value}px)`,
-}))
 
 const currentAspectRatio = computed<number | null>(() => {
   const normalizedIndex = getWrappedPhotoIndex(selectedPhotoIndex.value)
@@ -536,274 +436,6 @@ const fallbackImageStageStyle = computed(() => {
 const metaPanelStyle = computed(() => ({
   maxWidth: imageStageStyle.value?.width ?? 'min(100%, 42rem)',
 }))
-
-function constrainPan() {
-  if (zoomLevel.value <= minZoom) {
-    panX.value = 0
-    panY.value = 0
-    return
-  }
-
-  const imageElement = getActiveModalImage()
-  const stageRect = imageStageRef.value?.getBoundingClientRect()
-  const imageRect = imageElement?.getBoundingClientRect()
-
-  if (!imageRect || !stageRect) return
-
-  const overflowX = Math.max(0, (imageRect.width - stageRect.width) / 2)
-  const overflowY = Math.max(0, (imageRect.height - stageRect.height) / 2)
-
-  panX.value = Math.max(-overflowX, Math.min(overflowX, panX.value))
-  panY.value = Math.max(-overflowY, Math.min(overflowY, panY.value))
-}
-
-function applyZoom(nextZoom: number, origin?: { clientX: number; clientY: number }) {
-  const clampedZoom = Math.max(minZoom, Math.min(maxZoom.value, nextZoom))
-  if (clampedZoom === zoomLevel.value) return
-
-  const imageElement = origin ? getActiveModalImage() : null
-
-  if (origin && imageElement) {
-    const imageRect = imageElement.getBoundingClientRect()
-    const imageCenterX = imageRect.left + imageRect.width / 2
-    const imageCenterY = imageRect.top + imageRect.height / 2
-    const offsetX = origin.clientX - imageCenterX
-    const offsetY = origin.clientY - imageCenterY
-    const zoomRatio = clampedZoom / zoomLevel.value
-
-    panX.value = panX.value * zoomRatio + offsetX * (1 - zoomRatio)
-    panY.value = panY.value * zoomRatio + offsetY * (1 - zoomRatio)
-  } else if (clampedZoom < zoomLevel.value) {
-    const zoomRatio = clampedZoom / zoomLevel.value
-    panX.value *= zoomRatio
-    panY.value *= zoomRatio
-  }
-
-  zoomLevel.value = clampedZoom
-
-  if (clampedZoom === minZoom) {
-    panX.value = 0
-    panY.value = 0
-  }
-
-  constrainPan()
-}
-
-function zoomIn() {
-  applyZoom(zoomLevel.value + zoomStep)
-}
-
-function zoomOut() {
-  applyZoom(zoomLevel.value - zoomStep)
-}
-
-function handleWheel(event: WheelEvent) {
-  if (!isOpen.value || !imageContainerRef.value || isCarouselTransitioning()) return
-
-  const delta = event.deltaY > 0 ? -zoomStep : zoomStep
-  applyZoom(zoomLevel.value + delta, { clientX: event.clientX, clientY: event.clientY })
-}
-
-function handleMouseDown(event: MouseEvent) {
-  if (zoomLevel.value <= minZoom || isCarouselTransitioning()) return
-
-  isPanning.value = true
-  panStartX.value = event.clientX - panX.value
-  panStartY.value = event.clientY - panY.value
-}
-
-function handleMouseMove(event: MouseEvent) {
-  if (!isPanning.value || zoomLevel.value <= minZoom) return
-
-  panX.value = event.clientX - panStartX.value
-  panY.value = event.clientY - panStartY.value
-  constrainPan()
-}
-
-function handleMouseUp() {
-  isPanning.value = false
-}
-
-function captureCarouselPointer(event: PointerEvent) {
-  const target = event.currentTarget as HTMLElement | null
-  if (target && !target.hasPointerCapture(event.pointerId)) {
-    target.setPointerCapture(event.pointerId)
-  }
-}
-
-function releaseCarouselPointer(event: PointerEvent) {
-  const target = event.currentTarget as HTMLElement | null
-  if (target && target.hasPointerCapture(event.pointerId)) {
-    target.releasePointerCapture(event.pointerId)
-  }
-}
-
-function handlePointerDown(event: PointerEvent) {
-  if (
-    !isOpen.value ||
-    !supportsSwipeNavigation.value ||
-    zoomLevel.value > minZoom ||
-    isCarouselTransitioning() ||
-    totalPhotos.value < 2 ||
-    carouselPointerId.value !== null
-  ) {
-    return
-  }
-
-  carouselPointerId.value = event.pointerId
-  carouselStartX.value = event.clientX
-  carouselStartY.value = event.clientY
-  carouselDragOffsetX.value = 0
-  isCarouselDragging.value = true
-  carouselTransitionEnabled.value = false
-  pendingCarouselDirection.value = 0
-  captureCarouselPointer(event)
-}
-
-function handlePointerMove(event: PointerEvent) {
-  if (!isOpen.value || carouselPointerId.value !== event.pointerId || !isCarouselDragging.value) {
-    return
-  }
-
-  captureCarouselPointer(event)
-  carouselDragOffsetX.value = event.clientX - carouselStartX.value
-}
-
-function handlePointerUp(event: PointerEvent) {
-  if (carouselPointerId.value !== event.pointerId) return
-
-  const deltaX = event.clientX - carouselStartX.value
-  const deltaY = event.clientY - carouselStartY.value
-  const width = imageStageRef.value?.clientWidth ?? imageContainerRef.value?.clientWidth ?? 0
-  const threshold = Math.min(140, Math.max(56, width * 0.16))
-
-  releaseCarouselPointer(event)
-  carouselPointerId.value = null
-
-  if (
-    isCarouselDragging.value &&
-    Math.abs(deltaX) > threshold &&
-    Math.abs(deltaX) > Math.abs(deltaY) * 1.2
-  ) {
-    isCarouselDragging.value = false
-    requestPhotoNavigation(deltaX < 0 ? 1 : -1)
-    return
-  }
-
-  snapCarouselBack()
-}
-
-function handlePointerCancel(event: PointerEvent) {
-  if (carouselPointerId.value === event.pointerId) {
-    releaseCarouselPointer(event)
-  }
-
-  resetCarouselPointerState()
-  pendingCarouselDirection.value = 0
-}
-
-function getTouchDistance(touches: TouchList) {
-  if (touches.length < 2) return 0
-  const firstTouch = touches[0]
-  const secondTouch = touches[1]
-
-  if (!firstTouch || !secondTouch) return 0
-
-  return Math.hypot(
-    secondTouch.clientX - firstTouch.clientX,
-    secondTouch.clientY - firstTouch.clientY
-  )
-}
-
-function getTouchMidpoint(touches: TouchList) {
-  const firstTouch = touches[0]
-  const secondTouch = touches[1]
-
-  if (!firstTouch || !secondTouch) {
-    return null
-  }
-
-  return {
-    clientX: (firstTouch.clientX + secondTouch.clientX) / 2,
-    clientY: (firstTouch.clientY + secondTouch.clientY) / 2,
-  }
-}
-
-function handleTouchStart(event: TouchEvent) {
-  if (!isOpen.value) return
-
-  if (event.touches.length === 2) {
-    resetCarouselPointerState()
-    isPinching.value = true
-    pinchStartDistance.value = getTouchDistance(event.touches)
-    pinchStartZoom.value = zoomLevel.value
-    isPanning.value = false
-    return
-  }
-
-  if (event.touches.length !== 1 || zoomLevel.value <= minZoom) return
-
-  const touch = event.touches[0]
-  if (!touch) return
-
-  lastTouchX.value = touch.clientX
-  lastTouchY.value = touch.clientY
-  isPanning.value = true
-}
-
-function handleTouchMove(event: TouchEvent) {
-  if (!isOpen.value) return
-
-  if (event.touches.length === 2) {
-    const distance = getTouchDistance(event.touches)
-    const midpoint = getTouchMidpoint(event.touches)
-
-    if (!distance || !pinchStartDistance.value) return
-
-    applyZoom(pinchStartZoom.value * (distance / pinchStartDistance.value), midpoint ?? undefined)
-    event.preventDefault()
-    return
-  }
-
-  if (event.touches.length !== 1 || zoomLevel.value <= minZoom || !isPanning.value) return
-
-  const touch = event.touches[0]
-  if (!touch) return
-
-  panX.value += touch.clientX - lastTouchX.value
-  panY.value += touch.clientY - lastTouchY.value
-  lastTouchX.value = touch.clientX
-  lastTouchY.value = touch.clientY
-  constrainPan()
-  event.preventDefault()
-}
-
-function handleTouchEnd(event: TouchEvent) {
-  if (!isOpen.value) return
-
-  if (event.touches.length === 2) {
-    pinchStartDistance.value = getTouchDistance(event.touches)
-    pinchStartZoom.value = zoomLevel.value
-    return
-  }
-
-  if (event.touches.length === 1) {
-    const touch = event.touches[0]
-    if (!touch) {
-      resetTouchState()
-      return
-    }
-
-    lastTouchX.value = touch.clientX
-    lastTouchY.value = touch.clientY
-    isPinching.value = false
-    isPanning.value = zoomLevel.value > minZoom
-    return
-  }
-
-  isPanning.value = false
-  isPinching.value = false
-}
 
 function handleModalSlideLoad(index: number, event: Event) {
   markPhotoAsLoaded(index, event.target as HTMLImageElement | null)
@@ -1145,7 +777,7 @@ onUnmounted(() => {
           />
 
           <div
-            class="relative z-10 mx-auto flex w-full max-w-full flex-col items-center rounded-[1.1rem] border border-black/10 bg-[rgb(255_255_255_/_0.96)] px-4 py-3 text-center text-[rgb(15_23_42)] shadow-[0_12px_40px_rgb(15_23_42_/_0.12)] md:w-fit dark:border-white/10 dark:bg-[rgb(15_23_42_/_0.9)] dark:text-white"
+            class="relative z-10 mx-auto flex w-full max-w-full flex-col items-center rounded-[1.1rem] border border-black/10 bg-white/96 px-4 py-3 text-center text-slate-900 shadow-[0_12px_40px_rgb(15_23_42_/_0.12)] md:w-fit dark:border-white/10 dark:bg-slate-900/90 dark:text-white"
             :style="metaPanelStyle"
             @click.stop
           >
@@ -1153,7 +785,7 @@ onUnmounted(() => {
               <button
                 v-if="totalPhotos > 1"
                 type="button"
-                class="gallery-lightbox-meta-nav focus-visible:ring-primary-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[rgb(15_23_42)]"
+                class="gallery-lightbox-meta-nav focus-visible:ring-primary-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900"
                 :aria-label="t('gallery.event.modal.prev')"
                 @click.stop="prevPhoto"
               >
@@ -1161,7 +793,7 @@ onUnmounted(() => {
               </button>
 
               <div
-                class="w-fit rounded-full bg-black/6 px-3 py-1.5 text-xs font-medium text-[rgb(51_65_85)] dark:bg-white/10 dark:text-white/78"
+                class="w-fit rounded-full bg-black/6 px-3 py-1.5 text-xs font-medium text-slate-700 dark:bg-white/10 dark:text-white/78"
                 aria-live="polite"
               >
                 {{ modalPositionLabel }}
@@ -1170,7 +802,7 @@ onUnmounted(() => {
               <button
                 v-if="totalPhotos > 1"
                 type="button"
-                class="gallery-lightbox-meta-nav focus-visible:ring-primary-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-[rgb(15_23_42)]"
+                class="gallery-lightbox-meta-nav focus-visible:ring-primary-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900"
                 :aria-label="t('gallery.event.modal.next')"
                 @click.stop="nextPhoto"
               >
@@ -1179,7 +811,7 @@ onUnmounted(() => {
             </div>
 
             <div
-              class="mb-2 hidden w-fit rounded-full bg-black/6 px-3 py-1.5 text-xs font-medium text-[rgb(51_65_85)] md:block dark:bg-white/10 dark:text-white/78"
+              class="mb-2 hidden w-fit rounded-full bg-black/6 px-3 py-1.5 text-xs font-medium text-slate-700 md:block dark:bg-white/10 dark:text-white/78"
               aria-live="polite"
             >
               {{ modalPositionLabel }}
@@ -1187,7 +819,7 @@ onUnmounted(() => {
             <p class="max-w-full text-sm font-semibold md:text-base">{{ selectedPhotoAlt }}</p>
             <p
               v-if="selectedPhoto.description"
-              class="mt-1 text-sm leading-relaxed text-[rgb(71_85_105)] dark:text-white/72"
+              class="mt-1 text-sm leading-relaxed text-slate-600 dark:text-white/72"
             >
               {{ selectedPhoto.description }}
             </p>

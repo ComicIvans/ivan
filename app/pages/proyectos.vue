@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { projectIcons, techIcons } from '~/constants/icons'
+
 const { t } = useI18n({ useScope: 'global' })
 
 defineI18nRoute({
@@ -10,21 +12,6 @@ defineI18nRoute({
 })
 
 usePageSeo('projects.title', 'seo.pages.projects')
-
-const techIcons: Record<string, string> = {
-  nuxt: 'i-simple-icons-nuxt',
-  vue: 'i-simple-icons-vuedotjs',
-  linux: 'i-simple-icons-linux',
-  docker: 'i-simple-icons-docker',
-  powershell: 'i-simple-icons-powershell',
-  python: 'i-simple-icons-python',
-  php: 'i-simple-icons-php',
-  sql: 'i-tabler-database',
-  nginx: 'i-simple-icons-nginx',
-  dns: 'i-tabler-world-www',
-  typescript: 'i-simple-icons-typescript',
-  node: 'i-simple-icons-nodedotjs',
-}
 
 const primaryTech = useI18nList('projects.stack.primary.items', ({ raw, value, tr }) => {
   const id = value(raw.id)
@@ -44,13 +31,6 @@ const secondaryTech = useI18nList('projects.stack.secondary.items', ({ raw, valu
     icon: techIcons[id] || 'i-tabler-code',
   }
 })
-
-const projectIcons: Record<string, string> = {
-  server: 'i-tabler-server-2',
-  firmas: 'i-tabler-signature',
-  'win-ens': 'i-tabler-shield-lock',
-  ceebi: 'i-tabler-calendar-event',
-}
 
 // Language-neutral technology / category tags shown across all locales.
 const projectTags: Record<string, string[]> = {
@@ -97,7 +77,12 @@ const projects = useI18nList('projects.list.items', ({ raw, value, tr }) => {
         {{ t('projects.stack.primary.title') }}
       </h3>
       <div class="section-stagger mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <UCard v-for="tech in primaryTech" :key="tech.name" class="motion-card">
+        <UCard
+          v-for="(tech, index) in primaryTech"
+          :key="tech.name"
+          :style="{ '--stagger-index': index }"
+          class="motion-card"
+        >
           <div class="flex items-center gap-3">
             <div
               class="bg-primary-500/10 flex size-10 shrink-0 items-center justify-center rounded-lg"
@@ -136,7 +121,12 @@ const projects = useI18nList('projects.list.items', ({ raw, value, tr }) => {
       </h2>
 
       <div class="section-stagger grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <UCard v-for="project in projects" :key="project.title" class="motion-card">
+        <UCard
+          v-for="(project, index) in projects"
+          :key="project.title"
+          :style="{ '--stagger-index': index }"
+          class="motion-card"
+        >
           <div class="flex items-start gap-4">
             <div
               class="bg-primary-500/10 flex size-16 shrink-0 items-center justify-center rounded-xl"
