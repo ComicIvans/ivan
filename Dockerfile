@@ -28,7 +28,11 @@ RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
 
 COPY . .
 
-RUN pnpm run build
+# NODE_ENV=production is set only for the build (not the install above, where it
+# would skip devDependencies like nuxt/vite) so the prod branches of nuxt.config
+# (CSP, content DB path, indexability, umami) are taken explicitly instead of
+# relying on nuxi's implicit default.
+RUN NODE_ENV=production pnpm run build
 RUN mkdir -p /runtime-data
 
 

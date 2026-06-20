@@ -96,12 +96,20 @@ export const getRequiredSmtpTransportConfig = (
 
   return {
     auth: {
-      pass: getRequiredRuntimeConfigString(runtimeConfig.smtpPass, 'SMTP_PASS', publicMessage),
-      user: getRequiredRuntimeConfigString(runtimeConfig.smtpUser, 'SMTP_USER', publicMessage),
+      pass: getRequiredRuntimeConfigString(runtimeConfig.smtpPass, 'NUXT_SMTP_PASS', publicMessage),
+      user: getRequiredRuntimeConfigString(runtimeConfig.smtpUser, 'NUXT_SMTP_USER', publicMessage),
     },
-    host: getRequiredRuntimeConfigString(runtimeConfig.smtpHost, 'SMTP_HOST', publicMessage),
-    port: getRequiredRuntimeConfigPositiveInt(runtimeConfig.smtpPort, 'SMTP_PORT', publicMessage),
-    secure: getRequiredRuntimeConfigBoolean(runtimeConfig.smtpSecure, 'SMTP_SECURE', publicMessage),
+    host: getRequiredRuntimeConfigString(runtimeConfig.smtpHost, 'NUXT_SMTP_HOST', publicMessage),
+    port: getRequiredRuntimeConfigPositiveInt(
+      runtimeConfig.smtpPort,
+      'NUXT_SMTP_PORT',
+      publicMessage
+    ),
+    secure: getRequiredRuntimeConfigBoolean(
+      runtimeConfig.smtpSecure,
+      'NUXT_SMTP_SECURE',
+      publicMessage
+    ),
   }
 }
 
@@ -112,7 +120,7 @@ export const getRequiredSmtpFromEmail = (
   const runtimeConfig = getRuntimeConfig(event)
   return getRequiredRuntimeConfigString(
     runtimeConfig.smtpFromEmail,
-    'SMTP_FROM_EMAIL',
+    'NUXT_SMTP_FROM_EMAIL',
     publicMessage
   )
 }
@@ -122,5 +130,9 @@ export const getRequiredSmtpToEmail = (
   publicMessage = 'Email service not configured.'
 ) => {
   const runtimeConfig = getRuntimeConfig(event)
-  return getRequiredRuntimeConfigString(runtimeConfig.smtpToEmail, 'SMTP_TO_EMAIL', publicMessage)
+  return getRequiredRuntimeConfigString(
+    runtimeConfig.smtpToEmail,
+    'NUXT_SMTP_TO_EMAIL',
+    publicMessage
+  )
 }

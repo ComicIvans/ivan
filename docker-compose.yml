@@ -2,9 +2,10 @@ services:
   ivan:
     image: ghcr.io/comicivans/ivan:latest
     container_name: ivan
+    restart: unless-stopped
     ports:
       - "127.0.0.1:3000:3000"
-    # Runtime secrets (SMTP_*) are read from .env at container start.
+    # Runtime secrets (NUXT_SMTP_*) are read from .env at container start.
     # Build-time vars (SITE_URL, NUXT_UMAMI_*) are baked into the image instead.
     env_file:
       - .env
@@ -12,13 +13,32 @@ services:
       NODE_ENV: "production"
       NITRO_PORT: "3000"
       HOST: "0.0.0.0"
-      # Force search-engine indexability at runtime, independent of the build's
-      # NODE_ENV. Without this the baked default (indexable only when NODE_ENV is
-      # production at build time) can leave the deployed site as noindex.
+      # Safety net: force indexability at runtime regardless of the build's
+      # NODE_ENV. The image already bakes indexable=true, this just guarantees it.
       NUXT_SITE_INDEXABLE: "true"
     # /data persists the Nuxt Content DB and the contact rate-limiter store.
     volumes:
       - ivan_data:/data
+    healthcheck:
+      # The distroless runtime has node but no shell or curl, so probe with the
+      # node binary directly. Node 24 ships a global fetch.
+      test:
+        [
+          "CMD",
+          "/nodejs/bin/node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    # Cap log growth so json-file logs can't fill the disk over time.
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   ivan_data:

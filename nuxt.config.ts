@@ -1,4 +1,3 @@
-import 'dotenv/config'
 import tailwindcss from '@tailwindcss/vite'
 import { requireConfigUrl } from './shared/utils/config'
 import { defaultLocale, siteLocales } from './shared/constants/locales'
@@ -56,15 +55,18 @@ export default defineNuxtConfig({
     },
   },
 
+  // Runtime secrets are injected at container start, not baked into the image.
+  // Nuxt only overrides these from NUXT_-prefixed env vars at runtime, so the
+  // defaults are empty and the real values come from NUXT_SMTP_* (see .env).
   runtimeConfig: {
     siteUrl,
-    smtpHost: process.env.SMTP_HOST,
-    smtpPort: process.env.SMTP_PORT,
-    smtpSecure: process.env.SMTP_SECURE,
-    smtpUser: process.env.SMTP_USER,
-    smtpPass: process.env.SMTP_PASS,
-    smtpFromEmail: process.env.SMTP_FROM_EMAIL,
-    smtpToEmail: process.env.SMTP_TO_EMAIL,
+    smtpHost: '',
+    smtpPort: '',
+    smtpSecure: '',
+    smtpUser: '',
+    smtpPass: '',
+    smtpFromEmail: '',
+    smtpToEmail: '',
   },
 
   app: {
