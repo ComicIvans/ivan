@@ -13,11 +13,13 @@ const {
   reset: resetPreloader,
 } = usePhotoPreloader()
 
-defineI18nRoute({
-  paths: {
-    es: '/galeria/[slug]',
-    en: '/gallery/[slug]',
-    de: '/galerie/[slug]',
+definePageMeta({
+  i18n: {
+    paths: {
+      es: '/galeria/[slug]',
+      en: '/gallery/[slug]',
+      de: '/galerie/[slug]',
+    },
   },
 })
 

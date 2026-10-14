@@ -31,11 +31,13 @@ const rightsItems = computed(() => {
   return items.map((item) => rt(item))
 })
 
-defineI18nRoute({
-  paths: {
-    es: '/legal',
-    en: '/legal',
-    de: '/impressum',
+definePageMeta({
+  i18n: {
+    paths: {
+      es: '/legal',
+      en: '/legal',
+      de: '/impressum',
+    },
   },
 })
 

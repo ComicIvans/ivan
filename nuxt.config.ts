@@ -1,4 +1,3 @@
-import tailwindcss from '@tailwindcss/vite'
 import { requireConfigUrl } from './shared/utils/config'
 import { defaultLocale, siteLocales } from './shared/constants/locales'
 import { profileName } from './shared/constants/profile'
@@ -30,7 +29,6 @@ export default defineNuxtConfig({
   ],
 
   vite: {
-    plugins: [tailwindcss()],
     optimizeDeps: {
       include: [
         '@nuxt/ui > prosemirror-state',
@@ -46,36 +44,52 @@ export default defineNuxtConfig({
     build: {
       // Vendor code that rarely changes between deploys gets its own chunk
       // so a browser that already cached it doesn't re-download it just
-      // because app code changed. Verified via bundle analysis (rollup-
-      // plugin-visualizer, run ad hoc) that gsap/ogl/photoswipe are already
-      // isolated or lazy and are NOT what makes the remaining shared chunk
-      // large. That chunk is the Vue + vue-router + Nuxt UI runtime plus
-      // layout chrome used on every route (LayoutHeader/Footer/Shell); it is
-      // not reducible without dropping one of those dependencies. vue-i18n
-      // + @intlify were pulled out into their own chunk below since they
-      // version-bump independently of app code. Per-locale message data is
-      // already lazy per @nuxtjs/i18n's own architecture (separate ~42 kB
-      // chunks per locale, not part of either chunk here). Measured after
-      // this split: framework/layout baseline ~394 kB min / ~131 kB gz,
-      // i18n-runtime ~143 kB min / ~53 kB gz. chunkSizeWarningLimit applies
-      // the same ceiling to every chunk (it is not tracked per chunk); 420
-      // sits just above the framework/layout chunk specifically, since that
-      // is the one with almost no headroom left. i18n-runtime has plenty of
-      // room under 420 and won't trip the warning until it roughly triples,
-      // but the framework/layout chunk will flag on only modest growth —
-      // which is the point: it's the one actually worth re-checking.
+      // because app code changed: Vue, gsap (eager, minus the bonus
+      // plugins), ogl (lazy, WebGL background only) and vue-i18n +
+      // @intlify, which version-bump independently of app code. Per-locale
+      // message data is already lazy per @nuxtjs/i18n's own architecture.
+      // The remaining shared chunk is the entry: vue-router + the Nuxt UI
+      // runtime plus layout chrome used on every route; it is not reducible
+      // without dropping one of those dependencies. Measured on Vite 8 /
+      // Rolldown: entry ~232 kB min / ~72 kB gz, gsap ~128 / ~51 kB,
+      // vue ~115 / ~44 kB, i18n-runtime ~50 / ~17 kB, ogl ~44 / ~13 kB.
+      // chunkSizeWarningLimit applies the same ceiling to every chunk (it
+      // is not tracked per chunk). 420 kB was set just above the previous
+      // framework/layout chunk (~417 kB before Vue moved to its own group)
+      // and is kept as the ceiling, so the build flags any chunk that
+      // grows back towards that size.
       chunkSizeWarningLimit: 420,
-      rollupOptions: {
+      rolldownOptions: {
         output: {
-          manualChunks(id) {
-            // Bonus plugins ride the lazy credential chunks, not the eager
-            // gsap chunk that every page downloads at startup.
-            if (/node_modules\/gsap\/(MorphSVGPlugin|DrawSVGPlugin)/.test(id)) return undefined
-            if (id.includes('node_modules/gsap')) return 'gsap'
-            if (id.includes('node_modules/ogl')) return 'ogl'
-            if (id.includes('node_modules/vue-i18n') || id.includes('node_modules/@intlify')) {
-              return 'i18n-runtime'
-            }
+          codeSplitting: {
+            groups: [
+              // Groups also capture their dependencies, so Vue gets its own
+              // group first; otherwise it is pulled into i18n-runtime.
+              { name: 'vue', test: /node_modules[\\/](?:vue|@vue)[\\/]/, priority: 1 },
+              // Bonus plugins ride the lazy credential chunks, not the eager
+              // gsap chunk that every page downloads at startup.
+              {
+                name: 'gsap',
+                test: /node_modules[\\/]gsap[\\/](?!(?:MorphSVGPlugin|DrawSVGPlugin)\b)/,
+              },
+              { name: 'ogl', test: /node_modules[\\/]ogl[\\/]/ },
+              { name: 'i18n-runtime', test: /node_modules[\\/](?:vue-i18n|@intlify)[\\/]/ },
+            ],
+          },
+        },
+      },
+    },
+    // Vite 8 minifies with Oxc and ignores the esbuild `drop` option that
+    // nuxt-security's removeLoggers relies on, so console/debugger stripping
+    // is configured on the client minifier directly (server logs stay intact).
+    $client: {
+      build: {
+        rolldownOptions: {
+          output: {
+            minify: {
+              compress: { dropConsole: true, dropDebugger: true },
+              mangle: true,
+            },
           },
         },
       },
@@ -98,7 +112,6 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      viewport: 'width=device-width, initial-scale=1',
       link: [
         { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg', sizes: 'any' },
         { rel: 'shortcut icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -173,8 +186,9 @@ export default defineNuxtConfig({
     './modules/fix-mdc-optimize-deps',
   ],
 
-  // Fonts are downloaded at build time and self-hosted from /_fonts, so the
-  // CSP font-src 'self' directive keeps holding at runtime.
+  // Fonts are downloaded at build time and self-hosted from /_nuxt/fonts, so
+  // the CSP font-src 'self' directive keeps holding at runtime. A failed
+  // download fails the production build instead of shipping without fonts.
   fonts: {
     families: [
       { name: 'Space Grotesk', weights: [500, 700], subsets: ['latin', 'latin-ext'] },
@@ -185,6 +199,9 @@ export default defineNuxtConfig({
   security: {
     // Own file-based limiter (server/utils/rateLimit.ts) is used instead.
     rateLimiter: false,
+    // Its esbuild-based console stripping is a no-op on Vite 8; the client
+    // minifier drops console/debugger instead (see vite.$client above).
+    removeLoggers: false,
     allowedMethodsRestricter: {
       methods: ['GET', 'HEAD', 'POST'],
     },
@@ -228,6 +245,9 @@ export default defineNuxtConfig({
 
   icon: {
     collections: ['tabler', 'circle-flags', 'simple-icons'],
+    // Serve icons only from the installed collections; never reach out to
+    // the public Iconify API at runtime.
+    fallbackToApi: false,
   },
 
   ...(hasUmami
@@ -294,6 +314,11 @@ export default defineNuxtConfig({
   linkChecker: {
     enabled: false,
   },
+
+  // Skew Protection needs old build assets kept between deploys, which the
+  // clean Docker build never has, and it adds client polling for little gain
+  // on a single-instance site. AI Ready (llms.txt) stays on by default.
+  skewProtection: false,
 
   i18n: {
     baseUrl: siteUrl,

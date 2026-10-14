@@ -5,6 +5,8 @@ import { profileName } from '~~/shared/constants/profile'
 // CSS: every element with more than one child sets display:flex, layout is
 // flexbox-only (no grid), and styles are bound as objects so formatting can't
 // inject newlines into CSS values (which breaks Satori's gradient parser).
+// Satori defaults to content-box, so the padded full-size root opts into
+// border-box to stay inside the 1200x630 canvas.
 withDefaults(
   defineProps<{
     title?: string
@@ -19,6 +21,7 @@ withDefaults(
 const rootStyle = {
   display: 'flex',
   flexDirection: 'column',
+  boxSizing: 'border-box',
   width: '100%',
   height: '100%',
   padding: '80px',

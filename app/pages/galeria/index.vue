@@ -6,11 +6,13 @@ const { getCoverAlt } = useGalleryImages()
 const { formatDate } = useDateFormatter()
 const formatMonthYear = (dateStr: string) => formatDate(dateStr, { year: 'numeric', month: 'long' })
 
-defineI18nRoute({
-  paths: {
-    es: '/galeria',
-    en: '/gallery',
-    de: '/galerie',
+definePageMeta({
+  i18n: {
+    paths: {
+      es: '/galeria',
+      en: '/gallery',
+      de: '/galerie',
+    },
   },
 })
 

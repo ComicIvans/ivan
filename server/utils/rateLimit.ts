@@ -43,7 +43,7 @@ export async function enforceRateLimit(event: H3Event, options: RateLimitOptions
   const key = `${sanitizeKeyPart(options.namespace)}:${sanitizeKeyPart(ip)}`
   await serializeByKey(key, async () => {
     const now = Date.now()
-    let record: RateLimitRecord | null = null
+    let record: RateLimitRecord | null
     try {
       record = await storage.getItem<RateLimitRecord>(key)
     } catch {

@@ -1,19 +1,8 @@
 import { getLocaleConfig } from '~/utils/locales'
 import { toAbsoluteUrl } from '~~/shared/utils/url'
 
-type SeoOgType =
-  | 'website'
-  | 'article'
-  | 'book'
-  | 'profile'
-  | 'music.song'
-  | 'music.album'
-  | 'music.playlist'
-  | 'music.radio_status'
-  | 'video.movie'
-  | 'video.episode'
-  | 'video.tv_show'
-  | 'video.other'
+// Derived from useSeoMeta so the accepted Open Graph types follow unhead.
+type SeoOgType = Extract<NonNullable<Parameters<typeof useSeoMeta>[0]['ogType']>, string>
 
 type SeoValue<T extends string = string> = T | (() => T | null | undefined)
 
