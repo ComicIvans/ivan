@@ -1,9 +1,12 @@
 # syntax=docker/dockerfile:1.7
 
-FROM node:24 AS base
+# Debian 13 (trixie) builder to match the distroless runtime below; Node 24
+# here is always >= 24.15, the floor required by Nuxt 4.6 and Nuxt SEO 6.
+FROM node:24-trixie AS base
 WORKDIR /app
 
-RUN npm install --global pnpm@10.33.0 \
+# Same pnpm release as package.json "packageManager".
+RUN npm install --global pnpm@12.11.2 \
   && npm cache clean --force
 
 ############################
@@ -17,14 +20,12 @@ ARG NUXT_UMAMI_ID
 
 ENV SITE_URL=$SITE_URL \
   NUXT_UMAMI_HOST=$NUXT_UMAMI_HOST \
-  NUXT_UMAMI_ID=$NUXT_UMAMI_ID \
-  npm_config_nodedir=/usr/local
+  NUXT_UMAMI_ID=$NUXT_UMAMI_ID
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
-  pnpm config set store-dir /pnpm/store \
-  && pnpm install --frozen-lockfile
+  pnpm install --frozen-lockfile --store-dir /pnpm/store
 
 COPY . .
 
@@ -39,7 +40,7 @@ RUN mkdir -p /runtime-data
 ############################
 # Minimal runtime image
 ############################
-FROM gcr.io/distroless/nodejs24-debian12:nonroot AS runner
+FROM gcr.io/distroless/nodejs24-debian13:nonroot AS runner
 
 WORKDIR /app
 
