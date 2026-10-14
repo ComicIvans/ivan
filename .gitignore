@@ -18,11 +18,19 @@ logs
 .fleet
 .idea
 .claude
+.agents
+.codex
 
 # Working/process docs (not part of the codebase)
 PLAN.md
+PLAN_ONEPAGE.md
+MEJORAS_VISUALES.md
+REVISION_CONTENIDO.md
 recommendations.md
 code_review.md
+
+# Local Nuxt Content database created by production builds
+/data
 
 # Local env files
 .env
