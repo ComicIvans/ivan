@@ -5,12 +5,7 @@
     "description": "Graduado en Matemáticas y especializado en Ciberseguridad con experiencia en gestión de proyectos, estrategia y gobernanza IT.",
     "pages": {
       "legal": "Información legal, política de cookies y privacidad del portfolio profesional de Iván Salido Cobo.",
-      "experience": "Experiencia destacada en gestión estratégica, gobernanza universitaria y organización de eventos de ámbito nacional.",
-      "projects": "Proyectos tecnológicos y stack técnico. Especialización en Ciberseguridad, automatización y desarrollo web.",
-      "representation": "Trayectoria en representación estudiantil, política universitaria y gestión de órganos colegiados.",
-      "gallery": "Galería de eventos, congresos y momentos destacados de la trayectoria profesional y académica.",
-      "training": "Formación académica, idiomas y competencias. MBA, Ciberseguridad y Grado en Matemáticas.",
-      "contact": "Contacto profesional. Envíame un mensaje a través del formulario."
+      "gallery": "Galería de eventos, congresos y momentos destacados de la trayectoria profesional y académica."
     }
   },
   "schema": {
@@ -46,8 +41,10 @@
   "home": {
     "hero": {
       "title": "¡Hola! Soy Iván",
-      "subtitle": "MBA en formación y especialista en Ciberseguridad",
-      "pitch": "Graduado en Matemáticas y especializado en Ciberseguridad. Actualmente curso un MBA, con un enfoque práctico en la ejecución de proyectos y la gestión de organizaciones. Me motiva trabajar en retos complejos, aportando análisis, criterio y organización para generar resultados concretos en entornos tecnológicos y de seguridad digital."
+      "pitch": "Graduado en Matemáticas y especializado en Ciberseguridad. Actualmente curso un MBA, con un enfoque práctico en la ejecución de proyectos y la gestión de organizaciones. Me motiva trabajar en retos complejos, aportando análisis, criterio y organización para generar resultados concretos en entornos tecnológicos y de seguridad digital.",
+      "titleLead": "¡Hola! Soy",
+      "titleAccent": "Iván",
+      "scrollCue": "Desliza"
     },
     "cta": {
       "experience": "Ver mi experiencia",
@@ -72,6 +69,17 @@
           "description": "Coordinación de eventos institucionales de ámbito nacional, con responsabilidad directa en logística, presupuestos y planificación."
         }
       ]
+    },
+    "stats": {
+      "projects": "Proyectos publicados",
+      "roles": "Cargos de representación",
+      "events": "Eventos en la galería"
+    },
+    "now": {
+      "title": "Ahora"
+    },
+    "tiles": {
+      "gallery": "Último evento"
     }
   },
   "experience": {
@@ -108,7 +116,8 @@
         "period": "Dic 2020 - Dic 2022",
         "description": "Gestión y optimización de un presupuesto público de 35.000 €, con foco en transparencia y eficiencia."
       }
-    ]
+    ],
+    "current": "Actual"
   },
   "projects": {
     "title": "Proyectos y Tecnología",
@@ -217,7 +226,10 @@
         "date": "Diciembre de 2020",
         "title": "Comienzo",
         "description": "Inicio como miembro del Claustro Universitario, del Consejo de Estudiantes (DGE) y de la Delegación de Estudiantes de la Facultad de Ciencias (DEFC), participando activamente en órganos de representación.",
-        "highlights": ["Tesorero de la DGE", "Secretario de la DEFC"]
+        "highlights": [
+          "Tesorero de la DGE",
+          "Secretario de la DEFC"
+        ]
       },
       {
         "id": "end-first-term",
@@ -236,41 +248,71 @@
         "date": "Marzo de 2023",
         "title": "Director de Relaciones Externas",
         "description": "Creación y asunción del cargo para fortalecer la presencia institucional y coordinación con entidades externas.",
-        "highlights": ["Director de Relaciones Externas de la DGE"]
+        "highlights": [
+          "Director de Relaciones Externas de la DGE"
+        ]
       },
       {
         "id": "academic-vicecoord",
         "date": "Junio de 2023",
         "title": "Vicecoordinador Académico",
         "description": "Participación directa en la mejora de la calidad docente y en la ampliación de garantías en la evaluación del estudiantado.",
-        "highlights": ["Vicecoordinador Académico de la DGE"]
+        "highlights": [
+          "Vicecoordinador Académico de la DGE"
+        ]
       },
       {
         "id": "creup-digitalization",
         "date": "Junio de 2024",
         "title": "Vocal de Digitalización y Transparencia",
         "description": "Responsable de la infraestructura tecnológica y de las políticas de seguridad, privacidad y protección de datos de CREUP.",
-        "highlights": ["Vocal de Digitalización y Transparencia de CREUP"]
+        "highlights": [
+          "Vocal de Digitalización y Transparencia de CREUP"
+        ]
       },
       {
         "id": "dge-advisor",
         "date": "Marzo de 2025",
         "title": "Director de Transparencia y Asesor",
         "description": "Elegido Director de Transparencia y nombrado Asesor del Consejo de Estudiantes, asumiendo funciones de apoyo estratégico, asesoramiento institucional y supervisión de buenas prácticas en materia de transparencia y gestión interna.",
-        "highlights": ["Director de Transparencia de la DGE", "Asesor de la DGE"]
+        "highlights": [
+          "Director de Transparencia de la DGE",
+          "Asesor de la DGE"
+        ]
       },
       {
         "id": "upv-delegate",
         "date": "Septiembre de 2025",
         "title": "Delegado en la UPV",
         "description": "Desde que comencé mis estudios de máster en la Universitat Politècnica de València, soy el delegado de mi clase, continuando así mi labor de representación estudiantil en una nueva universidad.",
-        "highlights": ["Delegado de clase"]
+        "highlights": [
+          "Delegado de clase"
+        ]
       }
-    ]
+    ],
+    "stats": {
+      "years": "Años en activo",
+      "milestones": "Hitos",
+      "roles": "Cargos desempeñados"
+    }
+  },
+  "credential": {
+    "role": {
+      "hero": "Representante · Developer"
+    },
+    "yourBadge": "TU ACREDITACIÓN",
+    "accredited": "ACREDITADO",
+    "holder": "Portador",
+    "delegate": "DELEGADO",
+    "diploma": "DIPLOMA",
+    "demoPass": "PASE DEMO",
+    "photoPass": "PASE DE PRENSA"
   },
   "gallery": {
     "title": "Galería",
     "intro": "Momentos destacados de eventos, congresos y actividades de representación estudiantil.",
+    "viewAll": "Ver toda la galería",
+    "loading": "Cargando galería...",
     "photoSoon": "Foto próximamente",
     "comingSoon": "Las fotografías de estos eventos se añadirán próximamente.",
     "filters": {
@@ -315,7 +357,8 @@
         "position": "Foto {current} de {total}",
         "zoomIn": "Aumentar zoom",
         "zoomOut": "Reducir zoom",
-        "resetZoom": "Restablecer zoom"
+        "resetZoom": "Restablecer zoom",
+        "error": "No se ha podido cargar la imagen."
       }
     }
   },
@@ -395,17 +438,50 @@
     "competencies": {
       "title": "Competencias Transversales",
       "items": [
-        { "id": "project-management", "name": "Gestión y Ejecución de Proyectos" },
-        { "id": "team-leadership", "name": "Liderazgo y Coordinación de Equipos" },
-        { "id": "governance", "name": "Gobernanza y Negociación" },
-        { "id": "communication", "name": "Comunicación" },
-        { "id": "systems", "name": "Administración de Sistemas" },
-        { "id": "cybersecurity-management", "name": "Gestión de la Seguridad de la Información" },
-        { "id": "compliance", "name": "Cumplimiento Normativo y Ciberseguridad" },
-        { "id": "automation", "name": "Automatización de Procesos" },
-        { "id": "data-analysis", "name": "Análisis y Toma de Decisiones" },
-        { "id": "problem-solving", "name": "Resolución de Problemas Complejos" },
-        { "id": "strategic-thinking", "name": "Pensamiento Estratégico y Planificación" }
+        {
+          "id": "project-management",
+          "name": "Gestión y Ejecución de Proyectos"
+        },
+        {
+          "id": "team-leadership",
+          "name": "Liderazgo y Coordinación de Equipos"
+        },
+        {
+          "id": "governance",
+          "name": "Gobernanza y Negociación"
+        },
+        {
+          "id": "communication",
+          "name": "Comunicación"
+        },
+        {
+          "id": "systems",
+          "name": "Administración de Sistemas"
+        },
+        {
+          "id": "cybersecurity-management",
+          "name": "Gestión de la Seguridad de la Información"
+        },
+        {
+          "id": "compliance",
+          "name": "Cumplimiento Normativo y Ciberseguridad"
+        },
+        {
+          "id": "automation",
+          "name": "Automatización de Procesos"
+        },
+        {
+          "id": "data-analysis",
+          "name": "Análisis y Toma de Decisiones"
+        },
+        {
+          "id": "problem-solving",
+          "name": "Resolución de Problemas Complejos"
+        },
+        {
+          "id": "strategic-thinking",
+          "name": "Pensamiento Estratégico y Planificación"
+        }
       ]
     }
   },
@@ -540,13 +616,10 @@
       "502": "El servidor recibió una respuesta inválida. Inténtalo más tarde.",
       "503": "El servicio está temporalmente no disponible. Vuelve pronto.",
       "default": "Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo."
-    }
+    },
+    "searchlight": "Esta página no está bajo esta luz."
   },
   "contactPage": {
-    "seo": {
-      "title": "Contacto",
-      "description": "Ponte en contacto con Iván Salido Cobo. Envía un mensaje a través del formulario de contacto."
-    },
     "title": "Contacto",
     "subtitle": "¿Tienes alguna pregunta o propuesta? Envíame un mensaje y te responderé lo antes posible.",
     "form": {
@@ -588,6 +661,10 @@
         "messageMax": "El mensaje no puede superar los 5000 caracteres"
       }
     },
-    "alternative": "También puedes contactarme a través de mis redes sociales:"
+    "alternative": "También puedes contactarme a través de mis redes sociales:",
+    "aside": {
+      "title": "Contacto directo",
+      "availability": "Suelo responder en 24-48 horas."
+    }
   }
 }

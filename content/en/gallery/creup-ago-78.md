@@ -3,6 +3,9 @@ title: 78th CREUP Ordinary General Assembly
 location: Barcelona, Spain
 duration: 4 days
 description: The Ordinary General Assemblies of CREUP bring together student representatives from across Spain to discuss issues and engage in political advocacy at the national level, with the aim of improving the situation of students at public universities.
+cover:
+  src: /gallery/creup-ago-78/cover.webp
+  alt: Assembly delegates during a debate
 tags:
   - CREUP
   - Assembly

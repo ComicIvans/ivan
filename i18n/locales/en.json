@@ -5,12 +5,7 @@
     "description": "Mathematics graduate specialising in Cybersecurity, with experience in project management, strategy and IT governance.",
     "pages": {
       "legal": "Legal information, cookies and privacy policy of Iván Salido Cobo’s professional portfolio.",
-      "experience": "Key experience in strategic management, university governance and organisation of national-level events.",
-      "projects": "Technology projects and technical stack. Specialisation in Cybersecurity, automation and web development.",
-      "representation": "Background in student representation, university policy and management of collegiate bodies.",
-      "gallery": "Gallery of events, conferences and key moments from my professional and academic trajectory.",
-      "training": "Academic background, languages and skills. MBA, Cybersecurity and BSc in Mathematics.",
-      "contact": "Professional contact. Send me a message via the contact form."
+      "gallery": "Gallery of events, conferences and key moments from my professional and academic trajectory."
     }
   },
   "schema": {
@@ -46,8 +41,10 @@
   "home": {
     "hero": {
       "title": "Hi, I’m Iván",
-      "subtitle": "MBA candidate and Cybersecurity specialist",
-      "pitch": "Mathematics graduate specialising in Cybersecurity. I am currently pursuing an MBA, with a practical focus on project execution and organisational management. I enjoy working on complex challenges, bringing analysis, judgement and structure to deliver tangible results in technology-driven and digital security environments."
+      "pitch": "Mathematics graduate specialising in Cybersecurity. I am currently pursuing an MBA, with a practical focus on project execution and organisational management. I enjoy working on complex challenges, bringing analysis, judgement and structure to deliver tangible results in technology-driven and digital security environments.",
+      "titleLead": "Hi, I’m",
+      "titleAccent": "Iván",
+      "scrollCue": "Scroll"
     },
     "cta": {
       "experience": "View my experience",
@@ -72,6 +69,17 @@
           "description": "Coordination of national-level institutional events, with direct responsibility for logistics, budgeting and planning."
         }
       ]
+    },
+    "stats": {
+      "projects": "Published projects",
+      "roles": "Representation roles",
+      "events": "Gallery events"
+    },
+    "now": {
+      "title": "Now"
+    },
+    "tiles": {
+      "gallery": "Latest event"
     }
   },
   "experience": {
@@ -108,7 +116,8 @@
         "period": "Dec 2020 - Dec 2022",
         "description": "Management and optimisation of a €35,000 public budget, with a strong focus on transparency and efficiency."
       }
-    ]
+    ],
+    "current": "Current"
   },
   "projects": {
     "title": "Projects and Technology",
@@ -142,14 +151,38 @@
       "secondary": {
         "title": "Secondary technologies",
         "items": [
-          { "id": "powershell", "name": "PowerShell" },
-          { "id": "python", "name": "Python" },
-          { "id": "php", "name": "PHP" },
-          { "id": "sql", "name": "SQL" },
-          { "id": "nginx", "name": "Nginx" },
-          { "id": "dns", "name": "DNS" },
-          { "id": "typescript", "name": "TypeScript" },
-          { "id": "node", "name": "Node.js" }
+          {
+            "id": "powershell",
+            "name": "PowerShell"
+          },
+          {
+            "id": "python",
+            "name": "Python"
+          },
+          {
+            "id": "php",
+            "name": "PHP"
+          },
+          {
+            "id": "sql",
+            "name": "SQL"
+          },
+          {
+            "id": "nginx",
+            "name": "Nginx"
+          },
+          {
+            "id": "dns",
+            "name": "DNS"
+          },
+          {
+            "id": "typescript",
+            "name": "TypeScript"
+          },
+          {
+            "id": "node",
+            "name": "Node.js"
+          }
         ]
       }
     },
@@ -193,7 +226,10 @@
         "date": "December 2020",
         "title": "Starting point",
         "description": "Joined the University Senate, the Students’ Council (DGE) and the Faculty of Science Student Delegation (DEFC), actively participating in representative bodies.",
-        "highlights": ["DGE Treasurer", "DEFC Secretary"]
+        "highlights": [
+          "DGE Treasurer",
+          "DEFC Secretary"
+        ]
       },
       {
         "id": "end-first-term",
@@ -212,41 +248,71 @@
         "date": "March 2023",
         "title": "Director of External Relations",
         "description": "Creation and assumption of the role to strengthen institutional presence and coordination with external entities.",
-        "highlights": ["Director of External Relations (DGE)"]
+        "highlights": [
+          "Director of External Relations (DGE)"
+        ]
       },
       {
         "id": "academic-vicecoord",
         "date": "June 2023",
         "title": "Academic Vice-Coordinator",
         "description": "Direct involvement in improving teaching quality and strengthening student assessment guarantees.",
-        "highlights": ["Academic Vice-Coordinator (DGE)"]
+        "highlights": [
+          "Academic Vice-Coordinator (DGE)"
+        ]
       },
       {
         "id": "creup-digitalization",
         "date": "June 2024",
         "title": "Board Member for Digitalisation and Transparency",
         "description": "Responsible for CREUP’s technological infrastructure and its security, privacy and data protection policies.",
-        "highlights": ["Board Member for Digitalisation and Transparency (CREUP)"]
+        "highlights": [
+          "Board Member for Digitalisation and Transparency (CREUP)"
+        ]
       },
       {
         "id": "dge-advisor",
         "date": "March 2025",
         "title": "Director of Transparency and Advisor",
         "description": "Elected Director of Transparency and appointed Advisor to the Students’ Council, undertaking strategic support, institutional advisory duties and oversight of transparency and internal management practices.",
-        "highlights": ["Director of Transparency (DGE)", "Advisor to the DGE"]
+        "highlights": [
+          "Director of Transparency (DGE)",
+          "Advisor to the DGE"
+        ]
       },
       {
         "id": "upv-delegate",
         "date": "September 2025",
         "title": "Class Representative at UPV",
         "description": "Elected class representative at the Universitat Politècnica de València at the start of my master’s studies, continuing my work in student representation within a new academic environment.",
-        "highlights": ["Class representative"]
+        "highlights": [
+          "Class representative"
+        ]
       }
-    ]
+    ],
+    "stats": {
+      "years": "Years active",
+      "milestones": "Milestones",
+      "roles": "Roles held"
+    }
+  },
+  "credential": {
+    "role": {
+      "hero": "Student rep · Developer"
+    },
+    "yourBadge": "YOUR BADGE",
+    "accredited": "ACCREDITED",
+    "holder": "Holder",
+    "delegate": "DELEGATE",
+    "diploma": "DIPLOMA",
+    "demoPass": "DEMO PASS",
+    "photoPass": "PHOTO PASS"
   },
   "gallery": {
     "title": "Gallery",
     "intro": "Highlights from events, conferences and student representation activities.",
+    "viewAll": "View the full gallery",
+    "loading": "Loading gallery...",
     "photoSoon": "Photo coming soon",
     "comingSoon": "Photographs from these events will be added shortly.",
     "filters": {
@@ -291,7 +357,8 @@
         "position": "Photo {current} of {total}",
         "zoomIn": "Zoom in",
         "zoomOut": "Zoom out",
-        "resetZoom": "Reset zoom"
+        "resetZoom": "Reset zoom",
+        "error": "The image could not be loaded."
       }
     }
   },
@@ -371,17 +438,50 @@
     "competencies": {
       "title": "Core competencies",
       "items": [
-        { "id": "project-management", "name": "Project Management and Execution" },
-        { "id": "team-leadership", "name": "Team Leadership and Coordination" },
-        { "id": "governance", "name": "Institutional Governance and Negotiation" },
-        { "id": "communication", "name": "Professional Communication" },
-        { "id": "systems", "name": "Systems Administration" },
-        { "id": "cybersecurity-management", "name": "Information Security Management" },
-        { "id": "compliance", "name": "Regulatory Compliance and Cybersecurity" },
-        { "id": "automation", "name": "Process Automation" },
-        { "id": "data-analysis", "name": "Analysis and Decision-Making" },
-        { "id": "problem-solving", "name": "Complex Problem Solving" },
-        { "id": "strategic-thinking", "name": "Strategic Thinking and Planning" }
+        {
+          "id": "project-management",
+          "name": "Project Management and Execution"
+        },
+        {
+          "id": "team-leadership",
+          "name": "Team Leadership and Coordination"
+        },
+        {
+          "id": "governance",
+          "name": "Institutional Governance and Negotiation"
+        },
+        {
+          "id": "communication",
+          "name": "Professional Communication"
+        },
+        {
+          "id": "systems",
+          "name": "Systems Administration"
+        },
+        {
+          "id": "cybersecurity-management",
+          "name": "Information Security Management"
+        },
+        {
+          "id": "compliance",
+          "name": "Regulatory Compliance and Cybersecurity"
+        },
+        {
+          "id": "automation",
+          "name": "Process Automation"
+        },
+        {
+          "id": "data-analysis",
+          "name": "Analysis and Decision-Making"
+        },
+        {
+          "id": "problem-solving",
+          "name": "Complex Problem Solving"
+        },
+        {
+          "id": "strategic-thinking",
+          "name": "Strategic Thinking and Planning"
+        }
       ]
     }
   },
@@ -516,13 +616,10 @@
       "502": "The server received an invalid response. Please try again later.",
       "503": "The service is temporarily unavailable. Please come back later.",
       "default": "An unexpected error occurred. Please try again."
-    }
+    },
+    "searchlight": "This page isn’t under this light."
   },
   "contactPage": {
-    "seo": {
-      "title": "Contact",
-      "description": "Get in touch with Iván Salido Cobo. Send a message using the contact form."
-    },
     "title": "Contact",
     "subtitle": "Do you have a question or a proposal? Send me a message and I will get back to you as soon as possible.",
     "form": {
@@ -564,6 +661,10 @@
         "messageMax": "Message cannot exceed 5000 characters"
       }
     },
-    "alternative": "You can also contact me via my social media profiles:"
+    "alternative": "You can also contact me via my social media profiles:",
+    "aside": {
+      "title": "Direct contact",
+      "availability": "I usually reply within 24-48 hours."
+    }
   }
 }

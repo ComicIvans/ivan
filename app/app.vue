@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { defaultLocale } from '~~/shared/constants/locales'
 import { profileName, profileSameAs } from '~~/shared/constants/profile'
+import { themeColorMeta } from '~~/shared/constants/theme'
 import { getOgLocale } from '~/utils/locales'
 import { getNuxtUiLocale } from '~/utils/nuxtUiLocale'
 
@@ -8,6 +9,7 @@ const { t, locale, localeCodes } = useI18n({ useScope: 'global' })
 const siteConfig = useSiteConfig()
 const localeHead = useLocaleHead({ seo: true })
 const siteUrl = computed(() => String(siteConfig.url ?? ''))
+const siteRoot = computed(() => siteUrl.value.replace(/\/$/, ''))
 const route = useRoute()
 const router = useRouter()
 const pendingPageFullPath = useState<string | null>('page-nav-pending-path', () => null)
@@ -35,7 +37,7 @@ useHead(() => ({
   link: [...(localeHead.value.link ?? [])],
   meta: [
     ...(localeHead.value.meta ?? []),
-    { name: 'theme-color', content: '#f87171' },
+    { name: 'theme-color', content: themeColorMeta },
     { name: 'author', content: profileName },
   ],
 }))
@@ -54,11 +56,13 @@ useSeoMeta({
   twitterTitle: () => t('seo.title'),
   twitterDescription: () => t('seo.description'),
   author: profileName,
-  themeColor: '#f87171',
+  themeColor: themeColorMeta,
 })
 
 onMounted(() => {
-  pageTransitionsEnabled.value = true
+  // The native View Transitions API (experimental.viewTransition) owns page
+  // navigation where supported; the Vue transition below is the fallback.
+  pageTransitionsEnabled.value = !('startViewTransition' in document)
 
   removeRoutePendingHook = router.beforeEach((to, from) => {
     if (to.fullPath !== from.fullPath) {
@@ -91,7 +95,7 @@ useSchemaOrg([
     familyName: 'Salido Cobo',
     gender: 'Male',
     url: () => siteUrl.value,
-    image: () => `${siteUrl.value}/profile-pic.webp`,
+    image: () => `${siteRoot.value}/profile-pic.webp`,
     description: () => t('seo.description'),
     nationality: {
       '@type': 'Country',
@@ -104,7 +108,6 @@ useSchemaOrg([
         addressCountry: 'ES',
         addressLocality: 'Santa María de los Llanos',
         addressRegion: 'Castilla-La Mancha',
-        postalCode: '16639',
       },
     },
     sameAs: profileSameAs,

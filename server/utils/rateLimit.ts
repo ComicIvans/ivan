@@ -17,6 +17,19 @@ interface RateLimitOptions {
 }
 
 const sanitizeKeyPart = (value: string) => value.replace(/[^a-zA-Z0-9_.:-]/g, '_')
+const pendingByKey = new Map<string, Promise<void>>()
+
+async function serializeByKey(key: string, operation: () => Promise<void>): Promise<void> {
+  const previous = pendingByKey.get(key) ?? Promise.resolve()
+  const current = previous.catch(() => undefined).then(operation)
+  pendingByKey.set(key, current)
+
+  try {
+    await current
+  } finally {
+    if (pendingByKey.get(key) === current) pendingByKey.delete(key)
+  }
+}
 
 /**
  * File-based, proxy-aware rate limiter. State lives in the `ratelimit` Nitro
@@ -28,32 +41,29 @@ export async function enforceRateLimit(event: H3Event, options: RateLimitOptions
   const ip = getClientIp(event)
   const storage = useStorage('ratelimit')
   const key = `${sanitizeKeyPart(options.namespace)}:${sanitizeKeyPart(ip)}`
-  const now = Date.now()
+  await serializeByKey(key, async () => {
+    const now = Date.now()
+    let record: RateLimitRecord | null = null
+    try {
+      record = await storage.getItem<RateLimitRecord>(key)
+    } catch {
+      return
+    }
 
-  let record: RateLimitRecord | null = null
-  try {
-    record = await storage.getItem<RateLimitRecord>(key)
-  } catch {
-    // Storage read failed: allow the request.
-    return
-  }
+    const currentRecord = record
+    const isExpired = !currentRecord || now - currentRecord.firstRequest > options.windowMs
+    const nextRecord: RateLimitRecord = isExpired
+      ? { count: 1, firstRequest: now }
+      : { count: currentRecord.count + 1, firstRequest: currentRecord.firstRequest }
 
-  const isExpired = !record || now - record.firstRequest > options.windowMs
-  const nextRecord: RateLimitRecord = isExpired
-    ? { count: 1, firstRequest: now }
-    : { count: record!.count + 1, firstRequest: record!.firstRequest }
+    try {
+      await storage.setItem(key, nextRecord)
+    } catch {
+      return
+    }
 
-  try {
-    await storage.setItem(key, nextRecord)
-  } catch {
-    // Storage write failed: allow the request.
-    return
-  }
-
-  if (nextRecord.count > options.maxRequests) {
-    throw createError({
-      statusCode: 429,
-      statusMessage: options.errorMessage,
-    })
-  }
+    if (nextRecord.count > options.maxRequests) {
+      throw createError({ statusCode: 429, statusMessage: options.errorMessage })
+    }
+  })
 }

@@ -7,7 +7,8 @@ const localePath = useLocalePath()
 const socialLinks = computed(() => [
   {
     icon: 'i-tabler-mail',
-    to: localePath('/contacto'),
+    // Contact lives as a home section now; deep-link via anchor
+    to: { path: localePath('/'), hash: '#contacto' },
     label: t('footer.contactLabel'),
     external: false,
   },
@@ -33,15 +34,15 @@ const socialLinks = computed(() => [
 </script>
 
 <template>
-  <footer class="bg-elevated text-muted p-4 pb-6 md:pb-4" role="contentinfo">
+  <footer class="footer-band text-muted p-4 pb-6 md:pb-4" role="contentinfo">
     <div
-      class="mx-auto flex w-11/12 max-w-7xl flex-col items-center gap-4 text-center md:grid md:grid-cols-3 md:items-center"
+      class="mx-auto flex w-11/12 max-w-7xl flex-col items-center gap-4 pt-2 text-center md:grid md:grid-cols-[auto_1fr_auto] md:items-center md:gap-8"
     >
-      <!-- Copyright -->
-      <div
-        class="flex flex-col items-center gap-2 text-center md:flex-row md:justify-start md:text-left"
-      >
-        <UIcon name="i-tabler-copyright" class="size-5 shrink-0" aria-hidden="true" />
+      <!-- Wordmark + copyright -->
+      <div class="flex flex-col items-center gap-1 md:items-start md:text-left">
+        <span class="type-display text-highlighted text-lg" aria-hidden="true">
+          {{ t('header.title') }}
+        </span>
         <p class="text-sm">
           <i18n-t keypath="footer.copyright" tag="span" scope="global">
             <template #link>
@@ -82,3 +83,26 @@ const socialLinks = computed(() => [
     </div>
   </footer>
 </template>
+
+<style scoped>
+/* Aurora hairline instead of a hard color break against the page backdrop */
+.footer-band {
+  position: relative;
+  background: color-mix(in oklab, var(--ui-bg-elevated) 82%, transparent);
+}
+
+.footer-band::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--color-ember-400) 45%, transparent) 30%,
+    color-mix(in oklab, var(--color-amber-400) 35%, transparent) 70%,
+    transparent
+  );
+  pointer-events: none;
+}
+</style>

@@ -3,6 +3,9 @@ title: 78. Ordentliche Generalversammlung von CREUP
 location: Barcelona, Spanien
 duration: 4 Tage
 description: Die Ordentlichen Generalversammlungen der CREUP bringen Studierendenvertretungen aus ganz Spanien zusammen, um Themen zu diskutieren und politische Interessenvertretung auf nationaler Ebene zu betreiben, mit dem Ziel, die Situation der Studierenden an öffentlichen Universitäten zu verbessern.
+cover:
+  src: /gallery/creup-ago-78/cover.webp
+  alt: Delegierte während einer Debatte der Versammlung
 tags:
   - CREUP
   - Versammlung

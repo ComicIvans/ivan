@@ -33,6 +33,9 @@ const queryOptions = computed(() => ({
 }))
 
 const { events, allTags, totalPages, totalEvents, isLoading } = useGalleryEvents(queryOptions)
+const allVisibleEventsLackPhotos = computed(
+  () => events.value.length > 0 && events.value.every((event) => event.photos.length === 0)
+)
 
 const sortOptions = computed(() => [
   { label: t('gallery.filters.sortByDateDesc'), value: 'date-desc' },
@@ -78,93 +81,91 @@ const hasActiveFilters = computed(() => {
 function getEventIcon(event: { icon?: string }) {
   return event.icon || 'i-tabler-photo'
 }
+
+function getEventSlug(event: { path: string }) {
+  return event.path.split('/').pop()
+}
 </script>
 
 <template>
-  <section :aria-label="t('gallery.title')" class="section-enter">
-    <!-- Header -->
-    <div class="mb-8 text-center">
-      <h1 class="text-primary-500 text-4xl font-bold lg:text-5xl">
-        {{ t('gallery.title') }}
-      </h1>
-      <p class="text-muted mx-auto mt-4 max-w-2xl">
-        {{ t('gallery.intro') }}
-      </p>
+  <section :aria-label="t('gallery.title')">
+    <PageHeader :title="t('gallery.title')" :intro="t('gallery.intro')" />
+
+    <!-- Filter toolbar -->
+    <div class="surface-glass mb-8 rounded-2xl p-4 sm:p-5">
+      <div class="flex flex-col gap-4 sm:flex-row">
+        <UInput
+          v-model="searchQuery"
+          :placeholder="t('gallery.filters.searchPlaceholder')"
+          :aria-label="t('gallery.filters.searchLabel')"
+          icon="i-tabler-search"
+          class="flex-1"
+          size="lg"
+        />
+
+        <USelect
+          v-model="selectedSort"
+          :items="sortOptions"
+          :aria-label="t('gallery.filters.sortLabel')"
+          class="w-full sm:w-64"
+          size="lg"
+        />
+      </div>
+
+      <!-- Tags -->
+      <div
+        v-if="allTags.length > 0"
+        role="group"
+        :aria-label="t('gallery.filters.tags')"
+        class="mt-4 flex flex-wrap gap-2"
+      >
+        <span class="text-muted flex items-center gap-2 text-sm" aria-hidden="true">
+          <UIcon name="i-tabler-tags" class="size-4" />
+          {{ t('gallery.filters.tags') }}:
+        </span>
+        <button
+          v-for="tag in allTags"
+          :key="tag"
+          type="button"
+          :aria-pressed="selectedTags.includes(tag)"
+          class="cursor-pointer transition-all hover:scale-105"
+          @click="toggleTag(tag)"
+        >
+          <UBadge
+            :color="selectedTags.includes(tag) ? 'primary' : 'neutral'"
+            :variant="selectedTags.includes(tag) ? 'solid' : 'outline'"
+          >
+            {{ tag }}
+          </UBadge>
+        </button>
+      </div>
+
+      <div class="mt-4 flex flex-wrap items-center justify-between gap-3" aria-live="polite">
+        <span class="text-muted font-mono text-sm">
+          {{ t('gallery.filters.resultsCount', { count: totalEvents }) }}
+        </span>
+        <UButton
+          v-if="hasActiveFilters"
+          variant="ghost"
+          color="neutral"
+          size="sm"
+          icon="i-tabler-x"
+          @click="clearFilters"
+        >
+          {{ t('gallery.filters.clearFilters') }}
+        </UButton>
+      </div>
     </div>
 
-    <!-- Filters and search -->
-    <UCard class="mb-8">
-      <div class="flex flex-col gap-4">
-        <!-- Search bar and sort -->
-        <div class="flex flex-col gap-4 sm:flex-row">
-          <!-- Search -->
-          <UInput
-            v-model="searchQuery"
-            :placeholder="t('gallery.filters.searchPlaceholder')"
-            :aria-label="t('gallery.filters.searchLabel')"
-            icon="i-tabler-search"
-            class="flex-1"
-            size="lg"
-          />
-
-          <USelect
-            v-model="selectedSort"
-            :items="sortOptions"
-            :aria-label="t('gallery.filters.sortLabel')"
-            class="w-full sm:w-64"
-            size="lg"
-          />
-        </div>
-
-        <!-- Tags -->
-        <div
-          v-if="allTags.length > 0"
-          role="group"
-          :aria-label="t('gallery.filters.tags')"
-          class="flex flex-wrap gap-2"
-        >
-          <span class="text-muted flex items-center gap-2 text-sm" aria-hidden="true">
-            <UIcon name="i-tabler-tags" class="size-4" />
-            {{ t('gallery.filters.tags') }}:
-          </span>
-          <button
-            v-for="tag in allTags"
-            :key="tag"
-            type="button"
-            :aria-pressed="selectedTags.includes(tag)"
-            class="cursor-pointer transition-all hover:scale-105"
-            @click="toggleTag(tag)"
-          >
-            <UBadge
-              :color="selectedTags.includes(tag) ? 'primary' : 'neutral'"
-              :variant="selectedTags.includes(tag) ? 'solid' : 'outline'"
-            >
-              {{ tag }}
-            </UBadge>
-          </button>
-        </div>
-
-        <div class="flex flex-wrap items-center justify-between gap-3" aria-live="polite">
-          <span class="text-muted text-sm">
-            {{ t('gallery.filters.resultsCount', { count: totalEvents }) }}
-          </span>
-          <UButton
-            v-if="hasActiveFilters"
-            variant="ghost"
-            color="neutral"
-            size="sm"
-            icon="i-tabler-x"
-            @click="clearFilters"
-          >
-            {{ t('gallery.filters.clearFilters') }}
-          </UButton>
-        </div>
-      </div>
-    </UCard>
-
     <!-- Loading state -->
-    <div v-if="isLoading" class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <UCard v-for="i in perPage" :key="i" class="overflow-hidden">
+    <div
+      v-if="isLoading"
+      class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+      role="status"
+      aria-busy="true"
+      :aria-label="t('gallery.loading')"
+    >
+      <UCard v-for="i in perPage" :key="i" class="overflow-hidden" aria-hidden="true">
         <template #header>
           <USkeleton class="aspect-video w-full" />
         </template>
@@ -180,7 +181,7 @@ function getEventIcon(event: { icon?: string }) {
     <UCard v-else-if="events.length === 0" class="text-center">
       <div class="flex flex-col items-center gap-4 py-8">
         <UIcon name="i-tabler-photo-off" class="text-muted size-16" />
-        <h3 class="text-lg font-semibold">{{ t('gallery.noResults.title') }}</h3>
+        <h2 class="text-lg font-semibold">{{ t('gallery.noResults.title') }}</h2>
         <p class="text-muted">{{ t('gallery.noResults.description') }}</p>
         <UButton v-if="hasActiveFilters" variant="soft" @click="clearFilters">
           {{ t('gallery.filters.clearFilters') }}
@@ -189,97 +190,106 @@ function getEventIcon(event: { icon?: string }) {
     </UCard>
 
     <!-- Events grid -->
-    <div v-else class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div v-else v-auto-animate class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       <NuxtLink
         v-for="event in events"
         :key="event.id"
-        :to="localePath(`/galeria/${event.path.split('/').pop()}`)"
+        v-spotlight
+        :to="localePath(`/galeria/${getEventSlug(event)}`)"
         :aria-label="`${event.title}. ${formatMonthYear(event.date)}`"
-        class="motion-link-card group block focus:outline-none"
+        class="motion-link-card reveal surface-glass group relative block overflow-hidden rounded-2xl"
       >
-        <UCard class="h-full overflow-hidden">
-          <template #header>
-            <div class="bg-elevated relative aspect-video w-full overflow-hidden">
-              <template v-if="event.cover">
-                <NuxtImg
-                  :src="event.cover.src"
-                  :alt="getCoverAlt(event.title, event.cover.alt)"
-                  class="motion-link-media size-full object-cover"
-                  loading="lazy"
-                  width="400"
-                  height="225"
-                  format="webp"
-                  quality="72"
-                />
-              </template>
-              <template v-else>
-                <USkeleton class="absolute inset-0 rounded-none" />
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <UIcon
-                    :name="getEventIcon(event)"
-                    class="text-dimmed size-16"
-                    aria-hidden="true"
-                  />
-                </div>
-                <UBadge
-                  v-if="event.photos.length === 0"
-                  color="neutral"
-                  size="sm"
-                  class="absolute right-2 bottom-2"
-                >
-                  {{ t('gallery.photoSoon') }}
-                </UBadge>
-              </template>
-
-              <!-- Photo counter -->
-              <UBadge
-                v-if="event.photos.length > 0"
-                color="primary"
-                size="sm"
-                class="absolute right-2 bottom-2"
-              >
-                <UIcon name="i-tabler-photo" class="mr-1 size-3" />
-                {{ event.photos.length }}
-              </UBadge>
+        <!-- Cover / fallback tile with title scrim -->
+        <div class="bg-elevated relative aspect-video w-full overflow-hidden">
+          <template v-if="event.cover">
+            <NuxtImg
+              :src="event.cover.src"
+              :alt="getCoverAlt(event.title, event.cover.alt)"
+              :style="{ viewTransitionName: `gallery-cover-${getEventSlug(event)}` }"
+              class="motion-link-media size-full object-cover"
+              loading="lazy"
+              width="800"
+              height="450"
+              quality="75"
+              sizes="xs:100vw md:50vw lg:40vw"
+            />
+            <div
+              class="absolute top-2 left-2 flex size-9 items-center justify-center rounded-lg bg-black/30 text-white backdrop-blur-md"
+              aria-hidden="true"
+            >
+              <UIcon :name="getEventIcon(event)" class="size-5" />
             </div>
           </template>
-
-          <div>
-            <h2 class="text-highlighted flex items-center gap-2 text-lg font-bold">
+          <template v-else>
+            <div class="gallery-fallback-tile absolute inset-0 flex items-center justify-center">
               <UIcon
                 :name="getEventIcon(event)"
-                class="text-primary-500 size-5 shrink-0"
+                class="text-primary-500/25 size-24"
                 aria-hidden="true"
               />
-              {{ event.title }}
-            </h2>
-            <div class="mt-1 flex items-center gap-2 text-sm">
-              <UIcon name="i-tabler-calendar" class="text-primary-500 size-4 shrink-0" />
-              <span class="text-toned font-medium">{{ formatMonthYear(event.date) }}</span>
             </div>
-            <div v-if="event.location" class="mt-1 flex items-center gap-2 text-sm">
-              <UIcon name="i-tabler-map-pin" class="text-muted size-4 shrink-0" />
-              <span class="text-muted">{{ event.location }}</span>
-            </div>
-            <p class="text-muted mt-2 line-clamp-2">{{ event.description }}</p>
+            <UBadge
+              v-if="event.photos.length === 0"
+              color="neutral"
+              variant="soft"
+              size="sm"
+              class="absolute top-2 right-2"
+            >
+              {{ t('gallery.photoSoon') }}
+            </UBadge>
+          </template>
 
-            <!-- Tags -->
-            <div v-if="event.tags.length > 0" class="mt-3 flex flex-wrap gap-1">
-              <UBadge
-                v-for="tag in event.tags.slice(0, 3)"
-                :key="tag"
-                color="neutral"
-                variant="subtle"
-                size="sm"
-              >
-                {{ tag }}
-              </UBadge>
-              <UBadge v-if="event.tags.length > 3" color="neutral" variant="subtle" size="xs">
-                +{{ event.tags.length - 3 }}
-              </UBadge>
+          <!-- Photo counter -->
+          <UBadge
+            v-if="event.photos.length > 0"
+            color="primary"
+            size="sm"
+            class="absolute top-2 right-2"
+          >
+            <UIcon name="i-tabler-photo" class="mr-1 size-3" />
+            {{ event.photos.length }}
+          </UBadge>
+
+          <!-- Title scrim: confined to the bottom ~45% so the cover reads
+               clearly before hover, not just after -->
+          <div
+            class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 from-0% to-transparent to-45%"
+          >
+            <div class="px-4 pt-10 pb-3">
+              <h2 class="text-lg leading-snug font-bold text-white drop-shadow-sm">
+                {{ event.title }}
+              </h2>
+              <p class="mt-0.5 font-mono text-xs text-white/85">
+                {{ formatMonthYear(event.date) }}
+              </p>
             </div>
           </div>
-        </UCard>
+        </div>
+
+        <!-- Card body -->
+        <div class="p-4 sm:p-5">
+          <div v-if="event.location" class="flex items-center gap-2 text-sm">
+            <UIcon name="i-tabler-map-pin" class="text-muted size-4 shrink-0" aria-hidden="true" />
+            <span class="text-muted">{{ event.location }}</span>
+          </div>
+          <p class="text-muted mt-2 line-clamp-2">{{ event.description }}</p>
+
+          <!-- Tags -->
+          <div v-if="event.tags.length > 0" class="mt-3 flex flex-wrap gap-1">
+            <UBadge
+              v-for="tag in event.tags.slice(0, 3)"
+              :key="tag"
+              color="neutral"
+              variant="subtle"
+              size="sm"
+            >
+              {{ tag }}
+            </UBadge>
+            <UBadge v-if="event.tags.length > 3" color="neutral" variant="subtle" size="xs">
+              +{{ event.tags.length - 3 }}
+            </UBadge>
+          </div>
+        </div>
       </NuxtLink>
     </div>
 
@@ -295,7 +305,7 @@ function getEventIcon(event: { icon?: string }) {
     </div>
 
     <!-- Informational note when no events have photos -->
-    <UCard v-if="events.length > 0 && events.every((e) => e.photos.length === 0)" class="mt-8">
+    <UCard v-if="allVisibleEventsLackPhotos" class="mt-8">
       <div class="flex items-center justify-center gap-3 text-center">
         <UIcon name="i-tabler-camera" class="text-primary-500 size-6" aria-hidden="true" />
         <p class="text-muted">
@@ -305,3 +315,25 @@ function getEventIcon(event: { icon?: string }) {
     </UCard>
   </section>
 </template>
+
+<style scoped>
+/* Designed no-cover tile: aurora-tinted gradient instead of a skeleton */
+.gallery-fallback-tile {
+  background:
+    radial-gradient(
+      circle at 20% 18%,
+      color-mix(in oklab, var(--color-ember-400) 18%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      circle at 82% 78%,
+      color-mix(in oklab, var(--color-amber-400) 14%, transparent),
+      transparent 55%
+    ),
+    linear-gradient(
+      160deg,
+      color-mix(in oklab, var(--color-ember-400) 8%, var(--ui-bg-elevated)),
+      var(--ui-bg-elevated)
+    );
+}
+</style>

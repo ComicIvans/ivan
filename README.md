@@ -63,13 +63,22 @@ pnpm typecheck
 
 ### SMTP
 
-- `SMTP_HOST`
-- `SMTP_PORT`
-- `SMTP_SECURE`
-- `SMTP_USER`
-- `SMTP_PASS`
-- `SMTP_FROM_EMAIL`
-- `SMTP_TO_EMAIL`
+- `NUXT_SMTP_HOST`
+- `NUXT_SMTP_PORT`
+- `NUXT_SMTP_SECURE`
+- `NUXT_SMTP_USER`
+- `NUXT_SMTP_PASS`
+- `NUXT_SMTP_FROM_EMAIL`
+- `NUXT_SMTP_TO_EMAIL`
+
+El proxy inverso debe reemplazar cualquier `X-Forwarded-For` proporcionado por
+el cliente por su propia cadena de confianza. La aplicación usa esa cabecera
+para los controles de abuso.
+
+Los binarios de la galería se mantienen fuera de Git. Antes de construir o
+desplegar hay que restaurar `public/gallery/` desde la copia privada. `pnpm
+build` ejecuta `pnpm verify:gallery` y falla si el contenido referencia un
+archivo local ausente.
 
 ### Analítica
 

@@ -1,21 +1,14 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui'
+import gsap from 'gsap'
 import { socialProfiles } from '~~/shared/constants/profile'
 import { contactFormSchema, type ContactFormData } from '~~/shared/utils/contactValidation'
 import { CONTACT_FIELD_LIMITS } from '~~/shared/utils/contactShared'
 
+defineProps<{ id: string }>()
+
 const { t } = useI18n({ useScope: 'global' })
 const toast = useToast()
-
-defineI18nRoute({
-  paths: {
-    es: '/contacto',
-    en: '/contact',
-    de: '/kontakt',
-  },
-})
-
-usePageSeo('contactPage.seo.title', 'contactPage.seo.description')
 
 const form = reactive<ContactFormData>({
   name: '',
@@ -28,8 +21,39 @@ const form = reactive<ContactFormData>({
 
 const isSubmitting = ref(false)
 
+// Live name printing on the credential badge. Once accredited, the printed
+// name is frozen: the form reset below would otherwise blank it right as the
+// stamp lands.
+const journey = useCredentialJourney()
+watch(
+  () => form.name,
+  (value) => {
+    if (!journey.accredited.value) journey.visitorName.value = value
+  }
+)
+
 onMounted(() => {
   form.startedAt = Date.now()
+})
+
+const formCard = useTemplateRef<HTMLElement>('formCard')
+
+// Mount-time entrance only: fields stay visible when JS or motion is off.
+useGsapMatchMedia(formCard, (context) => {
+  const { reduceMotion } = context.conditions as { reduceMotion: boolean }
+
+  if (reduceMotion) {
+    return
+  }
+
+  gsap.from('.contact-field', {
+    autoAlpha: 0,
+    y: 6,
+    duration: 0.45,
+    ease: 'power2.out',
+    stagger: 0.03,
+    clearProps: 'opacity,visibility,transform',
+  })
 })
 
 const apiErrorMessages = computed<Record<string, string>>(() => ({
@@ -86,6 +110,10 @@ async function onSubmit(event: FormSubmitEvent<ContactFormData>) {
       color: 'success',
     })
 
+    // Freeze the submitted name on the badge BEFORE clearing the form.
+    journey.visitorName.value = event.data.name
+    journey.accredited.value = true
+
     form.name = ''
     form.email = ''
     form.subject = ''
@@ -102,29 +130,33 @@ async function onSubmit(event: FormSubmitEvent<ContactFormData>) {
     isSubmitting.value = false
   }
 }
+
+function onFormError(event: { errors: Array<{ name?: string }> }) {
+  const fieldName = event.errors[0]?.name
+  if (!fieldName) return
+  document.querySelector<HTMLElement>(`[name="${CSS.escape(fieldName)}"]`)?.focus()
+}
 </script>
 
 <template>
-  <section :aria-label="t('contactPage.title')" class="section-enter">
-    <div class="mx-auto max-w-2xl">
-      <!-- Header -->
-      <div class="mb-8 text-center">
-        <h1 class="text-primary-500 text-3xl font-bold sm:text-4xl">
-          {{ t('contactPage.title') }}
-        </h1>
-        <p class="text-muted mt-4">
-          {{ t('contactPage.subtitle') }}
-        </p>
-      </div>
+  <section :id="id" class="scroll-mt-24 py-20 sm:py-28" :aria-labelledby="`${id}-title`">
+    <RevealHeading
+      :title="t('contactPage.title')"
+      :heading-id="`${id}-title`"
+      :intro="t('contactPage.subtitle')"
+      accent="ember"
+    />
 
+    <div class="grid gap-6 lg:grid-cols-[1fr_20rem]">
       <!-- Contact Form -->
-      <UCard>
+      <div ref="formCard" class="surface-glass rounded-2xl p-4 sm:p-6">
         <UForm
           :schema="contactFormSchema"
           :state="form"
           class="space-y-6"
           aria-describedby="form-description"
           @submit="onSubmit"
+          @error="onFormError"
         >
           <p id="form-description" class="sr-only">{{ t('contactPage.subtitle') }}</p>
 
@@ -142,7 +174,7 @@ async function onSubmit(event: FormSubmitEvent<ContactFormData>) {
           </div>
 
           <!-- Name -->
-          <UFormField name="name" :label="t('contactPage.form.name') + ' *'">
+          <UFormField name="name" :label="t('contactPage.form.name') + ' *'" class="contact-field">
             <UInput
               id="contact-name"
               v-model="form.name"
@@ -157,7 +189,11 @@ async function onSubmit(event: FormSubmitEvent<ContactFormData>) {
           </UFormField>
 
           <!-- Email -->
-          <UFormField name="email" :label="t('contactPage.form.email') + ' *'">
+          <UFormField
+            name="email"
+            :label="t('contactPage.form.email') + ' *'"
+            class="contact-field"
+          >
             <UInput
               id="contact-email"
               v-model="form.email"
@@ -173,7 +209,11 @@ async function onSubmit(event: FormSubmitEvent<ContactFormData>) {
           </UFormField>
 
           <!-- Subject -->
-          <UFormField name="subject" :label="t('contactPage.form.subject') + ' *'">
+          <UFormField
+            name="subject"
+            :label="t('contactPage.form.subject') + ' *'"
+            class="contact-field"
+          >
             <UInput
               id="contact-subject"
               v-model="form.subject"
@@ -188,7 +228,11 @@ async function onSubmit(event: FormSubmitEvent<ContactFormData>) {
           </UFormField>
 
           <!-- Message -->
-          <UFormField name="message" :label="t('contactPage.form.message') + ' *'">
+          <UFormField
+            name="message"
+            :label="t('contactPage.form.message') + ' *'"
+            class="contact-field"
+          >
             <UTextarea
               id="contact-message"
               v-model="form.message"
@@ -208,7 +252,6 @@ async function onSubmit(event: FormSubmitEvent<ContactFormData>) {
                     ? 'text-error'
                     : 'text-muted'
                 "
-                aria-live="polite"
               >
                 {{
                   t('contactPage.form.messageLength', {
@@ -228,23 +271,29 @@ async function onSubmit(event: FormSubmitEvent<ContactFormData>) {
             :loading="isSubmitting"
             :disabled="isSubmitting"
             icon="i-tabler-send"
+            class="contact-field"
           >
             {{ isSubmitting ? t('contactPage.form.sending') : t('contactPage.form.submit') }}
           </UButton>
-
-          <!-- Privacy Note -->
-          <p class="text-dimmed text-center text-sm">
-            {{ t('contactPage.form.privacyNote') }}
-          </p>
         </UForm>
-      </UCard>
+      </div>
 
-      <!-- Alternative Contact -->
-      <div class="mt-8 text-center">
-        <p class="text-muted">
+      <!-- Alternative contact channels -->
+      <aside
+        v-spotlight
+        class="bg-elevated/50 reveal flex flex-col gap-4 rounded-2xl p-6 lg:self-start"
+      >
+        <CredentialAnchor section="contacto" class="mx-auto" />
+
+        <h3 class="text-highlighted text-lg font-semibold">
+          {{ t('contactPage.aside.title') }}
+        </h3>
+
+        <p class="text-muted text-sm">
           {{ t('contactPage.alternative') }}
         </p>
-        <div class="mt-4 flex flex-wrap justify-center gap-4">
+
+        <div class="flex flex-wrap gap-3">
           <UButton
             :to="socialProfiles.linkedin"
             target="_blank"
@@ -268,7 +317,16 @@ async function onSubmit(event: FormSubmitEvent<ContactFormData>) {
             Instagram
           </UButton>
         </div>
-      </div>
+
+        <p class="text-muted flex items-center gap-2 font-mono text-sm">
+          <UIcon name="i-tabler-clock" class="size-4 shrink-0" aria-hidden="true" />
+          {{ t('contactPage.aside.availability') }}
+        </p>
+
+        <p class="text-dimmed text-sm">
+          {{ t('contactPage.form.privacyNote') }}
+        </p>
+      </aside>
     </div>
   </section>
 </template>

@@ -23,6 +23,8 @@ export interface GalleryEvent {
     src: string
     alt?: string
     description?: string
+    width?: number
+    height?: number
   }>
   icon?: string
   draft?: boolean

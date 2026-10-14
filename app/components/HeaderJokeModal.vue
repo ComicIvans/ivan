@@ -6,6 +6,10 @@ defineProps<{
   description?: string
   closeLabel: string
 }>()
+
+function close() {
+  open.value = false
+}
 </script>
 
 <template>
@@ -20,7 +24,7 @@ defineProps<{
               color="neutral"
               variant="ghost"
               :aria-label="closeLabel"
-              @click="open = false"
+              @click="close"
             />
           </div>
         </template>
@@ -29,7 +33,7 @@ defineProps<{
 
         <template #footer>
           <div class="flex justify-end">
-            <UButton color="primary" @click="open = false">
+            <UButton color="primary" @click="close">
               {{ closeLabel }}
             </UButton>
           </div>

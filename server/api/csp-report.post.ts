@@ -1,5 +1,6 @@
-import { defineEventHandler, readBody, getRequestHeader, setResponseStatus, createError } from 'h3'
+import { defineEventHandler, setResponseStatus } from 'h3'
 import { enforceRateLimit } from '../utils/rateLimit'
+import { readLimitedJsonBody } from '../utils/readLimitedJsonBody'
 
 const MAX_CSP_REPORT_BYTES = 64 * 1024
 const CSP_REPORT_FIELDS = [
@@ -46,11 +47,6 @@ function normalizeReports(payload: unknown): Record<string, unknown>[] {
 }
 
 export default defineEventHandler(async (event) => {
-  const contentLength = Number(getRequestHeader(event, 'content-length') || 0)
-  if (Number.isFinite(contentLength) && contentLength > MAX_CSP_REPORT_BYTES) {
-    throw createError({ statusCode: 413, statusMessage: 'CSP_REPORT_TOO_LARGE' })
-  }
-
   await enforceRateLimit(event, {
     namespace: 'csp-report',
     maxRequests: 120,
@@ -58,7 +54,8 @@ export default defineEventHandler(async (event) => {
     errorMessage: 'CSP_REPORT_RATE_LIMITED',
   })
 
-  const reports = normalizeReports(await readBody(event)).map(summarizeReport)
+  const payload = await readLimitedJsonBody(event, MAX_CSP_REPORT_BYTES, 'CSP_REPORT_TOO_LARGE')
+  const reports = normalizeReports(payload).slice(0, 10).map(summarizeReport)
 
   if (reports.length > 0) {
     console.warn('[csp-violation]', JSON.stringify(reports))

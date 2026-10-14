@@ -1,4 +1,4 @@
-import { defineEventHandler, readBody, createError } from 'h3'
+import { defineEventHandler, createError } from 'h3'
 import {
   getRequiredSiteUrl,
   getRequiredSmtpFromEmail,
@@ -9,6 +9,9 @@ import { getSmtpTransporter } from '../utils/smtp'
 import { validatePublicBody } from '../utils/validatePublicBody'
 import { contactFormSchema } from '~~/shared/utils/contactValidation'
 import { CONTACT_MIN_SUBMIT_DELAY_MS } from '~~/shared/utils/contactShared'
+import { readLimitedJsonBody } from '../utils/readLimitedJsonBody'
+
+const MAX_CONTACT_BODY_BYTES = 32 * 1024
 
 const CONTACT_ERROR_CODES = {
   validation: 'CONTACT_VALIDATION',
@@ -47,7 +50,7 @@ export default defineEventHandler(async (event) => {
 
   const body = validatePublicBody(
     contactFormSchema,
-    await readBody(event),
+    await readLimitedJsonBody(event, MAX_CONTACT_BODY_BYTES, CONTACT_ERROR_CODES.validation),
     CONTACT_ERROR_CODES.validation
   )
 

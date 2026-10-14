@@ -140,14 +140,31 @@ If a handler becomes hard to read, extract helpers into `server/utils/`.
 
 ## Frontend & Motion Conventions
 
-- Preserve the existing visual language of the portfolio.
-- Do not add animation for its own sake.
-- When hover or entrance motion is useful, prefer the shared classes:
-  - `motion-card`
-  - `motion-card-strong`
-  - `motion-link-card`
-  - `motion-link-media`
-  - `section-enter`
+- Preserve the existing visual language: a single warm "light" accent system
+  (custom `ember` primary ramp, amber and blue as secondary accents) defined
+  as tokens in `app/assets/css/main.css` — never hard-code raw accent colors.
+- Do not add animation for its own sake; one signature effect per page.
+- Typography: `.type-display` (Space Grotesk) for display headings,
+  `.type-kicker` / `font-mono` (IBM Plex Mono) for kickers, dates and
+  counters; body text stays on the default sans.
+- Shared building blocks (prefer these over bespoke CSS):
+  - Components: `PageHeader`, `SectionHeader`, `MarqueeStrip`, `StatCounter`,
+    `LanguageLevel`.
+  - Classes: `surface-glass`, `reveal` (scroll-driven entrance),
+    `motion-card`/`motion-card-strong`/`motion-link-card`/`motion-link-media`
+    (hover lift), `float-y`, `aurora-ring`, `ink-gradient`.
+  - Directive `v-spotlight` for cursor-lit cards.
+  - Composables: `useGsapMatchMedia` (scoped GSAP with reduced-motion
+    conditions), `useMotionTier` (`full`/`lite`/`static` capability ladder),
+    `useMagnet` (reserved for a single primary CTA).
+- GSAP (ScrollTrigger + SplitText) is the only JS animation engine; register
+  nothing else. Prefer CSS scroll-driven animations (`animation-timeline`)
+  behind `@supports` for simple reveals.
+- Respect `prefers-reduced-motion` in every effect: the reduced-motion state
+  must look finished, not disabled. JS effects self-gate via `useMotionTier`.
+- WebGL is limited to lazily-mounted, `<ClientOnly>` backgrounds gated on the
+  `full` motion tier + WebGL2 support, with a CSS gradient fallback. No
+  Draco/KTX2 loaders (they would require CSP changes).
 - Keep animations subtle and content-supporting.
 
 ---

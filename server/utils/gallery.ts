@@ -133,6 +133,8 @@ export async function fetchGalleryEvent(
     .path(basePath)
     .first()) as GalleryEvent | null
 
+  if (baseEvent?.draft) return null
+
   if (!baseEvent || normalizedLocale === defaultLocale) {
     return baseEvent
   }
@@ -142,5 +144,5 @@ export async function fetchGalleryEvent(
     .path(localePath)
     .first()) as GalleryEvent | null
 
-  return localeEvent ? mergeEventData(baseEvent, localeEvent) : baseEvent
+  return localeEvent && !localeEvent.draft ? mergeEventData(baseEvent, localeEvent) : baseEvent
 }

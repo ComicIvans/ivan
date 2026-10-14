@@ -13,13 +13,37 @@ cover:
   alt: Acto de apertura de las jornadas
 photos:
   - src: /gallery/ceeina-2025/01.JPG
+    alt: Ponente explicando código ante una pantalla de proyección
+    width: 6000
+    height: 4000
   - src: /gallery/ceeina-2025/02.JPG
+    alt: Ponente durante una presentación sobre inteligencia artificial
+    width: 6000
+    height: 4000
   - src: /gallery/ceeina-2025/03.JPG
+    alt: Taller con asistentes frente a ordenadores portátiles
+    width: 6000
+    height: 4000
   - src: /gallery/ceeina-2025/04.JPG
+    alt: Participantes trabajando en grupo alrededor de varias mesas
+    width: 6000
+    height: 4000
   - src: /gallery/ceeina-2025/05.JPG
+    alt: Ponente impartiendo una sesión ante el público
+    width: 6000
+    height: 4000
   - src: /gallery/ceeina-2025/06.JPG
+    alt: Grupo de participantes reunido junto a una furgoneta
+    width: 6000
+    height: 4000
   - src: /gallery/ceeina-2025/07.JPG
+    alt: Asistentes sentados durante una mesa redonda
+    width: 6000
+    height: 4000
   - src: /gallery/ceeina-2025/08.JPG
+    alt: Mesa redonda de las jornadas vista desde el público
+    width: 6000
+    height: 4000
 draft: false
 seo:
   title: IV Jornadas de Formación del CEEINA 2025

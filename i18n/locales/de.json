@@ -5,12 +5,7 @@
     "description": "Absolvent der Mathematik mit Spezialisierung auf Cybersicherheit und Erfahrung in Projektmanagement, Strategie und IT-Governance.",
     "pages": {
       "legal": "Rechtliche Hinweise sowie Cookie- und Datenschutzerklärung des professionellen Portfolios von Iván Salido Cobo.",
-      "experience": "Zentrale Erfahrungen in strategischem Management, universitärer Governance und der Organisation von Veranstaltungen auf nationaler Ebene.",
-      "projects": "Technologieprojekte und technischer Stack. Spezialisierung auf Cybersicherheit, Automatisierung und Webentwicklung.",
-      "representation": "Erfahrung in studentischer Vertretung, Hochschulpolitik und der Arbeit in Kollegialgremien.",
-      "gallery": "Galerie mit Veranstaltungen, Konferenzen und prägenden Momenten meiner beruflichen und akademischen Laufbahn.",
-      "training": "Akademischer Werdegang, Sprachen und Kompetenzen. MBA, Cybersicherheit und Bachelor in Mathematik.",
-      "contact": "Professioneller Kontakt. Sende mir eine Nachricht über das Kontaktformular."
+      "gallery": "Galerie mit Veranstaltungen, Konferenzen und prägenden Momenten meiner beruflichen und akademischen Laufbahn."
     }
   },
   "schema": {
@@ -46,8 +41,10 @@
   "home": {
     "hero": {
       "title": "Hi, ich bin Iván",
-      "subtitle": "MBA-Teilnehmer und Spezialist für Cybersicherheit",
-      "pitch": "Mathematik-Absolvent mit Spezialisierung auf Cybersicherheit. Derzeit absolviere ich einen MBA mit einem praxisnahen Fokus auf Projektausführung und Organisationsmanagement. Ich arbeite gern an komplexen Herausforderungen und bringe Analyse, Urteilsvermögen und Struktur mit, um in technologiegetriebenen und digitalen Sicherheitsumfeldern greifbare Ergebnisse zu erzielen."
+      "pitch": "Mathematik-Absolvent mit Spezialisierung auf Cybersicherheit. Derzeit absolviere ich einen MBA mit einem praxisnahen Fokus auf Projektausführung und Organisationsmanagement. Ich arbeite gern an komplexen Herausforderungen und bringe Analyse, Urteilsvermögen und Struktur mit, um in technologiegetriebenen und digitalen Sicherheitsumfeldern greifbare Ergebnisse zu erzielen.",
+      "titleLead": "Hi, ich bin",
+      "titleAccent": "Iván",
+      "scrollCue": "Scrollen"
     },
     "cta": {
       "experience": "Meine Erfahrung ansehen",
@@ -72,6 +69,17 @@
           "description": "Koordination institutioneller Veranstaltungen auf nationaler Ebene, mit direkter Verantwortung für Logistik, Budgetierung und Planung."
         }
       ]
+    },
+    "stats": {
+      "projects": "Veröffentlichte Projekte",
+      "roles": "Vertretungsämter",
+      "events": "Events in der Galerie"
+    },
+    "now": {
+      "title": "Aktuell"
+    },
+    "tiles": {
+      "gallery": "Neuestes Event"
     }
   },
   "experience": {
@@ -108,7 +116,8 @@
         "period": "Dez 2020 - Dez 2022",
         "description": "Verwaltung und Optimierung eines öffentlichen Budgets von 35.000 €, mit starkem Fokus auf Transparenz und Effizienz."
       }
-    ]
+    ],
+    "current": "Aktuell"
   },
   "projects": {
     "title": "Projekte und Technologie",
@@ -142,14 +151,38 @@
       "secondary": {
         "title": "Sekundäre Technologien",
         "items": [
-          { "id": "powershell", "name": "PowerShell" },
-          { "id": "python", "name": "Python" },
-          { "id": "php", "name": "PHP" },
-          { "id": "sql", "name": "SQL" },
-          { "id": "nginx", "name": "Nginx" },
-          { "id": "dns", "name": "DNS" },
-          { "id": "typescript", "name": "TypeScript" },
-          { "id": "node", "name": "Node.js" }
+          {
+            "id": "powershell",
+            "name": "PowerShell"
+          },
+          {
+            "id": "python",
+            "name": "Python"
+          },
+          {
+            "id": "php",
+            "name": "PHP"
+          },
+          {
+            "id": "sql",
+            "name": "SQL"
+          },
+          {
+            "id": "nginx",
+            "name": "Nginx"
+          },
+          {
+            "id": "dns",
+            "name": "DNS"
+          },
+          {
+            "id": "typescript",
+            "name": "TypeScript"
+          },
+          {
+            "id": "node",
+            "name": "Node.js"
+          }
         ]
       }
     },
@@ -164,7 +197,7 @@
         },
         {
           "id": "firmas",
-          "title": "Generator für корпоративe E-Mail-Signaturen",
+          "title": "Generator für Unternehmens-E-Mail-Signaturen",
           "description": "Zwei Tools (eine Python-CLI und eine Webanwendung), um E-Mail-Signaturen gemäß Corporate-Identity-Richtlinien zu erstellen.",
           "link": "firmas.wupp.dev"
         },
@@ -193,7 +226,10 @@
         "date": "Dezember 2020",
         "title": "Startpunkt",
         "description": "Beitritt zum Universitäts­senat, zum Studierendenrat (DGE) und zur Studierendenvertretung der Fakultät für Naturwissenschaften (DEFC) und aktive Mitarbeit in repräsentativen Gremien.",
-        "highlights": ["Kassenwart (DGE)", "Sekretär (DEFC)"]
+        "highlights": [
+          "Kassenwart (DGE)",
+          "Sekretär (DEFC)"
+        ]
       },
       {
         "id": "end-first-term",
@@ -212,41 +248,71 @@
         "date": "März 2023",
         "title": "Direktor für externe Beziehungen",
         "description": "Schaffung und Übernahme der Rolle zur Stärkung der institutionellen Präsenz und zur Koordination mit externen Organisationen.",
-        "highlights": ["Direktor für externe Beziehungen (DGE)"]
+        "highlights": [
+          "Direktor für externe Beziehungen (DGE)"
+        ]
       },
       {
         "id": "academic-vicecoord",
         "date": "Juni 2023",
         "title": "Akademischer Vizekoordinator",
         "description": "Direkte Mitarbeit an der Verbesserung der Lehrqualität und an der Stärkung der Prüfungs- und Bewertungsrechte der Studierenden.",
-        "highlights": ["Akademischer Vizekoordinator (DGE)"]
+        "highlights": [
+          "Akademischer Vizekoordinator (DGE)"
+        ]
       },
       {
         "id": "creup-digitalization",
         "date": "Juni 2024",
         "title": "Vorstandsmitglied für Digitalisierung und Transparenz",
         "description": "Verantwortlich für die technologische Infrastruktur von CREUP sowie für Sicherheits-, Datenschutz- und Daten­schutzrichtlinien.",
-        "highlights": ["Vorstandsmitglied für Digitalisierung und Transparenz (CREUP)"]
+        "highlights": [
+          "Vorstandsmitglied für Digitalisierung und Transparenz (CREUP)"
+        ]
       },
       {
         "id": "dge-advisor",
         "date": "März 2025",
         "title": "Direktor für Transparenz und Berater",
         "description": "Zum Direktor für Transparenz gewählt und als Berater des Studierendenrats ernannt, mit Aufgaben in strategischer Unterstützung, institutioneller Beratung sowie der Aufsicht über Transparenz- und interne Managementpraktiken.",
-        "highlights": ["Direktor für Transparenz (DGE)", "Berater des DGE"]
+        "highlights": [
+          "Direktor für Transparenz (DGE)",
+          "Berater des DGE"
+        ]
       },
       {
         "id": "upv-delegate",
         "date": "September 2025",
         "title": "Klassensprecher an der UPV",
         "description": "Zu Beginn meines Masterstudiums an der Universitat Politècnica de València zum Klassensprecher gewählt und damit die studentische Vertretungsarbeit in einem neuen akademischen Umfeld fortgesetzt.",
-        "highlights": ["Klassensprecher"]
+        "highlights": [
+          "Klassensprecher"
+        ]
       }
-    ]
+    ],
+    "stats": {
+      "years": "Jahre aktiv",
+      "milestones": "Meilensteine",
+      "roles": "Ausgeübte Ämter"
+    }
+  },
+  "credential": {
+    "role": {
+      "hero": "Studierendenvertreter · Developer"
+    },
+    "yourBadge": "DEIN AUSWEIS",
+    "accredited": "AKKREDITIERT",
+    "holder": "Inhaber",
+    "delegate": "DELEGIERTER",
+    "diploma": "DIPLOM",
+    "demoPass": "DEMO-PASS",
+    "photoPass": "FOTO-PASS"
   },
   "gallery": {
     "title": "Galerie",
     "intro": "Highlights aus Veranstaltungen, Konferenzen und Aktivitäten der studentischen Vertretung.",
+    "viewAll": "Zur vollständigen Galerie",
+    "loading": "Galerie wird geladen...",
     "photoSoon": "Foto folgt in Kürze",
     "comingSoon": "Fotos zu diesen Veranstaltungen werden in Kürze hinzugefügt.",
     "filters": {
@@ -291,7 +357,8 @@
         "position": "Foto {current} von {total}",
         "zoomIn": "Vergrößern",
         "zoomOut": "Verkleinern",
-        "resetZoom": "Zoom zurücksetzen"
+        "resetZoom": "Zoom zurücksetzen",
+        "error": "Das Bild konnte nicht geladen werden."
       }
     }
   },
@@ -371,17 +438,50 @@
     "competencies": {
       "title": "Kernkompetenzen",
       "items": [
-        { "id": "project-management", "name": "Projektmanagement und -umsetzung" },
-        { "id": "team-leadership", "name": "Teamführung und -koordination" },
-        { "id": "governance", "name": "Institutionelle Governance und Verhandlung" },
-        { "id": "communication", "name": "Professionelle Kommunikation" },
-        { "id": "systems", "name": "Systemadministration" },
-        { "id": "cybersecurity-management", "name": "Informationssicherheitsmanagement" },
-        { "id": "compliance", "name": "Regulatorische Compliance und Cybersicherheit" },
-        { "id": "automation", "name": "Prozessautomatisierung" },
-        { "id": "data-analysis", "name": "Analyse und Entscheidungsfindung" },
-        { "id": "problem-solving", "name": "Lösen komplexer Probleme" },
-        { "id": "strategic-thinking", "name": "Strategisches Denken und Planung" }
+        {
+          "id": "project-management",
+          "name": "Projektmanagement und -umsetzung"
+        },
+        {
+          "id": "team-leadership",
+          "name": "Teamführung und -koordination"
+        },
+        {
+          "id": "governance",
+          "name": "Institutionelle Governance und Verhandlung"
+        },
+        {
+          "id": "communication",
+          "name": "Professionelle Kommunikation"
+        },
+        {
+          "id": "systems",
+          "name": "Systemadministration"
+        },
+        {
+          "id": "cybersecurity-management",
+          "name": "Informationssicherheitsmanagement"
+        },
+        {
+          "id": "compliance",
+          "name": "Regulatorische Compliance und Cybersicherheit"
+        },
+        {
+          "id": "automation",
+          "name": "Prozessautomatisierung"
+        },
+        {
+          "id": "data-analysis",
+          "name": "Analyse und Entscheidungsfindung"
+        },
+        {
+          "id": "problem-solving",
+          "name": "Lösen komplexer Probleme"
+        },
+        {
+          "id": "strategic-thinking",
+          "name": "Strategisches Denken und Planung"
+        }
       ]
     }
   },
@@ -516,13 +616,10 @@
       "502": "Der Server hat eine ungültige Antwort erhalten. Bitte versuche es später erneut.",
       "503": "Der Dienst ist vorübergehend nicht verfügbar. Bitte schau später wieder vorbei.",
       "default": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut."
-    }
+    },
+    "searchlight": "Diese Seite liegt nicht in diesem Licht."
   },
   "contactPage": {
-    "seo": {
-      "title": "Kontakt",
-      "description": "Nimm Kontakt mit Iván Salido Cobo auf. Sende eine Nachricht über das Kontaktformular."
-    },
     "title": "Kontakt",
     "subtitle": "Hast du eine Frage oder einen Vorschlag? Schreib mir eine Nachricht und ich melde mich so schnell wie möglich bei dir.",
     "form": {
@@ -564,6 +661,10 @@
         "messageMax": "Nachricht darf maximal 5000 Zeichen lang sein"
       }
     },
-    "alternative": "Du kannst mich auch über meine Social-Media-Profile kontaktieren:"
+    "alternative": "Du kannst mich auch über meine Social-Media-Profile kontaktieren:",
+    "aside": {
+      "title": "Direkter Kontakt",
+      "availability": "Ich antworte in der Regel innerhalb von 24–48 Stunden."
+    }
   }
 }

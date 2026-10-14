@@ -6,6 +6,7 @@
 export function usePhotoPreloader() {
   const aspectRatios = ref<Record<number, number>>({})
   const preloads = new Map<number, Promise<number | null>>()
+  let generation = 0
 
   function recordFromImage(index: number, image: HTMLImageElement | null | undefined) {
     if (image?.naturalWidth && image.naturalHeight) {
@@ -14,6 +15,7 @@ export function usePhotoPreloader() {
   }
 
   function preload(index: number, src: string): Promise<number | null> {
+    const preloadGeneration = generation
     const known = aspectRatios.value[index]
     if (known && Number.isFinite(known)) {
       return Promise.resolve(known)
@@ -36,7 +38,7 @@ export function usePhotoPreloader() {
             ? image.naturalWidth / image.naturalHeight
             : null
 
-        if (ratio) {
+        if (ratio && preloadGeneration === generation) {
           aspectRatios.value[index] = ratio
         }
 
@@ -59,6 +61,7 @@ export function usePhotoPreloader() {
   }
 
   function reset() {
+    generation += 1
     aspectRatios.value = {}
     preloads.clear()
   }

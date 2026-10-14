@@ -38,7 +38,6 @@ export default defineSitemapEventHandler(async (event) => {
 
     return siteLocales.map(({ code }) => ({
       loc: localizedGalleryPath(code, slug),
-      lastmod: galleryEvent.date,
       alternatives,
     }))
   })

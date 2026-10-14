@@ -39,6 +39,10 @@ const eventSchema = z.object({
         src: z.string(),
         alt: z.string().optional(),
         description: z.string().optional(),
+        width: z.number().int().positive().optional(),
+        height: z.number().int().positive().optional(),
+        width: z.number().int().positive().optional(),
+        height: z.number().int().positive().optional(),
       })
     )
     .default([]),

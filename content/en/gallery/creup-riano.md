@@ -3,6 +3,9 @@ title: In-person meeting of the CREUP Extended Executive Committee
 location: Riaño, Cantabria, Spain
 duration: 3 days
 description: In-person meeting of CREUP's Vice-Presidencies and Board Members to follow up on strategic planning and work across different areas.
+cover:
+  src: /gallery/creup-riano/cover.webp
+  alt: Landscape around Riaño
 tags:
   - CREUP
   - Meeting
