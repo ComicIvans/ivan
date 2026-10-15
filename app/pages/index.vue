@@ -13,6 +13,12 @@ const hydrated = ref(false)
 onMounted(() => {
   hydrated.value = true
 })
+
+// Mount the sections with their content in place. After a client-side
+// navigation the profile is fetched here, and the sections' mount-time GSAP
+// setups (pinned project track, credential thread) and the hash scroll would
+// otherwise measure empty lists.
+await loadProfile()
 </script>
 
 <template>

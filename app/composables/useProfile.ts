@@ -18,18 +18,29 @@ const getCachedProfile = (
 ): ProfileData | undefined => nuxtApp.payload.data[key] ?? nuxtApp.static.data[key]
 
 /**
+ * Starts the profile request, or joins the one already running. A page that
+ * renders profile content awaits it in setup, so it mounts with the content
+ * in place: mount-time effects (GSAP pins, the credential thread) and the
+ * hash scroll after a client-side navigation measure the final layout. On
+ * SSR and hydration the cached payload resolves it at once.
+ */
+export function loadProfile() {
+  return useAsyncData(PROFILE_KEY, fetchProfileData, {
+    getCachedData: getCachedProfile,
+    // Many components ask at once: join the pending request instead of
+    // cancelling it and starting another one per caller.
+    dedupe: 'defer',
+  })
+}
+
+/**
  * Profile content (content/profile/*.yml) resolved for the current locale,
  * with Spanish as the fallback for any missing translation. Every consumer
  * shares one request; all values are computed refs, so counters, periods and
  * the current role follow the data and the active language.
  */
 export function useProfile() {
-  const { data } = useAsyncData(PROFILE_KEY, fetchProfileData, {
-    getCachedData: getCachedProfile,
-    // Many components ask at once: join the pending request instead of
-    // cancelling it and starting another one per caller.
-    dedupe: 'defer',
-  })
+  const { data } = loadProfile()
   return resolveProfile(data)
 }
 
