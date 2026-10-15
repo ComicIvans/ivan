@@ -173,6 +173,11 @@ export const representationSchema = z.strictObject({
   ),
 })
 
+/**
+ * Theme colour token, read at runtime as var(--color-<token>). Tailwind only
+ * emits the theme variables something references, so app/assets/css/main.css
+ * keeps these exact ramps and shades in the build: change both together.
+ */
 const paletteToken = z
   .string()
   .regex(

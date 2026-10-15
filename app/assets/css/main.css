@@ -38,6 +38,12 @@
   --color-primary-950: var(--color-ember-950);
 }
 
+/* Project cover plates read var(--color-<token>) with tokens named in
+   content/profile/projects.yml, which Tailwind cannot see. Theme variables are
+   only emitted when something uses them, so keep every shade of the ramps the
+   content schema accepts (paletteToken in shared/content/schemas.ts). */
+@source inline('fill-{ember,amber,blue}-{50,{100..900..100},950}');
+
 @property --ring-angle {
   syntax: '<angle>';
   initial-value: 0deg;
