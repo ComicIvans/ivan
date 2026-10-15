@@ -4,7 +4,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import { socialProfiles } from '~~/shared/constants/profile'
 import { auroraColorStops as auroraColorStopsByScheme } from '~~/shared/constants/theme'
-import { highlightIcons, techIcons } from '~/constants/icons'
 import { variantsById } from '~/components/credential/credentialVariants'
 
 defineProps<{ id: string }>()
@@ -19,15 +18,7 @@ const colorMode = useColorMode()
 const motionTier = useMotionTier()
 const { getCoverAlt } = useGalleryImages()
 
-const highlights = useI18nList('home.highlights.items', ({ raw, value, tr }) => {
-  const id = value(raw.id)
-  return {
-    id,
-    title: tr(raw.title),
-    description: tr(raw.description),
-    icon: highlightIcons[id] || 'i-tabler-star',
-  }
-})
+const { highlights, currentRole, projects, representationStats, stack } = useProfile()
 
 // Hero aurora: WebGL is a garnish, so it only mounts client-side on the full
 // motion tier and when WebGL2 is actually available. The panel gradient in
@@ -49,15 +40,8 @@ const auroraColorStops = computed(() => [
 ])
 
 // Stats derived from content that already exists elsewhere on the page.
-const projectIds = useI18nList('projects.list.items', ({ raw, value }) => value(raw.id))
-const projectsCount = computed(() => projectIds.value.length)
-
-const timelineRoleCounts = useI18nList('representation.timeline', ({ raw }) =>
-  Array.isArray(raw.highlights) ? raw.highlights.length : 0
-)
-const rolesCount = computed(() =>
-  timelineRoleCounts.value.reduce((total, count) => total + count, 0)
-)
+const projectsCount = computed(() => projects.value.length)
+const rolesCount = computed(() => representationStats.value.roles)
 
 const { allEvents, totalEvents } = useGalleryEvents()
 const latestEvent = computed(() => allEvents.value[0] ?? null)
@@ -65,31 +49,36 @@ const latestEventLink = computed(() =>
   latestEvent.value ? localePath(`/galeria/${latestEvent.value.path.split('/').pop()}`) : ''
 )
 
-const CURRENT_ROLE_ID = 'creup-digitalization'
-
-const experienceRoles = useI18nList('experience.roles', ({ raw, value, tr }) => ({
-  id: value(raw.id),
-  title: tr(raw.title),
-  organization: tr(raw.organization),
-}))
-const currentRole = computed(
-  () => experienceRoles.value.find((role) => role.id === CURRENT_ROLE_ID) ?? null
-)
-
-const primaryStack = useI18nList('projects.stack.primary.items', ({ raw, value, tr }) => ({
-  id: value(raw.id),
-  label: tr(raw.name),
-}))
-const secondaryStack = useI18nList('projects.stack.secondary.items', ({ raw, value, tr }) => ({
-  id: value(raw.id),
-  label: tr(raw.name),
-}))
 const stackMarqueeItems = computed(() =>
-  [...primaryStack.value, ...secondaryStack.value].map((tech) => ({
-    label: tech.label,
-    icon: techIcons[tech.id] || 'i-tabler-code',
+  [...stack.value.primary, ...stack.value.secondary].map((tech) => ({
+    label: tech.name,
+    icon: tech.icon,
   }))
 )
+
+// Bento grid (md: 3 columns, lg: 4): the highlight tiles plus the "Now" tile
+// close their rows whatever their number, and the stats/latest-event row
+// stays full, so editing the content never leaves holes in the grid.
+const leadTileCount = computed(() => highlights.value.length + (currentRole.value ? 1 : 0))
+const LG_SPAN = ['', 'lg:col-span-1', 'lg:col-span-2', 'lg:col-span-3', 'lg:col-span-4'] as const
+
+const lastLeadTileClass = computed(() => {
+  const count = leadTileCount.value
+  const lgRemainder = count % 4
+  const lgSpan = lgRemainder ? 5 - lgRemainder : 1
+  // md: two tiles left on the last row would push the 2-column stats tile
+  // onto a new row, so the last lead tile widens to close its own row.
+  const mdWide = count % 3 === 2
+  return [mdWide ? 'md:col-span-2' : '', mdWide || lgSpan > 1 ? LG_SPAN[lgSpan] : '']
+})
+
+const statsTileClass = computed(() => [
+  leadTileCount.value % 3 === 1 ? 'md:col-span-2' : 'md:col-span-3',
+  latestEvent.value ? 'lg:col-span-2' : 'lg:col-span-4',
+])
+
+const isLastLeadTile = (index: number) =>
+  !currentRole.value && index === highlights.value.length - 1
 
 function scrollToSection(targetId: string) {
   const el = document.getElementById(targetId)
@@ -300,10 +289,11 @@ watch(locale, async () => {
       <SectionHeader :title="t('home.highlights.title')" index="01" class="reveal" />
       <div class="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-3 lg:grid-cols-4">
         <article
-          v-for="highlight in highlights"
+          v-for="(highlight, index) in highlights"
           :key="highlight.id"
           v-spotlight
           class="bento-tile surface-glass motion-card rounded-2xl p-5 sm:p-6"
+          :class="isLastLeadTile(index) ? lastLeadTileClass : ''"
         >
           <div class="bg-primary-500/10 flex size-12 items-center justify-center rounded-xl">
             <UIcon
@@ -325,6 +315,7 @@ watch(locale, async () => {
           v-spotlight
           type="button"
           class="bento-tile surface-glass motion-link-card block cursor-pointer rounded-2xl p-5 text-left sm:p-6"
+          :class="lastLeadTileClass"
           @click="scrollToSection('experiencia')"
         >
           <p
@@ -348,7 +339,8 @@ watch(locale, async () => {
 
         <div
           v-spotlight
-          class="bento-tile surface-glass motion-card rounded-2xl p-5 sm:p-6 md:col-span-2"
+          class="bento-tile surface-glass motion-card rounded-2xl p-5 sm:p-6"
+          :class="statsTileClass"
         >
           <div class="grid h-full grid-cols-3 items-center gap-4">
             <StatCounter :value="projectsCount" :label="t('home.stats.projects')" />

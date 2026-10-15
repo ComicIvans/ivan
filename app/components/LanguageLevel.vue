@@ -6,12 +6,9 @@ const props = withDefaults(
     /** CEFR level; 'native' lights the full scale. */
     level: (typeof CEFR_SCALE)[number] | 'native'
     levelLabel: string
-    /** Legacy proficiency percentage, kept for assistive tech. */
-    percent?: number
     accent?: 'ember' | 'amber'
   }>(),
   {
-    percent: undefined,
     accent: 'amber',
   }
 )
@@ -83,7 +80,6 @@ onBeforeUnmount(() => observer?.disconnect())
       <span>{{ levelLabel }}</span>
       <span aria-hidden="true">{{ level === 'native' ? 'C2' : level }}</span>
     </div>
-    <span v-if="percent !== undefined" class="sr-only">{{ percent }}%</span>
   </div>
 </template>
 

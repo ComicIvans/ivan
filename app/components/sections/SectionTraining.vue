@@ -1,57 +1,9 @@
 <script setup lang="ts">
-import { academicIcons, competencyIcons, languageFlags } from '~/constants/icons'
-
 defineProps<{ id: string }>()
 
 const { t } = useI18n({ useScope: 'global' })
 
-const currentAcademic = ['mugeps']
-
-const academicItems = useI18nList('training.academic.items', ({ raw, value, tr }) => {
-  const id = value(raw.id)
-  return {
-    id,
-    title: tr(raw.title),
-    org: tr(raw.organization),
-    period: tr(raw.period),
-    description: tr(raw.description),
-    icon: academicIcons[id] || 'i-tabler-certificate',
-    current: currentAcademic.includes(id),
-  }
-})
-
-type CefrLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2' | 'native'
-
-const languageLevels: Record<string, CefrLevel> = {
-  english: 'C1',
-  german: 'A1',
-  spanish: 'native',
-}
-
-// Percentages feed the sr-only proficiency value of the CEFR meter.
-const languageProgress: Record<string, number> = {
-  english: 85,
-  german: 15,
-  spanish: 100,
-}
-
-const languages = useI18nList('training.languages.items', ({ raw, value, tr }) => {
-  const id = value(raw.id)
-  return {
-    id,
-    name: tr(raw.name),
-    level: tr(raw.level),
-    description: tr(raw.description),
-    flag: languageFlags[id] || 'i-tabler-flag',
-    cefr: languageLevels[id] || 'A1',
-    progress: languageProgress[id] || 50,
-  }
-})
-
-const competencies = useI18nList('training.competencies.items', ({ raw, value, tr }) => ({
-  name: tr(raw.name),
-  icon: competencyIcons[value(raw.id)] || 'i-tabler-star',
-}))
+const { academic, languages, certifications, competencies } = useProfile()
 </script>
 
 <template>
@@ -70,12 +22,7 @@ const competencies = useI18nList('training.competencies.items', ({ raw, value, t
         />
 
         <div class="space-y-6">
-          <UCard
-            v-for="item in academicItems"
-            :key="item.id"
-            v-spotlight
-            class="motion-card reveal"
-          >
+          <UCard v-for="item in academic" :key="item.id" v-spotlight class="motion-card reveal">
             <div class="flex flex-col gap-4 sm:flex-row sm:items-start">
               <div
                 class="flex size-14 shrink-0 items-center justify-center self-start rounded-xl"
@@ -99,7 +46,7 @@ const competencies = useI18nList('training.competencies.items', ({ raw, value, t
                     {{ item.period }}
                   </UBadge>
                 </div>
-                <p class="text-toned mt-1 font-medium">{{ item.org }}</p>
+                <p class="text-toned mt-1 font-medium">{{ item.organization }}</p>
                 <p class="text-muted mt-2">{{ item.description }}</p>
               </div>
             </div>
@@ -132,19 +79,14 @@ const competencies = useI18nList('training.competencies.items', ({ raw, value, t
               <p class="text-muted mt-2 text-sm">{{ lang.description }}</p>
               <div class="mt-4">
                 <p class="text-muted mb-2 text-xs">{{ t('training.languages.proficiency') }}</p>
-                <LanguageLevel
-                  :level="lang.cefr"
-                  :level-label="lang.level"
-                  :percent="lang.progress"
-                  accent="amber"
-                />
+                <LanguageLevel :level="lang.cefr" :level-label="lang.level" accent="amber" />
               </div>
             </UCard>
           </div>
         </div>
 
         <!-- Other Certifications -->
-        <div>
+        <div v-if="certifications.length">
           <SectionHeader
             as="h3"
             index="03"
@@ -153,23 +95,25 @@ const competencies = useI18nList('training.competencies.items', ({ raw, value, t
             accent="amber"
           />
 
-          <UCard class="motion-card reveal">
-            <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
-              <div
-                class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-amber-500/10"
-              >
-                <UIcon
-                  name="i-tabler-car"
-                  class="size-6 text-amber-600 dark:text-amber-400"
-                  aria-hidden="true"
-                />
+          <div class="space-y-4">
+            <UCard v-for="item in certifications" :key="item.id" class="motion-card reveal">
+              <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                <div
+                  class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-amber-500/10"
+                >
+                  <UIcon
+                    :name="item.icon"
+                    class="size-6 text-amber-600 dark:text-amber-400"
+                    aria-hidden="true"
+                  />
+                </div>
+                <h3 class="font-bold">{{ item.title }}</h3>
+                <p class="text-muted text-sm">
+                  {{ item.description }}
+                </p>
               </div>
-              <h3 class="font-bold">{{ t('training.other.drivingLicense.title') }}</h3>
-              <p class="text-muted text-sm">
-                {{ t('training.other.drivingLicense.description') }}
-              </p>
-            </div>
-          </UCard>
+            </UCard>
+          </div>
         </div>
 
         <!-- Transversal Competencies -->
@@ -185,7 +129,7 @@ const competencies = useI18nList('training.competencies.items', ({ raw, value, t
           <div class="reveal flex flex-wrap gap-3">
             <div
               v-for="comp in competencies"
-              :key="comp.name"
+              :key="comp.id"
               class="border-default bg-elevated/50 flex items-center gap-2 rounded-full border px-4 py-2"
             >
               <UIcon

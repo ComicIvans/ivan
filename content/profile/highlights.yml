@@ -1,0 +1,37 @@
+# Hero "areas of expertise" tiles, in display order.
+
+# Text fields take one plain string (the same in every language) or one value
+# per language (es, en, de). Spanish is required and fills in for any missing
+# language. Dates are YYYY or YYYY-MM. Schema: shared/content/schemas.ts.
+
+items:
+  - id: governance
+    icon: i-tabler-building-bank
+    title:
+      es: Gobernanza y toma de decisiones
+      en: Governance and decision-making
+      de: Governance und Entscheidungsfindung
+    description:
+      es: Experiencia como Consejero de Gobierno de la Universidad de Granada, participando en decisiones estratégicas sobre políticas académicas y económicas.
+      en: Experience as a member of the Governing Council of the University of Granada, contributing to strategic decisions on academic and financial policies.
+      de: Erfahrung als Mitglied des Universitätsrats (Governing Council) der Universität Granada, mit Beitrag zu strategischen Entscheidungen zu akademischen und finanziellen Richtlinien.
+  - id: infrastructure
+    icon: i-tabler-server-2
+    title:
+      es: Infraestructura y seguridad digital
+      en: Digital infrastructure and security
+      de: Digitale Infrastruktur und Sicherheit
+    description:
+      es: Responsable de la infraestructura tecnológica y políticas de seguridad de CREUP, organización que representa a más de un millón de estudiantes a nivel nacional.
+      en: Responsible for the technological infrastructure and security policies of CREUP, an organisation representing over one million students nationwide.
+      de: Verantwortlich für die technologische Infrastruktur und Sicherheitsrichtlinien von CREUP, einer Organisation, die landesweit über eine Million Studierende vertritt.
+  - id: events
+    icon: i-tabler-calendar-event
+    title:
+      es: Gestión de proyectos y eventos
+      en: Project and event management
+      de: Projekt- und Eventmanagement
+    description:
+      es: Coordinación de eventos institucionales de ámbito nacional, con responsabilidad directa en logística, presupuestos y planificación.
+      en: Coordination of national-level institutional events, with direct responsibility for logistics, budgeting and planning.
+      de: Koordination institutioneller Veranstaltungen auf nationaler Ebene, mit direkter Verantwortung für Logistik, Budgetierung und Planung.

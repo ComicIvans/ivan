@@ -51,24 +51,7 @@
       "contact": "Get in touch"
     },
     "highlights": {
-      "title": "Areas of expertise",
-      "items": [
-        {
-          "id": "governance",
-          "title": "Governance and decision-making",
-          "description": "Experience as a member of the Governing Council of the University of Granada, contributing to strategic decisions on academic and financial policies."
-        },
-        {
-          "id": "infrastructure",
-          "title": "Digital infrastructure and security",
-          "description": "Responsible for the technological infrastructure and security policies of CREUP, an organisation representing over one million students nationwide."
-        },
-        {
-          "id": "events",
-          "title": "Project and event management",
-          "description": "Coordination of national-level institutional events, with direct responsibility for logistics, budgeting and planning."
-        }
-      ]
+      "title": "Areas of expertise"
     },
     "stats": {
       "projects": "Published projects",
@@ -82,41 +65,15 @@
       "gallery": "Latest event"
     }
   },
+  "period": {
+    "present": "Present",
+    "ongoing": "Ongoing"
+  },
   "experience": {
     "title": "Selected Experience",
     "intro": "A career focused on project management, institutional governance and team coordination within complex organisational environments.",
     "fullExperience": "If you would like to see my full background in student representation, you can find it in the Representation section.",
     "viewRepresentation": "View full trajectory",
-    "roles": [
-      {
-        "id": "creup-digitalization",
-        "title": "Board Member for Digitalisation and Transparency",
-        "organization": "Coordinator of Student Representatives of Public Universities (CREUP)",
-        "period": "Jun 2024 - Present",
-        "description": "Management of VPS infrastructure, Google Workspace and the definition of security, privacy and data protection policies for the organisation."
-      },
-      {
-        "id": "enem-treasurer",
-        "title": "Treasurer and Secretary (Organising Committee)",
-        "organization": "26th National Meeting of Mathematics Students (ENEM)",
-        "period": "Feb 2024 - Jul 2025",
-        "description": "End-to-end management of budgets, sponsorship and logistics for a national conference with hundreds of participants and dozens of partner organisations."
-      },
-      {
-        "id": "ugr-council",
-        "title": "Member of the Governing Council",
-        "organization": "University of Granada",
-        "period": "Dec 2022 - Jan 2025",
-        "description": "Participation in the university’s highest collegiate body, contributing to academic regulation and the negotiation of budgets and other key policies."
-      },
-      {
-        "id": "dge-treasurer",
-        "title": "Treasurer",
-        "organization": "University of Granada Students’ Council",
-        "period": "Dec 2020 - Dec 2022",
-        "description": "Management and optimisation of a €35,000 public budget, with a strong focus on transparency and efficiency."
-      }
-    ],
     "current": "Current"
   },
   "projects": {
@@ -124,172 +81,20 @@
     "stack": {
       "title": "Technology stack",
       "primary": {
-        "title": "Core technologies",
-        "items": [
-          {
-            "id": "nuxt",
-            "name": "Nuxt",
-            "description": "Vue.js framework for modern web applications with SSR and static generation."
-          },
-          {
-            "id": "vue",
-            "name": "Vue.js",
-            "description": "Progressive JavaScript framework for building user interfaces."
-          },
-          {
-            "id": "linux",
-            "name": "Linux",
-            "description": "Administration of Linux-based systems and servers."
-          },
-          {
-            "id": "docker",
-            "name": "Docker",
-            "description": "Containerisation for application deployment and orchestration."
-          }
-        ]
+        "title": "Core technologies"
       },
       "secondary": {
-        "title": "Secondary technologies",
-        "items": [
-          {
-            "id": "powershell",
-            "name": "PowerShell"
-          },
-          {
-            "id": "python",
-            "name": "Python"
-          },
-          {
-            "id": "php",
-            "name": "PHP"
-          },
-          {
-            "id": "sql",
-            "name": "SQL"
-          },
-          {
-            "id": "nginx",
-            "name": "Nginx"
-          },
-          {
-            "id": "dns",
-            "name": "DNS"
-          },
-          {
-            "id": "typescript",
-            "name": "TypeScript"
-          },
-          {
-            "id": "node",
-            "name": "Node.js"
-          }
-        ]
+        "title": "Secondary technologies"
       }
     },
     "list": {
-      "title": "Key projects",
-      "items": [
-        {
-          "id": "server",
-          "title": "Personal server",
-          "description": "Since 2020, management of a personal Linux server with Docker, hosting multiple services under my own domain.",
-          "link": "wupp.dev"
-        },
-        {
-          "id": "firmas",
-          "title": "Corporate Email Signature Generator",
-          "description": "Two tools (a Python CLI and a web application) to generate email signatures aligned with corporate identity guidelines.",
-          "link": "firmas.wupp.dev"
-        },
-        {
-          "id": "win-ens",
-          "title": "ENS Compliance Automation (Master’s Thesis)",
-          "description": "PowerShell scripts to automatically configure and audit Windows 10/11 systems according to the Spanish National Security Scheme (ENS).",
-          "link": "github.com/ComicIvans/win-ens"
-        },
-        {
-          "id": "ceebi",
-          "title": "Conference Management Platform (CEEBI)",
-          "description": "Web platform for schedule consultation, real-time Q&A and automated generation of attendance certificates.",
-          "link": "ceebi.wupp.dev"
-        }
-      ]
+      "title": "Key projects"
     }
   },
   "representation": {
     "title": "Student Representation",
     "intro": "Comprehensive experience in university politics, student advocacy and institutional governance.",
     "timelineLabel": "Timeline of student representation",
-    "timeline": [
-      {
-        "id": "start-2020",
-        "date": "December 2020",
-        "title": "Starting point",
-        "description": "Joined the University Senate, the Students’ Council (DGE) and the Faculty of Science Student Delegation (DEFC), actively participating in representative bodies.",
-        "highlights": [
-          "DGE Treasurer",
-          "DEFC Secretary"
-        ]
-      },
-      {
-        "id": "end-first-term",
-        "date": "December 2022",
-        "title": "End of first term",
-        "description": "Completion of the first term of office, continuing participation in the Senate and joining the Governing Council.",
-        "highlights": [
-          "Governing Council",
-          "Academic Committee",
-          "Economic Committee",
-          "Advisor to the DEFC"
-        ]
-      },
-      {
-        "id": "external-relations",
-        "date": "March 2023",
-        "title": "Director of External Relations",
-        "description": "Creation and assumption of the role to strengthen institutional presence and coordination with external entities.",
-        "highlights": [
-          "Director of External Relations (DGE)"
-        ]
-      },
-      {
-        "id": "academic-vicecoord",
-        "date": "June 2023",
-        "title": "Academic Vice-Coordinator",
-        "description": "Direct involvement in improving teaching quality and strengthening student assessment guarantees.",
-        "highlights": [
-          "Academic Vice-Coordinator (DGE)"
-        ]
-      },
-      {
-        "id": "creup-digitalization",
-        "date": "June 2024",
-        "title": "Board Member for Digitalisation and Transparency",
-        "description": "Responsible for CREUP’s technological infrastructure and its security, privacy and data protection policies.",
-        "highlights": [
-          "Board Member for Digitalisation and Transparency (CREUP)"
-        ]
-      },
-      {
-        "id": "dge-advisor",
-        "date": "March 2025",
-        "title": "Director of Transparency and Advisor",
-        "description": "Elected Director of Transparency and appointed Advisor to the Students’ Council, undertaking strategic support, institutional advisory duties and oversight of transparency and internal management practices.",
-        "highlights": [
-          "Director of Transparency (DGE)",
-          "Advisor to the DGE"
-        ]
-      },
-      {
-        "id": "upv-delegate",
-        "date": "September 2025",
-        "title": "Class Representative at UPV",
-        "description": "Elected class representative at the Universitat Politècnica de València at the start of my master’s studies, continuing my work in student representation within a new academic environment.",
-        "highlights": [
-          "Class representative"
-        ]
-      }
-    ],
     "stats": {
       "years": "Years active",
       "milestones": "Milestones",
@@ -365,124 +170,19 @@
   "training": {
     "title": "Education and Skills",
     "academic": {
-      "title": "Academic background",
-      "items": [
-        {
-          "id": "mugeps",
-          "title": "Master’s Degree in Business, Product and Service Management (MUGEPS)",
-          "organization": "Universitat Politècnica de València",
-          "period": "Ongoing",
-          "description": "Focus on strategic management and team leadership. Teaching mainly in English, with a forthcoming Erasmus+ stay in Germany."
-        },
-        {
-          "id": "cybersecurity-master",
-          "title": "Master’s Degree in Cybersecurity",
-          "organization": "University of Granada",
-          "period": "2024",
-          "description": "Specialisation in ethical hacking, digital forensics and security management. Thesis focused on ENS compliance."
-        },
-        {
-          "id": "math-degree",
-          "title": "Bachelor’s Degree in Mathematics",
-          "organization": "University of Granada",
-          "period": "2019 - 2024",
-          "description": "Development of advanced analytical thinking and complex problem-solving skills."
-        },
-        {
-          "id": "data-analyst",
-          "title": "Data Analyst Course",
-          "organization": "Google Cloud Skills Boost",
-          "period": "03/2023 - 05/2023",
-          "description": "Google Cloud Big Data and Machine Learning Fundamentals, data preparation with BigQuery, dataset creation and insight visualisation, and advanced analytics with BigQuery."
-        },
-        {
-          "id": "math-conferences",
-          "title": "National Mathematics Meetings",
-          "organization": "ENEM / ANEM",
-          "period": "Since 2019 (annual)",
-          "description": "Annual attendance at training events covering mathematics, statistics, data science and artificial intelligence."
-        }
-      ]
+      "title": "Academic background"
     },
     "languages": {
       "title": "Languages",
       "proficiency": "Proficiency level",
-      "items": [
-        {
-          "id": "english",
-          "name": "English",
-          "level": "C1 Cambridge",
-          "description": "Full professional proficiency (master’s taught in English). Immersion stay in Galway (2018)."
-        },
-        {
-          "id": "german",
-          "name": "German",
-          "level": "Basic level (A1)",
-          "description": "Currently in training for international mobility."
-        },
-        {
-          "id": "spanish",
-          "name": "Spanish",
-          "level": "Native",
-          "description": "Mother tongue."
-        }
-      ]
+      "level": "Level {level}",
+      "native": "Native"
     },
     "other": {
-      "title": "Other certifications",
-      "drivingLicense": {
-        "title": "Driving licence (Category B)",
-        "description": "Licence to drive private motor vehicles."
-      }
+      "title": "Other certifications"
     },
     "competencies": {
-      "title": "Core competencies",
-      "items": [
-        {
-          "id": "project-management",
-          "name": "Project Management and Execution"
-        },
-        {
-          "id": "team-leadership",
-          "name": "Team Leadership and Coordination"
-        },
-        {
-          "id": "governance",
-          "name": "Institutional Governance and Negotiation"
-        },
-        {
-          "id": "communication",
-          "name": "Professional Communication"
-        },
-        {
-          "id": "systems",
-          "name": "Systems Administration"
-        },
-        {
-          "id": "cybersecurity-management",
-          "name": "Information Security Management"
-        },
-        {
-          "id": "compliance",
-          "name": "Regulatory Compliance and Cybersecurity"
-        },
-        {
-          "id": "automation",
-          "name": "Process Automation"
-        },
-        {
-          "id": "data-analysis",
-          "name": "Analysis and Decision-Making"
-        },
-        {
-          "id": "problem-solving",
-          "name": "Complex Problem Solving"
-        },
-        {
-          "id": "strategic-thinking",
-          "name": "Strategic Thinking and Planning"
-        }
-      ]
+      "title": "Core competencies"
     }
   },
   "footer": {

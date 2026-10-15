@@ -1,0 +1,72 @@
+# Selected experience, newest first. An item without `end` is a current role.
+
+# Text fields take one plain string (the same in every language) or one value
+# per language (es, en, de). Spanish is required and fills in for any missing
+# language. Dates are YYYY or YYYY-MM. Schema: shared/content/schemas.ts.
+
+items:
+  - id: creup-digitalization
+    icon: i-tabler-server-2
+    start: 2024-06
+    organizationUrl: https://www.creup.es/
+    title:
+      es: Vocal de Digitalización y Transparencia
+      en: Board Member for Digitalisation and Transparency
+      de: Vorstandsmitglied für Digitalisierung und Transparenz
+    organization:
+      es: Coordinadora de Representantes de Estudiantes de Universidades Públicas (CREUP)
+      en: Coordinator of Student Representatives of Public Universities (CREUP)
+      de: Koordinierung der Studierendenvertretungen öffentlicher Universitäten (CREUP)
+    description:
+      es: Gestión de infraestructura VPS, Google Workspace y definición de políticas de seguridad, privacidad y protección de datos de la organización.
+      en: Management of VPS infrastructure, Google Workspace and the definition of security, privacy and data protection policies for the organisation.
+      de: Verwaltung der VPS-Infrastruktur, Google Workspace sowie die Definition von Sicherheits-, Datenschutz- und Daten­schutzrichtlinien für die Organisation.
+  - id: enem-treasurer
+    icon: i-tabler-calculator
+    start: 2024-02
+    end: 2025-07
+    title:
+      es: Tesorero y Secretario (Comité Organizador)
+      en: Treasurer and Secretary (Organising Committee)
+      de: Kassenwart und Sekretär (Organisationskomitee)
+    organization:
+      es: XXVI Encuentro Nacional de Estudiantes de Matemáticas (ENEM)
+      en: 26th National Meeting of Mathematics Students (ENEM)
+      de: 26. Nationales Treffen der Mathematikstudierenden (ENEM)
+    description:
+      es: Gestión integral de presupuestos, patrocinio y logística para un congreso nacional con centenares de participantes y decenas de entidades colaboradoras.
+      en: End-to-end management of budgets, sponsorship and logistics for a national conference with hundreds of participants and dozens of partner organisations.
+      de: Ganzheitliche Verantwortung für Budgets, Sponsoring und Logistik einer nationalen Konferenz mit Hunderten Teilnehmenden und Dutzenden Partnerorganisationen.
+  - id: ugr-council
+    icon: i-tabler-building-bank
+    start: 2022-12
+    end: 2025-01
+    organizationUrl: https://www.ugr.es/
+    title:
+      es: Consejero de Gobierno
+      en: Member of the Governing Council
+      de: Mitglied des Universitätsrats
+    organization:
+      es: Universidad de Granada
+      en: University of Granada
+      de: Universität Granada
+    description:
+      es: Participación en el máximo órgano colegiado de la universidad, contribuyendo a la regulación académica y negociando presupuestos y otras normativas clave.
+      en: Participation in the university’s highest collegiate body, contributing to academic regulation and the negotiation of budgets and other key policies.
+      de: Mitwirkung im höchsten Kollegialorgan der Universität, mit Beiträgen zur akademischen Regulierung sowie zur Verhandlung von Budgets und weiteren zentralen Regelwerken.
+  - id: dge-treasurer
+    icon: i-tabler-coins
+    start: 2020-12
+    end: 2022-12
+    title:
+      es: Tesorero
+      en: Treasurer
+      de: Kassenwart
+    organization:
+      es: Consejo de Estudiantes de la Universidad de Granada
+      en: University of Granada Students’ Council
+      de: Studierendenrat der Universität Granada
+    description:
+      es: Gestión y optimización de un presupuesto público de 35.000 €, con foco en transparencia y eficiencia.
+      en: Management and optimisation of a €35,000 public budget, with a strong focus on transparency and efficiency.
+      de: Verwaltung und Optimierung eines öffentlichen Budgets von 35.000 €, mit starkem Fokus auf Transparenz und Effizienz.

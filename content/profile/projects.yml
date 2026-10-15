@@ -1,0 +1,148 @@
+# Technology stack and key projects, in display order.
+
+# Text fields take one plain string (the same in every language) or one value
+# per language (es, en, de). Spanish is required and fills in for any missing
+# language. Dates are YYYY or YYYY-MM. Schema: shared/content/schemas.ts.
+
+stack:
+  primary:
+    - id: nuxt
+      name: Nuxt
+      icon: i-simple-icons-nuxt
+      tint: ember
+      description:
+        es: Framework de Vue.js para aplicaciones web modernas con SSR y generación estática.
+        en: Vue.js framework for modern web applications with SSR and static generation.
+        de: Vue.js-Framework für moderne Webanwendungen mit SSR und statischer Generierung.
+    - id: vue
+      name: Vue.js
+      icon: i-simple-icons-vuedotjs
+      tint: ember
+      description:
+        es: Framework progresivo de JavaScript para construir interfaces de usuario.
+        en: Progressive JavaScript framework for building user interfaces.
+        de: Progressives JavaScript-Framework zum Aufbau von Benutzeroberflächen.
+    - id: linux
+      name: Linux
+      icon: i-simple-icons-linux
+      tint: blue
+      description:
+        es: Administración de sistemas y servidores basados en Linux.
+        en: Administration of Linux-based systems and servers.
+        de: Administration von Linux-basierten Systemen und Servern.
+    - id: docker
+      name: Docker
+      icon: i-simple-icons-docker
+      tint: blue
+      description:
+        es: Contenedores para despliegue y orquestación de aplicaciones.
+        en: Containerisation for application deployment and orchestration.
+        de: Containerisierung für Deployment und Orchestrierung von Anwendungen.
+  secondary:
+    - id: powershell
+      name: PowerShell
+      icon: i-simple-icons-powershell
+    - id: python
+      name: Python
+      icon: i-simple-icons-python
+    - id: php
+      name: PHP
+      icon: i-simple-icons-php
+    - id: sql
+      name: SQL
+      icon: i-tabler-database
+    - id: nginx
+      name: Nginx
+      icon: i-simple-icons-nginx
+    - id: dns
+      name: DNS
+      icon: i-tabler-world-www
+    - id: typescript
+      name: TypeScript
+      icon: i-simple-icons-typescript
+    - id: node
+      name: Node.js
+      icon: i-simple-icons-nodedotjs
+items:
+  - id: server
+    icon: i-tabler-server-2
+    url: https://wupp.dev
+    title:
+      es: Servidor personal
+      en: Personal server
+      de: Privater Server
+    description:
+      es: Gestión desde 2020 de un servidor Linux con Docker, desplegando múltiples servicios bajo dominio propio.
+      en: Since 2020, management of a personal Linux server with Docker, hosting multiple services under my own domain.
+      de: Seit 2020 Verwaltung eines privaten Linux-Servers mit Docker, der mehrere Dienste unter meiner eigenen Domain hostet.
+    tags:
+      - Linux
+      - Docker
+      - es: Autoalojado
+        en: Self-hosted
+        de: Selbst gehostet
+      - Nginx
+    accent:
+      from: blue-500
+      to: blue-300
+  - id: firmas
+    icon: i-tabler-signature
+    url: https://firmas.wupp.dev
+    title:
+      es: Generador de Firmas Corporativas
+      en: Corporate Email Signature Generator
+      de: Generator für Unternehmens-E-Mail-Signaturen
+    description:
+      es: Dos herramientas (CLI con Python y aplicación web) para generar firmas de correos electrónicos siguiendo la identidad corporativa.
+      en: Two tools (a Python CLI and a web application) to generate email signatures aligned with corporate identity guidelines.
+      de: Zwei Tools (eine Python-CLI und eine Webanwendung), um E-Mail-Signaturen gemäß Corporate-Identity-Richtlinien zu erstellen.
+    tags:
+      - Python
+      - Vue.js
+      - es: Full-stack
+        en: Full-stack
+        de: Full-Stack
+    accent:
+      from: ember-500
+      to: ember-300
+  - id: win-ens
+    icon: i-tabler-shield-lock
+    url: https://github.com/ComicIvans/win-ens
+    title:
+      es: Automatización de Cumplimiento ENS (TFM)
+      en: ENS Compliance Automation (Master’s Thesis)
+      de: ENS-Compliance-Automatisierung (Masterarbeit)
+    description:
+      es: Scripts en PowerShell para configurar y auditar automáticamente Windows 10/11 según perfiles del Esquema Nacional de Seguridad.
+      en: PowerShell scripts to automatically configure and audit Windows 10/11 systems according to the Spanish National Security Scheme (ENS).
+      de: PowerShell-Skripte zur automatischen Konfiguration und Auditierung von Windows-10/11-Systemen gemäß dem spanischen Nationalen Sicherheits­schema (ENS).
+    tags:
+      - PowerShell
+      - ENS
+      - Windows
+      - es: Ciberseguridad
+        en: Cybersecurity
+        de: Cybersicherheit
+    accent:
+      from: amber-500
+      to: amber-300
+  - id: ceebi
+    icon: i-tabler-calendar-event
+    url: https://ceebi.wupp.dev
+    title:
+      es: Gestión de Congresos (CEEBI)
+      en: Conference Management Platform (CEEBI)
+      de: Plattform für Konferenzmanagement (CEEBI)
+    description:
+      es: Plataforma web para consulta de horarios y turnos, realización de preguntas en tiempo real y generación de certificados de asistencia.
+      en: Web platform for schedule consultation, real-time Q&A and automated generation of attendance certificates.
+      de: Webplattform zur Einsicht in Zeitpläne, für Live-Q&A und zur automatisierten Erstellung von Teilnahmezertifikaten.
+    tags:
+      - Vue.js
+      - Web
+      - es: Eventos
+        en: Events
+        de: Veranstaltungen
+    accent:
+      from: ember-500
+      to: blue-400

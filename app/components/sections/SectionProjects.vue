@@ -1,73 +1,26 @@
 <script setup lang="ts">
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { projectIcons, techIcons } from '~/constants/icons'
 
 defineProps<{ id: string }>()
 
 const { t } = useI18n({ useScope: 'global' })
 
-// Icon tile tint per stack category: frontend (nuxt/vue) = ember, infrastructure (linux/docker) = blue.
-const techTileClasses: Record<string, string> = {
-  nuxt: 'bg-primary-500/10 text-primary-600 dark:text-primary-400',
-  vue: 'bg-primary-500/10 text-primary-600 dark:text-primary-400',
-  linux: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
-  docker: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
+const { stack, projects } = useProfile()
+
+// Icon tile tint per stack category (set per item in content/profile/projects.yml).
+const techTileClasses = {
+  ember: 'bg-primary-500/10 text-primary-600 dark:text-primary-400',
+  blue: 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
+} as const
+
+// Cover plate aurora tints come from theme colour tokens in the content data.
+const defaultAccent = { from: 'ember-500', to: 'amber-400' }
+
+function accentStyle(accent: { from: string; to: string } | undefined) {
+  const { from, to } = accent ?? defaultAccent
+  return { '--card-accent': `var(--color-${from})`, '--card-accent-2': `var(--color-${to})` }
 }
-
-const primaryTech = useI18nList('projects.stack.primary.items', ({ raw, value, tr }) => {
-  const id = value(raw.id)
-  return {
-    id,
-    name: tr(raw.name),
-    description: tr(raw.description),
-    icon: techIcons[id] || 'i-tabler-code',
-    tileClass: techTileClasses[id] || 'bg-primary-500/10 text-primary-600 dark:text-primary-400',
-  }
-})
-
-const secondaryTech = useI18nList('projects.stack.secondary.items', ({ raw, value, tr }) => {
-  const id = value(raw.id)
-  return {
-    id,
-    name: tr(raw.name),
-    icon: techIcons[id] || 'i-tabler-code',
-  }
-})
-
-// Language-neutral technology / category tags shown across all locales.
-const projectTags: Record<string, string[]> = {
-  server: ['Linux', 'Docker', 'Self-hosted', 'Nginx'],
-  firmas: ['Python', 'Vue.js', 'Full-stack'],
-  'win-ens': ['PowerShell', 'ENS', 'Windows', 'Cybersecurity'],
-  ceebi: ['Vue.js', 'Web', 'Events'],
-}
-
-// Cover plate aurora tints per project id, injected as CSS custom properties.
-const projectAccents: Record<string, { from: string; to: string }> = {
-  server: { from: 'var(--color-blue-500)', to: 'var(--color-blue-300)' },
-  firmas: { from: 'var(--color-ember-500)', to: 'var(--color-ember-300)' },
-  'win-ens': { from: 'var(--color-amber-500)', to: 'var(--color-amber-300)' },
-  ceebi: { from: 'var(--color-ember-500)', to: 'var(--color-blue-400)' },
-}
-
-const defaultAccent = { from: 'var(--color-ember-500)', to: 'var(--color-amber-400)' }
-
-const projects = useI18nList('projects.list.items', ({ raw, value, tr }) => {
-  const id = value(raw.id)
-  const link = value(raw.link)
-
-  return {
-    id,
-    title: tr(raw.title),
-    description: tr(raw.description),
-    link: link.startsWith('http') ? link : `https://${link}`,
-    linkText: link,
-    icon: projectIcons[id] || 'i-tabler-folder-code',
-    tags: projectTags[id] || [],
-    accent: projectAccents[id] || defaultAccent,
-  }
-})
 
 const sceneEl = useTemplateRef<HTMLElement>('sceneEl')
 const trackEl = useTemplateRef<HTMLElement>('trackEl')
@@ -142,17 +95,17 @@ useGsapMatchMedia(sceneEl, (ctx) => {
         {{ t('projects.stack.primary.title') }}
       </h3>
       <div class="mb-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <UCard v-for="tech in primaryTech" :key="tech.name" v-spotlight class="motion-card">
+        <UCard v-for="tech in stack.primary" :key="tech.id" v-spotlight class="motion-card">
           <div class="flex items-center gap-3">
             <div
               class="flex size-10 shrink-0 items-center justify-center rounded-lg"
-              :class="tech.tileClass"
+              :class="techTileClasses[tech.tint]"
             >
               <UIcon :name="tech.icon" class="size-6" aria-hidden="true" />
             </div>
             <h4 class="font-bold">{{ tech.name }}</h4>
           </div>
-          <p class="text-muted mt-2 text-sm">{{ tech.description }}</p>
+          <p v-if="tech.description" class="text-muted mt-2 text-sm">{{ tech.description }}</p>
         </UCard>
       </div>
 
@@ -161,8 +114,8 @@ useGsapMatchMedia(sceneEl, (ctx) => {
       </h3>
       <div class="flex flex-wrap gap-3">
         <div
-          v-for="tech in secondaryTech"
-          :key="tech.name"
+          v-for="tech in stack.secondary"
+          :key="tech.id"
           class="border-default bg-elevated/50 flex items-center gap-2 rounded-full border px-4 py-2"
         >
           <UIcon :name="tech.icon" class="text-muted size-5" aria-hidden="true" />
@@ -191,10 +144,20 @@ useGsapMatchMedia(sceneEl, (ctx) => {
             :key="project.id"
             v-spotlight
             class="project-card motion-link-card bg-default ring-default overflow-hidden rounded-lg ring lg:w-[min(38rem,70vw)] lg:shrink-0"
-            :style="{ '--card-accent': project.accent.from, '--card-accent-2': project.accent.to }"
+            :style="accentStyle(project.accent)"
           >
-            <div class="relative aspect-[2/1] overflow-hidden" aria-hidden="true">
-              <div class="cover-plate motion-link-media absolute inset-0">
+            <div class="relative aspect-[2/1] overflow-hidden">
+              <NuxtImg
+                v-if="project.screenshot"
+                :src="project.screenshot.src"
+                :alt="project.screenshot.alt"
+                class="motion-link-media absolute inset-0 size-full object-cover"
+                loading="lazy"
+                width="1216"
+                height="608"
+                sizes="100vw sm:640px lg:608px"
+              />
+              <div v-else class="cover-plate motion-link-media absolute inset-0" aria-hidden="true">
                 <UIcon
                   :name="project.icon"
                   class="plate-icon absolute right-6 bottom-0 size-24 translate-y-1/4"
@@ -202,15 +165,24 @@ useGsapMatchMedia(sceneEl, (ctx) => {
               </div>
             </div>
             <div class="p-4 sm:p-6">
+              <p v-if="project.year" class="text-muted font-mono text-xs">{{ project.year }}</p>
               <h3 class="text-lg font-bold">{{ project.title }}</h3>
               <p class="text-muted mt-2">{{ project.description }}</p>
-              <div class="mt-3 flex flex-wrap gap-2">
+              <dl v-if="project.metrics.length" class="mt-3 flex flex-wrap gap-x-6 gap-y-2">
+                <div v-for="metric in project.metrics" :key="metric.label">
+                  <dt class="text-muted text-xs">{{ metric.label }}</dt>
+                  <dd class="text-highlighted font-mono text-lg font-semibold tabular-nums">
+                    {{ metric.value }}
+                  </dd>
+                </div>
+              </dl>
+              <div v-if="project.tags.length" class="mt-3 flex flex-wrap gap-2">
                 <UBadge v-for="tag in project.tags" :key="tag" variant="outline" size="sm">
                   {{ tag }}
                 </UBadge>
               </div>
               <UButton
-                :to="project.link"
+                :to="project.url"
                 target="_blank"
                 rel="noopener noreferrer"
                 variant="link"

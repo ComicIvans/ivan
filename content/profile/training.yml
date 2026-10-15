@@ -1,0 +1,212 @@
+# Academic background, languages, certifications and competencies, in display order.
+
+# Text fields take one plain string (the same in every language) or one value
+# per language (es, en, de). Spanish is required and fills in for any missing
+# language. Dates are YYYY or YYYY-MM. Schema: shared/content/schemas.ts.
+
+academic:
+  - id: mugeps
+    icon: i-tabler-briefcase
+    start: 2025-09
+    organizationUrl: https://www.upv.es/
+    title:
+      es: Máster Universitario en Gestión de Empresas, Productos y Servicios (MUGEPS)
+      en: Master’s Degree in Business, Product and Service Management (MUGEPS)
+      de: Masterstudiengang in Unternehmens-, Produkt- und Dienstleistungsmanagement (MUGEPS)
+    badgeRole: MUGEPS · UPV
+    organization: Universitat Politècnica de València
+    description:
+      es: Enfoque en dirección estratégica y gestión de equipos. Docencia mayoritariamente en inglés y próxima estancia Erasmus+ en Alemania.
+      en: Focus on strategic management and team leadership. Teaching mainly in English, with a forthcoming Erasmus+ stay in Germany.
+      de: Fokus auf strategisches Management und Teamführung. Unterricht überwiegend auf Englisch, mit einem bevorstehenden Erasmus+-Aufenthalt in Deutschland.
+  - id: cybersecurity-master
+    icon: i-tabler-shield-lock
+    end: "2024"
+    organizationUrl: https://www.ugr.es/
+    title:
+      es: Máster de Formación Permanente en Ciberseguridad
+      en: Lifelong Learning Master’s in Cybersecurity
+      de: Weiterbildungsmaster in Cybersicherheit
+    organization:
+      es: Universidad de Granada
+      en: University of Granada
+      de: Universität Granada
+    description:
+      es: Especialización en Hacking Ético, Análisis Forense y Gestión de Seguridad. Tesis sobre cumplimiento del ENS.
+      en: Specialisation in ethical hacking, digital forensics and security management. Thesis focused on ENS compliance.
+      de: Spezialisierung auf Ethical Hacking, digitale Forensik und Sicherheitsmanagement. Abschlussarbeit mit Fokus auf ENS-Compliance.
+  - id: math-degree
+    icon: i-tabler-math-function
+    start: "2019"
+    end: "2024"
+    organizationUrl: https://www.ugr.es/
+    title:
+      es: Grado en Matemáticas
+      en: Bachelor’s Degree in Mathematics
+      de: Bachelorabschluss in Mathematik
+    organization:
+      es: Universidad de Granada
+      en: University of Granada
+      de: Universität Granada
+    description:
+      es: Desarrollo de pensamiento analítico complejo y resolución de problemas.
+      en: Development of advanced analytical thinking and complex problem-solving skills.
+      de: Entwicklung fortgeschrittenen analytischen Denkens und der Fähigkeit, komplexe Probleme zu lösen.
+  - id: data-analyst
+    icon: i-simple-icons-googlecloud
+    start: 2023-03
+    end: 2023-05
+    title:
+      es: Curso de Data Analyst
+      en: Data Analyst Course
+      de: Data-Analyst-Kurs
+    organization: Google Cloud Skills Boost
+    description:
+      es: Google Cloud Big Data and Machine Learning Fundamentals, Exploring and Preparing Your Data with BigQuery, Creating New BigQuery Datasets and Visualizing Insights, Achieving Advanced Insights with BigQuery.
+      en: Google Cloud Big Data and Machine Learning Fundamentals, data preparation with BigQuery, dataset creation and insight visualisation, and advanced analytics with BigQuery.
+      de: Google Cloud Big Data and Machine Learning Fundamentals, Datenaufbereitung mit BigQuery, Erstellung neuer BigQuery-Datensätze und Visualisierung von Erkenntnissen sowie Advanced Insights mit BigQuery.
+  - id: math-conferences
+    icon: i-tabler-presentation
+    start: "2019"
+    current: false
+    periodLabel:
+      es: Desde 2019 (anual)
+      en: Since 2019 (annual)
+      de: Seit 2019 (jährlich)
+    title:
+      es: Encuentros Nacionales de Matemáticas
+      en: National Mathematics Meetings
+      de: Nationale Mathematiktreffen
+    organization: ENEM / ANEM
+    description:
+      es: Asistencia anual a encuentros formativos sobre matemáticas, estadística, ciencia de datos e inteligencia artificial.
+      en: Annual attendance at training events covering mathematics, statistics, data science and artificial intelligence.
+      de: Jährliche Teilnahme an Fortbildungsveranstaltungen zu Mathematik, Statistik, Data Science und künstlicher Intelligenz.
+languages:
+  - id: english
+    code: en
+    flag: circle-flags:gb
+    cefr: C1
+    certificate: Cambridge
+    name:
+      es: Inglés
+      en: English
+      de: Englisch
+    level:
+      es: Nivel C1 Cambridge
+      en: C1 Cambridge
+      de: Niveau C1 (Cambridge)
+    description:
+      es: Capacidad profesional completa (Máster en inglés). Estancia de inmersión en Galway (2018).
+      en: Full professional proficiency (master’s taught in English). Immersion stay in Galway (2018).
+      de: Volle berufliche Einsatzfähigkeit (Master auf Englisch). Sprachaufenthalt in Galway (2018).
+  - id: german
+    code: de
+    flag: circle-flags:de
+    cefr: A1
+    name:
+      es: Alemán
+      en: German
+      de: Deutsch
+    level:
+      es: Nivel Básico (A1)
+      en: Basic level (A1)
+      de: Grundkenntnisse (A1)
+    description:
+      es: En formación para movilidad internacional.
+      en: Currently in training for international mobility.
+      de: Derzeit in Ausbildung für internationale Mobilität.
+  - id: spanish
+    code: es
+    flag: circle-flags:es
+    cefr: native
+    name:
+      es: Español
+      en: Spanish
+      de: Spanisch
+    level:
+      es: Nativo
+      en: Native
+      de: Muttersprache
+    description:
+      es: Lengua materna.
+      en: Mother tongue.
+      de: Muttersprache.
+certifications:
+  - id: driving-licence
+    icon: i-tabler-car
+    title:
+      es: Permiso de conducir B
+      en: Driving licence (Category B)
+      de: Führerschein (Klasse B)
+    description:
+      es: Permiso de conducir de vehículos particulares.
+      en: Licence to drive private motor vehicles.
+      de: Berechtigung zum Führen von privaten Kraftfahrzeugen.
+competencies:
+  - id: project-management
+    icon: i-tabler-list-check
+    name:
+      es: Gestión y Ejecución de Proyectos
+      en: Project Management and Execution
+      de: Projektmanagement und -umsetzung
+  - id: team-leadership
+    icon: i-tabler-users
+    name:
+      es: Liderazgo y Coordinación de Equipos
+      en: Team Leadership and Coordination
+      de: Teamführung und -koordination
+  - id: governance
+    icon: i-tabler-building-bank
+    name:
+      es: Gobernanza y Negociación
+      en: Institutional Governance and Negotiation
+      de: Institutionelle Governance und Verhandlung
+  - id: communication
+    icon: i-tabler-speakerphone
+    name:
+      es: Comunicación
+      en: Professional Communication
+      de: Professionelle Kommunikation
+  - id: systems
+    icon: i-tabler-server-2
+    name:
+      es: Administración de Sistemas
+      en: Systems Administration
+      de: Systemadministration
+  - id: cybersecurity-management
+    icon: i-tabler-shield-lock
+    name:
+      es: Gestión de la Seguridad de la Información
+      en: Information Security Management
+      de: Informationssicherheitsmanagement
+  - id: compliance
+    icon: i-tabler-shield-check
+    name:
+      es: Cumplimiento Normativo y Ciberseguridad
+      en: Regulatory Compliance and Cybersecurity
+      de: Regulatorische Compliance und Cybersicherheit
+  - id: automation
+    icon: i-tabler-robot
+    name:
+      es: Automatización de Procesos
+      en: Process Automation
+      de: Prozessautomatisierung
+  - id: data-analysis
+    icon: i-tabler-chart-dots
+    name:
+      es: Análisis y Toma de Decisiones
+      en: Analysis and Decision-Making
+      de: Analyse und Entscheidungsfindung
+  - id: problem-solving
+    icon: i-tabler-puzzle
+    name:
+      es: Resolución de Problemas Complejos
+      en: Complex Problem Solving
+      de: Lösen komplexer Probleme
+  - id: strategic-thinking
+    icon: i-tabler-brain
+    name:
+      es: Pensamiento Estratégico y Planificación
+      en: Strategic Thinking and Planning
+      de: Strategisches Denken und Planung

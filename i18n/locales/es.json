@@ -51,24 +51,7 @@
       "contact": "Contactar"
     },
     "highlights": {
-      "title": "Áreas de experiencia",
-      "items": [
-        {
-          "id": "governance",
-          "title": "Gobernanza y toma de decisiones",
-          "description": "Experiencia como Consejero de Gobierno de la Universidad de Granada, participando en decisiones estratégicas sobre políticas académicas y económicas."
-        },
-        {
-          "id": "infrastructure",
-          "title": "Infraestructura y seguridad digital",
-          "description": "Responsable de la infraestructura tecnológica y políticas de seguridad de CREUP, organización que representa a más de un millón de estudiantes a nivel nacional."
-        },
-        {
-          "id": "events",
-          "title": "Gestión de proyectos y eventos",
-          "description": "Coordinación de eventos institucionales de ámbito nacional, con responsabilidad directa en logística, presupuestos y planificación."
-        }
-      ]
+      "title": "Áreas de experiencia"
     },
     "stats": {
       "projects": "Proyectos publicados",
@@ -82,41 +65,15 @@
       "gallery": "Último evento"
     }
   },
+  "period": {
+    "present": "Actualidad",
+    "ongoing": "En curso"
+  },
   "experience": {
     "title": "Experiencia Destacada",
     "intro": "Trayectoria orientada a la gestión de proyectos, la gobernanza institucional y la coordinación de equipos en entornos organizativos complejos.",
     "fullExperience": "Si quieres ver mi experiencia completa en representación estudiantil, puedes consultarla en la sección de Representación.",
     "viewRepresentation": "Ver trayectoria completa",
-    "roles": [
-      {
-        "id": "creup-digitalization",
-        "title": "Vocal de Digitalización y Transparencia",
-        "organization": "Coordinadora de Representantes de Estudiantes de Universidades Públicas (CREUP)",
-        "period": "Jun 2024 - Actual",
-        "description": "Gestión de infraestructura VPS, Google Workspace y definición de políticas de seguridad, privacidad y protección de datos de la organización."
-      },
-      {
-        "id": "enem-treasurer",
-        "title": "Tesorero y Secretario (Comité Organizador)",
-        "organization": "XXVI Encuentro Nacional de Estudiantes de Matemáticas (ENEM)",
-        "period": "Feb 2024 - Jul 2025",
-        "description": "Gestión integral de presupuestos, patrocinio y logística para un congreso nacional con centenares de participantes y decenas de entidades colaboradoras."
-      },
-      {
-        "id": "ugr-council",
-        "title": "Consejero de Gobierno",
-        "organization": "Universidad de Granada",
-        "period": "Dic 2022 - Ene 2025",
-        "description": "Participación en el máximo órgano colegiado de la universidad, contribuyendo a la regulación académica y negociando presupuestos y otras normativas clave."
-      },
-      {
-        "id": "dge-treasurer",
-        "title": "Tesorero",
-        "organization": "Consejo de Estudiantes de la Universidad de Granada",
-        "period": "Dic 2020 - Dic 2022",
-        "description": "Gestión y optimización de un presupuesto público de 35.000 €, con foco en transparencia y eficiencia."
-      }
-    ],
     "current": "Actual"
   },
   "projects": {
@@ -124,172 +81,20 @@
     "stack": {
       "title": "Stack Tecnológico",
       "primary": {
-        "title": "Tecnologías Principales",
-        "items": [
-          {
-            "id": "nuxt",
-            "name": "Nuxt",
-            "description": "Framework de Vue.js para aplicaciones web modernas con SSR y generación estática."
-          },
-          {
-            "id": "vue",
-            "name": "Vue.js",
-            "description": "Framework progresivo de JavaScript para construir interfaces de usuario."
-          },
-          {
-            "id": "linux",
-            "name": "Linux",
-            "description": "Administración de sistemas y servidores basados en Linux."
-          },
-          {
-            "id": "docker",
-            "name": "Docker",
-            "description": "Contenedores para despliegue y orquestación de aplicaciones."
-          }
-        ]
+        "title": "Tecnologías Principales"
       },
       "secondary": {
-        "title": "Tecnologías Secundarias",
-        "items": [
-          {
-            "id": "powershell",
-            "name": "PowerShell"
-          },
-          {
-            "id": "python",
-            "name": "Python"
-          },
-          {
-            "id": "php",
-            "name": "PHP"
-          },
-          {
-            "id": "sql",
-            "name": "SQL"
-          },
-          {
-            "id": "nginx",
-            "name": "Nginx"
-          },
-          {
-            "id": "dns",
-            "name": "DNS"
-          },
-          {
-            "id": "typescript",
-            "name": "TypeScript"
-          },
-          {
-            "id": "node",
-            "name": "Node.js"
-          }
-        ]
+        "title": "Tecnologías Secundarias"
       }
     },
     "list": {
-      "title": "Proyectos Relevantes",
-      "items": [
-        {
-          "id": "server",
-          "title": "Servidor personal",
-          "description": "Gestión desde 2020 de un servidor Linux con Docker, desplegando múltiples servicios bajo dominio propio.",
-          "link": "wupp.dev"
-        },
-        {
-          "id": "firmas",
-          "title": "Generador de Firmas Corporativas",
-          "description": "Dos herramientas (CLI con Python y aplicación web) para generar firmas de correos electrónicos siguiendo la identidad corporativa.",
-          "link": "firmas.wupp.dev"
-        },
-        {
-          "id": "win-ens",
-          "title": "Automatización de Cumplimiento ENS (TFM)",
-          "description": "Scripts en PowerShell para configurar y auditar automáticamente Windows 10/11 según perfiles del Esquema Nacional de Seguridad.",
-          "link": "github.com/ComicIvans/win-ens"
-        },
-        {
-          "id": "ceebi",
-          "title": "Gestión de Congresos (CEEBI)",
-          "description": "Plataforma web para consulta de horarios y turnos, realización de preguntas en tiempo real y generación de certificados de asistencia.",
-          "link": "ceebi.wupp.dev"
-        }
-      ]
+      "title": "Proyectos Relevantes"
     }
   },
   "representation": {
     "title": "Representación Estudiantil",
     "intro": "Trayectoria completa en la política universitaria, defensa de derechos estudiantiles y gobernanza universitaria .",
     "timelineLabel": "Cronología de trayectoria en representación estudiantil",
-    "timeline": [
-      {
-        "id": "start-2020",
-        "date": "Diciembre de 2020",
-        "title": "Comienzo",
-        "description": "Inicio como miembro del Claustro Universitario, del Consejo de Estudiantes (DGE) y de la Delegación de Estudiantes de la Facultad de Ciencias (DEFC), participando activamente en órganos de representación.",
-        "highlights": [
-          "Tesorero de la DGE",
-          "Secretario de la DEFC"
-        ]
-      },
-      {
-        "id": "end-first-term",
-        "date": "Diciembre de 2022",
-        "title": "Cierre de primer mandato",
-        "description": "Finalización del mandato de los cargos anteriores, manteniendo la participación en el Claustro y accediendo al Consejo de Gobierno.",
-        "highlights": [
-          "Consejo de Gobierno",
-          "Comisión Académica",
-          "Comisión Económica",
-          "Asesor de la DEFC"
-        ]
-      },
-      {
-        "id": "external-relations",
-        "date": "Marzo de 2023",
-        "title": "Director de Relaciones Externas",
-        "description": "Creación y asunción del cargo para fortalecer la presencia institucional y coordinación con entidades externas.",
-        "highlights": [
-          "Director de Relaciones Externas de la DGE"
-        ]
-      },
-      {
-        "id": "academic-vicecoord",
-        "date": "Junio de 2023",
-        "title": "Vicecoordinador Académico",
-        "description": "Participación directa en la mejora de la calidad docente y en la ampliación de garantías en la evaluación del estudiantado.",
-        "highlights": [
-          "Vicecoordinador Académico de la DGE"
-        ]
-      },
-      {
-        "id": "creup-digitalization",
-        "date": "Junio de 2024",
-        "title": "Vocal de Digitalización y Transparencia",
-        "description": "Responsable de la infraestructura tecnológica y de las políticas de seguridad, privacidad y protección de datos de CREUP.",
-        "highlights": [
-          "Vocal de Digitalización y Transparencia de CREUP"
-        ]
-      },
-      {
-        "id": "dge-advisor",
-        "date": "Marzo de 2025",
-        "title": "Director de Transparencia y Asesor",
-        "description": "Elegido Director de Transparencia y nombrado Asesor del Consejo de Estudiantes, asumiendo funciones de apoyo estratégico, asesoramiento institucional y supervisión de buenas prácticas en materia de transparencia y gestión interna.",
-        "highlights": [
-          "Director de Transparencia de la DGE",
-          "Asesor de la DGE"
-        ]
-      },
-      {
-        "id": "upv-delegate",
-        "date": "Septiembre de 2025",
-        "title": "Delegado en la UPV",
-        "description": "Desde que comencé mis estudios de máster en la Universitat Politècnica de València, soy el delegado de mi clase, continuando así mi labor de representación estudiantil en una nueva universidad.",
-        "highlights": [
-          "Delegado de clase"
-        ]
-      }
-    ],
     "stats": {
       "years": "Años en activo",
       "milestones": "Hitos",
@@ -365,124 +170,19 @@
   "training": {
     "title": "Formación y Competencias",
     "academic": {
-      "title": "Formación Académica",
-      "items": [
-        {
-          "id": "mugeps",
-          "title": "Máster Universitario en Gestión de Empresas, Productos y Servicios (MUGEPS)",
-          "organization": "Universitat Politècnica de València",
-          "period": "En curso",
-          "description": "Enfoque en dirección estratégica y gestión de equipos. Docencia mayoritariamente en inglés y próxima estancia Erasmus+ en Alemania."
-        },
-        {
-          "id": "cybersecurity-master",
-          "title": "Máster de Formación Permanente en Ciberseguridad",
-          "organization": "Universidad de Granada",
-          "period": "2024",
-          "description": "Especialización en Hacking Ético, Análisis Forense y Gestión de Seguridad. Tesis sobre cumplimiento del ENS."
-        },
-        {
-          "id": "math-degree",
-          "title": "Grado en Matemáticas",
-          "organization": "Universidad de Granada",
-          "period": "2019 - 2024",
-          "description": "Desarrollo de pensamiento analítico complejo y resolución de problemas."
-        },
-        {
-          "id": "data-analyst",
-          "title": "Curso de Data Analyst",
-          "organization": "Google Cloud Skills Boost",
-          "period": "03/2023 - 05/2023",
-          "description": "Google Cloud Big Data and Machine Learning Fundamentals, Exploring and Preparing Your Data with BigQuery, Creating New BigQuery Datasets and Visualizing Insights, Achieving Advanced Insights with BigQuery."
-        },
-        {
-          "id": "math-conferences",
-          "title": "Encuentros Nacionales de Matemáticas",
-          "organization": "ENEM / ANEM",
-          "period": "Desde 2019 (anual)",
-          "description": "Asistencia anual a encuentros formativos sobre matemáticas, estadística, ciencia de datos e inteligencia artificial."
-        }
-      ]
+      "title": "Formación Académica"
     },
     "languages": {
       "title": "Idiomas",
       "proficiency": "Nivel de dominio",
-      "items": [
-        {
-          "id": "english",
-          "name": "Inglés",
-          "level": "Nivel C1 Cambridge",
-          "description": "Capacidad profesional completa (Máster en inglés). Estancia de inmersión en Galway (2018)."
-        },
-        {
-          "id": "german",
-          "name": "Alemán",
-          "level": "Nivel Básico (A1)",
-          "description": "En formación para movilidad internacional."
-        },
-        {
-          "id": "spanish",
-          "name": "Español",
-          "level": "Nativo",
-          "description": "Lengua materna."
-        }
-      ]
+      "level": "Nivel {level}",
+      "native": "Nativo"
     },
     "other": {
-      "title": "Otras Certificaciones",
-      "drivingLicense": {
-        "title": "Permiso de conducir B",
-        "description": "Permiso de conducir de vehículos particulares."
-      }
+      "title": "Otras Certificaciones"
     },
     "competencies": {
-      "title": "Competencias Transversales",
-      "items": [
-        {
-          "id": "project-management",
-          "name": "Gestión y Ejecución de Proyectos"
-        },
-        {
-          "id": "team-leadership",
-          "name": "Liderazgo y Coordinación de Equipos"
-        },
-        {
-          "id": "governance",
-          "name": "Gobernanza y Negociación"
-        },
-        {
-          "id": "communication",
-          "name": "Comunicación"
-        },
-        {
-          "id": "systems",
-          "name": "Administración de Sistemas"
-        },
-        {
-          "id": "cybersecurity-management",
-          "name": "Gestión de la Seguridad de la Información"
-        },
-        {
-          "id": "compliance",
-          "name": "Cumplimiento Normativo y Ciberseguridad"
-        },
-        {
-          "id": "automation",
-          "name": "Automatización de Procesos"
-        },
-        {
-          "id": "data-analysis",
-          "name": "Análisis y Toma de Decisiones"
-        },
-        {
-          "id": "problem-solving",
-          "name": "Resolución de Problemas Complejos"
-        },
-        {
-          "id": "strategic-thinking",
-          "name": "Pensamiento Estratégico y Planificación"
-        }
-      ]
+      "title": "Competencias Transversales"
     }
   },
   "footer": {

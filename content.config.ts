@@ -1,56 +1,6 @@
-import { defineContentConfig, defineCollection, z } from '@nuxt/content'
+import { defineContentConfig, defineCollection } from '@nuxt/content'
 import { siteLocales } from './shared/constants/locales'
-
-const eventSchema = z.object({
-  title: z.string(),
-  location: z.string(),
-  date: z.string(),
-  duration: z.string().optional(),
-  description: z.string(),
-
-  links: z
-    .array(
-      z.object({
-        label: z.string(),
-        url: z.string(),
-      })
-    )
-    .optional(),
-
-  seo: z
-    .object({
-      title: z.string().optional(),
-      description: z.string().optional(),
-    })
-    .optional(),
-
-  tags: z.array(z.string()).default([]),
-
-  cover: z
-    .object({
-      src: z.string(),
-      alt: z.string().optional(),
-    })
-    .optional(),
-
-  photos: z
-    .array(
-      z.object({
-        src: z.string(),
-        alt: z.string().optional(),
-        description: z.string().optional(),
-        width: z.number().int().positive().optional(),
-        height: z.number().int().positive().optional(),
-        width: z.number().int().positive().optional(),
-        height: z.number().int().positive().optional(),
-      })
-    )
-    .default([]),
-
-  icon: z.string().optional(),
-
-  draft: z.boolean().default(false),
-})
+import { galleryEventSchema, profileSchemas } from './shared/content/schemas'
 
 // One gallery collection per locale, generated from siteLocales so adding a
 // locale requires no change here.
@@ -63,11 +13,27 @@ const galleryCollections = Object.fromEntries(
         include: `${code}/gallery/**/*.md`,
         prefix: `/${code}`,
       },
-      schema: eventSchema,
+      schema: galleryEventSchema,
+    }),
+  ])
+)
+
+// Profile sections: one data collection per content/profile/<section>.yml,
+// with every language side by side in the same file.
+const profileCollections = Object.fromEntries(
+  Object.entries(profileSchemas).map(([section, schema]) => [
+    `profile_${section}`,
+    defineCollection({
+      type: 'data',
+      source: `profile/${section}.yml`,
+      schema,
     }),
   ])
 )
 
 export default defineContentConfig({
-  collections: galleryCollections,
+  collections: {
+    ...galleryCollections,
+    ...profileCollections,
+  },
 })

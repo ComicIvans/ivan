@@ -1,63 +1,43 @@
 <script setup lang="ts">
-import { representationIcons } from '~/constants/icons'
 import type { TimelineSectionItem } from '~/components/TimelineSection.vue'
 
 defineProps<{ id: string }>()
 
 const { t } = useI18n({ useScope: 'global' })
 
-interface RepresentationItem {
-  id: string
-  date: string
-  title: string
-  description: string
-  highlights: string[]
-  icon: string
-}
-
-const representationData = useI18nList<RepresentationItem>(
-  'representation.timeline',
-  ({ raw, value, tr }) => {
-    const id = value(raw.id)
-    const highlights = (raw.highlights as unknown[]) || []
-
-    return {
-      id,
-      date: tr(raw.date),
-      title: tr(raw.title),
-      description: tr(raw.description),
-      highlights: highlights.map((highlight) => tr(highlight)),
-      icon: representationIcons[id] || 'i-tabler-point',
-    }
-  }
-)
-
-// Derived from a fixed start year so server and client agree within a render
-const START_YEAR = 2020
-const yearsActive = new Date().getFullYear() - START_YEAR
-
-const milestonesCount = computed(() => representationData.value.length)
-const rolesCount = computed(() =>
-  representationData.value.reduce((total, item) => total + item.highlights.length, 0)
-)
+const { representation, representationStats } = useProfile()
 
 const timelineItems = computed<TimelineSectionItem[]>(() =>
-  representationData.value.map((item) => ({
+  representation.value.map((item) => ({
     title: item.title,
     date: item.date,
     description: item.description,
     icon: item.icon,
-    highlights: item.highlights,
+    highlights: item.roles,
   }))
 )
 
-// Finished counters stamp org pins onto the DELEGADO badge (placeholder
-// initials until the official SVG logos land — material list A3).
+// Finished counters stamp the organisation pins of the milestones (in
+// timeline order) onto the DELEGADO badge, spread across the three counters.
+const COUNTER_COUNT = 3
 const journey = useCredentialJourney()
+const milestonePins = computed(() => representation.value.flatMap((item) => item.pin ?? []))
+const finishedCounters = ref<number[]>([])
 
-function addPin(pin: string) {
-  if (!journey.pins.value.includes(pin)) journey.pins.value.push(pin)
+function onCounterFinished(counter: number) {
+  if (!finishedCounters.value.includes(counter)) finishedCounters.value.push(counter)
 }
+
+watch(
+  [milestonePins, finishedCounters],
+  ([pins, finished]) => {
+    pins.forEach((pin, index) => {
+      const stamped = finished.includes(index % COUNTER_COUNT)
+      if (stamped && !journey.pins.value.includes(pin)) journey.pins.value.push(pin)
+    })
+  },
+  { deep: true }
+)
 </script>
 
 <template>
@@ -73,19 +53,19 @@ function addPin(pin: string) {
 
         <div class="border-default reveal grid grid-cols-3 gap-4 border-y py-6 sm:gap-6">
           <StatCounter
-            :value="yearsActive"
+            :value="representationStats.yearsActive"
             :label="t('representation.stats.years')"
-            @finished="addPin('CR')"
+            @finished="onCounterFinished(0)"
           />
           <StatCounter
-            :value="milestonesCount"
+            :value="representationStats.milestones"
             :label="t('representation.stats.milestones')"
-            @finished="addPin('UPV')"
+            @finished="onCounterFinished(1)"
           />
           <StatCounter
-            :value="rolesCount"
+            :value="representationStats.roles"
             :label="t('representation.stats.roles')"
-            @finished="addPin('UGR')"
+            @finished="onCounterFinished(2)"
           />
         </div>
       </div>

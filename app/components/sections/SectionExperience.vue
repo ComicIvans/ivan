@@ -1,41 +1,17 @@
 <script setup lang="ts">
-import { roleIcons } from '~/constants/icons'
 import type { TimelineSectionItem } from '~/components/TimelineSection.vue'
 
 defineProps<{ id: string }>()
 
 const { t } = useI18n({ useScope: 'global' })
 
-const currentRoles = ['creup-digitalization']
-
-interface Experience {
-  id: string
-  title: string
-  org: string
-  period: string
-  description: string
-  icon: string
-  current: boolean
-}
-
-const experiences = useI18nList<Experience>('experience.roles', ({ raw, value, tr }) => {
-  const id = value(raw.id)
-  return {
-    id,
-    title: tr(raw.title),
-    org: tr(raw.organization),
-    period: tr(raw.period),
-    description: tr(raw.description),
-    icon: roleIcons[id] || 'i-tabler-briefcase',
-    current: currentRoles.includes(id),
-  }
-})
+const { experience } = useProfile()
 
 const timelineItems = computed<TimelineSectionItem[]>(() =>
-  experiences.value.map((exp) => ({
+  experience.value.map((exp) => ({
     title: exp.title,
     date: exp.period,
-    organization: exp.org,
+    organization: exp.organization,
     description: exp.description,
     icon: exp.icon,
     current: exp.current,
@@ -53,7 +29,7 @@ function scrollToSection(targetId: string) {
 const journey = useCredentialJourney()
 
 function onMilestone(index: number) {
-  const exp = experiences.value[index]
+  const exp = experience.value[index]
   if (exp) journey.roleLine.value = exp.title
 }
 </script>

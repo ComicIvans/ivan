@@ -1,0 +1,130 @@
+# Student representation milestones, oldest first.
+
+# Text fields take one plain string (the same in every language) or one value
+# per language (es, en, de). Spanish is required and fills in for any missing
+# language. Dates are YYYY or YYYY-MM. Schema: shared/content/schemas.ts.
+
+items:
+  - id: start-2020
+    icon: i-tabler-rocket
+    date: 2020-12
+    pin: UGR
+    title:
+      es: Comienzo
+      en: Starting point
+      de: Startpunkt
+    description:
+      es: Inicio como miembro del Claustro Universitario, del Consejo de Estudiantes (DGE) y de la Delegación de Estudiantes de la Facultad de Ciencias (DEFC), participando activamente en órganos de representación.
+      en: Joined the University Senate, the Students’ Council (DGE) and the Faculty of Science Student Delegation (DEFC), actively participating in representative bodies.
+      de: Beitritt zum Universitäts­senat, zum Studierendenrat (DGE) und zur Studierendenvertretung der Fakultät für Naturwissenschaften (DEFC) und aktive Mitarbeit in repräsentativen Gremien.
+    roles:
+      - es: Tesorero de la DGE
+        en: DGE Treasurer
+        de: Kassenwart (DGE)
+      - es: Secretario de la DEFC
+        en: DEFC Secretary
+        de: Sekretär (DEFC)
+  - id: end-first-term
+    icon: i-tabler-refresh
+    date: 2022-12
+    title:
+      es: Cierre de primer mandato
+      en: End of first term
+      de: Ende der ersten Amtszeit
+    description:
+      es: Finalización del mandato de los cargos anteriores, manteniendo la participación en el Claustro y accediendo al Consejo de Gobierno.
+      en: Completion of the first term of office, continuing participation in the Senate and joining the Governing Council.
+      de: Abschluss der ersten Amtszeit, weitere Mitarbeit im Senat und Eintritt in den Universitätsrat.
+    roles:
+      - es: Consejo de Gobierno
+        en: Governing Council
+        de: Universitätsrat
+      - es: Comisión Académica
+        en: Academic Committee
+        de: Akademischer Ausschuss
+      - es: Comisión Económica
+        en: Economic Committee
+        de: Wirtschaftsausschuss
+      - es: Asesor de la DEFC
+        en: Advisor to the DEFC
+        de: Berater der DEFC
+  - id: external-relations
+    icon: i-tabler-world
+    date: 2023-03
+    title:
+      es: Director de Relaciones Externas
+      en: Director of External Relations
+      de: Direktor für externe Beziehungen
+    description:
+      es: Creación y asunción del cargo para fortalecer la presencia institucional y coordinación con entidades externas.
+      en: Creation and assumption of the role to strengthen institutional presence and coordination with external entities.
+      de: Schaffung und Übernahme der Rolle zur Stärkung der institutionellen Präsenz und zur Koordination mit externen Organisationen.
+    roles:
+      - es: Director de Relaciones Externas de la DGE
+        en: Director of External Relations (DGE)
+        de: Direktor für externe Beziehungen (DGE)
+  - id: academic-vicecoord
+    icon: i-tabler-school
+    date: 2023-06
+    title:
+      es: Vicecoordinador Académico
+      en: Academic Vice-Coordinator
+      de: Akademischer Vizekoordinator
+    description:
+      es: Participación directa en la mejora de la calidad docente y en la ampliación de garantías en la evaluación del estudiantado.
+      en: Direct involvement in improving teaching quality and strengthening student assessment guarantees.
+      de: Direkte Mitarbeit an der Verbesserung der Lehrqualität und an der Stärkung der Prüfungs- und Bewertungsrechte der Studierenden.
+    roles:
+      - es: Vicecoordinador Académico de la DGE
+        en: Academic Vice-Coordinator (DGE)
+        de: Akademischer Vizekoordinator (DGE)
+  - id: creup-digitalization
+    icon: i-tabler-server-2
+    date: 2024-06
+    pin: CR
+    title:
+      es: Vocal de Digitalización y Transparencia
+      en: Board Member for Digitalisation and Transparency
+      de: Vorstandsmitglied für Digitalisierung und Transparenz
+    description:
+      es: Responsable de la infraestructura tecnológica y de las políticas de seguridad, privacidad y protección de datos de CREUP.
+      en: Responsible for CREUP’s technological infrastructure and its security, privacy and data protection policies.
+      de: Verantwortlich für die technologische Infrastruktur von CREUP sowie für Sicherheits-, Datenschutz- und Daten­schutzrichtlinien.
+    roles:
+      - es: Vocal de Digitalización y Transparencia de CREUP
+        en: Board Member for Digitalisation and Transparency (CREUP)
+        de: Vorstandsmitglied für Digitalisierung und Transparenz (CREUP)
+  - id: dge-advisor
+    icon: i-tabler-shield-check
+    date: 2025-03
+    title:
+      es: Director de Transparencia y Asesor
+      en: Director of Transparency and Advisor
+      de: Direktor für Transparenz und Berater
+    description:
+      es: Elegido Director de Transparencia y nombrado Asesor del Consejo de Estudiantes, asumiendo funciones de apoyo estratégico, asesoramiento institucional y supervisión de buenas prácticas en materia de transparencia y gestión interna.
+      en: Elected Director of Transparency and appointed Advisor to the Students’ Council, undertaking strategic support, institutional advisory duties and oversight of transparency and internal management practices.
+      de: Zum Direktor für Transparenz gewählt und als Berater des Studierendenrats ernannt, mit Aufgaben in strategischer Unterstützung, institutioneller Beratung sowie der Aufsicht über Transparenz- und interne Managementpraktiken.
+    roles:
+      - es: Director de Transparencia de la DGE
+        en: Director of Transparency (DGE)
+        de: Direktor für Transparenz (DGE)
+      - es: Asesor de la DGE
+        en: Advisor to the DGE
+        de: Berater des DGE
+  - id: upv-delegate
+    icon: i-tabler-users
+    date: 2025-09
+    pin: UPV
+    title:
+      es: Delegado en la UPV
+      en: Class Representative at UPV
+      de: Klassensprecher an der UPV
+    description:
+      es: Desde que comencé mis estudios de máster en la Universitat Politècnica de València, soy el delegado de mi clase, continuando así mi labor de representación estudiantil en una nueva universidad.
+      en: Elected class representative at the Universitat Politècnica de València at the start of my master’s studies, continuing my work in student representation within a new academic environment.
+      de: Zu Beginn meines Masterstudiums an der Universitat Politècnica de València zum Klassensprecher gewählt und damit die studentische Vertretungsarbeit in einem neuen akademischen Umfeld fortgesetzt.
+    roles:
+      - es: Delegado de clase
+        en: Class representative
+        de: Klassensprecher
