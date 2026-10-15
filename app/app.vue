@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { defaultLocale } from '~~/shared/constants/locales'
 import { profileName, profileSameAs } from '~~/shared/constants/profile'
 import { themeColorMeta } from '~~/shared/constants/theme'
 import { getOgLocale } from '~/utils/locales'
@@ -80,6 +79,58 @@ onBeforeUnmount(() => {
   removeRouteErrorHook?.()
 })
 
+// Person details derived from the profile content, so the structured data
+// follows the timeline (current roles, studies, languages) without edits here.
+// They are added once the home has loaded the profile; other pages keep the
+// base Person node and a lighter payload.
+const profile = useLoadedProfile()
+
+function nonEmpty<T>(items: T[]) {
+  return items.length ? items : undefined
+}
+
+const uniqueByUrl = <T extends { url: string }>(items: T[]) =>
+  items.filter((item, index) => items.findIndex((other) => other.url === item.url) === index)
+
+const personWorksFor = computed(() =>
+  uniqueByUrl(
+    profile.experience.value.flatMap((role) =>
+      role.current && role.organizationUrl
+        ? [{ '@type': 'Organization', name: role.organization, url: role.organizationUrl }]
+        : []
+    )
+  )
+)
+
+const personAlumniOf = computed(() =>
+  uniqueByUrl(
+    profile.academic.value.flatMap((item) =>
+      item.organizationUrl
+        ? [
+            {
+              '@type': 'EducationalOrganization',
+              name: item.organization,
+              url: item.organizationUrl,
+            },
+          ]
+        : []
+    )
+  )
+)
+
+const personKnowsAbout = computed(() => [
+  ...profile.competencies.value.map((competency) => competency.name),
+  ...profile.stack.value.primary.map((tech) => tech.name),
+])
+
+const personKnowsLanguage = computed(() =>
+  profile.languages.value.map((language) => ({
+    '@type': 'Language',
+    name: language.name,
+    alternateName: language.code,
+  }))
+)
+
 useSchemaOrg([
   defineWebSite({
     '@id': () => `${siteUrl.value}#website`,
@@ -93,7 +144,6 @@ useSchemaOrg([
     name: profileName,
     givenName: 'Iván',
     familyName: 'Salido Cobo',
-    gender: 'Male',
     url: () => siteUrl.value,
     image: () => `${siteRoot.value}/profile-pic.webp`,
     description: () => t('seo.description'),
@@ -101,61 +151,12 @@ useSchemaOrg([
       '@type': 'Country',
       name: 'Spain',
     },
-    birthPlace: {
-      '@type': 'Place',
-      address: {
-        '@type': 'PostalAddress',
-        addressCountry: 'ES',
-        addressLocality: 'Santa María de los Llanos',
-        addressRegion: 'Castilla-La Mancha',
-      },
-    },
     sameAs: profileSameAs,
     jobTitle: () => t('schema.jobTitle'),
-    worksFor: [
-      {
-        '@type': 'Organization',
-        name: 'Coordinadora de Representantes de Estudiantes de Universidades Públicas - CREUP',
-        url: 'https://www.creup.es/',
-      },
-    ],
-    alumniOf: [
-      {
-        '@type': 'EducationalOrganization',
-        name: 'Universitat Politècnica de València (UPV)',
-        url: 'https://www.upv.es/',
-      },
-      {
-        '@type': 'EducationalOrganization',
-        name: 'Universidad de Granada (UGR)',
-        url: 'https://www.ugr.es/',
-      },
-    ],
-    knowsAbout: [
-      'Cybersecurity',
-      'Mathematics',
-      'Project Management',
-      'Strategic Management',
-      'Student Representation',
-      'Vue.js',
-    ],
-    knowsLanguage: [
-      {
-        '@type': 'Language',
-        name: 'Spanish',
-        alternateName: defaultLocale,
-      },
-      {
-        '@type': 'Language',
-        name: 'English',
-        alternateName: 'en',
-      },
-      {
-        '@type': 'Language',
-        name: 'German',
-        alternateName: 'de',
-      },
-    ],
+    worksFor: () => nonEmpty(personWorksFor.value),
+    alumniOf: () => nonEmpty(personAlumniOf.value),
+    knowsAbout: () => nonEmpty(personKnowsAbout.value),
+    knowsLanguage: () => nonEmpty(personKnowsLanguage.value),
   }),
 ])
 </script>

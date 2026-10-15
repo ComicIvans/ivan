@@ -24,7 +24,9 @@ export function useCredentialJourney() {
   const active = useState<SectionId>('credential-active', () => 'inicio')
   const isJumping = useState('credential-is-jumping', () => false)
   const layerMounted = useState('credential-layer-mounted', () => false)
-  const roleLine = useState('credential-role-line', () => '')
+  // Index of the experience entry the timeline thread last lit (null until
+  // the visitor reaches it); the experience badge prints that entry's role.
+  const roleIndex = useState<number | null>('credential-role-index', () => null)
   const pins = useState<string[]>('credential-pins', () => [])
   const projectIndex = useState('credential-project-index', () => '')
   const photoSrc = useState('credential-photo-src', () => '')
@@ -52,7 +54,7 @@ export function useCredentialJourney() {
     isJumping,
     layerMounted,
     currentVariant: computed(() => variantsById[active.value]),
-    roleLine,
+    roleIndex,
     pins,
     projectIndex,
     photoSrc,

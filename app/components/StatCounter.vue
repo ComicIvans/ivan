@@ -55,6 +55,21 @@ onMounted(() => {
   observer.observe(el)
 })
 
+// Values can arrive or change after mount (data loaded on a client-side
+// navigation, a language switch): show the new value right away, cutting a
+// running count-up short. A pending count-up reads props.value when it starts.
+watch(
+  () => props.value,
+  (value) => {
+    if (tween?.isActive()) {
+      tween.kill()
+      tween = null
+      emit('finished')
+    }
+    shown.value = value
+  }
+)
+
 onBeforeUnmount(() => {
   observer?.disconnect()
   tween?.kill()

@@ -25,12 +25,13 @@ function scrollToSection(targetId: string) {
   el.scrollIntoView({ behavior: motionOk ? 'smooth' : 'auto' })
 }
 
-// The thread reports which milestone it lit; the badge reprints its role line.
+// The thread reports which milestone it lit; the experience badge reprints
+// its role line from that entry (resolved in the badge, so it follows the
+// active language).
 const journey = useCredentialJourney()
 
 function onMilestone(index: number) {
-  const exp = experience.value[index]
-  if (exp) journey.roleLine.value = exp.title
+  journey.roleIndex.value = index
 }
 </script>
 

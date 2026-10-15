@@ -22,7 +22,8 @@ const props = withDefaults(
 const { t } = useI18n({ useScope: 'global' })
 
 const journey = useCredentialJourney()
-const { roleLine, pins, projectIndex, photoSrc, galleryCovers, visitorName, accredited } = journey
+const { roleIndex, pins, projectIndex, photoSrc, galleryCovers, visitorName, accredited } = journey
+const { experience, currentAcademic } = useProfile()
 
 const accentVar = computed(
   () =>
@@ -42,7 +43,19 @@ const displayedPhotoSrc = computed(() => {
   return photoSrc.value || galleryCovers.value[0] || portraitSrc
 })
 
-const shownRole = computed(() => roleLine.value || t(props.variant.roleKey))
+// Role line: the experience badge follows the entry the timeline thread lit,
+// the diploma shows the current studies, every other dock the generic role.
+// Resolved here from content data, so it always matches the active language.
+const shownRole = computed(() => {
+  if (props.variant.id === 'experiencia' && roleIndex.value !== null) {
+    const entry = experience.value[roleIndex.value]
+    if (entry) return entry.badgeRole
+  }
+  if (props.variant.id === 'formacion' && currentAcademic.value) {
+    return currentAcademic.value.badgeRole
+  }
+  return t(props.variant.roleKey)
+})
 const tierLabel = computed(() => (props.variant.tierKey ? t(props.variant.tierKey) : ''))
 
 // Imperative handles for the traveling instance (reprint / stamp / swing).
