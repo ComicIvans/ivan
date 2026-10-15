@@ -285,12 +285,29 @@ export type ProfileProjects = z.infer<typeof projectsSchema>
 export type ProfileTraining = z.infer<typeof trainingSchema>
 export type CefrLevel = (typeof cefrLevels)[number]
 
+/**
+ * A content date already formatted for every locale. The server formats the
+ * dates once, so the SSR HTML and the hydrating client print the same month
+ * names even when their Intl data differ.
+ */
+export type LocalizedDate = Record<SiteLocaleCode, string>
+
+/** Period bounds of a timeline item, formatted per locale ("Jun 2024"). */
+export interface PeriodText {
+  startText?: LocalizedDate
+  endText?: LocalizedDate
+}
+
+/** Profile content as /api/profile returns it: the YAML plus formatted dates. */
 export interface ProfileData {
   highlights: ProfileHighlights['items']
-  experience: ProfileExperience['items']
-  representation: ProfileRepresentation['items']
+  experience: Array<ProfileExperience['items'][number] & PeriodText>
+  /** `dateText` is the milestone date with the full month name ("December 2020"). */
+  representation: Array<ProfileRepresentation['items'][number] & { dateText: LocalizedDate }>
   projects: ProfileProjects
-  training: ProfileTraining
+  training: Omit<ProfileTraining, 'academic'> & {
+    academic: Array<ProfileTraining['academic'][number] & PeriodText>
+  }
 }
 
 // ---------------------------------------------------------------------------

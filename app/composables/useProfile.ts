@@ -1,10 +1,5 @@
 import type { CefrLevel, LocalizedText, ProfileData } from '~~/shared/content/schemas'
-import {
-  formatPeriod,
-  formatYearMonth,
-  isCurrentPeriod,
-  resolveLocalized,
-} from '~/utils/profileFormat'
+import { formatPeriod, isCurrentPeriod, resolveLocalized } from '~/utils/profileFormat'
 
 const PROFILE_KEY = 'profile'
 
@@ -95,7 +90,7 @@ function resolveProfile(data: { readonly value: ProfileData | null | undefined }
       id: item.id,
       icon: item.icon,
       pin: item.pin,
-      date: formatYearMonth(item.date, locale.value, 'long'),
+      date: lt(item.dateText),
       title: lt(item.title),
       description: lt(item.description),
       roles: (item.roles ?? []).map(lt),
