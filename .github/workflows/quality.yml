@@ -21,6 +21,10 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      # Gallery images are not in git, so verify:gallery only runs locally
+      # (pnpm build); the content and locale files are checked here.
+      - run: pnpm verify:content
+      - run: pnpm verify:i18n
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm exec nuxt build

@@ -3,7 +3,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "build": "pnpm verify:gallery && nuxt build",
+    "build": "pnpm verify && nuxt build",
     "dev": "nuxt dev",
     "dev:clean": "nuxi cleanup && nuxt dev",
     "cleanup": "nuxi cleanup",
@@ -13,7 +13,10 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "typecheck": "nuxt typecheck",
+    "verify": "pnpm verify:gallery && pnpm verify:content && pnpm verify:i18n",
     "verify:gallery": "node scripts/verify-gallery-assets.mjs",
+    "verify:content": "node scripts/verify-content.mjs",
+    "verify:i18n": "node scripts/verify-i18n.mjs",
     "deploy:local": "bash ./deploy-local.sh",
     "deploy": "bash ./deploy.sh"
   },
@@ -57,7 +60,8 @@
     "prettier": "3.9.10",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "typescript": "~6.0.3",
-    "vue-tsc": "3.3.13"
+    "vue-tsc": "3.3.13",
+    "yaml": "^2.9.1"
   },
   "engines": {
     "node": ">=24.15.0"
