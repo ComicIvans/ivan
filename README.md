@@ -27,7 +27,7 @@ URLs de producción:
 
 ## Requisitos
 
-- Node.js compatible con Nuxt 4
+- Node.js 24 (`engines`: >= 24.15.0), la misma versión mayor que usa la imagen de Docker
 - `pnpm`
 - Docker y Docker Compose para el despliegue local o en VPS
 - Linux o WSL para usar los scripts de despliegue
@@ -60,6 +60,13 @@ pnpm typecheck
 ### Aplicación
 
 - `SITE_URL`
+- `NUXT_APP_SECRET`: secreto raíz con el que se firman las URL `/_og/*` de las
+  imágenes para redes sociales. Es obligatorio en producción: sin él, todas esas
+  imágenes responden 500. Debe tener al menos 32 caracteres (por ejemplo,
+  `openssl rand -base64 32`) y mantenerse igual entre despliegues para que las
+  URL ya compartidas sigan siendo válidas. Solo se usa en tiempo de ejecución:
+  llega al contenedor por el `env_file` de `docker-compose.yml` y nunca se
+  incluye en la imagen.
 
 ### SMTP
 
