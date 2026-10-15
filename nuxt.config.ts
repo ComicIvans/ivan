@@ -317,8 +317,17 @@ export default defineNuxtConfig({
 
   // Skew Protection needs old build assets kept between deploys, which the
   // clean Docker build never has, and it adds client polling for little gain
-  // on a single-instance site. AI Ready (llms.txt) stays on by default.
+  // on a single-instance site.
   skewProtection: false,
+
+  // AI Ready serves llms.txt and Markdown copies of each page. Its i18n
+  // auto-detection rebuilds hreflang alternates from the locale prefix alone
+  // and ignores the localized page paths (/en/gallery, /de/impressum), so its
+  // Link headers would point at 404 URLs and contradict the hreflang links
+  // that useLocaleHead renders. Those links stay the only hreflang source.
+  aiReady: {
+    autoI18n: false,
+  },
 
   i18n: {
     baseUrl: siteUrl,
