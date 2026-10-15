@@ -284,6 +284,19 @@ export default defineNuxtConfig({
     // Native cross-page morphs where supported; the manual page-shell
     // transition in app.vue stays wired as the universal fallback.
     viewTransition: true,
+    // Every /_nuxt/ file name must change whenever its bytes change: the files
+    // are cached as immutable and nuxt-security pins their SRI hash, so a
+    // stale cached copy under an unchanged name is blocked and the page fails.
+    // The entry import map breaks that rule. Chunks import the entry through
+    // "#entry", so their [hash] no longer depends on the entry's, yet Vite
+    // writes their __vite__mapDeps preload lists after hashing, and those
+    // lists name the entry's CSS and its other dependencies. A change that
+    // only renames the entry CSS (any edit to the entry or to the Tailwind
+    // output) rewrites the page chunks without renaming them. Without the
+    // import map every importer hashes the entry's final name again. The
+    // trade-off: an entry change also renames every chunk that imports the
+    // entry, so returning visitors download those again after such a deploy.
+    entryImportMap: false,
   },
 
   // Nuxt SEO configuration
