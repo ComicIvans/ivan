@@ -84,8 +84,9 @@ para los controles de abuso.
 
 Los binarios de la galería se mantienen fuera de Git. Antes de construir o
 desplegar hay que restaurar `public/gallery/` desde la copia privada. `pnpm
-build` ejecuta `pnpm verify:gallery` y falla si el contenido referencia un
-archivo local ausente.
+build` ejecuta antes `pnpm verify`, que falla si el contenido referencia una
+imagen ausente (o con otras mayúsculas), si el contenido no cumple su esquema o
+si los archivos de traducción no están alineados.
 
 ### Analítica
 
@@ -109,6 +110,7 @@ Las variables de Umami son opcionales. Si faltan, la analítica queda desactivad
 - `pnpm lint`
 - `pnpm lint:fix`
 - `pnpm typecheck`
+- `pnpm verify` (`verify:gallery`, `verify:content` y `verify:i18n`)
 - `pnpm deploy:local`
 - `pnpm deploy`
 
@@ -135,7 +137,7 @@ pnpm deploy
 ## Estructura principal
 
 - `app/` — componentes, layouts, páginas, composables y estilos globales.
-- `content/` — contenido editorial de la galería por idioma.
+- `content/` — perfil (`content/profile/*.yml`) y galería por idioma.
 - `i18n/locales/` — mensajes de traducción.
 - `server/api/` — endpoints del servidor, incluido el formulario de contacto.
 - `server/utils/` — utilidades de configuración y soporte del servidor.
@@ -147,6 +149,8 @@ pnpm deploy
 - El español es el idioma base del sitio.
 - Las traducciones de galería pueden sobrescribir parcialmente el contenido base; si falta algo, se conserva la versión en español.
 - El texto visible al usuario debe salir de `i18n` o del contenido localizado, no de cadenas sueltas en componentes.
+- La trayectoria (áreas destacadas, experiencia, representación, proyectos y formación) vive en `content/profile/<sección>.yml`, con los tres idiomas juntos en cada campo (`es` obligatorio, `en` y `de` opcionales). Fechas como `YYYY` o `YYYY-MM`; un elemento sin `end` se considera actual. Contadores, cargo actual y datos estructurados se calculan a partir de esos archivos.
+- Los títulos de sección y textos de interfaz siguen en `i18n/locales/`. En esos mensajes, `|`, `@`, `{` y `}` son sintaxis de vue-i18n: escríbelos como `{'|'}`, `{'@'}`, `{'{'}` y `{'}'}`.
 
 ## Licencia
 

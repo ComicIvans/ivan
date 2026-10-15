@@ -34,11 +34,12 @@ Current scope includes:
 ## Repository Structure
 
 - `app/` — Vue components, layouts, pages, composables, utilities, and CSS.
-- `content/` — Gallery content grouped by locale.
+- `content/` — Profile data (`content/profile/*.yml`) and gallery content grouped by locale.
 - `i18n/locales/` — Public translation message files.
 - `server/api/` — Nitro route handlers.
 - `server/utils/` — Shared server helpers and runtime config access.
-- `shared/` — Runtime-safe shared utilities.
+- `shared/` — Runtime-safe shared utilities and the content schemas (`shared/content/schemas.ts`).
+- `scripts/` — Pre-build checks (`pnpm verify`).
 - `public/` — Static assets served as-is.
 - `modules/` — Local Nuxt module patches or adjustments.
 
@@ -59,6 +60,8 @@ Current scope includes:
   - **English (`en`)**
   - **German (`de`)**
 - Locale-specific gallery content must keep Spanish as the source of truth and fallback.
+- vue-i18n falls back to Spanish (`i18n/i18n.config.ts`), but every key must still exist in all three files (`pnpm verify:i18n`).
+- In i18n messages `|` separates plural forms, `{x}` is a placeholder and `@` starts a linked message; write literal characters as `{'|'}`, `{'{'}`, `{'}'}` and `{'@'}`.
 - Prefer shared locale helpers such as `app/utils/locales.ts`, `app/utils/nuxtUiLocale.ts`, and the existing gallery composables instead of scattering raw locale checks.
 
 ### Emails
@@ -108,6 +111,19 @@ Current scope includes:
 - Spanish content is the base entry; translated entries may override only the fields they actually localize.
 - Do not replace a valid Spanish value with an empty localized value.
 - Image alt text should stay descriptive for third parties, not for internal notes.
+
+---
+
+## Profile Content Conventions
+
+- Profile sections live in `content/profile/<section>.yml` (`highlights`, `experience`, `representation`, `projects`, `training`), one Nuxt Content data collection each, validated by the zod schemas in `shared/content/schemas.ts`.
+- Text fields are a plain string when identical in every language, or `{ es, en, de }` with `es` required; a missing translation falls back to Spanish.
+- Facts are typed fields, never copy: dates as `YYYY` / `YYYY-MM` (`start`/`end`, no `end` = current), Iconify names, CEFR levels, tags, accents (theme tokens), URLs.
+- Components read the data through `useProfile()`, which resolves the locale and derives counters, the current role, years active, badge role lines and the Person JSON-LD. Do not hard-code profile facts or id maps in components.
+- A page that renders profile sections awaits `loadProfile()` in its setup (see `app/pages/index.vue`), so after a client-side navigation the sections mount with their content and GSAP setups and hash scrolling measure the final layout.
+- `/api/profile` formats the dates for every locale on the server; the client only picks the right string, so SSR and hydration print the same month names.
+- Project accents are `ember`/`amber`/`blue` shade tokens; `main.css` keeps those ramps in the build. Extend both together.
+- Section titles and UI words ("Actualidad", "En curso") stay in the i18n JSON files.
 
 ---
 
@@ -179,6 +195,7 @@ Common commands:
 - `pnpm lint`
 - `pnpm lint:fix`
 - `pnpm typecheck`
+- `pnpm verify` (gallery assets, content schemas, i18n parity; run by `pnpm build`)
 
 Deployment commands:
 
@@ -208,5 +225,6 @@ perf: reduce gallery image payload
 - Added animations still respect reduced-motion users.
 - SEO metadata remains coherent after the change.
 - Runtime configuration is validated through shared helpers when relevant.
+- `pnpm verify` passes.
 - Lint passes.
 - Typecheck passes.
