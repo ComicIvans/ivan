@@ -136,6 +136,15 @@ export default defineNuxtConfig({
     '/de/ausbildung': { redirect: { to: '/de#formacion', statusCode: 301 } },
     '/de/vertretung': { redirect: { to: '/de#representacion', statusCode: 301 } },
     '/de/kontakt': { redirect: { to: '/de#contacto', statusCode: 301 } },
+    // The legal page is noindex in every locale. The page sets the robots meta
+    // tag itself; these rules make the X-Robots-Tag header agree with it and
+    // also cover the Markdown copies that AI Ready serves at <path>.md.
+    '/legal': { robots: 'noindex, follow' },
+    '/legal.md': { robots: 'noindex, follow' },
+    '/en/legal': { robots: 'noindex, follow' },
+    '/en/legal.md': { robots: 'noindex, follow' },
+    '/de/impressum': { robots: 'noindex, follow' },
+    '/de/impressum.md': { robots: 'noindex, follow' },
     '/api/**': {
       headers: {
         'X-Robots-Tag': 'noindex, nofollow, noarchive',
