@@ -34,6 +34,15 @@ COPY . .
 # (CSP, content DB path, indexability, umami) are taken explicitly instead of
 # relying on nuxi's implicit default.
 RUN NODE_ENV=production pnpm run build
+
+# better-sqlite3 13 ships prebuilt binaries for eight platforms and the server
+# bundle traces all of them (about 17 MB). It loads prebuilds/<platform>-<arch>
+# at runtime, and this stage runs on the same platform and glibc as the runtime
+# image, so keep only that binary and fail the build if it is missing.
+RUN target="$(node -p 'process.platform + "-" + process.arch')" \
+  && find .output/server/node_modules -path '*/better-sqlite3*/prebuilds/*.node' ! -name "${target}.node" -delete \
+  && find .output/server/node_modules -path "*/better-sqlite3*/prebuilds/${target}.node" | grep -q .
+
 RUN mkdir -p /runtime-data
 
 
