@@ -2,7 +2,6 @@
 const { t } = useI18n({ useScope: 'global' })
 const route = useRoute()
 const localePath = useLocalePath()
-const { formatDate } = useDateFormatter()
 const { getPhotoAlt, getCoverAlt } = useGalleryImages()
 const img = useImage()
 
@@ -142,9 +141,14 @@ function getEventIcon() {
 const metaChips = computed(() => {
   if (!event.value) return []
 
-  const chips = [{ icon: 'i-tabler-calendar', label: formatDate(event.value.date) }]
+  const chips = [{ icon: 'i-tabler-calendar', label: event.value.dateText }]
   if (event.value.location) chips.push({ icon: 'i-tabler-map-pin', label: event.value.location })
-  if (event.value.duration) chips.push({ icon: 'i-tabler-clock', label: event.value.duration })
+  if (event.value.days > 1) {
+    chips.push({
+      icon: 'i-tabler-clock',
+      label: t('gallery.event.duration', { count: event.value.days }),
+    })
+  }
   if (event.value.photos.length > 0) {
     chips.push({
       icon: 'i-tabler-photo',

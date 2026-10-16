@@ -2,7 +2,7 @@
 title: IV Jornadas de Formación del CEEINA
 location: Munébrega, Zaragoza, España
 date: 2025-09-16
-duration: 5 días
+endDate: 2025-09-21
 description: Las Jornadas de Formación del CEEINA consisten en una convivencia en un albergue de la comunidad aragonesa, donde se llevan a cabo formaciones y dinámicas para fomentar el aprendizaje en un ambiente relajado y favorable.
 icon: i-tabler-school
 tags:

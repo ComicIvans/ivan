@@ -6,8 +6,6 @@ defineProps<{ id: string }>()
 const { t } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
 const { getCoverAlt } = useGalleryImages()
-const { formatDate } = useDateFormatter()
-const formatMonthYear = (dateStr: string) => formatDate(dateStr, { year: 'numeric', month: 'long' })
 
 const { allEvents } = useGalleryEvents()
 
@@ -24,8 +22,6 @@ onMounted(() => {
       .filter((src): src is string => Boolean(src))
   })
 })
-
-const getEventSlug = (event: { path: string }) => event.path.split('/').pop()
 
 const sectionEl = useTemplateRef<HTMLElement>('sectionEl')
 
@@ -75,10 +71,10 @@ useGsapMatchMedia(sectionEl, (ctx) => {
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2">
       <NuxtLink
         v-for="(event, index) in mosaicEvents"
-        :key="event.id"
+        :key="event.slug"
         v-spotlight
-        :to="localePath(`/galeria/${getEventSlug(event)}`)"
-        :aria-label="`${event.title}. ${formatMonthYear(event.date)}`"
+        :to="localePath(`/galeria/${event.slug}`)"
+        :aria-label="`${event.title}. ${event.monthText}`"
         class="gallery-tile motion-link-card reveal group relative block overflow-hidden rounded-2xl"
         :class="index === 0 ? 'sm:col-span-2 sm:row-span-2' : ''"
       >
@@ -86,7 +82,7 @@ useGsapMatchMedia(sectionEl, (ctx) => {
           v-if="event.cover"
           :src="event.cover.src"
           :alt="getCoverAlt(event.title, event.cover.alt)"
-          :style="{ viewTransitionName: `gallery-cover-${getEventSlug(event)}` }"
+          :style="{ viewTransitionName: `gallery-cover-${event.slug}` }"
           class="motion-link-media size-full object-cover"
           loading="lazy"
           width="800"
@@ -106,7 +102,7 @@ useGsapMatchMedia(sectionEl, (ctx) => {
               {{ event.title }}
             </h3>
             <p class="mt-0.5 font-mono text-xs text-white/85">
-              {{ formatMonthYear(event.date) }}
+              {{ event.monthText }}
             </p>
           </div>
         </div>

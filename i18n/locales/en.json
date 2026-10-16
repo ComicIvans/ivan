@@ -147,6 +147,7 @@
       "links": "Links",
       "photos": "Photo gallery",
       "photosCount": "{count} photo | {count} photos",
+      "duration": "{count} day | {count} days",
       "photoAlt": "Photo {number}",
       "breadcrumb": "Event breadcrumb",
       "backToGallery": "Back to gallery",

@@ -234,6 +234,14 @@ for (const { code } of siteLocales) {
         fail(file, `photos[${index}].src: "${photo.src}" is not a photo of the Spanish entry`)
       }
     })
+    const translatedPhotos = new Map((data.photos ?? []).map((photo) => [photo.src, photo]))
+    for (const photo of source.photos ?? []) {
+      const translated = translatedPhotos.get(photo.src)
+      const missing = ['alt', 'description'].filter((key) => photo[key] && !translated?.[key])
+      if (missing.length) {
+        warn(file, `${photo.src}: no ${code} ${missing.join('/')}, Spanish is shown instead`)
+      }
+    }
   }
 }
 

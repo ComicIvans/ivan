@@ -1,11 +1,27 @@
 ---
 title: IV. CEEINA-Fortbildungstagung
 location: Munébrega, Zaragoza, Spanien
-duration: 5 Tage
 description: Die CEEINA-Fortbildungstagung besteht aus einem Aufenthalt in einer Herberge in der Region Aragón, wo Schulungen und Aktivitäten durchgeführt werden, um das Lernen in einer entspannten und günstigen Umgebung zu fördern.
 cover:
   src: /gallery/ceeina-2025/cover.webp
   alt: Eröffnungsveranstaltung der Fortbildungstagung
+photos:
+  - src: /gallery/ceeina-2025/01.webp
+    alt: Vortrag, in dem Code vor einer Projektionsleinwand erklärt wird
+  - src: /gallery/ceeina-2025/02.webp
+    alt: Vortrag über künstliche Intelligenz
+  - src: /gallery/ceeina-2025/03.webp
+    alt: Workshop mit Teilnehmenden an ihren Laptops
+  - src: /gallery/ceeina-2025/04.webp
+    alt: Teilnehmende bei der Gruppenarbeit an mehreren Tischen
+  - src: /gallery/ceeina-2025/05.webp
+    alt: Vortrag vor dem Publikum der Tagung
+  - src: /gallery/ceeina-2025/06.webp
+    alt: Gruppe von Teilnehmenden neben einem Kleinbus
+  - src: /gallery/ceeina-2025/07.webp
+    alt: Teilnehmende auf ihren Plätzen während einer Podiumsdiskussion
+  - src: /gallery/ceeina-2025/08.webp
+    alt: Podiumsdiskussion der Tagung aus Sicht des Publikums
 tags:
   - CEEINA
   - Formationen

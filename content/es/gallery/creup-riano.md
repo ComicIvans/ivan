@@ -2,7 +2,7 @@
 title: Reunión presencial de la Comisión Ejecutiva Ampliada de CREUP
 location: Riaño, Cantabria, España
 date: 2025-09-01
-duration: 3 días
+endDate: 2025-09-04
 description: Reunión presencial de las Vicepresidencias y Vocalías de CREUP para realizar seguimiento de la planificación estratégica y trabajar entre las distintas áreas.
 icon: i-tabler-users-group
 tags:

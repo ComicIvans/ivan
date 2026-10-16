@@ -46,7 +46,7 @@ const rolesCount = computed(() => representationStats.value.roles)
 const { allEvents, totalEvents } = useGalleryEvents()
 const latestEvent = computed(() => allEvents.value[0] ?? null)
 const latestEventLink = computed(() =>
-  latestEvent.value ? localePath(`/galeria/${latestEvent.value.path.split('/').pop()}`) : ''
+  latestEvent.value ? localePath(`/galeria/${latestEvent.value.slug}`) : ''
 )
 
 const stackMarqueeItems = computed(() =>

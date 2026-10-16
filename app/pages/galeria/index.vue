@@ -3,8 +3,6 @@ const { t } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
 
 const { getCoverAlt } = useGalleryImages()
-const { formatDate } = useDateFormatter()
-const formatMonthYear = (dateStr: string) => formatDate(dateStr, { year: 'numeric', month: 'long' })
 
 definePageMeta({
   i18n: {
@@ -36,7 +34,7 @@ const queryOptions = computed(() => ({
 
 const { events, allTags, totalPages, totalEvents, isLoading } = useGalleryEvents(queryOptions)
 const allVisibleEventsLackPhotos = computed(
-  () => events.value.length > 0 && events.value.every((event) => event.photos.length === 0)
+  () => events.value.length > 0 && events.value.every((event) => event.photoCount === 0)
 )
 
 const sortOptions = computed(() => [
@@ -82,10 +80,6 @@ const hasActiveFilters = computed(() => {
 
 function getEventIcon(event: { icon?: string }) {
   return event.icon || 'i-tabler-photo'
-}
-
-function getEventSlug(event: { path: string }) {
-  return event.path.split('/').pop()
 }
 </script>
 
@@ -195,10 +189,10 @@ function getEventSlug(event: { path: string }) {
     <div v-else v-auto-animate class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       <NuxtLink
         v-for="event in events"
-        :key="event.id"
+        :key="event.slug"
         v-spotlight
-        :to="localePath(`/galeria/${getEventSlug(event)}`)"
-        :aria-label="`${event.title}. ${formatMonthYear(event.date)}`"
+        :to="localePath(`/galeria/${event.slug}`)"
+        :aria-label="`${event.title}. ${event.monthText}`"
         class="motion-link-card reveal surface-glass group relative block overflow-hidden rounded-2xl"
       >
         <!-- Cover / fallback tile with title scrim -->
@@ -207,7 +201,7 @@ function getEventSlug(event: { path: string }) {
             <NuxtImg
               :src="event.cover.src"
               :alt="getCoverAlt(event.title, event.cover.alt)"
-              :style="{ viewTransitionName: `gallery-cover-${getEventSlug(event)}` }"
+              :style="{ viewTransitionName: `gallery-cover-${event.slug}` }"
               class="motion-link-media size-full object-cover"
               loading="lazy"
               width="800"
@@ -231,7 +225,7 @@ function getEventSlug(event: { path: string }) {
               />
             </div>
             <UBadge
-              v-if="event.photos.length === 0"
+              v-if="event.photoCount === 0"
               color="neutral"
               variant="soft"
               size="sm"
@@ -243,13 +237,13 @@ function getEventSlug(event: { path: string }) {
 
           <!-- Photo counter -->
           <UBadge
-            v-if="event.photos.length > 0"
+            v-if="event.photoCount > 0"
             color="primary"
             size="sm"
             class="absolute top-2 right-2"
           >
             <UIcon name="i-tabler-photo" class="mr-1 size-3" />
-            {{ event.photos.length }}
+            {{ event.photoCount }}
           </UBadge>
 
           <!-- Title scrim: confined to the bottom ~45% so the cover reads
@@ -262,7 +256,7 @@ function getEventSlug(event: { path: string }) {
                 {{ event.title }}
               </h2>
               <p class="mt-0.5 font-mono text-xs text-white/85">
-                {{ formatMonthYear(event.date) }}
+                {{ event.monthText }}
               </p>
             </div>
           </div>

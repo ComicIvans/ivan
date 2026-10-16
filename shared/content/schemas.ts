@@ -332,7 +332,6 @@ export const galleryEventSchema = z.object({
   location: z.string(),
   date: z.string(),
   endDate: z.string().optional(),
-  duration: z.string().optional(),
   description: z.string(),
   links: z.array(z.object({ label: z.string(), url: z.string() })).optional(),
   seo: z.object({ title: z.string().optional(), description: z.string().optional() }).optional(),
@@ -372,9 +371,10 @@ export const galleryEventSourceSchema = z
   .strictObject({
     title: nonBlank,
     location: nonBlank,
+    /** First day. The page derives the event length from date and endDate. */
     date: isoDate,
+    /** Last day; leave it out for a one-day event. */
     endDate: isoDate.optional(),
-    duration: nonBlank.optional(),
     description: nonBlank,
     links: galleryLinks.optional(),
     seo: gallerySeo.optional(),
@@ -422,7 +422,6 @@ export const galleryEventSourceSchema = z
 export const galleryEventTranslationSchema = z.strictObject({
   title: nonBlank.optional(),
   location: nonBlank.optional(),
-  duration: nonBlank.optional(),
   description: nonBlank.optional(),
   links: galleryLinks.optional(),
   seo: gallerySeo.optional(),

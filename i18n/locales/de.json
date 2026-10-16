@@ -147,6 +147,7 @@
       "links": "Links",
       "photos": "Fotogalerie",
       "photosCount": "{count} Foto | {count} Fotos",
+      "duration": "{count} Tag | {count} Tage",
       "photoAlt": "Foto {number}",
       "breadcrumb": "Navigationspfad der Veranstaltung",
       "backToGallery": "Zurück zur Galerie",

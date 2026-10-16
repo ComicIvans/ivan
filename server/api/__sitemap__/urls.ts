@@ -3,8 +3,6 @@ import { getRequiredSiteUrl } from '~~/server/utils/runtimeConfig'
 import { defaultLocale, siteLocales } from '~~/shared/constants/locales'
 import { galleryBasePathByLocale } from '~~/shared/constants/routes'
 
-const getEventSlug = (path: string) => path.split('/').pop() || ''
-
 const localizedGalleryPath = (localeCode: string, slug: string) => {
   const base = galleryBasePathByLocale[localeCode as keyof typeof galleryBasePathByLocale]
   const prefix = localeCode === defaultLocale ? '' : `/${localeCode}`
@@ -21,8 +19,7 @@ export default defineSitemapEventHandler(async (event) => {
   const siteUrl = getRequiredSiteUrl(event).replace(/\/$/, '')
   const baseEvents = await fetchGalleryEvents(event, defaultLocale)
 
-  return baseEvents.flatMap((galleryEvent) => {
-    const slug = getEventSlug(galleryEvent.path)
+  return baseEvents.flatMap(({ slug }) => {
     if (!slug) {
       return []
     }

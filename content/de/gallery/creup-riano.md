@@ -1,11 +1,19 @@
 ---
 title: Präsenztreffen des erweiterten CREUP-Vorstands
 location: Riaño, Kantabrien, Spanien
-duration: 3 Tage
 description: Präsenztreffen der Vizepräsidentschaften und Vorstandsmitglieder von CREUP zur Nachverfolgung der strategischen Planung und zur bereichsübergreifenden Zusammenarbeit.
 cover:
   src: /gallery/creup-riano/cover.webp
   alt: Landschaft rund um Riaño
+photos:
+  - src: /gallery/creup-riano/01.webp
+    alt: Grüne Berglandschaft rund um Riaño
+  - src: /gallery/creup-riano/02.webp
+    alt: Arbeit am Laptop während des Treffens
+  - src: /gallery/creup-riano/03.webp
+    alt: Zwei Teilnehmende posieren auf einer Wiese in Riaño
+  - src: /gallery/creup-riano/04.webp
+    alt: Gruppenfoto der Teilnehmenden des Treffens
 tags:
   - CREUP
   - Treffen

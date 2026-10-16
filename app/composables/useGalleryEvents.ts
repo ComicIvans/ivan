@@ -1,4 +1,16 @@
-import type { GalleryEvent, GalleryQueryOptions } from '~~/shared/types/gallery'
+import type {
+  GalleryEvent,
+  GalleryEventSummary,
+  GalleryQueryOptions,
+} from '~~/shared/types/gallery'
+
+/** Lowercase text without accents, so "reunion" finds "Reunión". */
+function toSearchText(value: string, locale: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLocaleLowerCase(locale)
+}
 
 /**
  * Composable for querying gallery events with filters, search, and pagination
@@ -10,7 +22,7 @@ export function useGalleryEvents(options: Ref<GalleryQueryOptions> = ref({})) {
   const { data: allEvents, status } = useAsyncData(
     () => `gallery-events-${locale.value}`,
     () =>
-      $fetch<GalleryEvent[]>('/api/gallery/events', {
+      $fetch<GalleryEventSummary[]>('/api/gallery/events', {
         params: { locale: locale.value },
       }),
     {
@@ -24,14 +36,12 @@ export function useGalleryEvents(options: Ref<GalleryQueryOptions> = ref({})) {
 
     let events = [...allEvents.value]
 
-    const searchTerm = options.value.search?.toLowerCase()
+    const searchTerm = toSearchText(options.value.search?.trim() ?? '', locale.value)
     if (searchTerm) {
-      events = events.filter(
-        (event) =>
-          event.title.toLowerCase().includes(searchTerm) ||
-          event.description.toLowerCase().includes(searchTerm) ||
-          event.location.toLowerCase().includes(searchTerm) ||
-          event.tags.some((tag) => tag.toLowerCase().includes(searchTerm))
+      events = events.filter((event) =>
+        [event.title, event.description, event.location, ...event.tags].some((text) =>
+          toSearchText(text, locale.value).includes(searchTerm)
+        )
       )
     }
 
@@ -47,7 +57,7 @@ export function useGalleryEvents(options: Ref<GalleryQueryOptions> = ref({})) {
       let comparison = 0
 
       if (sortBy === 'date') {
-        comparison = new Date(a.date).getTime() - new Date(b.date).getTime()
+        comparison = a.date.localeCompare(b.date)
       } else if (sortBy === 'title') {
         comparison = a.title.localeCompare(b.title, locale.value)
       }
