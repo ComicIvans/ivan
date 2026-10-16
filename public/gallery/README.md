@@ -42,10 +42,17 @@ public/gallery/<slug>/   # lo que se publica
    original conserva su número y los textos ya escritos se mantienen. Los
    originales nunca se modifican ni se borran.
 
-3. No sustituyas una foto publicada por otra con el mismo nombre: los
-   navegadores guardan la foto y sus versiones redimensionadas en caché y
-   pueden seguir mostrando la anterior durante días. Si cambias una foto, dale
-   un número nuevo.
+3. Si retocas un original (un recorte, otro revelado), vuelve a ejecutar el
+   script: la foto se convierte otra vez con el mismo número y conserva sus
+   textos. Los navegadores guardan la foto y sus versiones redimensionadas en
+   caché, así que quien ya la haya visto puede seguir viendo la anterior unos
+   días.
+
+   Para cambiar una foto por otra distinta, no guardes el original nuevo con
+   el nombre del antiguo (heredaría su número y su `alt`): añádelo con otro
+   nombre para que reciba un número nuevo. Después saca el original antiguo de
+   `gallery-src/<slug>/` y borra su entrada de `photos` (también en las
+   traducciones) y su `NN.webp`.
 
 ## Contenido
 

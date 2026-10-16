@@ -96,7 +96,8 @@ const manifest = existsSync(manifestPath)
 manifest.photos ??= {}
 
 // Known originals keep their number; new ones continue after the highest
-// number already used, so no published file changes its content.
+// number already used, so adding photos never changes a published file. An
+// original edited after its conversion is encoded again under its number.
 const numberOf = (name) => Number.parseInt(basename(name, extname(name)), 10) || 0
 const usedNumbers = [
   ...Object.values(manifest.photos),
@@ -146,6 +147,7 @@ for (const source of sources) {
     ;({ width, height } = await sharp(output).metadata())
     console.log(`  ${source} -> ${name}  up to date (${width}x${height})`)
   } else {
+    const replacing = existsSync(output)
     const original = await sharp(sourcePath).metadata()
     ;({ width, height } = await encode(sourcePath, output, (image) =>
       image.resize({
@@ -163,7 +165,8 @@ for (const source of sources) {
     const originalSize = original.autoOrient ?? original
     console.log(
       `  ${source} -> ${name}  ${originalSize.width}x${originalSize.height} -> ${width}x${height}` +
-        `  ${formatBytes(before)} -> ${formatBytes(after)}`
+        `  ${formatBytes(before)} -> ${formatBytes(after)}` +
+        (replacing ? '  (replaces the previous WebP)' : '')
     )
   }
 
