@@ -12,22 +12,22 @@ cover:
   src: /gallery/creup-riano/cover.webp
   alt: Paisaje de Riaño
 photos:
-  - src: /gallery/creup-riano/01.JPG
+  - src: /gallery/creup-riano/01.webp
     alt: Paisaje verde de las montañas de Riaño
-    width: 6000
-    height: 3376
-  - src: /gallery/creup-riano/02.JPG
+    width: 2560
+    height: 1440
+  - src: /gallery/creup-riano/02.webp
     alt: Trabajo con ordenador portátil durante el encuentro
-    width: 6000
-    height: 3376
-  - src: /gallery/creup-riano/03.JPG
+    width: 2560
+    height: 1440
+  - src: /gallery/creup-riano/03.webp
     alt: Dos participantes posando en un prado de Riaño
-    width: 6000
-    height: 3376
-  - src: /gallery/creup-riano/04.JPG
+    width: 2560
+    height: 1440
+  - src: /gallery/creup-riano/04.webp
     alt: Fotografía de grupo de las personas participantes en el encuentro
-    width: 6000
-    height: 3376
+    width: 2560
+    height: 1440
 draft: false
 seo:
   title: Reunión CEA CREUP - Riaño 2025

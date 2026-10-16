@@ -12,54 +12,54 @@ cover:
   src: /gallery/creup-ago-78/cover.webp
   alt: Imagen de la asamblea en mitad de un debate
 photos:
-  - src: /gallery/creup-ago-78/01.JPG
+  - src: /gallery/creup-ago-78/01.webp
     alt: Representantes sentados en el salón de actos durante la asamblea
-    width: 6000
-    height: 3376
-  - src: /gallery/creup-ago-78/02.JPG
+    width: 2560
+    height: 1440
+  - src: /gallery/creup-ago-78/02.webp
     alt: Intervención con micrófono durante el turno de palabra
-    width: 4928
-    height: 3264
-  - src: /gallery/creup-ago-78/03.JPG
+    width: 2560
+    height: 1696
+  - src: /gallery/creup-ago-78/03.webp
     alt: Representante argumentando una propuesta ante la asamblea
-    width: 4928
-    height: 3264
-  - src: /gallery/creup-ago-78/04.JPG
+    width: 2560
+    height: 1696
+  - src: /gallery/creup-ago-78/04.webp
     alt: Intervención durante un debate de la asamblea
-    width: 4928
-    height: 3264
-  - src: /gallery/creup-ago-78/05.JPG
+    width: 2560
+    height: 1696
+  - src: /gallery/creup-ago-78/05.webp
     alt: Vista general del pleno con representantes en sus mesas
     width: 1920
     height: 1080
-  - src: /gallery/creup-ago-78/06.JPG
+  - src: /gallery/creup-ago-78/06.webp
     alt: Puesto de control de asistencia con ordenador portátil
-    width: 6000
-    height: 3376
-  - src: /gallery/creup-ago-78/07.JPG
+    width: 2560
+    height: 1440
+  - src: /gallery/creup-ago-78/07.webp
     alt: Pleno de la asamblea trabajando en una sala compartida
     width: 1920
     height: 1080
-  - src: /gallery/creup-ago-78/08.JPG
+  - src: /gallery/creup-ago-78/08.webp
     alt: Mesa de control de asistencia durante una sesión
     width: 1920
     height: 1080
-  - src: /gallery/creup-ago-78/09.JPG
+  - src: /gallery/creup-ago-78/09.webp
     alt: Consulta del sistema de asistencia durante el pleno
-    width: 4928
-    height: 3264
-  - src: /gallery/creup-ago-78/10.JPG
+    width: 2560
+    height: 1696
+  - src: /gallery/creup-ago-78/10.webp
     alt: Registro de asistencia con lector y ordenador portátil
-    width: 4928
-    height: 3264
-  - src: /gallery/creup-ago-78/11.JPG
+    width: 2560
+    height: 1696
+  - src: /gallery/creup-ago-78/11.webp
     alt: Trabajo en el puesto de control de la asamblea
     width: 1920
     height: 1080
-  - src: /gallery/creup-ago-78/12.JPG
+  - src: /gallery/creup-ago-78/12.webp
     alt: Fotografía de grupo de las personas participantes en la asamblea
-    width: 6000
-    height: 3376
+    width: 2560
+    height: 1440
 draft: false
 seo:
   title: 78ª AGO CREUP - Barcelona 2025

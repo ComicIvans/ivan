@@ -37,6 +37,8 @@ code_review.md
 .env.*
 !.env.example
 
-# Gallery images
+# Gallery images: the published WebP files and their originals
+# (pnpm gallery:add reads gallery-src/<slug>/ and writes public/gallery/<slug>/)
 public/gallery/*
 !public/gallery/README.md
+/gallery-src/

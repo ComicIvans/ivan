@@ -12,38 +12,38 @@ cover:
   src: /gallery/ceeina-2025/cover.webp
   alt: Acto de apertura de las jornadas
 photos:
-  - src: /gallery/ceeina-2025/01.JPG
+  - src: /gallery/ceeina-2025/01.webp
     alt: Ponente explicando código ante una pantalla de proyección
-    width: 6000
-    height: 4000
-  - src: /gallery/ceeina-2025/02.JPG
+    width: 2560
+    height: 1707
+  - src: /gallery/ceeina-2025/02.webp
     alt: Ponente durante una presentación sobre inteligencia artificial
-    width: 6000
-    height: 4000
-  - src: /gallery/ceeina-2025/03.JPG
+    width: 2560
+    height: 1707
+  - src: /gallery/ceeina-2025/03.webp
     alt: Taller con asistentes frente a ordenadores portátiles
-    width: 6000
-    height: 4000
-  - src: /gallery/ceeina-2025/04.JPG
+    width: 2560
+    height: 1707
+  - src: /gallery/ceeina-2025/04.webp
     alt: Participantes trabajando en grupo alrededor de varias mesas
-    width: 6000
-    height: 4000
-  - src: /gallery/ceeina-2025/05.JPG
+    width: 2560
+    height: 1707
+  - src: /gallery/ceeina-2025/05.webp
     alt: Ponente impartiendo una sesión ante el público
-    width: 6000
-    height: 4000
-  - src: /gallery/ceeina-2025/06.JPG
+    width: 2560
+    height: 1707
+  - src: /gallery/ceeina-2025/06.webp
     alt: Grupo de participantes reunido junto a una furgoneta
-    width: 6000
-    height: 4000
-  - src: /gallery/ceeina-2025/07.JPG
+    width: 2560
+    height: 1707
+  - src: /gallery/ceeina-2025/07.webp
     alt: Asistentes sentados durante una mesa redonda
-    width: 6000
-    height: 4000
-  - src: /gallery/ceeina-2025/08.JPG
+    width: 2560
+    height: 1707
+  - src: /gallery/ceeina-2025/08.webp
     alt: Mesa redonda de las jornadas vista desde el público
-    width: 6000
-    height: 4000
+    width: 2560
+    height: 1707
 draft: false
 seo:
   title: IV Jornadas de Formación del CEEINA 2025

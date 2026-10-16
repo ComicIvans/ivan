@@ -19,6 +19,8 @@ npm-debug.log
 .github
 .vscode
 /data
+# Gallery originals; the image only needs the WebP files in public/gallery
+/gallery-src
 PLAN*.md
 MEJORAS_VISUALES.md
 REVISION_CONTENIDO.md
