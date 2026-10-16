@@ -261,13 +261,16 @@ watch(eventSlug, () => {
     <!-- Event content -->
     <template v-else>
       <!-- Cover hero: full-width image with the title overlaid on a scrim.
-           The fixed ratio reserves its box before the image arrives. -->
-      <div v-if="event.cover" class="relative mb-8 overflow-hidden rounded-2xl">
+           The spacer and the title share one grid cell, so the hero keeps a
+           16:9 box (at most 62vh) before the image arrives and grows instead
+           of cutting off a title that needs more room (long titles on phones).
+           The image covers whatever box results. -->
+      <div v-if="event.cover" class="relative mb-8 grid grid-cols-1 overflow-hidden rounded-2xl">
         <NuxtImg
           :src="event.cover.src"
           :alt="coverAlt"
           :style="{ viewTransitionName: `gallery-cover-${eventSlug}` }"
-          class="aspect-video max-h-[62vh] w-full object-cover"
+          class="absolute inset-0 size-full object-cover"
           fetchpriority="high"
           width="1600"
           height="900"
@@ -275,12 +278,20 @@ watch(eventSlug, () => {
           quality="78"
           sizes="xs:100vw md:100vw lg:1232px"
         />
-        <!-- Scrim confined to the bottom half so the cover reads clearly above the title -->
+        <div class="col-start-1 row-start-1 aspect-video max-h-[62vh] w-full" aria-hidden="true" />
+        <!-- Scrim confined to the bottom half of the title block so the cover
+             reads clearly above it. On phones it spans the whole block: a long
+             title can cover most of the image there. -->
         <div
-          class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 from-0% to-transparent to-50%"
+          class="relative col-start-1 row-start-1 self-end bg-gradient-to-t from-black/70 from-0% to-transparent to-50% max-sm:to-100%"
         >
           <div class="p-4 pt-16 sm:p-6 sm:pt-20">
-            <h1 class="type-display text-3xl text-white drop-shadow-sm lg:text-4xl">
+            <!-- Long compound words (German) would not fit a phone-width line:
+                 hyphenate words of 12+ letters, or break them where hyphenation
+                 is unavailable. -->
+            <h1
+              class="type-display text-3xl break-words hyphens-auto text-white drop-shadow-sm [hyphenate-limit-chars:12_5_5] lg:text-4xl"
+            >
               {{ event.title }}
             </h1>
             <div class="mt-3 flex flex-wrap gap-2">
@@ -310,8 +321,10 @@ watch(eventSlug, () => {
         >
           <UIcon :name="getEventIcon()" class="size-8" aria-hidden="true" />
         </div>
-        <div class="flex-1">
-          <h1 class="type-display text-highlighted text-3xl lg:text-4xl">
+        <div class="min-w-0 flex-1">
+          <h1
+            class="type-display text-highlighted text-3xl break-words hyphens-auto [hyphenate-limit-chars:12_5_5] lg:text-4xl"
+          >
             {{ event.title }}
           </h1>
           <div
