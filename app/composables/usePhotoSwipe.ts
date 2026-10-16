@@ -209,8 +209,16 @@ export function usePhotoSwipe(config: UsePhotoSwipeOptions) {
       // Clicks that arrive while PhotoSwipe is still loading share one
       // instance; its loadAndOpen() keeps only the latest request.
       const currentGeneration = generation
-      pendingLightbox ??= createLightbox()
-      const instance = await pendingLightbox
+      const pending = (pendingLightbox ??= createLightbox())
+      let instance: PhotoSwipeLightbox
+      try {
+        instance = await pending
+      } catch (error) {
+        // A failed import (flaky network, chunk names changed by a deploy)
+        // must not stick: the next click loads PhotoSwipe again.
+        if (pendingLightbox === pending) pendingLightbox = null
+        throw error
+      }
       if (currentGeneration !== generation) {
         instance.destroy()
         return
