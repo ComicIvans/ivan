@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { toAbsoluteUrl } from '~~/shared/utils/url'
+
 const { t } = useI18n({ useScope: 'global' })
 const route = useRoute()
 const localePath = useLocalePath()
 const { getPhotoAlt, getCoverAlt } = useGalleryImages()
 const img = useImage()
+const siteConfig = useSiteConfig()
 
 const {
   aspectRatios: photoAspectRatios,
@@ -26,19 +29,55 @@ const eventSlug = computed(() => route.params.slug as string)
 
 const { event, isLoading } = await useGalleryEvent(eventSlug)
 
+// Share cards get a 1200x630 JPEG crop of the cover: the size and format
+// every social network accepts, whatever the cover's own ratio.
+const OG_IMAGE = { width: 1200, height: 630 }
+const coverAlt = computed(() =>
+  event.value?.cover ? getCoverAlt(event.value.title, event.value.cover.alt) : undefined
+)
+
 usePageSeo(
   () => event.value?.seo?.title || event.value?.title || t('gallery.title'),
   () => event.value?.seo?.description || event.value?.description || t('seo.pages.gallery'),
-  { ogImage: () => event.value?.cover?.src }
+  {
+    ogImage: () =>
+      event.value?.cover &&
+      img(event.value.cover.src, { ...OG_IMAGE, format: 'jpeg', quality: 80 }),
+  }
 )
+
+useSeoMeta({
+  ogImageWidth: () => (coverAlt.value ? OG_IMAGE.width : undefined),
+  ogImageHeight: () => (coverAlt.value ? OG_IMAGE.height : undefined),
+  ogImageType: () => (coverAlt.value ? 'image/jpeg' : undefined),
+  ogImageAlt: () => coverAlt.value,
+  twitterImageAlt: () => coverAlt.value,
+})
+
+const absoluteUrl = (path: string | undefined) =>
+  toAbsoluteUrl(path, String(siteConfig.url ?? '')) ?? undefined
 
 useSchemaOrg([
   defineEvent({
     name: () => event.value?.title || t('gallery.title'),
-    startDate: () => event.value?.date,
-    location: () => event.value?.location,
     description: () => event.value?.description,
-    image: () => event.value?.cover?.src,
+    startDate: () => event.value?.date,
+    endDate: () => event.value?.endDate,
+    eventAttendanceMode: 'OfflineEventAttendanceMode',
+    // An explicit Place: given a plain string, the schema.org resolver would
+    // turn the location into a VirtualLocation whose url is the place name.
+    location: {
+      '@type': 'Place',
+      name: () => event.value?.location,
+      address: () => event.value?.location,
+    },
+    image: () => absoluteUrl(event.value?.cover?.src),
+  }),
+  defineBreadcrumb({
+    itemListElement: [
+      { name: () => t('gallery.title'), item: (): string => localePath('/galeria') },
+      { name: () => event.value?.title || t('gallery.title') },
+    ],
   }),
 ])
 
@@ -180,7 +219,7 @@ watch(eventSlug, () => {
         <li class="flex shrink-0" aria-hidden="true">
           <UIcon name="i-tabler-chevron-right" class="size-4" />
         </li>
-        <li class="text-highlighted min-w-0 flex-1 truncate font-semibold">
+        <li class="text-highlighted min-w-0 flex-1 truncate font-semibold" aria-current="page">
           {{ event?.title || '...' }}
         </li>
       </ol>
@@ -226,7 +265,7 @@ watch(eventSlug, () => {
       <div v-if="event.cover" class="relative mb-8 overflow-hidden rounded-2xl">
         <NuxtImg
           :src="event.cover.src"
-          :alt="getCoverAlt(event.title, event.cover.alt)"
+          :alt="coverAlt"
           :style="{ viewTransitionName: `gallery-cover-${eventSlug}` }"
           class="aspect-video max-h-[62vh] w-full object-cover"
           fetchpriority="high"
