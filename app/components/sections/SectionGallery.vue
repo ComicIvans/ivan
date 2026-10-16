@@ -44,6 +44,12 @@ const LG_COLUMN_PX = 320
  * row, and so does the last one when the others are an odd number. lg: the
  * newest tile fills 2 x 2 cells (all 4 x 2 when it is alone). `sizes` follows
  * the rendered width of each tile.
+ *
+ * Nuxt Image derives each srcset candidate from the lower edge of its
+ * breakpoint (xs:100vw yields 320 px x 1 and x 2), so the half-width tiles,
+ * which fill the row on phones, would top out at 768w on a high-density
+ * screen. They add an x3 density to reach about 1150w; tiles that span a full
+ * row already get 1280w from their sm:100vw.
  */
 const mosaicTiles = computed(() => {
   const [newest, ...others] = mosaicEvents.value
@@ -55,6 +61,7 @@ const mosaicTiles = computed(() => {
     featured: true,
     class: `sm:col-span-2 lg:row-span-2 ${featuredColumns === 4 ? 'lg:col-span-4' : 'lg:col-span-2'}`,
     sizes: `xs:100vw sm:100vw lg:${featuredColumns * LG_COLUMN_PX}px`,
+    densities: undefined,
   }
 
   const spans = LG_BLOCK_SPANS[others.length] ?? []
@@ -68,6 +75,7 @@ const mosaicTiles = computed(() => {
         featured: false,
         class: `${fullRow ? 'sm:col-span-2 sm:aspect-[32/10]' : ''} ${lg.class}`,
         sizes: `xs:100vw ${fullRow ? 'sm:100vw' : 'sm:50vw md:50vw'} lg:${lg.columns * LG_COLUMN_PX}px`,
+        densities: fullRow ? undefined : 'x1 x2 x3',
       }
     }),
   ]
@@ -154,6 +162,7 @@ useGsapMatchMedia(sectionEl, (ctx) => {
           format="webp"
           quality="75"
           :sizes="tile.sizes"
+          :densities="tile.densities"
         />
         <!-- Title scrim confined to the bottom band -->
         <div
