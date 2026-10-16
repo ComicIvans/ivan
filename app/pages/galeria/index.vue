@@ -188,7 +188,7 @@ function getEventIcon(event: { icon?: string }) {
     <!-- Events grid -->
     <div v-else v-auto-animate class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       <NuxtLink
-        v-for="event in events"
+        v-for="(event, index) in events"
         :key="event.slug"
         v-spotlight
         :to="localePath(`/galeria/${event.slug}`)"
@@ -198,16 +198,19 @@ function getEventIcon(event: { icon?: string }) {
         <!-- Cover / fallback tile with title scrim -->
         <div class="bg-elevated relative aspect-video w-full overflow-hidden">
           <template v-if="event.cover">
+            <!-- One column below md, two up to lg, then three (~400 px max).
+                 The first row is usually in view on load, so it is not lazy. -->
             <NuxtImg
               :src="event.cover.src"
               :alt="getCoverAlt(event.title, event.cover.alt)"
               :style="{ viewTransitionName: `gallery-cover-${event.slug}` }"
               class="motion-link-media size-full object-cover"
-              loading="lazy"
+              :loading="currentPage === 1 && index < 3 ? 'eager' : 'lazy'"
               width="800"
               height="450"
+              format="webp"
               quality="75"
-              sizes="xs:100vw md:50vw lg:40vw"
+              sizes="xs:100vw sm:100vw md:50vw lg:400px"
             />
             <div
               class="absolute top-2 left-2 flex size-9 items-center justify-center rounded-lg bg-black/30 text-white backdrop-blur-md"

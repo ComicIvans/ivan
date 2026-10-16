@@ -78,10 +78,11 @@ const photoGridRef = ref<HTMLElement | null>(null)
 
 function warmPhotoRatio(index: number) {
   const photo = event.value?.photos[index]
-  if (!photo || photoAspectRatios.value[index]) return
+  // The lightbox already knows the ratio of photos with a declared size.
+  if (!photo || (photo.width && photo.height) || photoAspectRatios.value[index]) return
 
   // A small thumbnail is enough: only the aspect ratio matters here.
-  void preloadPhotoAspectRatio(index, img(photo.src, { width: 320, quality: 60 }))
+  void preloadPhotoAspectRatio(index, img(photo.src, { width: 320, quality: 60, format: 'webp' }))
 }
 
 const PHOTO_HASH_PATTERN = /^#foto-(\d+)$/
@@ -220,17 +221,20 @@ watch(eventSlug, () => {
 
     <!-- Event content -->
     <template v-else>
-      <!-- Cover hero: full-width image with the title overlaid on a scrim -->
+      <!-- Cover hero: full-width image with the title overlaid on a scrim.
+           The fixed ratio reserves its box before the image arrives. -->
       <div v-if="event.cover" class="relative mb-8 overflow-hidden rounded-2xl">
         <NuxtImg
           :src="event.cover.src"
           :alt="getCoverAlt(event.title, event.cover.alt)"
           :style="{ viewTransitionName: `gallery-cover-${eventSlug}` }"
-          class="max-h-[62vh] w-full object-cover"
+          class="aspect-video max-h-[62vh] w-full object-cover"
           fetchpriority="high"
           width="1600"
+          height="900"
+          format="webp"
           quality="78"
-          sizes="xs:100vw xl:1200px"
+          sizes="xs:100vw md:100vw lg:1232px"
         />
         <!-- Scrim confined to the bottom half so the cover reads clearly above the title -->
         <div
@@ -367,6 +371,8 @@ watch(eventSlug, () => {
               class="motion-link-card group focus-visible:ring-primary-500 relative block w-full cursor-zoom-in overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
               @click="onThumbnailClick($event, absoluteIndex(index))"
             >
+              <!-- width/height only give the ratio; sizes picks a variant for the
+                   column width (2, 3 or 4 columns, at most ~300 px wide). -->
               <NuxtImg
                 :src="photo.src"
                 :alt="
@@ -378,10 +384,11 @@ watch(eventSlug, () => {
                 "
                 class="motion-link-media h-auto w-full"
                 loading="lazy"
-                :width="photo.width || 600"
+                :width="photo.width"
                 :height="photo.height"
+                format="webp"
                 quality="72"
-                densities="x1 x2"
+                sizes="xs:50vw sm:50vw md:33vw lg:300px"
                 @load="onImageLoad(index, absoluteIndex(index), $event)"
               />
 

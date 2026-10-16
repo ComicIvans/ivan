@@ -157,11 +157,6 @@ export default defineNuxtConfig({
         xssValidator: false,
       },
     },
-    '/_ipx/**': {
-      headers: {
-        'cache-control': 'public, max-age=31536000, stale-while-revalidate=86400',
-      },
-    },
     '/gallery/**': {
       headers: {
         'cache-control': 'public, max-age=86400, stale-while-revalidate=604800',
@@ -412,9 +407,20 @@ export default defineNuxtConfig({
   },
 
   // Image optimization
+  // <NuxtImg> keeps the source format unless it gets a `format`, so the
+  // components set format="webp" themselves (`image.format` only applies to
+  // <NuxtPicture>, which the site does not use).
   image: {
     quality: 80,
-    format: ['webp', 'avif', 'png', 'jpg'],
+    // IPX writes its own Cache-Control (a route rule for /_ipx/** is
+    // overwritten). Resized images live under URLs made of the source path and
+    // the resize options, so a photo, cover or portrait replaced in public/
+    // under the same name keeps every variant URL: they expire after a day,
+    // like the /gallery/** sources in routeRules. Revalidating is cheap because
+    // IPX answers If-Modified-Since from the source file's mtime with a 304.
+    ipx: {
+      maxAge: 60 * 60 * 24,
+    },
     domains: Array.from(new Set([siteImageHostname, ...(isDev ? ['localhost', '127.0.0.1'] : [])])),
     screens: {
       xs: 320,

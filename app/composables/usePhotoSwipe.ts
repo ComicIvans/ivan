@@ -2,9 +2,7 @@ import 'photoswipe/style.css'
 import 'photoswipe-dynamic-caption-plugin/photoswipe-dynamic-caption-plugin.css'
 import type PhotoSwipeLightbox from 'photoswipe/lightbox'
 import type { PhotoSwipeOptions, SlideData } from 'photoswipe'
-import type { GalleryEvent } from '~~/shared/types/gallery'
-
-type GalleryPhoto = GalleryEvent['photos'][number]
+import type { GalleryPhoto } from '~~/shared/types/gallery'
 
 interface UsePhotoSwipeOptions {
   photos: MaybeRefOrGetter<GalleryPhoto[]>
@@ -26,7 +24,7 @@ const LAYOUT_WIDTH = 2400
 const FALLBACK_HEIGHT = 1600
 const DISPLAY_WIDTH = 1600
 const SRCSET_WIDTHS = [800, 1200, 1600, 2400]
-const IMAGE_QUALITY = 75
+const IMAGE_MODIFIERS = { quality: 75, format: 'webp' }
 
 function escapeHtml(value: string): string {
   return value
@@ -52,7 +50,10 @@ export function usePhotoSwipe(config: UsePhotoSwipeOptions) {
   let lightbox: PhotoSwipeLightbox | null = null
 
   function slideDimensions(index: number): { width: number; height: number } {
-    const ratio = toValue(config.aspectRatios)[index]
+    const photo = toValue(config.photos)[index]
+    const ratio =
+      toValue(config.aspectRatios)[index] ??
+      (photo?.width && photo.height ? photo.width / photo.height : undefined)
     return {
       width: LAYOUT_WIDTH,
       height: ratio && Number.isFinite(ratio) ? Math.round(LAYOUT_WIDTH / ratio) : FALLBACK_HEIGHT,
@@ -64,9 +65,9 @@ export function usePhotoSwipe(config: UsePhotoSwipeOptions) {
     const thumbImage = element?.querySelector('img')
 
     return {
-      src: img(photo.src, { width: DISPLAY_WIDTH, quality: IMAGE_QUALITY }),
+      src: img(photo.src, { width: DISPLAY_WIDTH, ...IMAGE_MODIFIERS }),
       srcset: SRCSET_WIDTHS.map(
-        (width) => `${img(photo.src, { width, quality: IMAGE_QUALITY })} ${width}w`
+        (width) => `${img(photo.src, { width, ...IMAGE_MODIFIERS })} ${width}w`
       ).join(', '),
       ...slideDimensions(index),
       alt: getPhotoAlt({
