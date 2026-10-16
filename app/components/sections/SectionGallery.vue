@@ -9,8 +9,69 @@ const { getCoverAlt } = useGalleryImages()
 
 const { allEvents } = useGalleryEvents()
 
-// Asymmetric mosaic: latest four events with a cover, newest tile doubled.
-const mosaicEvents = computed(() => allEvents.value.filter((event) => event.cover).slice(0, 4))
+// Asymmetric mosaic: up to five events with a cover, the newest one doubled.
+const mosaicEvents = computed(() => allEvents.value.filter((event) => event.cover).slice(0, 5))
+
+/**
+ * Spans of the tiles that share the 2 x 2 lg block next to the newest event,
+ * by how many there are, so the 4 x 2 lg grid never shows a hole.
+ */
+const LG_BLOCK_SPANS: Record<number, { class: string; columns: number }[]> = {
+  0: [],
+  1: [{ class: 'lg:col-span-2 lg:row-span-2', columns: 2 }],
+  2: [
+    { class: 'lg:col-span-2', columns: 2 },
+    { class: 'lg:col-span-2', columns: 2 },
+  ],
+  3: [
+    { class: '', columns: 1 },
+    { class: '', columns: 1 },
+    { class: 'lg:col-span-2', columns: 2 },
+  ],
+  4: [
+    { class: '', columns: 1 },
+    { class: '', columns: 1 },
+    { class: '', columns: 1 },
+    { class: '', columns: 1 },
+  ],
+}
+
+// Rendered width of one lg column (a quarter of the 1232 px content box).
+const LG_COLUMN_PX = 320
+
+/**
+ * Tile layout for 1–5 events. sm–md (2 columns): the newest tile takes a full
+ * row, and so does the last one when the others are an odd number. lg: the
+ * newest tile fills 2 x 2 cells (all 4 x 2 when it is alone). `sizes` follows
+ * the rendered width of each tile.
+ */
+const mosaicTiles = computed(() => {
+  const [newest, ...others] = mosaicEvents.value
+  if (!newest) return []
+
+  const featuredColumns = others.length === 0 ? 4 : 2
+  const featured = {
+    event: newest,
+    featured: true,
+    class: `sm:col-span-2 lg:row-span-2 ${featuredColumns === 4 ? 'lg:col-span-4' : 'lg:col-span-2'}`,
+    sizes: `xs:100vw sm:100vw lg:${featuredColumns * LG_COLUMN_PX}px`,
+  }
+
+  const spans = LG_BLOCK_SPANS[others.length] ?? []
+  return [
+    featured,
+    ...others.map((event, index) => {
+      const fullRow = others.length % 2 === 1 && index === others.length - 1
+      const lg = spans[index] ?? { class: '', columns: 1 }
+      return {
+        event,
+        featured: false,
+        class: `${fullRow ? 'sm:col-span-2 sm:aspect-[32/10]' : ''} ${lg.class}`,
+        sizes: `xs:100vw ${fullRow ? 'sm:100vw' : 'sm:50vw md:50vw'} lg:${lg.columns * LG_COLUMN_PX}px`,
+      }
+    }),
+  ]
+})
 
 // Feed the credential PHOTO PASS: the traveling badge cycles these covers
 // while docked at this section.
@@ -68,27 +129,31 @@ useGsapMatchMedia(sectionEl, (ctx) => {
       <CredentialAnchor section="galeria" class="hidden shrink-0 lg:block" />
     </div>
 
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2">
+    <!-- Tiles keep a CSS ratio, so the covers need no width/height. lg: a fixed
+         4 x 2 grid whose cells keep the 16:10 tile ratio. -->
+    <div
+      v-if="mosaicTiles.length > 0"
+      class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:aspect-[32/10] lg:grid-cols-4 lg:grid-rows-2"
+    >
       <NuxtLink
-        v-for="(event, index) in mosaicEvents"
-        :key="event.slug"
+        v-for="tile in mosaicTiles"
+        :key="tile.event.slug"
         v-spotlight
-        :to="localePath(`/galeria/${event.slug}`)"
-        :aria-label="`${event.title}. ${event.monthText}`"
-        class="gallery-tile motion-link-card reveal group relative block overflow-hidden rounded-2xl"
-        :class="index === 0 ? 'sm:col-span-2 sm:row-span-2' : ''"
+        :to="localePath(`/galeria/${tile.event.slug}`)"
+        :aria-label="`${tile.event.title}. ${tile.event.monthText}`"
+        class="gallery-tile motion-link-card reveal group relative block aspect-[16/10] overflow-hidden rounded-2xl lg:aspect-auto"
+        :class="tile.class"
       >
         <NuxtImg
-          v-if="event.cover"
-          :src="event.cover.src"
-          :alt="getCoverAlt(event.title, event.cover.alt)"
-          :style="{ viewTransitionName: `gallery-cover-${event.slug}` }"
+          v-if="tile.event.cover"
+          :src="tile.event.cover.src"
+          :alt="getCoverAlt(tile.event.title, tile.event.cover.alt)"
+          :style="{ viewTransitionName: `gallery-cover-${tile.event.slug}` }"
           class="motion-link-media size-full object-cover"
           loading="lazy"
-          width="800"
-          height="450"
+          format="webp"
           quality="75"
-          sizes="xs:100vw md:50vw lg:40vw"
+          :sizes="tile.sizes"
         />
         <!-- Title scrim confined to the bottom band -->
         <div
@@ -97,12 +162,12 @@ useGsapMatchMedia(sectionEl, (ctx) => {
           <div class="px-4 pt-10 pb-3">
             <h3
               class="line-clamp-2 leading-snug font-bold text-white drop-shadow-sm"
-              :class="index === 0 ? 'text-xl' : 'text-base'"
+              :class="tile.featured ? 'text-xl' : 'text-base'"
             >
-              {{ event.title }}
+              {{ tile.event.title }}
             </h3>
             <p class="mt-0.5 font-mono text-xs text-white/85">
-              {{ event.monthText }}
+              {{ tile.event.monthText }}
             </p>
           </div>
         </div>
@@ -122,9 +187,3 @@ useGsapMatchMedia(sectionEl, (ctx) => {
     </div>
   </section>
 </template>
-
-<style scoped>
-.gallery-tile {
-  aspect-ratio: 16 / 10;
-}
-</style>
