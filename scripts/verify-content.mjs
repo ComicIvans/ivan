@@ -100,10 +100,17 @@ function checkIcon(file, path, icon) {
   }
 }
 
-/** Walks parsed data and calls visit(key, value, path) for every property. */
+/**
+ * Walks parsed data and calls visit(key, value, path) for every property and
+ * every list item (key is then the index), so translations inside lists such
+ * as tags[2] are checked too.
+ */
 function walk(value, visit, path = []) {
   if (Array.isArray(value)) {
-    value.forEach((item, index) => walk(item, visit, [...path, index]))
+    value.forEach((item, index) => {
+      visit(index, item, [...path, index])
+      walk(item, visit, [...path, index])
+    })
   } else if (value && typeof value === 'object') {
     for (const [key, child] of Object.entries(value)) {
       visit(key, child, [...path, key])
@@ -163,11 +170,16 @@ for (const [section, schema] of Object.entries(profileSchemas)) {
 
 // Gallery --------------------------------------------------------------------
 
+// The gallery collections read content/<locale>/gallery/*.md only: the file
+// name is the event's URL slug, so an event inside a subfolder is never shown.
 function markdownFiles(directory) {
   if (!existsSync(directory)) return []
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const path = join(directory, entry.name)
-    if (entry.isDirectory()) return markdownFiles(path)
+    if (entry.isDirectory()) {
+      fail(path, 'subfolders are not read; move its events into the gallery folder itself')
+      return []
+    }
     return extname(entry.name) === '.md' ? [path] : []
   })
 }

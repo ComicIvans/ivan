@@ -3,14 +3,15 @@ import { siteLocales } from './shared/constants/locales'
 import { galleryEventSchema, profileSchemas } from './shared/content/schemas'
 
 // One gallery collection per locale, generated from siteLocales so adding a
-// locale requires no change here.
+// locale requires no change here. Events live directly in the gallery folder:
+// the file name is the URL slug, so subfolders are not read.
 const galleryCollections = Object.fromEntries(
   siteLocales.map(({ code }) => [
     `gallery_${code}`,
     defineCollection({
       type: 'page',
       source: {
-        include: `${code}/gallery/**/*.md`,
+        include: `${code}/gallery/*.md`,
         prefix: `/${code}`,
       },
       schema: galleryEventSchema,

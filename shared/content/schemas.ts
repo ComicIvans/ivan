@@ -107,11 +107,19 @@ const periodFields = {
 }
 
 function checkPeriod(
-  item: { start?: YearMonth; end?: YearMonth; periodLabel?: unknown },
+  item: { start?: YearMonth; end?: YearMonth; current?: boolean; periodLabel?: unknown },
   ctx: z.RefinementCtx
 ) {
   if (item.start === undefined && item.end === undefined && item.periodLabel === undefined) {
     // A current item may omit every date; the period then reads "Ongoing".
+    // A finished one would show no period at all.
+    if (item.current === false) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'a finished item needs start/end dates or a periodLabel',
+        path: ['current'],
+      })
+    }
     return
   }
   if (
