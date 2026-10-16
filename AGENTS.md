@@ -107,8 +107,11 @@ Current scope includes:
 
 ## Gallery Content Conventions
 
-- Gallery content lives in `content/<locale>/gallery/**`.
+- Gallery content lives in `content/<locale>/gallery/*.md` (flat: the file name is the slug).
 - Spanish content is the base entry; translated entries may override only the fields they actually localize.
+- Translated photos are matched by `src` and carry only `alt`/`description`; order and sizes come from Spanish.
+- Events have `date` and optional `endDate` (`YYYY-MM-DD`); the displayed duration is derived from them.
+- Photos are published as WebP through `pnpm gallery:add` (originals stay in the ignored `gallery-src/`).
 - Do not replace a valid Spanish value with an empty localized value.
 - Image alt text should stay descriptive for third parties, not for internal notes.
 

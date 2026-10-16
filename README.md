@@ -83,10 +83,14 @@ el cliente por su propia cadena de confianza. La aplicación usa esa cabecera
 para los controles de abuso.
 
 Los binarios de la galería se mantienen fuera de Git. Antes de construir o
-desplegar hay que restaurar `public/gallery/` desde la copia privada. `pnpm
-build` ejecuta antes `pnpm verify`, que falla si el contenido referencia una
-imagen ausente (o con otras mayúsculas), si el contenido no cumple su esquema o
-si los archivos de traducción no están alineados.
+desplegar hay que restaurar `public/gallery/` desde la copia privada; los
+originales de las fotos van en `gallery-src/`, que tampoco entra en Git ni en
+la imagen Docker. `pnpm gallery:add <slug>` convierte esos originales en las
+fotos que se publican (ver `public/gallery/README.md`). `pnpm build` ejecuta
+antes `pnpm verify`, que falla si el contenido referencia una imagen ausente
+(o con otras mayúsculas) o declara un tamaño que no es el del archivo, si el
+contenido no cumple su esquema o si los archivos de traducción no están
+alineados.
 
 ### Analítica
 
@@ -111,6 +115,7 @@ Las variables de Umami son opcionales. Si faltan, la analítica queda desactivad
 - `pnpm lint:fix`
 - `pnpm typecheck`
 - `pnpm verify` (`verify:gallery`, `verify:content` y `verify:i18n`)
+- `pnpm gallery:add <slug> [carpeta] [--cover <archivo>] [--write]`
 - `pnpm deploy:local`
 - `pnpm deploy`
 
@@ -147,7 +152,7 @@ pnpm deploy
 ## Contenido y localización
 
 - El español es el idioma base del sitio.
-- Las traducciones de galería pueden sobrescribir parcialmente el contenido base; si falta algo, se conserva la versión en español.
+- Las traducciones de galería pueden sobrescribir parcialmente el contenido base; si falta algo, se conserva la versión en español. Las fotos se traducen por `src`: cada traducción lista solo `src` y `alt` (y `description`), y el orden y los tamaños salen del archivo en español.
 - El texto visible al usuario debe salir de `i18n` o del contenido localizado, no de cadenas sueltas en componentes.
 - La trayectoria (áreas destacadas, experiencia, representación, proyectos y formación) vive en `content/profile/<sección>.yml`, con los tres idiomas juntos en cada campo (`es` obligatorio, `en` y `de` opcionales). Fechas como `YYYY` o `YYYY-MM`; un elemento sin `end` se considera actual. Contadores, cargo actual y datos estructurados se calculan a partir de esos archivos.
 - Los títulos de sección y textos de interfaz siguen en `i18n/locales/`. En esos mensajes, `|`, `@`, `{` y `}` son sintaxis de vue-i18n: escríbelos como `{'|'}`, `{'@'}`, `{'{'}` y `{'}'}`.
