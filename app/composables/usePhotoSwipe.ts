@@ -48,6 +48,10 @@ export function usePhotoSwipe(config: UsePhotoSwipeOptions) {
   const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   let lightbox: PhotoSwipeLightbox | null = null
+  let pendingLightbox: Promise<PhotoSwipeLightbox> | null = null
+  // Bumped by destroy(): an instance whose creation was still pending is
+  // dropped instead of opening on a page that has moved on.
+  let generation = 0
 
   function slideDimensions(index: number): { width: number; height: number } {
     const photo = toValue(config.photos)[index]
@@ -201,7 +205,20 @@ export function usePhotoSwipe(config: UsePhotoSwipeOptions) {
   async function open(index: number) {
     if (!import.meta.client) return
 
-    lightbox ??= await createLightbox()
+    if (!lightbox) {
+      // Clicks that arrive while PhotoSwipe is still loading share one
+      // instance; its loadAndOpen() keeps only the latest request.
+      const currentGeneration = generation
+      pendingLightbox ??= createLightbox()
+      const instance = await pendingLightbox
+      if (currentGeneration !== generation) {
+        instance.destroy()
+        return
+      }
+      pendingLightbox = null
+      lightbox = instance
+    }
+
     lightbox.loadAndOpen(index, buildDataSource())
   }
 
@@ -210,6 +227,8 @@ export function usePhotoSwipe(config: UsePhotoSwipeOptions) {
   }
 
   function destroy() {
+    generation += 1
+    pendingLightbox = null
     lightbox?.destroy()
     lightbox = null
   }
