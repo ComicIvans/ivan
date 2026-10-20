@@ -32,7 +32,7 @@ COPY . .
 # would skip devDependencies like nuxt/vite) so the prod branches of nuxt.config
 # (CSP, content DB path, indexability, umami) are taken explicitly instead of
 # relying on nuxi's implicit default.
-RUN NODE_ENV=production pnpm run build
+RUN NODE_ENV=production NODE_OPTIONS=--max-old-space-size=6144 pnpm run build
 RUN mkdir -p /runtime-data
 
 
