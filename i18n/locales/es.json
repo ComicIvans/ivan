@@ -5,11 +5,11 @@
     "description": "Graduado en Matemáticas y especializado en Ciberseguridad con experiencia en gestión de proyectos, estrategia y gobernanza IT.",
     "pages": {
       "legal": "Información legal, política de cookies y privacidad del portfolio profesional de Iván Salido Cobo.",
-      "experience": "Experiencia destacada en gestión estratégica, gobernanza universitaria y organización de eventos de ámbito nacional.",
+      "experience": "Experiencia en desarrollo web con WordPress en la UPV, infraestructura digital en CREUP y gestión universitaria.",
       "projects": "Proyectos tecnológicos y stack técnico. Especialización en Ciberseguridad, automatización y desarrollo web.",
       "representation": "Trayectoria en representación estudiantil, política universitaria y gestión de órganos colegiados.",
       "gallery": "Galería de eventos, congresos y momentos destacados de la trayectoria profesional y académica.",
-      "training": "Formación académica, idiomas y competencias. MBA, Ciberseguridad y Grado en Matemáticas.",
+      "training": "Formación en gestión de empresas, ciberseguridad y matemáticas. Estancia Erasmus+ actual en Hochschule Ansbach, Alemania.",
       "contact": "Contacto profesional. Envíame un mensaje a través del formulario."
     }
   },
@@ -46,8 +46,8 @@
   "home": {
     "hero": {
       "title": "¡Hola! Soy Iván",
-      "subtitle": "MBA en formación y especialista en Ciberseguridad",
-      "pitch": "Graduado en Matemáticas y especializado en Ciberseguridad. Actualmente curso un MBA, con un enfoque práctico en la ejecución de proyectos y la gestión de organizaciones. Me motiva trabajar en retos complejos, aportando análisis, criterio y organización para generar resultados concretos en entornos tecnológicos y de seguridad digital."
+      "subtitle": "Estudiante de máster en gestión empresarial y especialista en Ciberseguridad",
+      "pitch": "Soy graduado en Matemáticas y especialista en Ciberseguridad. Curso el Máster en Gestión de Empresas, Productos y Servicios de la UPV y actualmente realizo una estancia Erasmus+ en Hochschule Ansbach, Alemania. Combino el desarrollo web y la gestión de infraestructura digital con la coordinación de proyectos y la representación estudiantil."
     },
     "cta": {
       "experience": "Ver mi experiencia",
@@ -76,7 +76,7 @@
   },
   "experience": {
     "title": "Experiencia Destacada",
-    "intro": "Trayectoria orientada a la gestión de proyectos, la gobernanza institucional y la coordinación de equipos en entornos organizativos complejos.",
+    "intro": "Experiencia en desarrollo web, infraestructura digital, gestión de proyectos y gobernanza universitaria.",
     "fullExperience": "Si quieres ver mi experiencia completa en representación estudiantil, puedes consultarla en la sección de Representación.",
     "viewRepresentation": "Ver trayectoria completa",
     "roles": [
@@ -86,6 +86,13 @@
         "organization": "Coordinadora de Representantes de Estudiantes de Universidades Públicas (CREUP)",
         "period": "Jun 2024 - Actual",
         "description": "Gestión de infraestructura VPS, Google Workspace y definición de políticas de seguridad, privacidad y protección de datos de la organización."
+      },
+      {
+        "id": "upv-web-internship",
+        "title": "Estudiante contratado en prácticas — Desarrollo web",
+        "organization": "Casa del Alumno — Universitat Politècnica de València",
+        "period": "Jun 2026 - Oct 2026",
+        "description": "Mantenimiento y actualización de la web de la Casa del Alumno en WordPress. Renovación completa del sitio con un diseño más moderno y accesible."
       },
       {
         "id": "enem-treasurer",
@@ -173,6 +180,10 @@
           {
             "id": "node",
             "name": "Node.js"
+          },
+          {
+            "id": "wordpress",
+            "name": "WordPress"
           }
         ]
       }
@@ -180,6 +191,18 @@
     "list": {
       "title": "Proyectos Relevantes",
       "items": [
+        {
+          "id": "creup-web",
+          "title": "Web de CREUP",
+          "description": "Desarrollo íntegro de la web pública de CREUP, desde el diseño hasta su implementación. Incluye contenido multilingüe, panel de administración e integraciones para publicar la agenda y la información de la organización.",
+          "link": "github.com/CREUP-DEV/web"
+        },
+        {
+          "id": "sipeu-voto",
+          "title": "Plataforma de votaciones SIPEU",
+          "description": "Desarrollo de una plataforma para la Simulación del Parlamento Europeo en Canarias (SIPEU). Permite gestionar participantes y votaciones de comisiones y pleno, con resultados en tiempo real y desglose por grupo parlamentario y participante.",
+          "link": "github.com/ComicIvans/sipeu-voto"
+        },
         {
           "id": "server",
           "title": "Servidor personal",
@@ -209,7 +232,7 @@
   },
   "representation": {
     "title": "Representación Estudiantil",
-    "intro": "Trayectoria completa en la política universitaria, defensa de derechos estudiantiles y gobernanza universitaria .",
+    "intro": "Trayectoria en política universitaria, defensa de los derechos del estudiantado y gobernanza institucional.",
     "timelineLabel": "Cronología de trayectoria en representación estudiantil",
     "timeline": [
       {
@@ -260,11 +283,11 @@
         "highlights": ["Director de Transparencia de la DGE", "Asesor de la DGE"]
       },
       {
-        "id": "upv-delegate",
-        "date": "Septiembre de 2025",
-        "title": "Delegado en la UPV",
-        "description": "Desde que comencé mis estudios de máster en la Universitat Politècnica de València, soy el delegado de mi clase, continuando así mi labor de representación estudiantil en una nueva universidad.",
-        "highlights": ["Delegado de clase"]
+        "id": "upv-digital-infrastructure",
+        "date": "Mayo de 2026 - Actualidad",
+        "title": "Coordinador de Infraestructuras Digitales",
+        "description": "Coordino las infraestructuras digitales del Consejo de Estudiantes de la UPV. Actualmente desarrollo una plataforma para gestionar el inventario de material y sus préstamos.",
+        "highlights": ["Consejo de Estudiantes de la UPV", "Gestión de inventario y préstamos"]
       }
     ]
   },
@@ -329,7 +352,7 @@
           "title": "Máster Universitario en Gestión de Empresas, Productos y Servicios (MUGEPS)",
           "organization": "Universitat Politècnica de València",
           "period": "En curso",
-          "description": "Enfoque en dirección estratégica y gestión de equipos. Docencia mayoritariamente en inglés y próxima estancia Erasmus+ en Alemania."
+          "description": "Formación en dirección estratégica y gestión de equipos, con docencia mayoritariamente en inglés. Actualmente realizo una estancia Erasmus+ en Hochschule Ansbach, Alemania."
         },
         {
           "id": "cybersecurity-master",
@@ -375,7 +398,7 @@
           "id": "german",
           "name": "Alemán",
           "level": "Nivel Básico (A1)",
-          "description": "En formación para movilidad internacional."
+          "description": "Aprendizaje de alemán durante mi estancia Erasmus+ en Hochschule Ansbach, Alemania."
         },
         {
           "id": "spanish",

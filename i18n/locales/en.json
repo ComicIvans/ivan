@@ -5,11 +5,11 @@
     "description": "Mathematics graduate specialising in Cybersecurity, with experience in project management, strategy and IT governance.",
     "pages": {
       "legal": "Legal information, cookies and privacy policy of Iván Salido Cobo’s professional portfolio.",
-      "experience": "Key experience in strategic management, university governance and organisation of national-level events.",
+      "experience": "Experience in WordPress web development at UPV, digital infrastructure at CREUP and university management.",
       "projects": "Technology projects and technical stack. Specialisation in Cybersecurity, automation and web development.",
       "representation": "Background in student representation, university policy and management of collegiate bodies.",
       "gallery": "Gallery of events, conferences and key moments from my professional and academic trajectory.",
-      "training": "Academic background, languages and skills. MBA, Cybersecurity and BSc in Mathematics.",
+      "training": "Education in business management, cybersecurity and mathematics. Currently on an Erasmus+ exchange at Hochschule Ansbach, Germany.",
       "contact": "Professional contact. Send me a message via the contact form."
     }
   },
@@ -46,8 +46,8 @@
   "home": {
     "hero": {
       "title": "Hi, I’m Iván",
-      "subtitle": "MBA candidate and Cybersecurity specialist",
-      "pitch": "Mathematics graduate specialising in Cybersecurity. I am currently pursuing an MBA, with a practical focus on project execution and organisational management. I enjoy working on complex challenges, bringing analysis, judgement and structure to deliver tangible results in technology-driven and digital security environments."
+      "subtitle": "Business management master’s student and Cybersecurity specialist",
+      "pitch": "I am a Mathematics graduate and Cybersecurity specialist. I am pursuing the Master’s Degree in Business, Product and Service Management at UPV and currently studying at Hochschule Ansbach, Germany, on an Erasmus+ exchange. I combine web development and digital infrastructure management with project coordination and student representation."
     },
     "cta": {
       "experience": "View my experience",
@@ -76,7 +76,7 @@
   },
   "experience": {
     "title": "Selected Experience",
-    "intro": "A career focused on project management, institutional governance and team coordination within complex organisational environments.",
+    "intro": "Experience in web development, digital infrastructure, project management and university governance.",
     "fullExperience": "If you would like to see my full background in student representation, you can find it in the Representation section.",
     "viewRepresentation": "View full trajectory",
     "roles": [
@@ -86,6 +86,13 @@
         "organization": "Coordinator of Student Representatives of Public Universities (CREUP)",
         "period": "Jun 2024 - Present",
         "description": "Management of VPS infrastructure, Google Workspace and the definition of security, privacy and data protection policies for the organisation."
+      },
+      {
+        "id": "upv-web-internship",
+        "title": "Student Intern — Web Development",
+        "organization": "Student Recreation Centre — Universitat Politècnica de València",
+        "period": "Jun 2026 - Oct 2026",
+        "description": "Maintained and updated the Student Recreation Centre’s WordPress website. Completely redesigned the site to give it a more modern and accessible interface."
       },
       {
         "id": "enem-treasurer",
@@ -149,13 +156,26 @@
           { "id": "nginx", "name": "Nginx" },
           { "id": "dns", "name": "DNS" },
           { "id": "typescript", "name": "TypeScript" },
-          { "id": "node", "name": "Node.js" }
+          { "id": "node", "name": "Node.js" },
+          { "id": "wordpress", "name": "WordPress" }
         ]
       }
     },
     "list": {
       "title": "Key projects",
       "items": [
+        {
+          "id": "creup-web",
+          "title": "CREUP Website",
+          "description": "Sole developer of CREUP’s public website, responsible for its design and implementation. Features multilingual content, an administration panel and integrations for publishing the organisation’s calendar and information.",
+          "link": "github.com/CREUP-DEV/web"
+        },
+        {
+          "id": "sipeu-voto",
+          "title": "SIPEU Voting Platform",
+          "description": "Developed a voting platform for the European Parliament Simulation in the Canary Islands (SIPEU). Supports participant management and committee and plenary votes, with live results broken down by parliamentary group and participant.",
+          "link": "github.com/ComicIvans/sipeu-voto"
+        },
         {
           "id": "server",
           "title": "Personal server",
@@ -236,11 +256,11 @@
         "highlights": ["Director of Transparency (DGE)", "Advisor to the DGE"]
       },
       {
-        "id": "upv-delegate",
-        "date": "September 2025",
-        "title": "Class Representative at UPV",
-        "description": "Elected class representative at the Universitat Politècnica de València at the start of my master’s studies, continuing my work in student representation within a new academic environment.",
-        "highlights": ["Class representative"]
+        "id": "upv-digital-infrastructure",
+        "date": "May 2026 - Present",
+        "title": "Digital Infrastructure Coordinator",
+        "description": "I coordinate digital infrastructure for UPV’s Students’ Council. I am currently developing a platform to manage equipment inventory and loans.",
+        "highlights": ["UPV Students’ Council", "Inventory and loan management"]
       }
     ]
   },
@@ -305,7 +325,7 @@
           "title": "Master’s Degree in Business, Product and Service Management (MUGEPS)",
           "organization": "Universitat Politècnica de València",
           "period": "Ongoing",
-          "description": "Focus on strategic management and team leadership. Teaching mainly in English, with a forthcoming Erasmus+ stay in Germany."
+          "description": "Training in strategic management and team leadership, taught mainly in English. I am currently on an Erasmus+ exchange at Hochschule Ansbach, Germany."
         },
         {
           "id": "cybersecurity-master",
@@ -351,7 +371,7 @@
           "id": "german",
           "name": "German",
           "level": "Basic level (A1)",
-          "description": "Currently in training for international mobility."
+          "description": "Learning German during my Erasmus+ exchange at Hochschule Ansbach, Germany."
         },
         {
           "id": "spanish",

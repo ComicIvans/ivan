@@ -34,6 +34,8 @@ const secondaryTech = useI18nList('projects.stack.secondary.items', ({ raw, valu
 
 // Language-neutral technology / category tags shown across all locales.
 const projectTags: Record<string, string[]> = {
+  'creup-web': ['Nuxt', 'TypeScript', 'PostgreSQL', 'Redis'],
+  'sipeu-voto': ['Nuxt', 'TypeScript', 'PostgreSQL', 'SSE'],
   server: ['Linux', 'Docker', 'Self-hosted', 'Nginx'],
   firmas: ['Python', 'Vue.js', 'Full-stack'],
   'win-ens': ['PowerShell', 'ENS', 'Windows', 'Cybersecurity'],
@@ -133,7 +135,7 @@ const projects = useI18nList('projects.list.items', ({ raw, value, tr }) => {
             >
               <UIcon :name="project.icon" class="text-primary-500 size-8" aria-hidden="true" />
             </div>
-            <div class="flex-1">
+            <div class="min-w-0 flex-1">
               <h3 class="text-lg font-bold">{{ project.title }}</h3>
               <p class="text-muted mt-2">{{ project.description }}</p>
               <div class="mt-3 flex flex-wrap gap-2">
@@ -143,15 +145,15 @@ const projects = useI18nList('projects.list.items', ({ raw, value, tr }) => {
               </div>
               <UButton
                 :to="project.link"
+                :label="project.linkText"
                 target="_blank"
                 rel="noopener noreferrer"
                 variant="link"
                 size="sm"
                 :trailing-icon="'i-tabler-external-link'"
-                class="mt-3 p-0"
-              >
-                {{ project.linkText }}
-              </UButton>
+                class="mt-3 max-w-full p-0"
+                :ui="{ label: 'break-all whitespace-normal text-left' }"
+              />
             </div>
           </div>
         </UCard>

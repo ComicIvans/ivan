@@ -5,11 +5,11 @@
     "description": "Absolvent der Mathematik mit Spezialisierung auf Cybersicherheit und Erfahrung in Projektmanagement, Strategie und IT-Governance.",
     "pages": {
       "legal": "Rechtliche Hinweise sowie Cookie- und Datenschutzerklärung des professionellen Portfolios von Iván Salido Cobo.",
-      "experience": "Zentrale Erfahrungen in strategischem Management, universitärer Governance und der Organisation von Veranstaltungen auf nationaler Ebene.",
+      "experience": "Erfahrung in der WordPress-Webentwicklung an der UPV, digitaler Infrastruktur bei CREUP und Hochschulverwaltung.",
       "projects": "Technologieprojekte und technischer Stack. Spezialisierung auf Cybersicherheit, Automatisierung und Webentwicklung.",
       "representation": "Erfahrung in studentischer Vertretung, Hochschulpolitik und der Arbeit in Kollegialgremien.",
       "gallery": "Galerie mit Veranstaltungen, Konferenzen und prägenden Momenten meiner beruflichen und akademischen Laufbahn.",
-      "training": "Akademischer Werdegang, Sprachen und Kompetenzen. MBA, Cybersicherheit und Bachelor in Mathematik.",
+      "training": "Ausbildung in Unternehmensmanagement, Cybersicherheit und Mathematik. Derzeitiger Erasmus+-Aufenthalt an der Hochschule Ansbach.",
       "contact": "Professioneller Kontakt. Sende mir eine Nachricht über das Kontaktformular."
     }
   },
@@ -46,8 +46,8 @@
   "home": {
     "hero": {
       "title": "Hi, ich bin Iván",
-      "subtitle": "MBA-Teilnehmer und Spezialist für Cybersicherheit",
-      "pitch": "Mathematik-Absolvent mit Spezialisierung auf Cybersicherheit. Derzeit absolviere ich einen MBA mit einem praxisnahen Fokus auf Projektausführung und Organisationsmanagement. Ich arbeite gern an komplexen Herausforderungen und bringe Analyse, Urteilsvermögen und Struktur mit, um in technologiegetriebenen und digitalen Sicherheitsumfeldern greifbare Ergebnisse zu erzielen."
+      "subtitle": "Masterstudent im Unternehmensmanagement und Spezialist für Cybersicherheit",
+      "pitch": "Ich habe Mathematik studiert und mich auf Cybersicherheit spezialisiert. Derzeit absolviere ich den Masterstudiengang in Unternehmens-, Produkt- und Dienstleistungsmanagement an der UPV und verbringe einen Erasmus+-Aufenthalt an der Hochschule Ansbach in Deutschland. Ich verbinde Webentwicklung und die Verwaltung digitaler Infrastruktur mit Projektkoordination und studentischer Vertretung."
     },
     "cta": {
       "experience": "Meine Erfahrung ansehen",
@@ -76,7 +76,7 @@
   },
   "experience": {
     "title": "Ausgewählte Erfahrung",
-    "intro": "Ein Werdegang mit Schwerpunkt auf Projektmanagement, institutioneller Governance und Teamkoordination in komplexen organisatorischen Umfeldern.",
+    "intro": "Erfahrung in Webentwicklung, digitaler Infrastruktur, Projektmanagement und Hochschulverwaltung.",
     "fullExperience": "Wenn du meinen vollständigen Hintergrund in der studentischen Vertretung sehen möchtest, findest du ihn im Abschnitt Vertretung.",
     "viewRepresentation": "Vollständige Laufbahn ansehen",
     "roles": [
@@ -86,6 +86,13 @@
         "organization": "Koordinierung der Studierendenvertretungen öffentlicher Universitäten (CREUP)",
         "period": "Jun 2024 - Heute",
         "description": "Verwaltung der VPS-Infrastruktur, Google Workspace sowie die Definition von Sicherheits-, Datenschutz- und Daten­schutzrichtlinien für die Organisation."
+      },
+      {
+        "id": "upv-web-internship",
+        "title": "Studentischer Praktikant — Webentwicklung",
+        "organization": "Casa del Alumno (Studierendenzentrum) — Universitat Politècnica de València",
+        "period": "Jun 2026 - Okt 2026",
+        "description": "Pflege und Aktualisierung der WordPress-Website der Casa del Alumno. Vollständige Neugestaltung mit einem moderneren und barriereärmeren Design."
       },
       {
         "id": "enem-treasurer",
@@ -149,13 +156,26 @@
           { "id": "nginx", "name": "Nginx" },
           { "id": "dns", "name": "DNS" },
           { "id": "typescript", "name": "TypeScript" },
-          { "id": "node", "name": "Node.js" }
+          { "id": "node", "name": "Node.js" },
+          { "id": "wordpress", "name": "WordPress" }
         ]
       }
     },
     "list": {
       "title": "Wichtige Projekte",
       "items": [
+        {
+          "id": "creup-web",
+          "title": "CREUP-Website",
+          "description": "Eigenständige Entwicklung der gesamten öffentlichen CREUP-Website, vom Design bis zur Implementierung. Mit mehrsprachigen Inhalten, Administrationsbereich und Integrationen zur Veröffentlichung des Veranstaltungskalenders und der Informationen der Organisation.",
+          "link": "github.com/CREUP-DEV/web"
+        },
+        {
+          "id": "sipeu-voto",
+          "title": "SIPEU-Abstimmungsplattform",
+          "description": "Entwicklung einer Abstimmungsplattform für die Simulation des Europäischen Parlaments auf den Kanarischen Inseln (SIPEU). Verwaltung von Teilnehmenden sowie Ausschuss- und Plenarabstimmungen mit Live-Ergebnissen nach Fraktion und Person.",
+          "link": "github.com/ComicIvans/sipeu-voto"
+        },
         {
           "id": "server",
           "title": "Privater Server",
@@ -164,7 +184,7 @@
         },
         {
           "id": "firmas",
-          "title": "Generator für корпоративe E-Mail-Signaturen",
+          "title": "Generator für geschäftliche E-Mail-Signaturen",
           "description": "Zwei Tools (eine Python-CLI und eine Webanwendung), um E-Mail-Signaturen gemäß Corporate-Identity-Richtlinien zu erstellen.",
           "link": "firmas.wupp.dev"
         },
@@ -236,11 +256,11 @@
         "highlights": ["Direktor für Transparenz (DGE)", "Berater des DGE"]
       },
       {
-        "id": "upv-delegate",
-        "date": "September 2025",
-        "title": "Klassensprecher an der UPV",
-        "description": "Zu Beginn meines Masterstudiums an der Universitat Politècnica de València zum Klassensprecher gewählt und damit die studentische Vertretungsarbeit in einem neuen akademischen Umfeld fortgesetzt.",
-        "highlights": ["Klassensprecher"]
+        "id": "upv-digital-infrastructure",
+        "date": "Mai 2026 - Heute",
+        "title": "Koordinator für digitale Infrastruktur",
+        "description": "Ich koordiniere die digitale Infrastruktur des Studierendenrats der UPV. Derzeit entwickle ich eine Plattform zur Verwaltung des Materialbestands und der Ausleihe.",
+        "highlights": ["Studierendenrat der UPV", "Bestands- und Ausleihverwaltung"]
       }
     ]
   },
@@ -305,7 +325,7 @@
           "title": "Masterstudiengang in Unternehmens-, Produkt- und Dienstleistungsmanagement (MUGEPS)",
           "organization": "Universitat Politècnica de València",
           "period": "Laufend",
-          "description": "Fokus auf strategisches Management und Teamführung. Unterricht überwiegend auf Englisch, mit einem bevorstehenden Erasmus+-Aufenthalt in Deutschland."
+          "description": "Schwerpunkte sind strategisches Management und Teamführung, mit überwiegend englischsprachigem Unterricht. Derzeit verbringe ich einen Erasmus+-Aufenthalt an der Hochschule Ansbach in Deutschland."
         },
         {
           "id": "cybersecurity-master",
@@ -351,7 +371,7 @@
           "id": "german",
           "name": "Deutsch",
           "level": "Grundkenntnisse (A1)",
-          "description": "Derzeit in Ausbildung für internationale Mobilität."
+          "description": "Ich lerne Deutsch während meines Erasmus+-Aufenthalts an der Hochschule Ansbach."
         },
         {
           "id": "spanish",

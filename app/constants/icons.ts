@@ -12,6 +12,7 @@ export const highlightIcons: Record<string, string> = {
 
 export const roleIcons: Record<string, string> = {
   'creup-digitalization': 'i-tabler-server-2',
+  'upv-web-internship': 'i-simple-icons-wordpress',
   'enem-treasurer': 'i-tabler-calculator',
   'ugr-council': 'i-tabler-building-bank',
   'dge-treasurer': 'i-tabler-coins',
@@ -52,10 +53,12 @@ export const representationIcons: Record<string, string> = {
   'academic-vicecoord': 'i-tabler-school',
   'creup-digitalization': 'i-tabler-server-2',
   'dge-advisor': 'i-tabler-shield-check',
-  'upv-delegate': 'i-tabler-users',
+  'upv-digital-infrastructure': 'i-tabler-server-2',
 }
 
 export const projectIcons: Record<string, string> = {
+  'creup-web': 'i-tabler-world-www',
+  'sipeu-voto': 'i-tabler-checkbox',
   server: 'i-tabler-server-2',
   firmas: 'i-tabler-signature',
   'win-ens': 'i-tabler-shield-lock',
@@ -63,6 +66,7 @@ export const projectIcons: Record<string, string> = {
 }
 
 export const techIcons: Record<string, string> = {
+  wordpress: 'i-simple-icons-wordpress',
   nuxt: 'i-simple-icons-nuxt',
   vue: 'i-simple-icons-vuedotjs',
   linux: 'i-simple-icons-linux',
