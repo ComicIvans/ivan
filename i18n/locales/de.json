@@ -85,14 +85,16 @@
         "title": "Vorstandsmitglied für Digitalisierung und Transparenz",
         "organization": "Koordinierung der Studierendenvertretungen öffentlicher Universitäten (CREUP)",
         "period": "Jun 2024 - Heute",
-        "description": "Verwaltung der VPS-Infrastruktur, Google Workspace sowie die Definition von Sicherheits-, Datenschutz- und Daten­schutzrichtlinien für die Organisation."
+        "description": "Verwaltung der VPS-Infrastruktur, Google Workspace sowie die Definition von Sicherheits-, Datenschutz- und Daten­schutzrichtlinien für die Organisation.",
+        "link": "creup.es"
       },
       {
         "id": "upv-web-internship",
         "title": "Praktikum im digitalen Projektmanagement und in der Webentwicklung",
-        "organization": "Casa del Alumno (Studierendenzentrum), Universitat Politècnica de València",
+        "organization": "Casa del Estudiante (Studierendenzentrum), Universitat Politècnica de València",
         "period": "Jun 2026 - Okt 2026",
-        "description": "Pflege und Aktualisierung der WordPress-Website der Casa del Alumno. Vollständige Neugestaltung mit einem moderneren und barriereärmeren Design."
+        "description": "Pflege und Aktualisierung der WordPress-Website der Casa del Estudiante. Vollständige Neugestaltung mit einem moderneren und barriereärmeren Design.",
+        "link": "calum.upv.es"
       },
       {
         "id": "enem-treasurer",
@@ -168,13 +170,15 @@
           "id": "creup-web",
           "title": "CREUP-Website",
           "description": "Eigenständige Entwicklung der gesamten öffentlichen CREUP-Website, vom Design bis zur Implementierung. Mit mehrsprachigen Inhalten, Administrationsbereich und Integrationen zur Veröffentlichung des Veranstaltungskalenders und der Informationen der Organisation.",
-          "link": "github.com/CREUP-DEV/web"
+          "link": "creup.es",
+          "repository": "https://github.com/CREUP-DEV/web"
         },
         {
           "id": "sipeu-voto",
           "title": "SIPEU-Abstimmungsplattform",
           "description": "Entwicklung einer Abstimmungsplattform für die Simulation des Europäischen Parlaments auf den Kanarischen Inseln (SIPEU). Verwaltung von Teilnehmenden sowie Ausschuss- und Plenarabstimmungen mit Live-Ergebnissen nach Fraktion und Person.",
-          "link": "github.com/ComicIvans/sipeu-voto"
+          "link": "sipeu.wupp.dev",
+          "repository": "https://github.com/ComicIvans/sipeu-voto"
         },
         {
           "id": "server",

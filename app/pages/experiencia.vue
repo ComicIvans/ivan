@@ -24,10 +24,13 @@ interface Experience {
   description: string
   icon: string
   current: boolean
+  link: string
+  linkText: string
 }
 
 const experiences = useI18nList<Experience>('experience.roles', ({ raw, value, tr }) => {
   const id = value(raw.id)
+  const link = value(raw.link)
   return {
     id,
     title: tr(raw.title),
@@ -36,6 +39,8 @@ const experiences = useI18nList<Experience>('experience.roles', ({ raw, value, t
     description: tr(raw.description),
     icon: roleIcons[id] || 'i-tabler-briefcase',
     current: currentRoles.includes(id),
+    link: link ? `https://${link}` : '',
+    linkText: link,
   }
 })
 
@@ -88,6 +93,17 @@ const timelineItems = computed(() => {
           <div class="flex flex-col gap-1">
             <span class="text-toned text-sm font-medium">{{ exp.org }}</span>
             <p class="text-muted text-sm">{{ exp.description }}</p>
+            <UButton
+              v-if="exp.link"
+              :to="exp.link"
+              :label="exp.linkText"
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="link"
+              size="sm"
+              trailing-icon="i-tabler-external-link"
+              class="mt-1 self-start p-0"
+            />
           </div>
         </template>
       </UTimeline>

@@ -85,14 +85,16 @@
         "title": "Vocal de Digitalización y Transparencia",
         "organization": "Coordinadora de Representantes de Estudiantes de Universidades Públicas (CREUP)",
         "period": "Jun 2024 - Actual",
-        "description": "Gestión de infraestructura VPS, Google Workspace y definición de políticas de seguridad, privacidad y protección de datos de la organización."
+        "description": "Gestión de infraestructura VPS, Google Workspace y definición de políticas de seguridad, privacidad y protección de datos de la organización.",
+        "link": "creup.es"
       },
       {
         "id": "upv-web-internship",
         "title": "Prácticas en gestión de proyectos digitales y desarrollo web",
-        "organization": "Casa del Alumno, Universitat Politècnica de València",
+        "organization": "Casa del Estudiante, Universitat Politècnica de València",
         "period": "Jun 2026 - Oct 2026",
-        "description": "Mantenimiento y actualización de la web de la Casa del Alumno en WordPress. Renovación completa del sitio con un diseño más moderno y accesible."
+        "description": "Mantenimiento y actualización de la web de la Casa del Estudiante en WordPress. Renovación completa del sitio con un diseño más moderno y accesible.",
+        "link": "calum.upv.es"
       },
       {
         "id": "enem-treasurer",
@@ -195,13 +197,15 @@
           "id": "creup-web",
           "title": "Web de CREUP",
           "description": "Desarrollo íntegro de la web pública de CREUP, desde el diseño hasta su implementación. Incluye contenido multilingüe, panel de administración e integraciones para publicar la agenda y la información de la organización.",
-          "link": "github.com/CREUP-DEV/web"
+          "link": "creup.es",
+          "repository": "https://github.com/CREUP-DEV/web"
         },
         {
           "id": "sipeu-voto",
           "title": "Plataforma de votaciones SIPEU",
           "description": "Desarrollo de una plataforma para la Simulación del Parlamento Europeo en Canarias (SIPEU). Permite gestionar participantes y votaciones de comisiones y pleno, con resultados en tiempo real y desglose por grupo parlamentario y participante.",
-          "link": "github.com/ComicIvans/sipeu-voto"
+          "link": "sipeu.wupp.dev",
+          "repository": "https://github.com/ComicIvans/sipeu-voto"
         },
         {
           "id": "server",

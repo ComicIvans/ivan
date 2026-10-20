@@ -52,6 +52,7 @@ const projects = useI18nList('projects.list.items', ({ raw, value, tr }) => {
     description: tr(raw.description),
     link: link.startsWith('http') ? link : `https://${link}`,
     linkText: link,
+    repository: value(raw.repository),
     icon: projectIcons[id] || 'i-tabler-folder-code',
     tags: projectTags[id] || [],
   }
@@ -143,17 +144,30 @@ const projects = useI18nList('projects.list.items', ({ raw, value, tr }) => {
                   {{ tag }}
                 </UBadge>
               </div>
-              <UButton
-                :to="project.link"
-                :label="project.linkText"
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="link"
-                size="sm"
-                :trailing-icon="'i-tabler-external-link'"
-                class="mt-3 max-w-full p-0"
-                :ui="{ label: 'break-all whitespace-normal text-left' }"
-              />
+              <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+                <UButton
+                  :to="project.link"
+                  :label="project.linkText"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="link"
+                  size="sm"
+                  :trailing-icon="'i-tabler-external-link'"
+                  class="max-w-full p-0"
+                  :ui="{ label: 'break-all whitespace-normal text-left' }"
+                />
+                <UButton
+                  v-if="project.repository"
+                  :to="project.repository"
+                  label="GitHub"
+                  icon="i-simple-icons-github"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="link"
+                  size="sm"
+                  class="p-0"
+                />
+              </div>
             </div>
           </div>
         </UCard>
