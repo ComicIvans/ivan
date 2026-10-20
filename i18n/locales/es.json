@@ -89,7 +89,7 @@
       },
       {
         "id": "upv-web-internship",
-        "title": "Estudiante contratado en prácticas: Desarrollo web",
+        "title": "Prácticas en gestión de proyectos digitales y desarrollo web",
         "organization": "Casa del Alumno, Universitat Politècnica de València",
         "period": "Jun 2026 - Oct 2026",
         "description": "Mantenimiento y actualización de la web de la Casa del Alumno en WordPress. Renovación completa del sitio con un diseño más moderno y accesible."
@@ -287,7 +287,7 @@
         "date": "Mayo de 2026 - Actualidad",
         "title": "Coordinador de Infraestructuras Digitales",
         "description": "Coordino las infraestructuras digitales del Consejo de Estudiantes de la UPV. Actualmente desarrollo una plataforma para gestionar el inventario de material y sus préstamos.",
-        "highlights": ["Consejo de Estudiantes de la UPV", "Gestión de inventario y préstamos"]
+        "highlights": ["Consejo de Estudiantes de la UPV"]
       }
     ]
   },
@@ -352,7 +352,7 @@
           "title": "Máster Universitario en Gestión de Empresas, Productos y Servicios (MUGEPS)",
           "organization": "Universitat Politècnica de València",
           "period": "En curso",
-          "description": "Formación en dirección estratégica y gestión de equipos, con docencia mayoritariamente en inglés. Actualmente realizo una estancia Erasmus+ en Hochschule Ansbach, Alemania."
+          "description": "Formación práctica e internacional en gestión empresarial, innovación y desarrollo de productos y servicios, con proyectos interdisciplinares y docencia principalmente en inglés. Actualmente realizo una estancia Erasmus+ en Hochschule Ansbach (Alemania), vinculada al programa International Product and Service Management (IPM)."
         },
         {
           "id": "cybersecurity-master",
