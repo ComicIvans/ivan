@@ -18,16 +18,18 @@ withDefaults(
     class="marquee group relative overflow-hidden"
     :style="{ '--marquee-duration': `${duration}s` }"
   >
-    <div class="marquee-track flex w-max items-center gap-8">
+    <!-- No gap between the two runs: each carries its trailing space (pr-8),
+         so the track is exactly two equal halves and the -50% loop is seamless -->
+    <div class="marquee-track flex w-max items-center">
       <!-- The label names the list: a generic div cannot carry one -->
-      <ul class="flex items-center gap-8" :aria-label="ariaLabel">
+      <ul class="flex items-center gap-8 pr-8" :aria-label="ariaLabel">
         <li v-for="item in items" :key="item.label" class="text-muted flex items-center gap-2">
           <UIcon v-if="item.icon" :name="item.icon" class="size-5 shrink-0" aria-hidden="true" />
           <span class="text-sm font-medium whitespace-nowrap">{{ item.label }}</span>
         </li>
       </ul>
       <!-- Duplicate run makes the loop seamless; hidden from assistive tech -->
-      <ul class="flex items-center gap-8" aria-hidden="true">
+      <ul class="flex items-center gap-8 pr-8" aria-hidden="true">
         <li v-for="item in items" :key="item.label" class="text-muted flex items-center gap-2">
           <UIcon v-if="item.icon" :name="item.icon" class="size-5 shrink-0" aria-hidden="true" />
           <span class="text-sm font-medium whitespace-nowrap">{{ item.label }}</span>
