@@ -26,7 +26,7 @@ const sceneEl = useTemplateRef<HTMLElement>('sceneEl')
 const trackEl = useTemplateRef<HTMLElement>('trackEl')
 const journey = useCredentialJourney()
 
-useGsapMatchMedia(sceneEl, (ctx) => {
+function setupScene(ctx: gsap.Context) {
   const scene = sceneEl.value
   const cards = scene ? Array.from(scene.querySelectorAll<HTMLElement>('.project-card')) : []
   if (!scene || !cards.length) return
@@ -36,13 +36,14 @@ useGsapMatchMedia(sceneEl, (ctx) => {
     return
   }
 
-  if (ctx.conditions?.fullMotion && trackEl.value) {
+  if (ctx.conditions?.fullMotion && ctx.conditions?.pinFits && trackEl.value) {
     // Horizontal showcase: the scene pins while the card track translates
     // sideways; snapping parks one project per beat. The pin spacer is
     // GSAP-managed layout, not a scroll-dependent height (no feedback loops).
     // The row layout itself only exists while this pin drives it
-    // (data-pinned); every other tier, and the page before JS runs, keeps the
-    // grid so no project is clipped out of reach.
+    // (data-pinned); every other tier, a window too short to hold a parked
+    // card, and the page before JS runs keep the grid so no project is
+    // clipped out of reach.
     const track = trackEl.value
     scene.dataset.pinned = ''
     const getScroll = () => Math.max(0, track.scrollWidth - track.clientWidth)
@@ -99,7 +100,8 @@ useGsapMatchMedia(sceneEl, (ctx) => {
     }
   }
 
-  // Mobile / tablet: vertical stack with a staggered entrance.
+  // Mobile / tablet, or a short desktop window: the grid with a staggered
+  // entrance.
   gsap.set(cards, { autoAlpha: 0, y: 32 })
   ScrollTrigger.batch(cards, {
     start: 'top 85%',
@@ -107,6 +109,13 @@ useGsapMatchMedia(sceneEl, (ctx) => {
     onEnter: (batch) =>
       gsap.to(batch, { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: 0.08 }),
   })
+}
+
+useGsapMatchMedia(sceneEl, setupScene, {
+  // The shortest window whose pinned scene still holds a whole card with the
+  // cover at its minimum height (see .project-cover below). matchMedia swaps
+  // the pin for the grid when a resize crosses it.
+  pinFits: '(min-height: 32rem)',
 })
 </script>
 
@@ -180,7 +189,7 @@ useGsapMatchMedia(sceneEl, (ctx) => {
             class="project-card motion-link-card bg-default ring-default min-w-0 overflow-hidden rounded-lg ring"
             :style="accentStyle(project.accent)"
           >
-            <div class="relative aspect-[2/1] overflow-hidden">
+            <div class="project-cover relative aspect-[2/1] overflow-hidden">
               <NuxtImg
                 v-if="project.screenshot"
                 :src="project.screenshot.src"
@@ -251,7 +260,9 @@ useGsapMatchMedia(sceneEl, (ctx) => {
 <style scoped>
 /* Horizontal showcase, only while the pin drives the track. The scene pins
    flush with the viewport top, so its padding keeps the content and the
-   badge dock clear of the fixed navbar. */
+   badge dock clear of the fixed navbar. Everything inside must fit one
+   viewport: the scene stays fixed while pinned, so whatever overflows it
+   (the card links first) can never be scrolled or tabbed into view. */
 .projects-scene[data-pinned] {
   display: flex;
   min-height: 100svh;
@@ -292,6 +303,15 @@ useGsapMatchMedia(sceneEl, (ctx) => {
 .projects-scene[data-pinned] .project-card {
   width: min(38rem, 70vw);
   flex-shrink: 0;
+}
+
+/* The cover gives way first on shorter windows: 26rem is the rest of the
+   pinned scene (navbar 3.5rem, sub-heading and its margin 4.5rem, the
+   tallest card text 15rem) plus 3rem of air; 19rem is the 2:1 cover of a
+   38rem card. Below 8rem the pin is dropped (pinFits above). */
+.projects-scene[data-pinned] .project-cover {
+  aspect-ratio: auto;
+  height: clamp(8rem, 100svh - 26rem, 19rem);
 }
 
 /* Decorative cover band: per-project aurora wash on an adaptive elevated base. */

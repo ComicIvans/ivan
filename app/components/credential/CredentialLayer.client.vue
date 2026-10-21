@@ -170,6 +170,12 @@ onMounted(async () => {
     const slot = slots.get(active.value)
     if (!slot) return
     const r = slot.getBoundingClientRect() // layer is fixed → viewport coords match
+    // A dock that is not rendered (the projects dock while its scene shows the
+    // grid instead of the pin) has no box to home onto: hide the badge there
+    // instead of shrinking it into the corner.
+    const docked = r.width > 0 || r.height > 0
+    if (docked === box.hidden) box.hidden = !docked
+    if (!docked) return
     const k = 0.14 // homing factor ≈ 0.8s settle at 60fps
     const dx = r.left - pos.x
     const dy = r.top - pos.y
