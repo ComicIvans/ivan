@@ -83,12 +83,18 @@ const homePath = computed(() => localePath('/'))
 </template>
 
 <style scoped>
+/* The hover lift uses the individual translate/scale properties: the idle
+   float animation owns `transform`, and a running animation would override a
+   hover transform. */
 .header-portrait {
-  transition: transform 500ms var(--motion-emphasized);
+  transition:
+    translate 500ms var(--motion-emphasized),
+    scale 500ms var(--motion-emphasized);
 }
 
 .header-portrait:hover {
-  transform: translate3d(0, -0.25rem, 0) scale(1.01);
+  translate: 0 -0.25rem;
+  scale: 1.01;
 }
 
 /* Idle float reuses the shared keyframe from main.css */
@@ -101,7 +107,8 @@ const homePath = computed(() => localePath('/'))
 @media (prefers-reduced-motion: reduce) {
   .header-portrait,
   .header-portrait:hover {
-    transform: none !important;
+    translate: none !important;
+    scale: none !important;
     transition: none !important;
   }
 

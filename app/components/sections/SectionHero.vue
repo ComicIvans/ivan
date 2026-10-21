@@ -346,15 +346,21 @@ useGsapMatchMedia(sectionEl, (ctx) => {
   );
 }
 
+/* The hover lift uses the individual translate/scale properties: the float-y
+   idle animation owns `transform`, and a running animation would override a
+   hover transform. */
 .home-hero-portrait {
-  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.home-hero-portrait:hover {
-  transform: translate3d(0, -0.25rem, 0) scale(1.01);
+  transition:
+    translate 500ms var(--motion-emphasized),
+    scale 500ms var(--motion-emphasized);
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  .home-hero-portrait:hover {
+    translate: 0 -0.25rem;
+    scale: 1.01;
+  }
+
   .now-dot-ping {
     animation: now-ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
   }

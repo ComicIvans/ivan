@@ -191,3 +191,15 @@ useGsapMatchMedia(sectionEl, (ctx) => {
     </div>
   </section>
 </template>
+
+<style scoped>
+/* Full motion tier (the same query as useMotionTier's 'full'): the scrubbed
+   parallax owns the tile transform. The .reveal entrance animates transform
+   too, and a running CSS animation would override it, so the tiles keep the
+   CSS entrance only on the other tiers. */
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .gallery-tile {
+    animation: none;
+  }
+}
+</style>
