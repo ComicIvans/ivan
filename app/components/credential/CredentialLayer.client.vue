@@ -114,6 +114,19 @@ onMounted(async () => {
 
   let settled = false
 
+  // The homing loop sleeps while the badge is parked on its dock; scrolling,
+  // resizing, layout changes and a new active dock wake it again.
+  let homing = false
+  const wake = () => {
+    if (homing) return
+    homing = true
+    gsap.ticker.add(home)
+  }
+  const sleep = () => {
+    homing = false
+    gsap.ticker.remove(home)
+  }
+
   // Hero lanyard: the badge hangs from a thread reaching the viewport top
   // while docked at the hero; it lets go as soon as the journey starts.
   const lanyard = lanyardEl.value
@@ -161,6 +174,7 @@ onMounted(async () => {
   }
 
   const stopLanyardWatch = watch(active, (id, previousId) => {
+    wake()
     if (id === 'inicio') drawLanyard()
     else if (previousId === 'inicio') releaseLanyard()
   })
@@ -195,6 +209,7 @@ onMounted(async () => {
         box.classList.remove('in-transit')
         settled = true
       }
+      sleep()
       return
     }
     if (settled) {
@@ -216,7 +231,15 @@ onMounted(async () => {
       gsap.set(box, { x: pos.x, y: pos.y })
     }
   }
-  gsap.ticker.add(home)
+
+  window.addEventListener('scroll', wake, { passive: true })
+  window.addEventListener('resize', wake)
+  ScrollTrigger.addEventListener('refresh', wake)
+  document.fonts.addEventListener('loadingdone', wake)
+  // Content above a dock growing or shrinking (images, fonts, form errors).
+  const layoutObserver = new ResizeObserver(wake)
+  layoutObserver.observe(document.documentElement)
+  wake()
 
   // One trigger per section feeds `active` — ignored mid-jump. Kept in a list
   // so the scrollEnd handler can re-derive the truth after a jump.
@@ -256,7 +279,12 @@ onMounted(async () => {
   ScrollTrigger.addEventListener('scrollEnd', onScrollEnd)
 
   cleanup = () => {
-    gsap.ticker.remove(home)
+    sleep()
+    window.removeEventListener('scroll', wake)
+    window.removeEventListener('resize', wake)
+    ScrollTrigger.removeEventListener('refresh', wake)
+    document.fonts.removeEventListener('loadingdone', wake)
+    layoutObserver.disconnect()
     stopLanyardWatch()
     lanyardTween?.kill()
     ScrollTrigger.removeEventListener('scrollEnd', onScrollEnd)
