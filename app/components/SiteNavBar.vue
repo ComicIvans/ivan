@@ -228,7 +228,7 @@ onBeforeUnmount(() => {
             <UIcon :name="themeToggleIcon" class="size-5" aria-hidden="true" />
           </button>
 
-          <HeaderLocaleSwitcher variant="compact" menu-id="navbar-locale-menu" />
+          <HeaderLocaleSwitcher menu-id="navbar-locale-menu" />
         </div>
       </div>
 

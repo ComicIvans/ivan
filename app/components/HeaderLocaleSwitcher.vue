@@ -8,8 +8,6 @@ import {
 } from '~/utils/locales'
 
 defineProps<{
-  /** 'full' = labelled pill (desktop), 'compact' = icon-only button (mobile). */
-  variant: 'full' | 'compact'
   menuId: string
 }>()
 
@@ -60,29 +58,6 @@ const selectLocale = (code: string) => {
 <template>
   <div ref="rootRef" class="relative">
     <button
-      v-if="variant === 'full'"
-      ref="triggerRef"
-      type="button"
-      class="border-default bg-default text-highlighted focus-visible:ring-primary-500 flex min-w-36 cursor-pointer list-none items-center justify-between gap-3 rounded-full border px-4 py-2 text-sm font-medium focus-visible:ring-2 focus-visible:outline-none"
-      :aria-label="t('language.toggle')"
-      :aria-expanded="open"
-      :aria-controls="menuId"
-      @click="toggle"
-    >
-      <span class="flex items-center gap-2">
-        <UIcon :name="currentLocale.icon" class="size-4" aria-hidden="true" />
-        <span>{{ currentLocale.name }}</span>
-      </span>
-      <UIcon
-        name="i-tabler-chevron-down"
-        class="size-4 transition-transform duration-200"
-        :class="{ 'rotate-180': open }"
-        aria-hidden="true"
-      />
-    </button>
-
-    <button
-      v-else
       ref="triggerRef"
       type="button"
       class="focus-visible:ring-primary-500 inline-flex size-10 items-center justify-center rounded-full focus-visible:ring-2 focus-visible:outline-none"
