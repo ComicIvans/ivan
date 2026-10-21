@@ -1,7 +1,7 @@
 <script setup lang="ts">
-// This component is only mounted on desktop-class pointers without reduced
-// motion (gated by LayoutShell via useDesktopPointerSupport), so it does not
-// re-check those media queries itself.
+// This component is only mounted on the full motion tier (desktop-class
+// pointers without reduced motion; LayoutShell gates it with useMotionTier),
+// so it does not re-check those media queries itself.
 const glowRef = ref<HTMLElement | null>(null)
 
 let rafId = 0

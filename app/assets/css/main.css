@@ -87,13 +87,8 @@ html {
   --motion-page-distance: 0.75rem;
   --motion-section-distance: 0.5rem;
   --motion-page-duration: 280ms;
-  --motion-section-duration: 260ms;
-  --motion-section-stagger: 45ms;
-  /* Accent-as-light tokens */
-  --glow: var(--color-ember-400);
+  /* Accent-as-light token */
   --glow-soft: color-mix(in oklab, var(--color-ember-400) 25%, transparent);
-  --accent-secondary: var(--color-amber-400);
-  --accent-ambient: var(--color-blue-500);
 }
 
 body {
@@ -170,14 +165,6 @@ textarea,
     .ink-gradient {
       animation: ink-sweep 9s var(--motion-emphasized) infinite;
     }
-  }
-
-  /* Short gradient rule used under section headings */
-  .heading-rule {
-    height: 3px;
-    width: 2.5rem;
-    border-radius: 9999px;
-    background: linear-gradient(90deg, var(--color-ember-500), var(--color-amber-400));
   }
 
   /* ---------------------------------------------------------------- */
@@ -342,9 +329,8 @@ textarea,
   /* Motion utilities                                                  */
   /* ---------------------------------------------------------------- */
 
-  /* One lift behavior; the historical aliases share the same block */
+  /* One lift behavior for static cards and linked cards */
   .motion-card,
-  .motion-card-strong,
   .motion-link-card {
     transition:
       transform 300ms var(--motion-emphasized),
@@ -360,7 +346,6 @@ textarea,
       @apply -translate-y-0.5 shadow-md;
     }
 
-    .motion-card-strong:hover,
     .motion-link-card:hover {
       @apply -translate-y-0.5 shadow-lg;
     }
@@ -417,16 +402,6 @@ textarea,
         animation-range: entry 0% entry 60%;
       }
     }
-  }
-
-  /* Legacy mount-time entrances, kept while pages migrate to .reveal/GSAP */
-  .section-enter {
-    animation: fadeSlideUp var(--motion-section-duration) var(--motion-emphasized) forwards;
-  }
-
-  .section-stagger > * {
-    animation: fadeSlideUp calc(var(--motion-section-duration) + 20ms) var(--motion-emphasized) both;
-    animation-delay: calc(var(--stagger-index, 0) * var(--motion-section-stagger));
   }
 
   /* Reading progress hairline under the sticky header (CSS-only) */
@@ -625,8 +600,6 @@ textarea,
     scroll-behavior: auto !important;
   }
 
-  .section-enter,
-  .section-stagger > *,
   .reveal {
     animation: none !important;
     opacity: 1 !important;

@@ -15,8 +15,7 @@
     "title": "Iván Salido Cobo",
     "subtitle": "Cybersicherheit, Strategie und Projektmanagement",
     "profileAlt": "Profilfoto von Iván Salido Cobo",
-    "jokeButton": "Zufälligen Witz anzeigen",
-    "content": "Inhalt"
+    "jokeButton": "Zufälligen Witz anzeigen"
   },
   "nav": {
     "home": "Startseite",
@@ -38,7 +37,6 @@
   },
   "home": {
     "hero": {
-      "title": "Hi, ich bin Iván",
       "pitch": "Ich habe Mathematik studiert und mich auf Cybersicherheit spezialisiert. Derzeit absolviere ich den Masterstudiengang in Unternehmens-, Produkt- und Dienstleistungsmanagement an der UPV und verbringe einen Erasmus+-Aufenthalt an der Hochschule Ansbach in Deutschland. Ich verbinde Webentwicklung und die Verwaltung digitaler Infrastruktur mit Projektkoordination und studentischer Vertretung.",
       "titleLead": "Hi, ich bin",
       "titleAccent": "Iván",
@@ -158,11 +156,8 @@
         "prev": "Vorheriges Foto",
         "next": "Nächstes Foto",
         "close": "Schließen",
-        "loading": "Bild wird geladen...",
         "position": "Foto {current} von {total}",
         "zoomIn": "Vergrößern",
-        "zoomOut": "Verkleinern",
-        "resetZoom": "Zoom zurücksetzen",
         "error": "Das Bild konnte nicht geladen werden."
       }
     }
@@ -195,14 +190,10 @@
     "profileLabel": "{network}-Profil von Iván Salido Cobo (öffnet in einem neuen Tab)"
   },
   "theme": {
-    "toggle": "Design wechseln",
-    "light": "Helles Design",
-    "dark": "Dunkles Design"
+    "toggle": "Design wechseln"
   },
   "language": {
-    "toggle": "Sprache wechseln",
-    "es": "Spanisch",
-    "en": "Englisch"
+    "toggle": "Sprache wechseln"
   },
   "legal": {
     "title": "Impressum und Datenschutzerklärung",

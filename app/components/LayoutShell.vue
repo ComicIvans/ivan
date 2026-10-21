@@ -11,7 +11,8 @@ withDefaults(
   { masthead: true }
 )
 
-const showCursorGlow = useDesktopPointerSupport()
+const motionTier = useMotionTier()
+const showCursorGlow = computed(() => motionTier.value === 'full')
 </script>
 
 <template>

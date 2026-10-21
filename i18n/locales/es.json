@@ -15,8 +15,7 @@
     "title": "Iván Salido Cobo",
     "subtitle": "Ciberseguridad, Estrategia y Gestión de Proyectos",
     "profileAlt": "Fotografía de perfil de Iván Salido Cobo",
-    "jokeButton": "Mostrar un chiste aleatorio",
-    "content": "Contenido"
+    "jokeButton": "Mostrar un chiste aleatorio"
   },
   "nav": {
     "home": "Inicio",
@@ -38,7 +37,6 @@
   },
   "home": {
     "hero": {
-      "title": "¡Hola! Soy Iván",
       "pitch": "Soy graduado en Matemáticas y especialista en Ciberseguridad. Curso el Máster en Gestión de Empresas, Productos y Servicios de la UPV y actualmente realizo una estancia Erasmus+ en Hochschule Ansbach, Alemania. Combino el desarrollo web y la gestión de infraestructura digital con la coordinación de proyectos y la representación estudiantil.",
       "titleLead": "¡Hola! Soy",
       "titleAccent": "Iván",
@@ -158,11 +156,8 @@
         "prev": "Foto anterior",
         "next": "Foto siguiente",
         "close": "Cerrar",
-        "loading": "Cargando imagen...",
         "position": "Foto {current} de {total}",
         "zoomIn": "Aumentar zoom",
-        "zoomOut": "Reducir zoom",
-        "resetZoom": "Restablecer zoom",
         "error": "No se ha podido cargar la imagen."
       }
     }
@@ -195,14 +190,10 @@
     "profileLabel": "Perfil de {network} de Iván Salido Cobo (se abre en una pestaña nueva)"
   },
   "theme": {
-    "toggle": "Cambiar tema",
-    "light": "Tema claro",
-    "dark": "Tema oscuro"
+    "toggle": "Cambiar tema"
   },
   "language": {
-    "toggle": "Cambiar idioma",
-    "es": "Español",
-    "en": "English"
+    "toggle": "Cambiar idioma"
   },
   "legal": {
     "title": "Aviso legal y política de privacidad",
