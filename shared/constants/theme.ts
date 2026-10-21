@@ -1,6 +1,7 @@
 /**
  * Brand hex values for contexts that cannot read CSS custom properties
- * (the <meta theme-color> tag, WebGL shader uniforms). Keep these in sync
+ * (the <meta theme-color> tag, WebGL shader uniforms, the Satori-rendered
+ * OG image). Keep these in sync
  * with the `ember`/amber/blue tokens declared in app/assets/css/main.css's
  * `@theme` block — they are the same ramp, just duplicated for JS-only use.
  */

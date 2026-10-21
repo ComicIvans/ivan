@@ -28,7 +28,7 @@ const { academic, languages, certifications, competencies } = useProfile()
                 class="flex size-14 shrink-0 items-center justify-center self-start rounded-xl"
                 :class="
                   item.current
-                    ? 'bg-amber-500/10 shadow-[0_0_24px_-6px_rgb(245_158_11_/_0.35)]'
+                    ? 'bg-amber-500/10 shadow-[0_0_24px_-6px_color-mix(in_oklab,var(--color-amber-500)_35%,transparent)]'
                     : 'bg-elevated'
                 "
               >

@@ -24,7 +24,8 @@ const filledClass = computed(
   () =>
     ({
       ember: 'bg-primary-500 shadow-[0_0_10px_-2px_var(--glow-soft)]',
-      amber: 'bg-amber-500 shadow-[0_0_10px_-2px_rgb(245_158_11_/_0.45)]',
+      amber:
+        'bg-amber-500 shadow-[0_0_10px_-2px_color-mix(in_oklab,var(--color-amber-500)_45%,transparent)]',
     })[props.accent]
 )
 
