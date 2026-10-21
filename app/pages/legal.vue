@@ -62,7 +62,13 @@ usePageSeo('legal.title', 'seo.pages.legal', { robots: 'noindex, follow' })
               <li>
                 <strong>{{ t('legal.siteInfo.email') }}:</strong>
                 <span class="mr-1" />
-                <ULink :to="{ path: localePath('/'), hash: '#contacto' }" class="inline-link">
+                <!-- raw + not-prose: ULink's colour utility and the prose link colour
+                     would both override .inline-link -->
+                <ULink
+                  :to="{ path: localePath('/'), hash: '#contacto' }"
+                  raw
+                  class="inline-link not-prose"
+                >
                   {{ t('legal.siteInfo.contactForm') }}
                 </ULink>
               </li>

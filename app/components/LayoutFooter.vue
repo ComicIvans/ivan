@@ -7,6 +7,8 @@ const localePath = useLocalePath()
 
 <template>
   <footer class="footer-band text-toned p-4 pb-6 md:pb-4" role="contentinfo">
+    <!-- The text links are raw ULinks: the default ULink colour utilities
+         would override .inline-link and .muted-link. -->
     <div
       class="mx-auto flex w-11/12 max-w-7xl flex-col items-center gap-4 pt-2 text-center md:grid md:grid-cols-[auto_1fr_auto] md:items-center md:gap-8"
     >
@@ -22,6 +24,7 @@ const localePath = useLocalePath()
                 :to="profileRepositoryUrl"
                 target="_blank"
                 rel="noopener noreferrer"
+                raw
                 class="inline-link"
               >
                 {{ t('footer.github') }}
@@ -32,7 +35,12 @@ const localePath = useLocalePath()
       </div>
 
       <!-- Legal notice -->
-      <ULink :to="localePath('/legal')" class="muted-link text-sm md:text-center">
+      <ULink
+        :to="localePath('/legal')"
+        raw
+        class="muted-link text-sm md:text-center"
+        active-class="text-primary"
+      >
         {{ t('legal.title') }}
       </ULink>
 
