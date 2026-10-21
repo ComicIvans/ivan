@@ -298,7 +298,8 @@ watch(locale, async () => {
           :class="lastLeadTileClass"
           @click="scrollToSection('experiencia')"
         >
-          <p class="text-primary flex items-center gap-2 text-xs font-medium tracking-wide">
+          <!-- Phrasing content only inside a button: spans, not paragraphs -->
+          <span class="text-primary flex items-center gap-2 text-xs font-medium tracking-wide">
             <span class="relative flex size-2" aria-hidden="true">
               <span
                 class="now-dot-ping bg-primary-500 absolute inline-flex size-full rounded-full"
@@ -306,13 +307,13 @@ watch(locale, async () => {
               <span class="bg-primary-500 relative inline-flex size-2 rounded-full" />
             </span>
             {{ t('home.now.title') }}
-          </p>
-          <p class="text-highlighted mt-3 font-semibold">
+          </span>
+          <span class="text-highlighted mt-3 block font-semibold">
             {{ currentRole.title }}
-          </p>
-          <p class="text-muted mt-1 text-sm leading-snug">
+          </span>
+          <span class="text-muted mt-1 block text-sm leading-snug">
             {{ currentRole.organization }}
-          </p>
+          </span>
         </button>
 
         <div

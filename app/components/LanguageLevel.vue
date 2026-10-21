@@ -6,9 +6,12 @@ const props = withDefaults(
     /** CEFR level; 'native' lights the full scale. */
     level: (typeof CEFR_SCALE)[number] | 'native'
     levelLabel: string
+    /** Space-separated ids of the elements that name the meter. */
+    labelledby?: string
     accent?: 'ember' | 'amber'
   }>(),
   {
+    labelledby: undefined,
     accent: 'amber',
   }
 )
@@ -26,6 +29,9 @@ const filledClass = computed(
 )
 
 const root = useTemplateRef<HTMLElement>('root')
+// The segments only start empty once JS can fill them in: the server
+// rendered (and no-JS) meter shows the level.
+const armed = ref(false)
 const revealed = ref(false)
 let observer: IntersectionObserver | null = null
 
@@ -34,6 +40,7 @@ onMounted(() => {
     revealed.value = true
     return
   }
+  armed.value = true
   const el = root.value
   if (!el) {
     revealed.value = true
@@ -58,10 +65,12 @@ onBeforeUnmount(() => observer?.disconnect())
   <div
     ref="root"
     role="meter"
+    :aria-labelledby="labelledby"
     :aria-valuemin="0"
     :aria-valuemax="CEFR_SCALE.length"
     :aria-valuenow="filledCount"
     :aria-valuetext="levelLabel"
+    :class="{ 'is-armed': armed }"
   >
     <div class="flex items-center gap-1.5">
       <span
@@ -86,15 +95,15 @@ onBeforeUnmount(() => observer?.disconnect())
 <style scoped>
 /* Filled segments sweep in left-to-right once the meter enters the viewport */
 @media (prefers-reduced-motion: no-preference) {
-  .segment-fill {
+  .is-armed .segment-fill {
     transform: scaleX(0);
     transform-origin: left center;
-    transition: transform 400ms var(--motion-emphasized);
-    transition-delay: calc(var(--segment-index, 0) * 90ms);
   }
 
-  .segment-fill.segment-on {
+  .is-armed .segment-fill.segment-on {
     transform: scaleX(1);
+    transition: transform 400ms var(--motion-emphasized);
+    transition-delay: calc(var(--segment-index, 0) * 90ms);
   }
 }
 </style>

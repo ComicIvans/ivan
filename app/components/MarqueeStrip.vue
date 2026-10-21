@@ -17,10 +17,10 @@ withDefaults(
   <div
     class="marquee group relative overflow-hidden"
     :style="{ '--marquee-duration': `${duration}s` }"
-    :aria-label="ariaLabel"
   >
     <div class="marquee-track flex w-max items-center gap-8">
-      <ul class="flex items-center gap-8">
+      <!-- The label names the list: a generic div cannot carry one -->
+      <ul class="flex items-center gap-8" :aria-label="ariaLabel">
         <li v-for="item in items" :key="item.label" class="text-muted flex items-center gap-2">
           <UIcon v-if="item.icon" :name="item.icon" class="size-5 shrink-0" aria-hidden="true" />
           <span class="text-sm font-medium whitespace-nowrap">{{ item.label }}</span>

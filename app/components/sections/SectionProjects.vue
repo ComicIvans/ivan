@@ -124,9 +124,9 @@ useGsapMatchMedia(sceneEl, (ctx) => {
         accent="ember"
       />
 
-      <h3 class="text-muted mb-4 text-lg font-semibold">
+      <h4 class="text-muted mb-4 text-lg font-semibold">
         {{ t('projects.stack.primary.title') }}
-      </h3>
+      </h4>
       <div class="mb-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <UCard v-for="tech in stack.primary" :key="tech.id" v-spotlight class="motion-card">
           <div class="flex items-center gap-3">
@@ -136,15 +136,15 @@ useGsapMatchMedia(sceneEl, (ctx) => {
             >
               <UIcon :name="tech.icon" class="size-6" aria-hidden="true" />
             </div>
-            <h4 class="font-bold">{{ tech.name }}</h4>
+            <h5 class="font-bold">{{ tech.name }}</h5>
           </div>
           <p v-if="tech.description" class="text-muted mt-2 text-sm">{{ tech.description }}</p>
         </UCard>
       </div>
 
-      <h3 class="text-muted mb-4 text-lg font-semibold">
+      <h4 class="text-muted mb-4 text-lg font-semibold">
         {{ t('projects.stack.secondary.title') }}
-      </h3>
+      </h4>
       <div class="flex flex-wrap gap-3">
         <div
           v-for="tech in stack.secondary"
@@ -200,7 +200,7 @@ useGsapMatchMedia(sceneEl, (ctx) => {
             </div>
             <div class="p-4 sm:p-6">
               <p v-if="project.year" class="text-muted font-mono text-xs">{{ project.year }}</p>
-              <h3 class="text-lg font-bold">{{ project.title }}</h3>
+              <h4 class="text-lg font-bold">{{ project.title }}</h4>
               <p class="text-muted mt-2">{{ project.description }}</p>
               <dl v-if="project.metrics.length" class="mt-3 flex flex-wrap gap-x-6 gap-y-2">
                 <div v-for="metric in project.metrics" :key="metric.label">

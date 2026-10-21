@@ -41,7 +41,7 @@ const { academic, languages, certifications, competencies } = useProfile()
               </div>
               <div class="flex-1">
                 <div class="flex flex-wrap items-center gap-2">
-                  <h3 class="text-lg font-bold">{{ item.title }}</h3>
+                  <h4 class="text-lg font-bold">{{ item.title }}</h4>
                   <UBadge :color="item.current ? 'warning' : 'neutral'" size="sm">
                     {{ item.period }}
                   </UBadge>
@@ -72,14 +72,22 @@ const { academic, languages, certifications, competencies } = useProfile()
               <div class="flex items-center gap-3">
                 <UIcon :name="lang.flag" class="size-10" aria-hidden="true" />
                 <div>
-                  <h3 class="font-bold">{{ lang.name }}</h3>
+                  <h4 :id="`${id}-lang-${lang.id}`" class="font-bold">{{ lang.name }}</h4>
                   <p class="text-toned text-sm">{{ lang.level }}</p>
                 </div>
               </div>
               <p class="text-muted mt-2 text-sm">{{ lang.description }}</p>
               <div class="mt-4">
-                <p class="text-muted mb-2 text-xs">{{ t('training.languages.proficiency') }}</p>
-                <LanguageLevel :level="lang.cefr" :level-label="lang.level" accent="amber" />
+                <p :id="`${id}-lang-${lang.id}-meter`" class="text-muted mb-2 text-xs">
+                  {{ t('training.languages.proficiency') }}
+                </p>
+                <!-- Meter name: the label above plus the language name -->
+                <LanguageLevel
+                  :level="lang.cefr"
+                  :level-label="lang.level"
+                  :labelledby="`${id}-lang-${lang.id}-meter ${id}-lang-${lang.id}`"
+                  accent="amber"
+                />
               </div>
             </UCard>
           </div>
@@ -107,7 +115,7 @@ const { academic, languages, certifications, competencies } = useProfile()
                     aria-hidden="true"
                   />
                 </div>
-                <h3 class="font-bold">{{ item.title }}</h3>
+                <h4 class="font-bold">{{ item.title }}</h4>
                 <p class="text-muted text-sm">
                   {{ item.description }}
                 </p>

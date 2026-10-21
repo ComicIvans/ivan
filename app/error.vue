@@ -84,16 +84,18 @@ useSeoMeta({
         <div class="surface-glass w-full max-w-md rounded-2xl p-4 sm:p-6">
           <div class="relative">
             <div class="error-bloom" aria-hidden="true" />
-            <h1
+            <!-- Decorative status code: the title below is the page heading -->
+            <p
               class="type-display ink-gradient relative text-[8rem] leading-none tracking-tight sm:text-9xl"
+              aria-hidden="true"
             >
               {{ error?.statusCode || 500 }}
-            </h1>
+            </p>
           </div>
 
-          <h2 class="mt-4 text-2xl font-semibold sm:text-3xl">
+          <h1 class="mt-4 text-2xl font-semibold sm:text-3xl">
             {{ errorTitle }}
-          </h2>
+          </h1>
 
           <p class="text-muted mt-2">
             {{ errorDescription }}

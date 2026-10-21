@@ -99,7 +99,7 @@ function dotClass(index: number) {
               {{ currentLabel }}
             </UBadge>
           </div>
-          <p class="text-highlighted mt-1.5 text-base font-semibold">{{ item.title }}</p>
+          <h3 class="text-highlighted mt-1.5 text-base font-semibold">{{ item.title }}</h3>
           <p v-if="item.organization" class="text-toned mt-0.5 text-sm font-medium">
             {{ item.organization }}
           </p>
