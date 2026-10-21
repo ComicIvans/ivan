@@ -477,8 +477,9 @@ textarea,
   /* Links                                                             */
   /* ---------------------------------------------------------------- */
 
+  /* The hover fade stops at 90% so the text keeps 4.5:1 on every surface. */
   .inline-link {
-    @apply text-primary-700 dark:text-primary-400 font-medium underline decoration-current underline-offset-3 transition-opacity hover:opacity-80;
+    @apply text-primary-700 dark:text-primary-400 font-medium underline decoration-current underline-offset-3 transition-opacity hover:opacity-90;
   }
 
   .muted-link {
