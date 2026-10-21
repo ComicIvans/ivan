@@ -22,6 +22,16 @@ function accentStyle(accent: { from: string; to: string } | undefined) {
   return { '--card-accent': `var(--color-${from})`, '--card-accent-2': `var(--color-${to})` }
 }
 
+// An engine without :focus-visible throws here; count its focus as keyboard
+// focus so the clipped cards stay reachable there.
+function isKeyboardFocus(el: Element) {
+  try {
+    return el.matches(':focus-visible')
+  } catch {
+    return true
+  }
+}
+
 const sceneEl = useTemplateRef<HTMLElement>('sceneEl')
 const trackEl = useTemplateRef<HTMLElement>('trackEl')
 const journey = useCredentialJourney()
@@ -84,8 +94,13 @@ function setupScene(ctx: gsap.Context) {
 
     // Keyboard focus: the clipped row cannot scroll itself into view, so move
     // the page to the scroll position where the focused card is parked.
+    // Pointer focus is left alone: Chromium focuses a link on mousedown, and
+    // jumping then would slide the link away before mouseup and swallow the
+    // click.
     const onFocusIn = (event: FocusEvent) => {
-      const card = event.target instanceof Element ? event.target.closest('.project-card') : null
+      const target = event.target
+      if (!(target instanceof Element) || !isKeyboardFocus(target)) return
+      const card = target.closest('.project-card')
       const index = card ? cards.indexOf(card as HTMLElement) : -1
       if (!pin || index < 0) return
       const progress = cards.length > 1 ? index / (cards.length - 1) : 0
