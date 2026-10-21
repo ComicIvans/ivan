@@ -1,9 +1,28 @@
 <script setup lang="ts">
-import { SECTION_IDS } from '~/components/credential/credentialVariants'
+import type { Component } from 'vue'
+import SectionContact from '~/components/sections/SectionContact.vue'
+import SectionExperience from '~/components/sections/SectionExperience.vue'
+import SectionGallery from '~/components/sections/SectionGallery.vue'
+import SectionHero from '~/components/sections/SectionHero.vue'
+import SectionProjects from '~/components/sections/SectionProjects.vue'
+import SectionRepresentation from '~/components/sections/SectionRepresentation.vue'
+import SectionTraining from '~/components/sections/SectionTraining.vue'
+import { SECTIONS, type SectionId } from '~/utils/sections'
 
 usePageSeo('seo.pageTitle', 'seo.description')
 
-const sectionIds = SECTION_IDS
+// Rendered in SECTIONS order; the record type makes a section without a
+// component a type error.
+const sectionComponents: Record<SectionId, Component> = {
+  inicio: SectionHero,
+  experiencia: SectionExperience,
+  representacion: SectionRepresentation,
+  proyectos: SectionProjects,
+  formacion: SectionTraining,
+  galeria: SectionGallery,
+  contacto: SectionContact,
+}
+
 const tier = useMotionTier()
 
 // The layer must stay absent during hydration: SSR renders a comment for the
@@ -23,15 +42,14 @@ await loadProfile()
 
 <template>
   <div>
-    <SectionDotRail :section-ids="[...sectionIds]" />
+    <SectionDotRail />
     <!-- Traveling credential badge: home only, full motion tier only -->
     <LazyCredentialLayer v-if="hydrated && tier === 'full'" />
-    <SectionHero id="inicio" />
-    <SectionExperience id="experiencia" />
-    <SectionRepresentation id="representacion" />
-    <SectionProjects id="proyectos" />
-    <SectionTraining id="formacion" />
-    <SectionGallery id="galeria" />
-    <SectionContact id="contacto" />
+    <component
+      :is="sectionComponents[section.id]"
+      v-for="section in SECTIONS"
+      :id="section.id"
+      :key="section.id"
+    />
   </div>
 </template>

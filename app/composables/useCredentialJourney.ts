@@ -1,4 +1,5 @@
-import { variantsById, type SectionId } from '~/components/credential/credentialVariants'
+import { variantsById } from '~/components/credential/credentialVariants'
+import type { SectionId } from '~/utils/sections'
 
 /**
  * Singleton state for the traveling credential badge. Anchors register their

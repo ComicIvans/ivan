@@ -1,21 +1,5 @@
+import type { SectionId } from '~/utils/sections'
 import type { EmblemName } from './emblems'
-
-/**
- * Single source of truth for the one-page section ids. The home orchestrator,
- * the navbar scroll spy, the dot rail and the credential journey all consume
- * this list; keeping it here avoids drifting copies.
- */
-export const SECTION_IDS = [
-  'inicio',
-  'experiencia',
-  'representacion',
-  'proyectos',
-  'formacion',
-  'galeria',
-  'contacto',
-] as const
-
-export type SectionId = (typeof SECTION_IDS)[number]
 
 export interface CredentialVariant {
   id: SectionId

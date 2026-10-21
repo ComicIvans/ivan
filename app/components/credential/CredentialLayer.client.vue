@@ -7,7 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
 import { MorphSVGPlugin } from 'gsap/MorphSVGPlugin'
 import { emblems } from './emblems'
-import { SECTION_IDS } from './credentialVariants'
+import { SECTION_IDS } from '~/utils/sections'
 import type CredentialBadge from './CredentialBadge.vue'
 
 gsap.registerPlugin(DrawSVGPlugin, MorphSVGPlugin)

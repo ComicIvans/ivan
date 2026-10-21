@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { variantsById, type SectionId } from './credentialVariants'
+import type { SectionId } from '~/utils/sections'
+import { variantsById } from './credentialVariants'
 
 const props = defineProps<{ section: SectionId }>()
 

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { SECTIONS, SECTION_IDS, type SectionId } from '~/utils/sections'
+
 const { t, locale } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
 const route = useRoute()
@@ -9,23 +11,9 @@ const { jokeModalOpen, currentJoke, showRandomJoke, resetJokes } = useJokes()
 
 const mobileMenuOpen = ref(false)
 
-interface NavTab {
-  id: string
-  icon: string
-  label: string
-}
-
-const tabs = computed<NavTab[]>(() => [
-  { id: 'inicio', icon: 'i-tabler-home', label: t('nav.home') },
-  { id: 'experiencia', icon: 'i-tabler-briefcase', label: t('nav.experience') },
-  { id: 'representacion', icon: 'i-tabler-building-bank', label: t('nav.representation') },
-  { id: 'proyectos', icon: 'i-tabler-code', label: t('nav.projects') },
-  { id: 'formacion', icon: 'i-tabler-school', label: t('nav.training') },
-  { id: 'galeria', icon: 'i-tabler-photo', label: t('nav.gallery') },
-  { id: 'contacto', icon: 'i-tabler-mail', label: t('nav.contact') },
-])
-
-const sectionIds = computed(() => tabs.value.map((tab) => tab.id))
+const tabs = computed(() =>
+  SECTIONS.map((section) => ({ id: section.id, icon: section.icon, label: t(section.navKey) }))
+)
 
 const normalizePath = (path: string) =>
   path !== '/' && path.endsWith('/') ? path.slice(0, -1) : path
@@ -36,7 +24,7 @@ const isGalleryRoute = computed(() =>
   normalizePath(route.path).startsWith(normalizePath(localePath('/galeria')))
 )
 
-const { activeId } = useScrollSpy(sectionIds.value)
+const { activeId } = useScrollSpy(SECTION_IDS)
 
 // Which pill is highlighted: sections via scroll spy on the home, the gallery
 // tab anywhere under the gallery routes, nothing on /legal.
@@ -77,13 +65,13 @@ const syncIndicators = async () => {
 
 const journey = useCredentialJourney()
 
-function activateSection(id: string) {
+function activateSection(id: SectionId) {
   mobileMenuOpen.value = false
   const el = document.getElementById(id)
   if (!el) return
   // Send the credential badge straight to the target; safe no-op when the
   // traveling layer is not mounted (other tiers/routes).
-  journey.jumpTo(id as Parameters<typeof journey.jumpTo>[0])
+  journey.jumpTo(id)
   window.setTimeout(() => {
     const heading = el.querySelector<HTMLElement>('h1, h2')
     if (!heading) return

@@ -1,25 +1,15 @@
 <script setup lang="ts">
-const props = defineProps<{ sectionIds: string[] }>()
+import { SECTIONS, SECTION_IDS, type SectionId } from '~/utils/sections'
 
 const { t } = useI18n({ useScope: 'global' })
 
-const labelKeys: Record<string, string> = {
-  inicio: 'nav.home',
-  experiencia: 'nav.experience',
-  representacion: 'nav.representation',
-  proyectos: 'nav.projects',
-  formacion: 'nav.training',
-  galeria: 'nav.gallery',
-  contacto: 'nav.contact',
-}
-
-const { activeId } = useScrollSpy(props.sectionIds)
+const { activeId } = useScrollSpy(SECTION_IDS)
 const journey = useCredentialJourney()
 
-function activateSection(id: string) {
+function activateSection(id: SectionId) {
   const el = document.getElementById(id)
   if (!el) return
-  journey.jumpTo(id as Parameters<typeof journey.jumpTo>[0])
+  journey.jumpTo(id)
   window.setTimeout(() => {
     const heading = el.querySelector<HTMLElement>('h1, h2')
     if (!heading) return
@@ -35,14 +25,14 @@ function activateSection(id: string) {
     class="fixed top-1/2 right-6 z-30 hidden -translate-y-1/2 flex-col gap-3 xl:flex"
   >
     <NuxtLink
-      v-for="id in sectionIds"
-      :key="id"
-      :to="`#${id}`"
+      v-for="section in SECTIONS"
+      :key="section.id"
+      :to="`#${section.id}`"
       class="dot-btn inline-flex cursor-pointer items-center justify-center rounded-full"
-      :class="{ 'is-active': activeId === id }"
-      :aria-label="t(labelKeys[id] ?? 'nav.home')"
-      :aria-current="activeId === id ? 'true' : undefined"
-      @click="activateSection(id)"
+      :class="{ 'is-active': activeId === section.id }"
+      :aria-label="t(section.navKey)"
+      :aria-current="activeId === section.id ? 'true' : undefined"
+      @click="activateSection(section.id)"
     >
       <span aria-hidden="true" />
     </NuxtLink>
