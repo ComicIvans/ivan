@@ -13,13 +13,15 @@ function toSearchText(value: string, locale: string): string {
 }
 
 /**
- * Composable for querying gallery events with filters, search, and pagination
- * Events are loaded from Spanish (es) as base and merged with current locale translations
+ * Starts the request for the gallery event summaries in the current locale, or
+ * joins the one already running. The home awaits it in setup, as it does with
+ * the profile, so the sections that show events mount at their final height
+ * before the router scrolls to a hash after a client-side navigation.
  */
-export function useGalleryEvents(options: Ref<GalleryQueryOptions> = ref({})) {
+export function loadGalleryEvents() {
   const { locale } = useI18n({ useScope: 'global' })
 
-  const { data: allEvents, status } = useAsyncData(
+  return useAsyncData(
     () => `gallery-events-${locale.value}`,
     () =>
       $fetch<GalleryEventSummary[]>('/api/gallery/events', {
@@ -28,8 +30,21 @@ export function useGalleryEvents(options: Ref<GalleryQueryOptions> = ref({})) {
     {
       watch: [locale],
       getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key] ?? nuxtApp.static.data[key],
+      // Several sections ask at once: join the pending request instead of
+      // cancelling it and starting another one per caller.
+      dedupe: 'defer',
     }
   )
+}
+
+/**
+ * Composable for querying gallery events with filters, search, and pagination
+ * Events are loaded from Spanish (es) as base and merged with current locale translations
+ */
+export function useGalleryEvents(options: Ref<GalleryQueryOptions> = ref({})) {
+  const { locale } = useI18n({ useScope: 'global' })
+
+  const { data: allEvents, status } = loadGalleryEvents()
 
   const filteredEvents = computed(() => {
     if (!allEvents.value) return []

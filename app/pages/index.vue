@@ -65,10 +65,12 @@ function holdInitialHashTarget() {
 }
 
 // Mount the sections with their content in place. After a client-side
-// navigation the profile is fetched here, and the sections' mount-time GSAP
-// setups (pinned project track, credential thread) and the hash scroll would
-// otherwise measure empty lists.
-await loadProfile()
+// navigation the profile and the gallery events are fetched here: without
+// them the sections' mount-time GSAP setups (pinned project track, credential
+// thread) would measure empty lists, and the router's hash scroll would land
+// before the hero's latest-event tile and the gallery mosaic add their height
+// above #contacto.
+await Promise.all([loadProfile(), loadGalleryEvents()])
 </script>
 
 <template>
