@@ -3,7 +3,7 @@ export type MotionTier = 'full' | 'lite' | 'static'
 /**
  * Capability ladder for every JS-driven effect:
  * - 'full': fine pointer, hover, >=1024px, motion allowed — spotlight, tilt,
- *   magnetic hover, WebGL and text choreography may run.
+ *   magnetic hover, WebGL, scrubbed parallax and text choreography may run.
  * - 'lite': motion allowed but touch/small viewport — short transform/opacity
  *   reveals only.
  * - 'static': prefers-reduced-motion — a designed still composition.

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui'
-import gsap from 'gsap'
 import { contactFormSchema, type ContactFormData } from '~~/shared/utils/contactValidation'
 import { CONTACT_FIELD_LIMITS } from '~~/shared/utils/contactShared'
 
@@ -33,26 +32,6 @@ watch(
 
 onMounted(() => {
   form.startedAt = Date.now()
-})
-
-const formCard = useTemplateRef<HTMLElement>('formCard')
-
-// Mount-time entrance only: fields stay visible when JS or motion is off.
-useGsapMatchMedia(formCard, (context) => {
-  const { reduceMotion } = context.conditions as { reduceMotion: boolean }
-
-  if (reduceMotion) {
-    return
-  }
-
-  gsap.from('.contact-field', {
-    autoAlpha: 0,
-    y: 6,
-    duration: 0.45,
-    ease: 'power2.out',
-    stagger: 0.03,
-    clearProps: 'opacity,visibility,transform',
-  })
 })
 
 const apiErrorMessages = computed<Record<string, string>>(() => ({
@@ -148,7 +127,7 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
 
     <div class="grid gap-6 lg:grid-cols-[1fr_20rem]">
       <!-- Contact Form -->
-      <div ref="formCard" class="surface-glass rounded-2xl p-4 sm:p-6">
+      <div class="surface-glass reveal rounded-2xl p-4 sm:p-6">
         <UForm
           :schema="contactFormSchema"
           :state="form"
@@ -173,7 +152,7 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
           </div>
 
           <!-- Name -->
-          <UFormField name="name" :label="t('contactPage.form.name') + ' *'" class="contact-field">
+          <UFormField name="name" :label="t('contactPage.form.name') + ' *'">
             <UInput
               id="contact-name"
               v-model="form.name"
@@ -188,11 +167,7 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
           </UFormField>
 
           <!-- Email -->
-          <UFormField
-            name="email"
-            :label="t('contactPage.form.email') + ' *'"
-            class="contact-field"
-          >
+          <UFormField name="email" :label="t('contactPage.form.email') + ' *'">
             <UInput
               id="contact-email"
               v-model="form.email"
@@ -208,11 +183,7 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
           </UFormField>
 
           <!-- Subject -->
-          <UFormField
-            name="subject"
-            :label="t('contactPage.form.subject') + ' *'"
-            class="contact-field"
-          >
+          <UFormField name="subject" :label="t('contactPage.form.subject') + ' *'">
             <UInput
               id="contact-subject"
               v-model="form.subject"
@@ -227,11 +198,7 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
           </UFormField>
 
           <!-- Message -->
-          <UFormField
-            name="message"
-            :label="t('contactPage.form.message') + ' *'"
-            class="contact-field"
-          >
+          <UFormField name="message" :label="t('contactPage.form.message') + ' *'">
             <UTextarea
               id="contact-message"
               v-model="form.message"
@@ -270,7 +237,6 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
             :loading="isSubmitting"
             :disabled="isSubmitting"
             icon="i-tabler-send"
-            class="contact-field"
           >
             {{ isSubmitting ? t('contactPage.form.sending') : t('contactPage.form.submit') }}
           </UButton>

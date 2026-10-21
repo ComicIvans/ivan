@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { SplitText } from 'gsap/SplitText'
 import { auroraColorStops as auroraColorStopsByScheme } from '~~/shared/constants/theme'
 import { variantsById } from '~/components/credential/credentialVariants'
 
@@ -11,7 +10,7 @@ defineProps<{ id: string }>()
 // instance hides (visibility keeps its box; SSR renders it visible).
 const { layerMounted } = useCredentialJourney()
 
-const { t, locale } = useI18n({ useScope: 'global' })
+const { t } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
 const colorMode = useColorMode()
 const motionTier = useMotionTier()
@@ -85,36 +84,14 @@ const primaryCta = useTemplateRef<HTMLElement>('primaryCta')
 useMagnet(primaryCta)
 
 const sectionEl = useTemplateRef<HTMLElement>('sectionEl')
-const heroTitle = useTemplateRef<HTMLElement>('heroTitle')
 
-let heroSplit: SplitText | null = null
-
-function createHeroSplit() {
-  const el = heroTitle.value
-  if (!el) return
-  heroSplit?.revert()
-  heroSplit = SplitText.create(el, {
-    type: 'lines,words',
-    mask: 'lines',
-    autoSplit: true,
-    aria: 'auto',
-    onSplit: (self) =>
-      gsap.from(self.words, {
-        yPercent: 110,
-        autoAlpha: 0,
-        duration: 0.8,
-        ease: 'power3.out',
-        stagger: 0.04,
-      }),
-  })
-}
-
+// The headline itself does not animate: it is the first thing painted (and
+// the largest), so it stays exactly as the server rendered it.
 useGsapMatchMedia(sectionEl, (ctx) => {
   const tiles = '.bento-tile'
 
   if (ctx.conditions?.reduceMotion) {
     gsap.set(tiles, { autoAlpha: 1 })
-    if (heroTitle.value) gsap.set(heroTitle.value, { autoAlpha: 1 })
     return
   }
 
@@ -128,8 +105,9 @@ useGsapMatchMedia(sectionEl, (ctx) => {
 
   // Hero recedes as the next content scrolls in (keyed to the panel, not the
   // whole section, so the bento grid below doesn't stretch the effect).
+  // Scrubbed parallax is a full-tier effect.
   const heroPanel = sectionEl.value?.querySelector('.home-hero-panel')
-  if (heroPanel) {
+  if (ctx.conditions?.fullMotion && heroPanel) {
     gsap.to('.hero-inner', {
       yPercent: -8,
       autoAlpha: 0.35,
@@ -142,25 +120,6 @@ useGsapMatchMedia(sectionEl, (ctx) => {
       },
     })
   }
-
-  // Waiting for fonts avoids splitting lines that reflow once webfonts land.
-  let cancelled = false
-  document.fonts.ready.then(() => {
-    if (!cancelled) createHeroSplit()
-  })
-
-  return () => {
-    cancelled = true
-    heroSplit?.revert()
-    heroSplit = null
-  }
-})
-
-// The split caches the headline text, so rebuild it after a locale switch.
-watch(locale, async () => {
-  if (!heroSplit) return
-  await nextTick()
-  createHeroSplit()
 })
 </script>
 
@@ -212,11 +171,7 @@ watch(locale, async () => {
           />
         </figure>
         <div class="max-w-2xl">
-          <h1
-            ref="heroTitle"
-            class="type-display text-highlighted text-4xl sm:text-5xl lg:text-6xl"
-            :aria-label="t('home.hero.title')"
-          >
+          <h1 class="type-display text-highlighted text-4xl sm:text-5xl lg:text-6xl">
             {{ t('home.hero.titleLead') }}
             <span class="ink-gradient">{{ t('home.hero.titleAccent') }}</span>
           </h1>
