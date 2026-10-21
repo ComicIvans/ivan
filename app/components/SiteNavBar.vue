@@ -63,27 +63,13 @@ const syncIndicators = async () => {
   await updateMobileIndicator()
 }
 
-const journey = useCredentialJourney()
+const { arrive } = useSectionNav()
 
-function activateSection(id: SectionId) {
-  mobileMenuOpen.value = false
-  const el = document.getElementById(id)
-  if (!el) return
-  // Send the credential badge straight to the target; safe no-op when the
-  // traveling layer is not mounted (other tiers/routes).
-  journey.jumpTo(id)
-  window.setTimeout(() => {
-    const heading = el.querySelector<HTMLElement>('h1, h2')
-    if (!heading) return
-    heading.tabIndex = -1
-    heading.focus({ preventScroll: true })
-  }, 350)
-}
-
-// Off the home the links simply navigate there; the router scrolls to the hash.
+// The router scrolls to the hash. Off the home the links simply navigate
+// there; on it they also send the badge and the focus to the section.
 function onTabClick(id: SectionId) {
-  if (isHome.value) activateSection(id)
-  else mobileMenuOpen.value = false
+  mobileMenuOpen.value = false
+  if (isHome.value) arrive(id)
 }
 
 const anchorLink = (id: string) => ({ path: localePath('/'), hash: `#${id}` })

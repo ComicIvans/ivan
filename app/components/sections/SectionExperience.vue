@@ -19,12 +19,7 @@ const timelineItems = computed<TimelineSectionItem[]>(() =>
   }))
 )
 
-function scrollToSection(targetId: string) {
-  const el = document.getElementById(targetId)
-  if (!el) return
-  const motionOk = !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  el.scrollIntoView({ behavior: motionOk ? 'smooth' : 'auto' })
-}
+const { goTo } = useSectionNav()
 
 // The thread reports which milestone it lit (-1: none yet); the experience
 // badge reprints its role line from that entry (resolved in the badge, so it
@@ -56,7 +51,7 @@ function onMilestone(index: number) {
             color="primary"
             class="mt-4"
             icon="i-tabler-history"
-            @click="scrollToSection('representacion')"
+            @click="goTo('representacion')"
           >
             {{ t('experience.viewRepresentation') }}
           </UButton>

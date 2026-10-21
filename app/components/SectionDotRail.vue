@@ -1,22 +1,11 @@
 <script setup lang="ts">
-import { SECTIONS, SECTION_IDS, type SectionId } from '~/utils/sections'
+import { SECTIONS, SECTION_IDS } from '~/utils/sections'
 
 const { t } = useI18n({ useScope: 'global' })
 
 const { activeId } = useScrollSpy(SECTION_IDS)
-const journey = useCredentialJourney()
-
-function activateSection(id: SectionId) {
-  const el = document.getElementById(id)
-  if (!el) return
-  journey.jumpTo(id)
-  window.setTimeout(() => {
-    const heading = el.querySelector<HTMLElement>('h1, h2')
-    if (!heading) return
-    heading.tabIndex = -1
-    heading.focus({ preventScroll: true })
-  }, 350)
-}
+// The router scrolls to the hash; this sends the badge and the focus there.
+const { arrive } = useSectionNav()
 </script>
 
 <template>
@@ -32,7 +21,7 @@ function activateSection(id: SectionId) {
       :class="{ 'is-active': activeId === section.id }"
       :aria-label="t(section.navKey)"
       :aria-current="activeId === section.id ? 'true' : undefined"
-      @click="activateSection(section.id)"
+      @click="arrive(section.id)"
     >
       <span aria-hidden="true" />
     </NuxtLink>

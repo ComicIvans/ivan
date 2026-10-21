@@ -79,12 +79,7 @@ const statsTileClass = computed(() => [
 const isLastLeadTile = (index: number) =>
   !currentRole.value && index === highlights.value.length - 1
 
-function scrollToSection(targetId: string) {
-  const el = document.getElementById(targetId)
-  if (!el) return
-  const motionOk = !window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  el.scrollIntoView({ behavior: motionOk ? 'smooth' : 'auto' })
-}
+const { goTo } = useSectionNav()
 
 const primaryCta = useTemplateRef<HTMLElement>('primaryCta')
 useMagnet(primaryCta)
@@ -230,11 +225,7 @@ watch(locale, async () => {
           </p>
           <div class="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
             <div ref="primaryCta" class="inline-flex">
-              <UButton
-                color="primary"
-                icon="i-tabler-briefcase"
-                @click="scrollToSection('experiencia')"
-              >
+              <UButton color="primary" icon="i-tabler-briefcase" @click="goTo('experiencia')">
                 {{ t('home.cta.experience') }}
               </UButton>
             </div>
@@ -242,7 +233,7 @@ watch(locale, async () => {
               color="primary"
               variant="outline"
               icon="i-tabler-mail"
-              @click="scrollToSection('contacto')"
+              @click="goTo('contacto')"
             >
               {{ t('home.cta.contact') }}
             </UButton>
@@ -257,7 +248,7 @@ watch(locale, async () => {
       <button
         type="button"
         class="hero-scroll-cue text-muted hover:text-highlighted absolute bottom-4 left-1/2 flex -translate-x-1/2 cursor-pointer flex-col items-center gap-1 font-mono text-xs transition-colors"
-        @click="scrollToSection('experiencia')"
+        @click="goTo('experiencia')"
       >
         {{ t('home.hero.scrollCue') }}
         <UIcon name="i-tabler-chevron-down" class="size-5" aria-hidden="true" />
@@ -296,7 +287,7 @@ watch(locale, async () => {
           type="button"
           class="bento-tile surface-glass motion-link-card block cursor-pointer rounded-2xl p-5 text-left sm:p-6"
           :class="lastLeadTileClass"
-          @click="scrollToSection('experiencia')"
+          @click="goTo('experiencia')"
         >
           <!-- Phrasing content only inside a button: spans, not paragraphs -->
           <span class="text-primary flex items-center gap-2 text-xs font-medium tracking-wide">
