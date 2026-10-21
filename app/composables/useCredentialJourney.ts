@@ -40,7 +40,9 @@ export function useCredentialJourney() {
   }
 
   function jumpTo(id: SectionId) {
-    if (id === active.value) return
+    // Only the layer's scrollEnd handler clears the flag, so without a layer
+    // it would stay set and a layer mounted later would ignore every section.
+    if (!layerMounted.value || id === active.value) return
     isJumping.value = true
     setActive(id)
   }

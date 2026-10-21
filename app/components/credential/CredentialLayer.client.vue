@@ -257,7 +257,6 @@ onMounted(async () => {
 
   cleanup = () => {
     gsap.ticker.remove(home)
-    clearInterval(cycleTimer)
     stopLanyardWatch()
     lanyardTween?.kill()
     ScrollTrigger.removeEventListener('scrollEnd', onScrollEnd)
@@ -267,7 +266,16 @@ onMounted(async () => {
   }
 })
 
-onUnmounted(() => cleanup?.())
+onUnmounted(() => {
+  cleanup?.()
+  clearInterval(cycleTimer)
+  // The journey state is global: start the next visit to the home from the
+  // hero, like the first one. The badge it remounts with shows the hero
+  // emblem, and the section triggers then move it to wherever the page is.
+  setActive('inicio')
+  isJumping.value = false
+  photoSrc.value = ''
+})
 </script>
 
 <template>

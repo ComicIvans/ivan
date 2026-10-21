@@ -68,8 +68,9 @@ onMounted(() => {
   resizeObserver.observe(host)
 
   // Milestone lighting: one trigger per timeline item toggles .thread-lit on
-  // its dot and reports the current index upward (SectionExperience maps it
-  // to the badge role line; representation simply ignores the event).
+  // its dot and reports the current index upward, -1 once the thread has
+  // left the first item again (SectionExperience maps it to the badge role
+  // line; representation simply ignores the event).
   const items = Array.from(host.querySelectorAll('li'))
   const itemTriggers = items.map((item, index) => {
     const dot = item.querySelector('span')
@@ -83,7 +84,7 @@ onMounted(() => {
       },
       onLeaveBack: () => {
         dot?.classList.remove('thread-lit')
-        emit('milestone', Math.max(0, index - 1))
+        emit('milestone', index - 1)
       },
     })
   })
