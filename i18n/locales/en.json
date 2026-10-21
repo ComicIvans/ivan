@@ -36,10 +36,6 @@
     "error": "Oops! A joke could not be loaded :(",
     "close": "Close"
   },
-  "contact": {
-    "linkedinLabel": "Iván Salido Cobo’s LinkedIn profile",
-    "instagramLabel": "Iván Salido Cobo’s Instagram profile"
-  },
   "home": {
     "hero": {
       "title": "Hi, I’m Iván",
@@ -192,11 +188,11 @@
   "footer": {
     "copyright": "Developed by Iván Salido Cobo under the MIT licence. View the source code at {link}.",
     "github": "GitHub",
-    "contactLabel": "Go to the contact page",
-    "linkedinLabel": "LinkedIn profile (opens in a new tab)",
-    "instagramLabel": "Instagram profile (opens in a new tab)",
-    "githubLabel": "GitHub profile (opens in a new tab)",
+    "contactLabel": "Go to the contact section",
     "socialNav": "Social media"
+  },
+  "social": {
+    "profileLabel": "Iván Salido Cobo’s {network} profile (opens in a new tab)"
   },
   "theme": {
     "toggle": "Change theme",

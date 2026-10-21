@@ -36,10 +36,6 @@
     "error": "¡Vaya! No se ha podido cargar ningún chiste :(",
     "close": "Cerrar"
   },
-  "contact": {
-    "linkedinLabel": "Perfil de LinkedIn de Iván Salido Cobo",
-    "instagramLabel": "Perfil de Instagram de Iván Salido Cobo"
-  },
   "home": {
     "hero": {
       "title": "¡Hola! Soy Iván",
@@ -192,11 +188,11 @@
   "footer": {
     "copyright": "Desarrollado por Iván Salido Cobo bajo la licencia MIT. Consulta el código en {link}.",
     "github": "GitHub",
-    "contactLabel": "Ir a la página de contacto",
-    "linkedinLabel": "Perfil de LinkedIn (abre en nueva pestaña)",
-    "instagramLabel": "Perfil de Instagram (abre en nueva pestaña)",
-    "githubLabel": "Perfil de GitHub (abre en nueva pestaña)",
+    "contactLabel": "Ir a la sección de contacto",
     "socialNav": "Redes sociales"
+  },
+  "social": {
+    "profileLabel": "Perfil de {network} de Iván Salido Cobo (se abre en una pestaña nueva)"
   },
   "theme": {
     "toggle": "Cambiar tema",

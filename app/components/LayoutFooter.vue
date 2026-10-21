@@ -1,36 +1,8 @@
 <script setup lang="ts">
-import { profileRepositoryUrl, socialProfiles } from '~~/shared/constants/profile'
+import { profileRepositoryUrl } from '~~/shared/constants/profile'
 
 const { t } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
-
-const socialLinks = computed(() => [
-  {
-    icon: 'i-tabler-mail',
-    // Contact lives as a home section now; deep-link via anchor
-    to: { path: localePath('/'), hash: '#contacto' },
-    label: t('footer.contactLabel'),
-    external: false,
-  },
-  {
-    icon: 'i-tabler-brand-linkedin',
-    to: socialProfiles.linkedin,
-    label: t('footer.linkedinLabel'),
-    external: true,
-  },
-  {
-    icon: 'i-tabler-brand-instagram',
-    to: socialProfiles.instagram,
-    label: t('footer.instagramLabel'),
-    external: true,
-  },
-  {
-    icon: 'i-tabler-brand-github',
-    to: socialProfiles.github,
-    label: t('footer.githubLabel'),
-    external: true,
-  },
-])
 </script>
 
 <template>
@@ -66,19 +38,17 @@ const socialLinks = computed(() => [
 
       <!-- Social links -->
       <nav class="flex gap-3 md:justify-end" :aria-label="t('footer.socialNav')">
+        <!-- Contact lives as a home section; deep-link via anchor -->
         <UButton
-          v-for="link in socialLinks"
-          :key="link.icon"
-          :to="link.to"
-          :target="link.external ? '_blank' : undefined"
-          :rel="link.external ? 'noopener noreferrer' : undefined"
-          :icon="link.icon"
+          :to="{ path: localePath('/'), hash: '#contacto' }"
+          icon="i-tabler-mail"
           color="neutral"
           variant="ghost"
           size="lg"
           class="social-icon"
-          :aria-label="link.label"
+          :aria-label="t('footer.contactLabel')"
         />
+        <SocialLinks placement="footer" />
       </nav>
     </div>
   </footer>

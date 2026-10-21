@@ -2,7 +2,6 @@
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
-import { socialProfiles } from '~~/shared/constants/profile'
 import { auroraColorStops as auroraColorStopsByScheme } from '~~/shared/constants/theme'
 import { variantsById } from '~/components/credential/credentialVariants'
 
@@ -248,26 +247,7 @@ watch(locale, async () => {
               {{ t('home.cta.contact') }}
             </UButton>
             <div class="flex gap-3">
-              <UButton
-                :to="socialProfiles.linkedin"
-                target="_blank"
-                color="neutral"
-                variant="outline"
-                icon="i-tabler-brand-linkedin"
-                :aria-label="t('contact.linkedinLabel')"
-              >
-                LinkedIn
-              </UButton>
-              <UButton
-                :to="socialProfiles.instagram"
-                target="_blank"
-                color="neutral"
-                variant="outline"
-                icon="i-tabler-brand-instagram"
-                :aria-label="t('contact.instagramLabel')"
-              >
-                Instagram
-              </UButton>
+              <SocialLinks placement="hero" />
             </div>
           </div>
         </div>

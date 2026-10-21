@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@nuxt/ui'
 import gsap from 'gsap'
-import { socialProfiles } from '~~/shared/constants/profile'
 import { contactFormSchema, type ContactFormData } from '~~/shared/utils/contactValidation'
 import { CONTACT_FIELD_LIMITS } from '~~/shared/utils/contactShared'
 
@@ -294,28 +293,7 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
         </p>
 
         <div class="flex flex-wrap gap-3">
-          <UButton
-            :to="socialProfiles.linkedin"
-            target="_blank"
-            rel="noopener noreferrer"
-            color="neutral"
-            variant="outline"
-            icon="i-tabler-brand-linkedin"
-            :aria-label="t('contact.linkedinLabel')"
-          >
-            LinkedIn
-          </UButton>
-          <UButton
-            :to="socialProfiles.instagram"
-            target="_blank"
-            rel="noopener noreferrer"
-            color="neutral"
-            variant="outline"
-            icon="i-tabler-brand-instagram"
-            :aria-label="t('contact.instagramLabel')"
-          >
-            Instagram
-          </UButton>
+          <SocialLinks placement="contact" />
         </div>
 
         <p class="text-muted flex items-center gap-2 font-mono text-sm">

@@ -36,10 +36,6 @@
     "error": "Ups! Es konnte kein Witz geladen werden :(",
     "close": "Schließen"
   },
-  "contact": {
-    "linkedinLabel": "LinkedIn-Profil von Iván Salido Cobo",
-    "instagramLabel": "Instagram-Profil von Iván Salido Cobo"
-  },
   "home": {
     "hero": {
       "title": "Hi, ich bin Iván",
@@ -192,11 +188,11 @@
   "footer": {
     "copyright": "Entwickelt von Iván Salido Cobo unter der MIT-Lizenz. Quellcode ansehen unter {link}.",
     "github": "GitHub",
-    "contactLabel": "Zur Kontaktseite",
-    "linkedinLabel": "LinkedIn-Profil (öffnet in einem neuen Tab)",
-    "instagramLabel": "Instagram-Profil (öffnet in einem neuen Tab)",
-    "githubLabel": "GitHub-Profil (öffnet in einem neuen Tab)",
+    "contactLabel": "Zum Kontaktbereich",
     "socialNav": "Soziale Medien"
+  },
+  "social": {
+    "profileLabel": "{network}-Profil von Iván Salido Cobo (öffnet in einem neuen Tab)"
   },
   "theme": {
     "toggle": "Design wechseln",
