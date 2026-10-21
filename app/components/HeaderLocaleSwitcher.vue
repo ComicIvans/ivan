@@ -6,6 +6,7 @@ import {
   localesConfig,
   type LocaleCode,
 } from '~/utils/locales'
+import { SECTIONS } from '~/utils/sections'
 
 defineProps<{
   menuId: string
@@ -51,7 +52,24 @@ const selectLocale = (code: string) => {
   const localizedPath = switchLocalePath(target)
   const fallbackPath = getLocaleSwitchPath(route.fullPath, target)
 
-  navigateTo(localizedPath && localizedPath !== route.fullPath ? localizedPath : fallbackPath)
+  navigateTo(
+    withActiveSection(
+      localizedPath && localizedPath !== route.fullPath ? localizedPath : fallbackPath
+    )
+  )
+}
+
+// On the home the URL hash only changes on anchor clicks, never while
+// scrolling, so the switch carries the section being read instead of a stale
+// hash (the first section maps to the top of the page).
+const activeSectionId = useActiveSectionId()
+
+function withActiveSection(path: string) {
+  const id = activeSectionId.value
+  // Only while that section is on the page, i.e. on the home.
+  if (!id || !document.getElementById(id)) return path
+  const [base = path] = path.split('#')
+  return id === SECTIONS[0].id ? base : `${base}#${id}`
 }
 </script>
 
