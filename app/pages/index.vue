@@ -9,6 +9,9 @@ import SectionRepresentation from '~/components/sections/SectionRepresentation.v
 import SectionTraining from '~/components/sections/SectionTraining.vue'
 import { SECTIONS, type SectionId } from '~/utils/sections'
 
+// The hero already carries the portrait, name and pitch.
+definePageMeta({ masthead: false })
+
 usePageSeo('seo.pageTitle', 'seo.description')
 
 // Rendered in SECTIONS order; the record type makes a section without a

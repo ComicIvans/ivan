@@ -183,6 +183,7 @@ onBeforeUnmount(() => {
             class="size-9 rounded-full object-cover shadow"
             src="/profile-pic.webp"
             :alt="t('header.profileAlt')"
+            loading="lazy"
             width="192"
             height="192"
             sizes="36px"
