@@ -141,11 +141,13 @@ let visibilityHandler: (() => void) | null = null
 let intersectionObserver: IntersectionObserver | null = null
 let inViewport = true
 
-const toStops = (stops: string[]) =>
-  stops.map((hex) => {
+// Converted once per colour change (e.g. a colour mode switch), not per frame.
+const colorStopValues = computed(() =>
+  props.colorStops.map((hex) => {
     const c = new Color(hex)
     return [c.r, c.g, c.b]
   })
+)
 
 const startLoop = () => {
   if (animateId) return
@@ -155,7 +157,7 @@ const startLoop = () => {
     program.uniforms.uTime.value = t * 0.01 * props.speed * 0.1
     program.uniforms.uAmplitude.value = props.amplitude
     program.uniforms.uBlend.value = props.blend
-    program.uniforms.uColorStops.value = toStops(props.colorStops)
+    program.uniforms.uColorStops.value = colorStopValues.value
     renderer.render({ scene: mesh })
   }
   animateId = requestAnimationFrame(update)
@@ -203,7 +205,7 @@ onMounted(() => {
     uniforms: {
       uTime: { value: 0 },
       uAmplitude: { value: props.amplitude },
-      uColorStops: { value: toStops(props.colorStops) },
+      uColorStops: { value: colorStopValues.value },
       uResolution: { value: [ctn.offsetWidth, ctn.offsetHeight] },
       uBlend: { value: props.blend },
     },
