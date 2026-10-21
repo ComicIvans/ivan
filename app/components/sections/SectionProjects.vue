@@ -27,8 +27,9 @@ const trackEl = useTemplateRef<HTMLElement>('trackEl')
 const journey = useCredentialJourney()
 
 useGsapMatchMedia(sceneEl, (ctx) => {
-  const cards = sceneEl.value ? Array.from(sceneEl.value.querySelectorAll('.project-card')) : []
-  if (!cards.length) return
+  const scene = sceneEl.value
+  const cards = scene ? Array.from(scene.querySelectorAll<HTMLElement>('.project-card')) : []
+  if (!scene || !cards.length) return
 
   if (ctx.conditions?.reduceMotion) {
     gsap.set(cards, { autoAlpha: 1 })
@@ -39,13 +40,21 @@ useGsapMatchMedia(sceneEl, (ctx) => {
     // Horizontal showcase: the scene pins while the card track translates
     // sideways; snapping parks one project per beat. The pin spacer is
     // GSAP-managed layout, not a scroll-dependent height (no feedback loops).
+    // The row layout itself only exists while this pin drives it
+    // (data-pinned); every other tier, and the page before JS runs, keeps the
+    // grid so no project is clipped out of reach.
     const track = trackEl.value
+    scene.dataset.pinned = ''
     const getScroll = () => Math.max(0, track.scrollWidth - track.clientWidth)
-    gsap.to(track, {
+    const snapToCard = gsap.utils.snap(1 / Math.max(1, cards.length - 1))
+    // Set while a keyboard focus jump settles: snapping would otherwise read
+    // the jump as momentum and carry it on to a neighbouring card.
+    let focusSnap: { progress: number; until: number } | null = null
+    const showcase = gsap.to(track, {
       x: () => -getScroll(),
       ease: 'none',
       scrollTrigger: {
-        trigger: sceneEl.value,
+        trigger: scene,
         pin: true,
         scrub: 1,
         end: () => `+=${getScroll()}`,
@@ -56,14 +65,38 @@ useGsapMatchMedia(sceneEl, (ctx) => {
         },
         snap:
           cards.length > 1
-            ? { snapTo: 1 / (cards.length - 1), duration: 0.3, ease: 'power1.inOut' }
+            ? {
+                snapTo: (value: number) =>
+                  focusSnap && performance.now() < focusSnap.until
+                    ? focusSnap.progress
+                    : snapToCard(value),
+                duration: 0.3,
+                ease: 'power1.inOut',
+              }
             : undefined,
         invalidateOnRefresh: true,
         // Pin spacers must exist before any later fixed-layer trigger measures.
         refreshPriority: 1,
       },
     })
-    return
+    const pin = showcase.scrollTrigger
+
+    // Keyboard focus: the clipped row cannot scroll itself into view, so move
+    // the page to the scroll position where the focused card is parked.
+    const onFocusIn = (event: FocusEvent) => {
+      const card = event.target instanceof Element ? event.target.closest('.project-card') : null
+      const index = card ? cards.indexOf(card as HTMLElement) : -1
+      if (!pin || index < 0) return
+      const progress = cards.length > 1 ? index / (cards.length - 1) : 0
+      focusSnap = { progress, until: performance.now() + 1500 }
+      pin.scroll(pin.start + (pin.end - pin.start) * progress)
+    }
+    track.addEventListener('focusin', onFocusIn)
+
+    return () => {
+      track.removeEventListener('focusin', onFocusIn)
+      delete scene.dataset.pinned
+    }
   }
 
   // Mobile / tablet: vertical stack with a staggered entrance.
@@ -124,10 +157,11 @@ useGsapMatchMedia(sceneEl, (ctx) => {
       </div>
     </div>
 
-    <!-- Projects: pinned horizontal showcase on desktop, vertical stack below lg -->
-    <div ref="sceneEl" class="relative mt-16 lg:flex lg:min-h-svh lg:flex-col lg:justify-center">
+    <!-- Projects: a grid; on the full motion tier the scene pins and the track
+         becomes a horizontal row (data-pinned, set by the pin setup above). -->
+    <div ref="sceneEl" class="projects-scene relative mt-16">
       <!-- Badge dock inside the pinned scene: stable coords while pinned -->
-      <CredentialAnchor section="proyectos" class="absolute top-6 right-6 hidden lg:block" />
+      <CredentialAnchor section="proyectos" class="projects-dock" />
       <SectionHeader
         as="h3"
         index="02"
@@ -137,13 +171,13 @@ useGsapMatchMedia(sceneEl, (ctx) => {
         class="reveal"
       />
 
-      <div class="lg:overflow-hidden">
-        <div ref="trackEl" class="grid grid-cols-1 gap-6 lg:flex lg:w-full lg:gap-8">
+      <div class="projects-viewport">
+        <div ref="trackEl" class="projects-track grid grid-cols-1 gap-6 lg:grid-cols-2">
           <article
             v-for="project in projects"
             :key="project.id"
             v-spotlight
-            class="project-card motion-link-card bg-default ring-default min-w-0 overflow-hidden rounded-lg ring lg:w-[min(38rem,70vw)] lg:shrink-0"
+            class="project-card motion-link-card bg-default ring-default min-w-0 overflow-hidden rounded-lg ring"
             :style="accentStyle(project.accent)"
           >
             <div class="relative aspect-[2/1] overflow-hidden">
@@ -215,6 +249,46 @@ useGsapMatchMedia(sceneEl, (ctx) => {
 </template>
 
 <style scoped>
+/* Horizontal showcase, only while the pin drives the track. The scene pins
+   flush with the viewport top, so its padding keeps the content and the
+   badge dock clear of the fixed navbar. */
+.projects-scene[data-pinned] {
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: var(--navbar-h);
+}
+
+.projects-dock {
+  position: absolute;
+  top: calc(var(--navbar-h) + 1.5rem);
+  right: 1.5rem;
+  display: none;
+}
+
+.projects-scene[data-pinned] .projects-dock {
+  display: block;
+}
+
+/* clip, unlike hidden, is not a scroll container: focusing a card that sits
+   off to the side cannot scroll the row out of step with the pin. */
+.projects-scene[data-pinned] .projects-viewport {
+  overflow: hidden;
+  overflow: clip;
+}
+
+.projects-scene[data-pinned] .projects-track {
+  display: flex;
+  width: 100%;
+  gap: 2rem;
+}
+
+.projects-scene[data-pinned] .project-card {
+  width: min(38rem, 70vw);
+  flex-shrink: 0;
+}
+
 /* Decorative cover band: per-project aurora wash on an adaptive elevated base. */
 .cover-plate {
   background:
