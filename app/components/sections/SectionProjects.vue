@@ -274,8 +274,13 @@ useGsapMatchMedia(sceneEl, (ctx) => {
 /* clip, unlike hidden, is not a scroll container: focusing a card that sits
    off to the side cannot scroll the row out of step with the pin. */
 .projects-scene[data-pinned] .projects-viewport {
-  overflow: hidden;
   overflow: clip;
+}
+
+@supports not (overflow: clip) {
+  .projects-scene[data-pinned] .projects-viewport {
+    overflow: hidden;
+  }
 }
 
 .projects-scene[data-pinned] .projects-track {
