@@ -1,4 +1,5 @@
-# Technology stack and key projects, in display order.
+# Technology stack and key projects, in display order. A project's optional
+# `repository` URL adds a "GitHub" link next to its website.
 
 # Text fields take one plain string (the same in every language) or one value
 # per language (es, en, de). Spanish is required and fills in for any missing
@@ -63,7 +64,50 @@ stack:
     - id: node
       name: Node.js
       icon: i-simple-icons-nodedotjs
+    - id: wordpress
+      name: WordPress
+      icon: i-simple-icons-wordpress
 items:
+  - id: creup-web
+    icon: i-tabler-world-www
+    url: https://www.creup.es/
+    repository: https://github.com/CREUP-DEV/web
+    title:
+      es: Web de CREUP
+      en: CREUP Website
+      de: CREUP-Website
+    description:
+      es: Desarrollo íntegro de la web pública de CREUP, desde el diseño hasta su implementación. Incluye contenido multilingüe, panel de administración e integraciones para publicar la agenda y la información de la organización.
+      en: Sole developer of CREUP’s public website, responsible for its design and implementation. Features multilingual content, an administration panel and integrations for publishing the organisation’s calendar and information.
+      de: Eigenständige Entwicklung der gesamten öffentlichen CREUP-Website, vom Design bis zur Implementierung. Mit mehrsprachigen Inhalten, Administrationsbereich und Integrationen zur Veröffentlichung des Veranstaltungskalenders und der Informationen der Organisation.
+    tags:
+      - Nuxt
+      - TypeScript
+      - PostgreSQL
+      - Redis
+    accent:
+      from: ember-500
+      to: amber-300
+  - id: sipeu-voto
+    icon: i-tabler-checkbox
+    url: https://sipeu.wupp.dev
+    repository: https://github.com/ComicIvans/sipeu-voto
+    title:
+      es: Plataforma de votaciones SIPEU
+      en: SIPEU Voting Platform
+      de: SIPEU-Abstimmungsplattform
+    description:
+      es: Desarrollo de una plataforma para la Simulación del Parlamento Europeo en Canarias (SIPEU). Permite gestionar participantes y votaciones de comisiones y pleno, con resultados en tiempo real y desglose por grupo parlamentario y participante.
+      en: Developed a voting platform for the European Parliament Simulation in the Canary Islands (SIPEU). Supports participant management and committee and plenary votes, with live results broken down by parliamentary group and participant.
+      de: Entwicklung einer Abstimmungsplattform für die Simulation des Europäischen Parlaments auf den Kanarischen Inseln (SIPEU). Verwaltung von Teilnehmenden sowie Ausschuss- und Plenarabstimmungen mit Live-Ergebnissen nach Fraktion und Person.
+    tags:
+      - Nuxt
+      - TypeScript
+      - PostgreSQL
+      - SSE
+    accent:
+      from: amber-500
+      to: blue-300
   - id: server
     icon: i-tabler-server-2
     url: https://wupp.dev
@@ -91,7 +135,7 @@ items:
     title:
       es: Generador de Firmas Corporativas
       en: Corporate Email Signature Generator
-      de: Generator für Unternehmens-E-Mail-Signaturen
+      de: Generator für geschäftliche E-Mail-Signaturen
     description:
       es: Dos herramientas (CLI con Python y aplicación web) para generar firmas de correos electrónicos siguiendo la identidad corporativa.
       en: Two tools (a Python CLI and a web application) to generate email signatures aligned with corporate identity guidelines.

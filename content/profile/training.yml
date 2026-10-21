@@ -16,9 +16,9 @@ academic:
     badgeRole: MUGEPS · UPV
     organization: Universitat Politècnica de València
     description:
-      es: Enfoque en dirección estratégica y gestión de equipos. Docencia mayoritariamente en inglés y próxima estancia Erasmus+ en Alemania.
-      en: Focus on strategic management and team leadership. Teaching mainly in English, with a forthcoming Erasmus+ stay in Germany.
-      de: Fokus auf strategisches Management und Teamführung. Unterricht überwiegend auf Englisch, mit einem bevorstehenden Erasmus+-Aufenthalt in Deutschland.
+      es: Formación práctica e internacional en gestión empresarial, innovación y desarrollo de productos y servicios, con proyectos interdisciplinares y docencia principalmente en inglés. Actualmente realizo una estancia Erasmus+ en Hochschule Ansbach (Alemania), vinculada al programa International Product and Service Management (IPM).
+      en: Practical, international training in business management, innovation, and product and service development, with interdisciplinary projects and teaching mainly in English. I am currently on an Erasmus+ exchange at Hochschule Ansbach, Germany, linked to the International Product and Service Management (IPM) programme.
+      de: Praxisorientierte, internationale Ausbildung in Unternehmensmanagement, Innovation sowie Produkt- und Dienstleistungsentwicklung, mit interdisziplinären Projekten und überwiegend englischsprachigem Unterricht. Derzeit absolviere ich einen Erasmus+-Aufenthalt an der Hochschule Ansbach im Rahmen des Studiengangs Internationales Produkt- und Servicemanagement (IPM).
   - id: cybersecurity-master
     icon: i-tabler-shield-lock
     end: "2024"
@@ -113,9 +113,9 @@ languages:
       en: Basic level (A1)
       de: Grundkenntnisse (A1)
     description:
-      es: En formación para movilidad internacional.
-      en: Currently in training for international mobility.
-      de: Derzeit in Ausbildung für internationale Mobilität.
+      es: Aprendizaje de alemán durante mi estancia Erasmus+ en Hochschule Ansbach, Alemania.
+      en: Learning German during my Erasmus+ exchange at Hochschule Ansbach, Germany.
+      de: Ich lerne Deutsch während meines Erasmus+-Aufenthalts an der Hochschule Ansbach.
   - id: spanish
     code: es
     flag: circle-flags:es

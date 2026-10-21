@@ -7,6 +7,8 @@ export interface TimelineSectionItem {
   icon: string
   highlights?: string[]
   current?: boolean
+  /** External website shown under the description (opens in a new tab). */
+  link?: { url: string; text: string }
 }
 </script>
 
@@ -102,6 +104,18 @@ function dotClass(index: number) {
             {{ item.organization }}
           </p>
           <p class="text-muted mt-1.5 text-sm">{{ item.description }}</p>
+          <UButton
+            v-if="item.link"
+            :to="item.link.url"
+            :label="item.link.text"
+            target="_blank"
+            rel="noopener noreferrer"
+            variant="link"
+            size="sm"
+            trailing-icon="i-tabler-external-link"
+            class="mt-2 max-w-full p-0"
+            :ui="{ label: 'break-all whitespace-normal text-left' }"
+          />
           <div v-if="item.highlights?.length" class="mt-3 flex flex-wrap gap-1.5">
             <UBadge
               v-for="highlight in item.highlights"

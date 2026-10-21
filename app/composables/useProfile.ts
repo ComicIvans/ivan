@@ -1,5 +1,5 @@
 import type { CefrLevel, LocalizedText, ProfileData } from '~~/shared/content/schemas'
-import { formatPeriod, isCurrentPeriod, resolveLocalized } from '~/utils/profileFormat'
+import { displayUrl, formatPeriod, isCurrentPeriod, resolveLocalized } from '~/utils/profileFormat'
 
 const PROFILE_KEY = 'profile'
 
@@ -75,6 +75,10 @@ function resolveProfile(data: { readonly value: ProfileData | null | undefined }
         title,
         organization: lt(item.organization),
         organizationUrl: item.organizationUrl,
+        link:
+          item.showLink && item.organizationUrl
+            ? { url: item.organizationUrl, text: displayUrl(item.organizationUrl) }
+            : undefined,
         description: lt(item.description),
         period: formatPeriod(item, locale.value, t('period.present')),
         current: isCurrentPeriod(item),
@@ -90,7 +94,7 @@ function resolveProfile(data: { readonly value: ProfileData | null | undefined }
       id: item.id,
       icon: item.icon,
       pin: item.pin,
-      date: lt(item.dateText),
+      date: item.current ? `${lt(item.dateText)} – ${t('period.present')}` : lt(item.dateText),
       title: lt(item.title),
       description: lt(item.description),
       roles: (item.roles ?? []).map(lt),
@@ -129,7 +133,8 @@ function resolveProfile(data: { readonly value: ProfileData | null | undefined }
       id: item.id,
       icon: item.icon,
       url: item.url,
-      linkText: item.url.replace(/^https:\/\//, '').replace(/\/$/, ''),
+      linkText: displayUrl(item.url),
+      repository: item.repository,
       year: item.year,
       title: lt(item.title),
       description: lt(item.description),

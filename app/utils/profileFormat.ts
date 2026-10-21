@@ -11,6 +11,14 @@ export function resolveLocalized(value: LocalizedText, locale: string): string {
   return translated?.trim() ? translated : value[defaultLocale]
 }
 
+/** Short link text for a URL: no scheme, no leading www., no trailing slash. */
+export function displayUrl(url: string): string {
+  return url
+    .replace(/^https?:\/\//, '')
+    .replace(/^www\./, '')
+    .replace(/\/$/, '')
+}
+
 export interface PeriodSource {
   end?: YearMonth
   current?: boolean

@@ -15,6 +15,7 @@ const timelineItems = computed<TimelineSectionItem[]>(() =>
     description: exp.description,
     icon: exp.icon,
     current: exp.current,
+    link: exp.link,
   }))
 )
 

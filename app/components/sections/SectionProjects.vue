@@ -143,7 +143,7 @@ useGsapMatchMedia(sceneEl, (ctx) => {
             v-for="project in projects"
             :key="project.id"
             v-spotlight
-            class="project-card motion-link-card bg-default ring-default overflow-hidden rounded-lg ring lg:w-[min(38rem,70vw)] lg:shrink-0"
+            class="project-card motion-link-card bg-default ring-default min-w-0 overflow-hidden rounded-lg ring lg:w-[min(38rem,70vw)] lg:shrink-0"
             :style="accentStyle(project.accent)"
           >
             <div class="relative aspect-[2/1] overflow-hidden">
@@ -181,17 +181,31 @@ useGsapMatchMedia(sceneEl, (ctx) => {
                   {{ tag }}
                 </UBadge>
               </div>
-              <UButton
-                :to="project.url"
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="link"
-                size="sm"
-                :trailing-icon="'i-tabler-external-link'"
-                class="mt-3 p-0"
-              >
-                {{ project.linkText }}
-              </UButton>
+              <div class="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+                <UButton
+                  :to="project.url"
+                  :label="project.linkText"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="link"
+                  size="sm"
+                  trailing-icon="i-tabler-external-link"
+                  class="max-w-full p-0"
+                  :ui="{ label: 'break-all whitespace-normal text-left' }"
+                />
+                <UButton
+                  v-if="project.repository"
+                  :to="project.repository"
+                  label="GitHub"
+                  :aria-label="t('projects.list.repositoryLabel', { project: project.title })"
+                  icon="i-simple-icons-github"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="link"
+                  size="sm"
+                  class="p-0"
+                />
+              </div>
             </div>
           </article>
         </div>

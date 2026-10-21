@@ -41,7 +41,7 @@
   "home": {
     "hero": {
       "title": "Hi, I’m Iván",
-      "pitch": "Mathematics graduate specialising in Cybersecurity. I am currently pursuing an MBA, with a practical focus on project execution and organisational management. I enjoy working on complex challenges, bringing analysis, judgement and structure to deliver tangible results in technology-driven and digital security environments.",
+      "pitch": "I am a Mathematics graduate and Cybersecurity specialist. I am pursuing the Master’s Degree in Business, Product and Service Management at UPV and currently studying at Hochschule Ansbach, Germany, on an Erasmus+ exchange. I combine web development and digital infrastructure management with project coordination and student representation.",
       "titleLead": "Hi, I’m",
       "titleAccent": "Iván",
       "scrollCue": "Scroll"
@@ -71,7 +71,7 @@
   },
   "experience": {
     "title": "Selected Experience",
-    "intro": "A career focused on project management, institutional governance and team coordination within complex organisational environments.",
+    "intro": "Experience in web development, digital infrastructure, project management and university governance.",
     "fullExperience": "If you would like to see my full background in student representation, you can find it in the Representation section.",
     "viewRepresentation": "View full trajectory",
     "current": "Current"
@@ -88,12 +88,13 @@
       }
     },
     "list": {
-      "title": "Key projects"
+      "title": "Key projects",
+      "repositoryLabel": "{project} source code on GitHub"
     }
   },
   "representation": {
     "title": "Student Representation",
-    "intro": "Comprehensive experience in university politics, student advocacy and institutional governance.",
+    "intro": "A track record in university politics, student advocacy and institutional governance.",
     "timelineLabel": "Timeline of student representation",
     "stats": {
       "years": "Years active",

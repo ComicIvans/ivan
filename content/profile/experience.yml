@@ -1,4 +1,6 @@
 # Selected experience, newest first. An item without `end` is a current role.
+# `organizationUrl` is the organisation's website (structured data uses it for
+# current roles); `showLink: true` also shows it under the role as a link.
 
 # Text fields take one plain string (the same in every language) or one value
 # per language (es, en, de). Spanish is required and fills in for any missing
@@ -9,6 +11,7 @@ items:
     icon: i-tabler-server-2
     start: 2024-06
     organizationUrl: https://www.creup.es/
+    showLink: true
     title:
       es: Vocal de Digitalización y Transparencia
       en: Board Member for Digitalisation and Transparency
@@ -21,6 +24,28 @@ items:
       es: Gestión de infraestructura VPS, Google Workspace y definición de políticas de seguridad, privacidad y protección de datos de la organización.
       en: Management of VPS infrastructure, Google Workspace and the definition of security, privacy and data protection policies for the organisation.
       de: Verwaltung der VPS-Infrastruktur, Google Workspace sowie die Definition von Sicherheits-, Datenschutz- und Daten­schutzrichtlinien für die Organisation.
+  - id: upv-web-internship
+    icon: i-simple-icons-wordpress
+    start: 2026-06
+    end: 2026-10
+    organizationUrl: https://calum.upv.es/
+    showLink: true
+    title:
+      es: Prácticas en gestión de proyectos digitales y desarrollo web
+      en: Internship in Digital Project Management and Web Development
+      de: Praktikum im digitalen Projektmanagement und in der Webentwicklung
+    badgeRole:
+      es: Prácticas web · UPV
+      en: Web internship · UPV
+      de: Webpraktikum · UPV
+    organization:
+      es: Casa del Estudiante, Universitat Politècnica de València
+      en: Student Recreation Centre, Universitat Politècnica de València
+      de: Casa del Estudiante (Studierendenzentrum), Universitat Politècnica de València
+    description:
+      es: Mantenimiento y actualización de la web de la Casa del Estudiante en WordPress. Renovación completa del sitio con un diseño más moderno y accesible.
+      en: Maintained and updated the Student Recreation Centre’s WordPress website. Completely redesigned the site to give it a more modern and accessible interface.
+      de: Pflege und Aktualisierung der WordPress-Website der Casa del Estudiante. Vollständige Neugestaltung mit einem moderneren und barriereärmeren Design.
   - id: enem-treasurer
     icon: i-tabler-calculator
     start: 2024-02

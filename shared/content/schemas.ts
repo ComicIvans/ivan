@@ -57,6 +57,11 @@ const iconName = z
 
 const httpsUrl = z.string().regex(/^https:\/\/[^\s]+$/, 'use an absolute https:// URL')
 
+/** Repository on GitHub: the page labels the link "GitHub". */
+const githubUrl = z
+  .string()
+  .regex(/^https:\/\/github\.com\/[^\s]+$/, 'use a https://github.com/ repository URL')
+
 /** Path of a file served from public/, e.g. /projects/server.webp. */
 const publicImagePath = z
   .string()
@@ -153,12 +158,23 @@ export const experienceSchema = z.strictObject({
         icon: iconName,
         ...periodFields,
         organizationUrl: httpsUrl.optional(),
+        /** Shows organizationUrl under the role as a visible external link. */
+        showLink: z.boolean().optional(),
         title: localizedText,
         badgeRole: badgeRole.optional(),
         organization: localizedText,
         description: localizedText,
       })
       .superRefine(checkPeriod)
+      .superRefine((item, ctx) => {
+        if (item.showLink && item.organizationUrl === undefined) {
+          ctx.addIssue({
+            code: 'custom',
+            message: 'showLink needs an organizationUrl to show',
+            path: ['showLink'],
+          })
+        }
+      })
   ),
 })
 
@@ -168,6 +184,8 @@ export const representationSchema = z.strictObject({
       id: itemId,
       icon: iconName,
       date: yearMonth,
+      /** Still ongoing: the date reads "May 2026 – Present". */
+      current: z.boolean().optional(),
       /** Organisation initials stamped on the DELEGADO credential badge. */
       pin: z
         .string()
@@ -212,6 +230,8 @@ export const projectsSchema = z.strictObject({
       id: itemId,
       icon: iconName,
       url: httpsUrl,
+      /** Source code, linked as "GitHub" next to the project website. */
+      repository: githubUrl.optional(),
       year: z.number().int().min(1990).max(2999).optional(),
       title: localizedText,
       description: localizedText,

@@ -1,4 +1,5 @@
-# Student representation milestones, oldest first.
+# Student representation milestones, oldest first. `current: true` marks a
+# milestone that is still ongoing ("May 2026 – Present").
 
 # Text fields take one plain string (the same in every language) or one value
 # per language (es, en, de). Spanish is required and fills in for any missing
@@ -112,19 +113,20 @@ items:
       - es: Asesor de la DGE
         en: Advisor to the DGE
         de: Berater des DGE
-  - id: upv-delegate
-    icon: i-tabler-users
-    date: 2025-09
+  - id: upv-digital-infrastructure
+    icon: i-tabler-server-2
+    date: 2026-05
+    current: true
     pin: UPV
     title:
-      es: Delegado en la UPV
-      en: Class Representative at UPV
-      de: Klassensprecher an der UPV
+      es: Coordinador de Infraestructuras Digitales
+      en: Digital Infrastructure Coordinator
+      de: Koordinator für digitale Infrastruktur
     description:
-      es: Desde que comencé mis estudios de máster en la Universitat Politècnica de València, soy el delegado de mi clase, continuando así mi labor de representación estudiantil en una nueva universidad.
-      en: Elected class representative at the Universitat Politècnica de València at the start of my master’s studies, continuing my work in student representation within a new academic environment.
-      de: Zu Beginn meines Masterstudiums an der Universitat Politècnica de València zum Klassensprecher gewählt und damit die studentische Vertretungsarbeit in einem neuen akademischen Umfeld fortgesetzt.
+      es: Coordino las infraestructuras digitales del Consejo de Estudiantes de la UPV. Actualmente desarrollo una plataforma para gestionar el inventario de material y sus préstamos.
+      en: I coordinate digital infrastructure for UPV’s Students’ Council. I am currently developing a platform to manage equipment inventory and loans.
+      de: Ich koordiniere die digitale Infrastruktur des Studierendenrats der UPV. Derzeit entwickle ich eine Plattform zur Verwaltung des Materialbestands und der Ausleihe.
     roles:
-      - es: Delegado de clase
-        en: Class representative
-        de: Klassensprecher
+      - es: Consejo de Estudiantes de la UPV
+        en: UPV Students’ Council
+        de: Studierendenrat der UPV

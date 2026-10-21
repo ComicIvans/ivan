@@ -32,8 +32,9 @@ COPY . .
 # NODE_ENV=production is set only for the build (not the install above, where it
 # would skip devDependencies like nuxt/vite) so the prod branches of nuxt.config
 # (CSP, content DB path, indexability, umami) are taken explicitly instead of
-# relying on nuxi's implicit default.
-RUN NODE_ENV=production pnpm run build
+# relying on nuxi's implicit default. The build runs out of memory with Node's
+# default heap limit, so NODE_OPTIONS raises it to 6 GB.
+RUN NODE_ENV=production NODE_OPTIONS=--max-old-space-size=6144 pnpm run build
 
 # better-sqlite3 13 ships prebuilt binaries for eight platforms and the server
 # bundle traces all of them (about 17 MB). It loads prebuilds/<platform>-<arch>

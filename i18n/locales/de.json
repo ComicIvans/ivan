@@ -41,7 +41,7 @@
   "home": {
     "hero": {
       "title": "Hi, ich bin Iván",
-      "pitch": "Mathematik-Absolvent mit Spezialisierung auf Cybersicherheit. Derzeit absolviere ich einen MBA mit einem praxisnahen Fokus auf Projektausführung und Organisationsmanagement. Ich arbeite gern an komplexen Herausforderungen und bringe Analyse, Urteilsvermögen und Struktur mit, um in technologiegetriebenen und digitalen Sicherheitsumfeldern greifbare Ergebnisse zu erzielen.",
+      "pitch": "Ich habe Mathematik studiert und mich auf Cybersicherheit spezialisiert. Derzeit absolviere ich den Masterstudiengang in Unternehmens-, Produkt- und Dienstleistungsmanagement an der UPV und verbringe einen Erasmus+-Aufenthalt an der Hochschule Ansbach in Deutschland. Ich verbinde Webentwicklung und die Verwaltung digitaler Infrastruktur mit Projektkoordination und studentischer Vertretung.",
       "titleLead": "Hi, ich bin",
       "titleAccent": "Iván",
       "scrollCue": "Scrollen"
@@ -71,7 +71,7 @@
   },
   "experience": {
     "title": "Ausgewählte Erfahrung",
-    "intro": "Ein Werdegang mit Schwerpunkt auf Projektmanagement, institutioneller Governance und Teamkoordination in komplexen organisatorischen Umfeldern.",
+    "intro": "Erfahrung in Webentwicklung, digitaler Infrastruktur, Projektmanagement und Hochschulverwaltung.",
     "fullExperience": "Wenn du meinen vollständigen Hintergrund in der studentischen Vertretung sehen möchtest, findest du ihn im Abschnitt Vertretung.",
     "viewRepresentation": "Vollständige Laufbahn ansehen",
     "current": "Aktuell"
@@ -88,12 +88,13 @@
       }
     },
     "list": {
-      "title": "Wichtige Projekte"
+      "title": "Wichtige Projekte",
+      "repositoryLabel": "Quellcode von {project} auf GitHub"
     }
   },
   "representation": {
     "title": "Studentische Vertretung",
-    "intro": "Umfassende Erfahrung in Hochschulpolitik, studentischer Interessenvertretung und institutioneller Governance.",
+    "intro": "Engagement in Hochschulpolitik, studentischer Interessenvertretung und institutioneller Governance.",
     "timelineLabel": "Zeitstrahl der studentischen Vertretung",
     "stats": {
       "years": "Jahre aktiv",
