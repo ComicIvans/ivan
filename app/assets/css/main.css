@@ -42,18 +42,24 @@
    on ember-500 (3.4:1) and on amber-500 (2.1:1), and both as text on their
    10% tints, fail WCAG AA, so light mode uses deeper steps of the same ramps:
    ember-700 and amber-800 keep text and solid fills at 4.9:1 or more on every
-   surface of the site. Dark mode keeps the 400 step (5.1:1 or more). Unlayered,
-   so these beat the color plugin's @layer theme rules; .dark comes last
-   because :root also matches html.dark. */
+   surface of the site. Dark mode keeps the 400 step (5.1:1 or more).
+   Muted text (neutral-500 by default) drops to 4.2–4.4:1 on the tinted page
+   and the translucent elevated surfaces, so light mode moves it halfway to
+   the 600 step: 5.2:1 or more there, and still a step lighter than toned
+   text. Dark mode restates the 400 default. Unlayered, so these beat Nuxt
+   UI's @layer theme rules; .dark comes last because :root also matches
+   html.dark. */
 :root,
 .light {
   --ui-primary: var(--ui-color-primary-700);
   --ui-warning: var(--ui-color-warning-800);
+  --ui-text-muted: color-mix(in oklab, var(--ui-color-neutral-500), var(--ui-color-neutral-600));
 }
 
 .dark {
   --ui-primary: var(--ui-color-primary-400);
   --ui-warning: var(--ui-color-warning-400);
+  --ui-text-muted: var(--ui-color-neutral-400);
 }
 
 /* Project cover plates read var(--color-<token>) with tokens named in
