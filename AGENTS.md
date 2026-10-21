@@ -127,6 +127,7 @@ Current scope includes:
 - A page that renders profile sections awaits `loadProfile()` in its setup (see `app/pages/index.vue`), so after a client-side navigation the sections mount with their content and GSAP setups and hash scrolling measure the final layout.
 - `/api/profile` formats the dates for every locale on the server; the client only picks the right string, so SSR and hydration print the same month names.
 - Project accents are `ember`/`amber`/`blue` shade tokens; `main.css` keeps those ramps in the build. Extend both together.
+- On the desktop motion tier the projects scene (`SectionProjects.vue`) pins one card row inside a single fixed window, so nothing below its bottom edge can be scrolled or tabbed to. Its cover height (`100svh - 26rem`) and pin floor (`pinFits`, `32rem`) budget about 15rem for the tallest card text in any locale (year, title, description, metrics, tags, links). After lengthening a project's text, tags or metrics, tab through the card links in a 1280x600 window and raise those two values together if a link ends up below the window.
 - Section titles and UI words ("Actualidad", "En curso") stay in the i18n JSON files.
 
 ---
