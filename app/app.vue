@@ -11,7 +11,7 @@ const siteUrl = computed(() => String(siteConfig.url ?? ''))
 const siteRoot = computed(() => siteUrl.value.replace(/\/$/, ''))
 const route = useRoute()
 const router = useRouter()
-const pendingPageFullPath = useState<string | null>('page-nav-pending-path', () => null)
+const pendingPagePath = useState<string | null>('page-nav-pending-path', () => null)
 
 const nuxtUiLocale = computed(() => getNuxtUiLocale(locale.value))
 const availableLocaleCodes = computed(() => localeCodes.value.map((code) => String(code)))
@@ -25,7 +25,7 @@ let removeRoutePendingHook: (() => void) | null = null
 let removeRouteErrorHook: (() => void) | null = null
 
 const clearPendingPagePath = () => {
-  pendingPageFullPath.value = null
+  pendingPagePath.value = null
 }
 
 useHead(() => ({
@@ -63,9 +63,11 @@ onMounted(() => {
   // navigation where supported; the Vue transition below is the fallback.
   pageTransitionsEnabled.value = !('startViewTransition' in document)
 
+  // Path, not fullPath: anchor links on the one-page only change the hash,
+  // which must neither hide nor remount the page.
   removeRoutePendingHook = router.beforeEach((to, from) => {
-    if (to.fullPath !== from.fullPath) {
-      pendingPageFullPath.value = from.fullPath
+    if (to.path !== from.path) {
+      pendingPagePath.value = from.path
     }
   })
 
@@ -172,10 +174,10 @@ useSchemaOrg([
           mode="out-in"
           @after-leave="clearPendingPagePath"
         >
-          <div :key="pageRoute.fullPath" class="page-shell-node">
+          <div :key="pageRoute.path" class="page-shell-node">
             <div
               class="page-shell-frame"
-              :class="{ 'page-nav-pending': pendingPageFullPath === pageRoute.fullPath }"
+              :class="{ 'page-nav-pending': pendingPagePath === pageRoute.path }"
             >
               <component :is="Component" />
             </div>
