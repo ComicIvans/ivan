@@ -21,7 +21,7 @@ function activateSection(id: SectionId) {
 
 <template>
   <nav
-    :aria-label="t('nav.mainNav')"
+    :aria-label="t('nav.sectionsNav')"
     class="fixed top-1/2 right-6 z-30 hidden -translate-y-1/2 flex-col gap-3 xl:flex"
   >
     <NuxtLink

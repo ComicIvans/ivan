@@ -80,7 +80,25 @@ function activateSection(id: SectionId) {
   }, 350)
 }
 
+// Off the home the links simply navigate there; the router scrolls to the hash.
+function onTabClick(id: SectionId) {
+  if (isHome.value) activateSection(id)
+  else mobileMenuOpen.value = false
+}
+
 const anchorLink = (id: string) => ({ path: localePath('/'), hash: `#${id}` })
+
+// The desktop pills show their labels from xl up; below that they are icons
+// with a tooltip.
+const showPillLabels = useMediaQuery('(min-width: 1280px)')
+
+const menuToggle = useTemplateRef<HTMLButtonElement>('menuToggle')
+
+function onKeydown(event: KeyboardEvent) {
+  if (event.key !== 'Escape' || !mobileMenuOpen.value) return
+  mobileMenuOpen.value = false
+  menuToggle.value?.focus()
+}
 
 const isDark = computed(() => colorMode.value === 'dark')
 const themeToggleIcon = computed(() => {
@@ -113,11 +131,13 @@ const handleResize = () => void syncIndicators()
 onMounted(() => {
   isClientReady.value = true
   window.addEventListener('resize', handleResize, { passive: true })
+  document.addEventListener('keydown', onKeydown)
   void syncIndicators()
 })
 
 onBeforeUnmount(() => {
   window.removeEventListener('resize', handleResize)
+  document.removeEventListener('keydown', onKeydown)
 })
 </script>
 
@@ -137,11 +157,12 @@ onBeforeUnmount(() => {
       >
         <!-- Mobile: menu toggle -->
         <button
+          ref="menuToggle"
           type="button"
           class="text-muted hover:text-highlighted focus-visible:ring-primary-600 inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-transparent focus-visible:ring-2 focus-visible:outline-none lg:hidden"
-          :aria-label="t('nav.mainNav')"
+          :aria-label="t('nav.menu')"
           :aria-expanded="mobileMenuOpen"
-          aria-controls="navbar-menu"
+          :aria-controls="mobileMenuOpen ? 'navbar-menu' : undefined"
           @click="mobileMenuOpen = !mobileMenuOpen"
         >
           <UIcon
@@ -192,27 +213,20 @@ onBeforeUnmount(() => {
               :ref="(element: Element | null) => setDesktopTabRef(tab.id, element)"
               class="relative z-10"
             >
-              <NuxtLink
-                v-if="isHome"
-                :to="anchorLink(tab.id)"
-                class="inline-flex cursor-pointer items-center gap-1.5 rounded-full px-2.5 py-2 text-sm font-medium whitespace-nowrap transition-colors"
-                :class="getTabClass(tab.id, desktopIndicatorStyle)"
-                :aria-current="activeTabId === tab.id ? 'true' : undefined"
-                @click="activateSection(tab.id)"
-              >
-                <UIcon :name="tab.icon" class="size-4" aria-hidden="true" />
-                <span class="hidden xl:inline">{{ tab.label }}</span>
-              </NuxtLink>
-              <NuxtLink
-                v-else
-                :to="anchorLink(tab.id)"
-                class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-2 text-sm font-medium whitespace-nowrap transition-colors"
-                :class="getTabClass(tab.id, desktopIndicatorStyle)"
-                :aria-current="activeTabId === tab.id ? 'page' : undefined"
-              >
-                <UIcon :name="tab.icon" class="size-4" aria-hidden="true" />
-                <span class="hidden xl:inline">{{ tab.label }}</span>
-              </NuxtLink>
+              <!-- Icon-only below xl: the label stays in the accessible name
+                   and shows as a tooltip. -->
+              <UTooltip :text="tab.label" :disabled="showPillLabels">
+                <NuxtLink
+                  :to="anchorLink(tab.id)"
+                  class="inline-flex cursor-pointer items-center gap-1.5 rounded-full px-2.5 py-2 text-sm font-medium whitespace-nowrap transition-colors"
+                  :class="getTabClass(tab.id, desktopIndicatorStyle)"
+                  :aria-current="activeTabId === tab.id ? 'true' : undefined"
+                  @click="onTabClick(tab.id)"
+                >
+                  <UIcon :name="tab.icon" class="size-4" aria-hidden="true" />
+                  <span class="sr-only xl:not-sr-only">{{ tab.label }}</span>
+                </NuxtLink>
+              </UTooltip>
             </li>
           </ul>
         </div>
@@ -222,7 +236,7 @@ onBeforeUnmount(() => {
             type="button"
             class="text-muted hover:text-highlighted focus-visible:ring-primary-600 inline-flex size-10 items-center justify-center rounded-full border border-transparent focus-visible:ring-2 focus-visible:outline-none"
             :aria-label="t('theme.toggle')"
-            :aria-pressed="isDark"
+            :aria-pressed="isClientReady ? isDark : undefined"
             @click="toggleTheme"
           >
             <UIcon :name="themeToggleIcon" class="size-5" aria-hidden="true" />
@@ -255,23 +269,11 @@ onBeforeUnmount(() => {
                   :style="{ '--stagger-index': index }"
                 >
                   <NuxtLink
-                    v-if="isHome"
                     :to="anchorLink(tab.id)"
                     class="flex w-full cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors"
                     :class="getTabClass(tab.id, mobileIndicatorStyle)"
                     :aria-current="activeTabId === tab.id ? 'true' : undefined"
-                    @click="activateSection(tab.id)"
-                  >
-                    <UIcon :name="tab.icon" class="size-5" aria-hidden="true" />
-                    <span>{{ tab.label }}</span>
-                  </NuxtLink>
-                  <NuxtLink
-                    v-else
-                    :to="anchorLink(tab.id)"
-                    class="flex items-center gap-3 rounded-xl px-4 py-3 transition-colors"
-                    :class="getTabClass(tab.id, mobileIndicatorStyle)"
-                    :aria-current="activeTabId === tab.id ? 'page' : undefined"
-                    @click="mobileMenuOpen = false"
+                    @click="onTabClick(tab.id)"
                   >
                     <UIcon :name="tab.icon" class="size-5" aria-hidden="true" />
                     <span>{{ tab.label }}</span>

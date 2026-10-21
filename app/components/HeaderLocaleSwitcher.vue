@@ -63,7 +63,7 @@ const selectLocale = (code: string) => {
       class="focus-visible:ring-primary-500 inline-flex size-10 items-center justify-center rounded-full focus-visible:ring-2 focus-visible:outline-none"
       :aria-label="t('language.toggle')"
       :aria-expanded="open"
-      :aria-controls="menuId"
+      :aria-controls="open ? menuId : undefined"
       @click="toggle"
     >
       <UIcon :name="currentLocale.icon" class="size-5" aria-hidden="true" />
@@ -92,7 +92,7 @@ const selectLocale = (code: string) => {
               @click="selectLocale(lang.code)"
             >
               <UIcon :name="lang.icon" class="size-4" aria-hidden="true" />
-              <span>{{ lang.name }}</span>
+              <span :lang="lang.code">{{ lang.name }}</span>
             </button>
           </li>
         </ul>
