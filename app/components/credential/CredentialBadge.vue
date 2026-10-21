@@ -64,9 +64,8 @@ const emblemB = useTemplateRef<SVGPathElement>('emblemB')
 const emblemC = useTemplateRef<SVGPathElement>('emblemC')
 const stampEl = useTemplateRef<HTMLElement>('stampEl')
 const swingEl = useTemplateRef<HTMLElement>('swingEl')
-const face3dEl = useTemplateRef<HTMLElement>('face3dEl')
 
-defineExpose({ emblemA, emblemB, emblemC, stampEl, swingEl, face3dEl })
+defineExpose({ emblemA, emblemB, emblemC, stampEl, swingEl })
 </script>
 
 <template>
@@ -77,7 +76,7 @@ defineExpose({ emblemA, emblemB, emblemC, stampEl, swingEl, face3dEl })
     :data-orientation="variant.orientation"
   >
     <div ref="swingEl" class="badge-swing">
-      <div ref="face3dEl" class="badge-3d" :class="variant.face === 'back' ? 'is-flipped' : ''">
+      <div class="badge-3d" :class="variant.face === 'back' ? 'is-flipped' : ''">
         <div class="badge-face badge-front">
           <span class="badge-punch" />
           <div class="badge-photo">
@@ -117,7 +116,12 @@ defineExpose({ emblemA, emblemB, emblemC, stampEl, swingEl, face3dEl })
             </template>
           </svg>
           <div class="badge-barcode" aria-hidden="true" />
-          <div v-if="pins.length" class="badge-pins" aria-hidden="true">
+          <!-- Organisation pins belong to the DELEGADO (representation) badge -->
+          <div
+            v-if="variant.id === 'representacion' && pins.length"
+            class="badge-pins"
+            aria-hidden="true"
+          >
             <span v-for="pin in pins" :key="pin" class="badge-pin font-mono">{{ pin }}</span>
           </div>
         </div>
@@ -170,6 +174,11 @@ defineExpose({ emblemA, emblemB, emblemC, stampEl, swingEl, face3dEl })
   height: 100%;
 }
 
+/* Container query units inside (the holder name) follow the badge width */
+.badge-swing {
+  container-type: inline-size;
+}
+
 .badge-3d {
   transform-style: preserve-3d;
   transition: transform 0.8s var(--motion-emphasized);
@@ -191,10 +200,6 @@ defineExpose({ emblemA, emblemB, emblemC, stampEl, swingEl, face3dEl })
     inset 0 0 0 1px color-mix(in oklab, var(--badge-accent) 35%, transparent),
     0 12px 32px -16px rgb(0 0 0 / 0.45);
   backdrop-filter: blur(10px);
-}
-
-.credential-badge.in-transit .badge-face {
-  backdrop-filter: none; /* keep the compositor cheap mid-flight */
 }
 
 .badge-back {
