@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { FormSubmitEvent } from '@nuxt/ui'
-import { contactFormSchema, type ContactFormData } from '~~/shared/utils/contactValidation'
+import type { FormSchema, FormSubmitEvent } from '@nuxt/ui'
+import type { ContactFormData } from '~~/shared/utils/contactValidation'
 import { CONTACT_FIELD_LIMITS } from '~~/shared/utils/contactShared'
 
 defineProps<{ id: string }>()
@@ -33,6 +33,21 @@ watch(
 onMounted(() => {
   form.startedAt = Date.now()
 })
+
+// The shared zod schema (and zod with it) loads on the first validation, not
+// with the home page: the form sits at the very bottom. UForm accepts any
+// Standard Schema and awaits its validate(), so this wrapper behaves exactly
+// like passing the zod schema itself (same issues, same parsed output).
+const contactSchema = {
+  '~standard': {
+    version: 1,
+    vendor: 'zod',
+    validate: async (value: unknown) => {
+      const { contactFormSchema } = await import('~~/shared/utils/contactValidation')
+      return contactFormSchema['~standard'].validate(value)
+    },
+  },
+} satisfies FormSchema<ContactFormData>
 
 const apiErrorMessages = computed<Record<string, string>>(() => ({
   CONTACT_VALIDATION: t('contactPage.form.apiErrors.missingFields'),
@@ -129,7 +144,7 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
       <!-- Contact Form -->
       <div class="surface-glass reveal rounded-2xl p-4 sm:p-6">
         <UForm
-          :schema="contactFormSchema"
+          :schema="contactSchema"
           :state="form"
           class="space-y-6"
           aria-describedby="form-description"
