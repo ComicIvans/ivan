@@ -171,7 +171,7 @@ watch(locale, async () => {
 </script>
 
 <template>
-  <section :id="id" ref="sectionEl" class="scroll-mt-24" :aria-label="t('nav.home')">
+  <section :id="id" ref="sectionEl" :aria-label="t('nav.home')">
     <!-- Hero panel: fills the first viewport under the navbar -->
     <div
       class="home-hero-panel relative flex min-h-[calc(88svh-var(--navbar-h))] items-center py-12"

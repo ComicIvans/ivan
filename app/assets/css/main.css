@@ -52,8 +52,10 @@
 
 html {
   scroll-behavior: smooth;
-  /* Fixed navbar height: the layout shell reserves this much space at the top
-     and anchor targets offset by it, so the bar never covers content. */
+  /* Anchor jumps, the skip link and focus scrolling stop clear of the fixed
+     navbar (the router adds this to its hash offset too). */
+  scroll-padding-top: calc(var(--navbar-h) + 2.5rem);
+  /* Fixed navbar height: the layout shell reserves this much space at the top. */
   --navbar-h: 3.5rem;
   /* Motion tokens: single source of truth for easing/durations/distances */
   --motion-emphasized: cubic-bezier(0.16, 1, 0.3, 1);

@@ -192,9 +192,11 @@ onBeforeUnmount(() => {
           />
         </button>
 
+        <!-- On the home a plain link to it would be a no-op: scroll back up -->
         <NuxtLink
-          :to="{ path: localePath('/') }"
+          :to="isHome ? anchorLink(SECTIONS[0].id) : { path: localePath('/') }"
           class="type-display text-highlighted hover:text-primary-700 dark:hover:text-primary-400 min-w-0 flex-1 truncate text-base transition-colors lg:flex-none lg:text-lg"
+          @click="onTabClick(SECTIONS[0].id)"
         >
           {{ t('header.title') }}
         </NuxtLink>

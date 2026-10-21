@@ -7,7 +7,7 @@ const { academic, languages, certifications, competencies } = useProfile()
 </script>
 
 <template>
-  <section :id="id" class="scroll-mt-24 py-20 sm:py-28" :aria-labelledby="`${id}-title`">
+  <section :id="id" class="py-20 sm:py-28" :aria-labelledby="`${id}-title`">
     <RevealHeading :title="t('training.title')" :heading-id="`${id}-title`" accent="amber" />
 
     <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">

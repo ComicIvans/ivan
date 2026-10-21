@@ -120,12 +120,7 @@ useGsapMatchMedia(sectionEl, (ctx) => {
 </script>
 
 <template>
-  <section
-    :id="id"
-    ref="sectionEl"
-    class="scroll-mt-24 py-20 sm:py-28"
-    :aria-labelledby="`${id}-title`"
-  >
+  <section :id="id" ref="sectionEl" class="py-20 sm:py-28" :aria-labelledby="`${id}-title`">
     <div class="flex flex-wrap items-start justify-between gap-6">
       <RevealHeading
         :title="t('gallery.title')"

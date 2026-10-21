@@ -41,7 +41,7 @@ watch(
 </script>
 
 <template>
-  <section :id="id" class="scroll-mt-24 py-20 sm:py-28" :aria-labelledby="`${id}-title`">
+  <section :id="id" class="py-20 sm:py-28" :aria-labelledby="`${id}-title`">
     <div class="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)] lg:gap-16">
       <div class="lg:sticky lg:top-28 lg:self-start">
         <RevealHeading

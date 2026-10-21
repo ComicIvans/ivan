@@ -139,7 +139,7 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
 </script>
 
 <template>
-  <section :id="id" class="scroll-mt-24 py-20 sm:py-28" :aria-labelledby="`${id}-title`">
+  <section :id="id" class="py-20 sm:py-28" :aria-labelledby="`${id}-title`">
     <RevealHeading
       :title="t('contactPage.title')"
       :heading-id="`${id}-title`"
