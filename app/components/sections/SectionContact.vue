@@ -323,7 +323,7 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
           {{ t('contactPage.aside.availability') }}
         </p>
 
-        <p class="text-dimmed text-sm">
+        <p class="text-muted text-sm">
           {{ t('contactPage.form.privacyNote') }}
         </p>
       </aside>

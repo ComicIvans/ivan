@@ -318,9 +318,7 @@ watch(locale, async () => {
           :class="lastLeadTileClass"
           @click="scrollToSection('experiencia')"
         >
-          <p
-            class="text-primary-600 dark:text-primary-400 flex items-center gap-2 text-xs font-medium tracking-wide"
-          >
+          <p class="text-primary flex items-center gap-2 text-xs font-medium tracking-wide">
             <span class="relative flex size-2" aria-hidden="true">
               <span
                 class="now-dot-ping bg-primary-500 absolute inline-flex size-full rounded-full"

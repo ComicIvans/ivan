@@ -34,7 +34,7 @@ const socialLinks = computed(() => [
 </script>
 
 <template>
-  <footer class="footer-band text-muted p-4 pb-6 md:pb-4" role="contentinfo">
+  <footer class="footer-band text-toned p-4 pb-6 md:pb-4" role="contentinfo">
     <div
       class="mx-auto flex w-11/12 max-w-7xl flex-col items-center gap-4 pt-2 text-center md:grid md:grid-cols-[auto_1fr_auto] md:items-center md:gap-8"
     >

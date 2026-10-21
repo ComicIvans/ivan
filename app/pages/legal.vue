@@ -146,7 +146,7 @@ usePageSeo('legal.title', 'seo.pages.legal', { robots: 'noindex, follow' })
           </section>
 
           <!-- Last update -->
-          <p class="text-dimmed mt-8 text-sm">
+          <p class="text-muted mt-8 text-sm">
             {{ t('legal.lastUpdate') }}: {{ t('legal.updateDate') }}
           </p>
         </div>

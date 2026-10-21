@@ -15,12 +15,13 @@ const props = withDefaults(
   }
 )
 
+// 700 in light mode: the index number is small text and needs 4.5:1.
 const accentText = computed(
   () =>
     ({
-      ember: 'text-primary-600 dark:text-primary-400',
-      amber: 'text-amber-600 dark:text-amber-400',
-      blue: 'text-blue-600 dark:text-blue-400',
+      ember: 'text-primary-700 dark:text-primary-400',
+      amber: 'text-amber-700 dark:text-amber-400',
+      blue: 'text-blue-700 dark:text-blue-400',
     })[props.accent]
 )
 

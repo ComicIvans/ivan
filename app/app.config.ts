@@ -11,6 +11,19 @@ export default defineAppConfig({
     skeleton: {
       base: 'skeleton-brand rounded-md',
     },
+    // The default hover/active state fades primary to 75%, which drops the
+    // button text below 4.5:1 (3.96:1 light, 4.29:1 dark); 90% keeps it
+    // above 5.3:1 in both modes.
+    button: {
+      compoundVariants: [
+        { color: 'primary', variant: 'solid', class: 'hover:bg-primary/90 active:bg-primary/90' },
+        {
+          color: 'primary',
+          variant: 'link',
+          class: 'hover:text-primary/90 active:text-primary/90',
+        },
+      ],
+    },
     // Nuxt UI defaults to lucide, which is not installed: map the built-in
     // icons the app's components render (select, pagination, modal/toast
     // close, loading states) to tabler so every icon comes from the locally
