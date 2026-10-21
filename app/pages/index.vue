@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import type { Component } from 'vue'
 import SectionContact from '~/components/sections/SectionContact.vue'
 import SectionExperience from '~/components/sections/SectionExperience.vue'
@@ -32,9 +33,36 @@ const tier = useMotionTier()
 // v-if, and the client's FIRST render must match it even though matchMedia
 // already reports the real tier. It mounts one tick after hydration.
 const hydrated = ref(false)
+// True only while the server-rendered page hydrates (not after client-side
+// navigations, where the router owns the hash scroll).
+const initialLoad = useNuxtApp().isHydrating
 onMounted(() => {
   hydrated.value = true
+  if (initialLoad) holdInitialHashTarget()
 })
+
+const USER_SCROLL_EVENTS = ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const
+
+/**
+ * Initial deep links (/#contacto, the legacy 301 redirects): the browser and
+ * the router scroll to the hash while the GSAP setups are still settling.
+ * Each ScrollTrigger refresh puts the page back at a recorded pixel offset,
+ * which cuts a smooth scroll short, and the projects pin adds height above
+ * the later sections. Land on the target after every refresh until the
+ * visitor scrolls on their own.
+ */
+function holdInitialHashTarget() {
+  const target = location.hash ? document.getElementById(location.hash.slice(1)) : null
+  if (!target) return
+  const realign = () => target.scrollIntoView({ behavior: 'instant' })
+  const release = () => {
+    ScrollTrigger.removeEventListener('refresh', realign)
+    for (const type of USER_SCROLL_EVENTS) window.removeEventListener(type, release)
+  }
+  ScrollTrigger.addEventListener('refresh', realign)
+  for (const type of USER_SCROLL_EVENTS) window.addEventListener(type, release, { passive: true })
+  window.setTimeout(release, 5000)
+}
 
 // Mount the sections with their content in place. After a client-side
 // navigation the profile is fetched here, and the sections' mount-time GSAP
