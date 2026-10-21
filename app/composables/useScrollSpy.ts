@@ -1,3 +1,7 @@
+/** Id of the home section currently being read; null off the home. */
+export const useActiveSectionId = () =>
+  useState<string | null>('section-scroll-spy-active', () => null)
+
 /**
  * Deterministic scroll spy for the anchor navigation. IntersectionObserver
  * only signals WHEN to recompute; pick() decides WHAT is active: the observed
@@ -6,9 +10,9 @@
  * sections cross the band at once or a pinned scene stretches one of them.
  */
 export function useScrollSpy(sectionIds: Readonly<string[]>) {
-  const activeId = useState<string | null>('section-scroll-spy-active', () => null)
+  const activeId = useActiveSectionId()
   const initialized = useState<boolean>('section-scroll-spy-initialized', () => false)
-  const route = useRoute()
+  const nuxtApp = useNuxtApp()
 
   const ACTIVATION_LINE = 0.35 // fraction of viewport height
 
@@ -33,6 +37,8 @@ export function useScrollSpy(sectionIds: Readonly<string[]>) {
   }
 
   onMounted(() => {
+    // One observer for the whole app: the persistent navbar owns it and the
+    // other consumers (dot rail) only read the shared state.
     if (initialized.value) return
     initialized.value = true
     const observer = new IntersectionObserver(() => pick(), {
@@ -42,40 +48,27 @@ export function useScrollSpy(sectionIds: Readonly<string[]>) {
 
     const observeAll = () => {
       observer.disconnect()
-      let found = 0
       for (const id of sectionIds) {
         const el = document.getElementById(id)
-        if (el) {
-          observer.observe(el)
-          found++
-        }
+        if (el) observer.observe(el)
       }
       pick() // initial state (covers deep links landing on a hash)
-      return found
     }
 
-    // The consumer (fixed navbar / dot rail) can mount before the page slot
-    // renders its sections, so retry across a few frames until they exist.
-    let attempts = 0
-    const tryObserve = () => {
-      if (observeAll() > 0 || attempts >= 20) return
-      attempts++
-      requestAnimationFrame(tryObserve)
-    }
-    void nextTick(tryObserve)
-
-    // Sections unmount/remount across route changes while the navbar persists.
-    watch(
-      () => route.path,
-      async () => {
-        await nextTick()
-        attempts = 0
-        tryObserve()
-      }
-    )
+    observeAll()
+    // Sections unmount and remount across route changes while the navbar
+    // persists; page:finish fires once the new page is in the DOM, also
+    // after a fallback page transition has swapped the old page out.
+    const removePageHook = nuxtApp.hook('page:finish', () => {
+      requestAnimationFrame(observeAll)
+    })
+    // A resize can move the sections without any band crossing.
+    window.addEventListener('resize', pick, { passive: true })
 
     onBeforeUnmount(() => {
       observer.disconnect()
+      removePageHook()
+      window.removeEventListener('resize', pick)
       initialized.value = false
     })
   })
