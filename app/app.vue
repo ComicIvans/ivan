@@ -55,7 +55,9 @@ useSeoMeta({
 onMounted(() => {
   // The native View Transitions API (experimental.viewTransition) owns page
   // navigation where supported; the Vue transition below is the fallback.
-  pageTransitionsEnabled.value = !('startViewTransition' in document)
+  // By value, like Nuxt's own check: a property that is present but not a
+  // function starts no view transition either.
+  pageTransitionsEnabled.value = typeof document.startViewTransition !== 'function'
 
   // Path, not fullPath: anchor links on the one-page only change the hash,
   // which must neither hide nor remount the page.
