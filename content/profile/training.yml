@@ -127,7 +127,7 @@ languages:
     level:
       es: Nativo
       en: Native
-      de: Muttersprache
+      de: Muttersprachlich
     description:
       es: Lengua materna.
       en: Mother tongue.

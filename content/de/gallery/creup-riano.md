@@ -1,5 +1,5 @@
 ---
-title: Präsenztreffen des erweiterten CREUP-Vorstands
+title: Präsenztreffen der erweiterten Exekutivkommission von CREUP
 location: Riaño, Kantabrien, Spanien
 description: Präsenztreffen der Vizepräsidentschaften und Vorstandsmitglieder von CREUP zur Nachverfolgung der strategischen Planung und zur bereichsübergreifenden Zusammenarbeit.
 cover:
@@ -18,8 +18,8 @@ tags:
   - CREUP
   - Treffen
 seo:
-  title: CREUP-Vorstandstreffen - Riaño 2025
-  description: Fotogalerie vom Präsenztreffen des erweiterten CREUP-Vorstands in Riaño.
+  title: Treffen der erweiterten CREUP-Exekutivkommission - Riaño 2025
+  description: Fotogalerie vom Präsenztreffen der erweiterten Exekutivkommission von CREUP in Riaño.
 ---
 
 ::event-about

@@ -52,13 +52,13 @@
     "stats": {
       "projects": "Veröffentlichte Projekte",
       "roles": "Vertretungsämter",
-      "events": "Events in der Galerie"
+      "events": "Veranstaltungen in der Galerie"
     },
     "now": {
       "title": "Aktuell"
     },
     "tiles": {
-      "gallery": "Neuestes Event"
+      "gallery": "Neueste Veranstaltung"
     }
   },
   "period": {
@@ -171,7 +171,7 @@
       "title": "Sprachen",
       "proficiency": "Sprachniveau",
       "level": "Niveau {level}",
-      "native": "Muttersprache"
+      "native": "Muttersprachlich"
     },
     "other": {
       "title": "Weitere Zertifizierungen"

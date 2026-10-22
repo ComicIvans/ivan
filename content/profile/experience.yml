@@ -19,11 +19,11 @@ items:
     organization:
       es: Coordinadora de Representantes de Estudiantes de Universidades Públicas (CREUP)
       en: Coordinator of Student Representatives of Public Universities (CREUP)
-      de: Koordinierung der Studierendenvertretungen öffentlicher Universitäten (CREUP)
+      de: Koordinationsstelle der Studierendenvertretungen öffentlicher Universitäten (CREUP)
     description:
       es: Gestión de infraestructura VPS, Google Workspace y definición de políticas de seguridad, privacidad y protección de datos de la organización.
       en: Management of VPS infrastructure, Google Workspace and the definition of security, privacy and data protection policies for the organisation.
-      de: Verwaltung der VPS-Infrastruktur, Google Workspace sowie die Definition von Sicherheits-, Datenschutz- und Daten­schutzrichtlinien für die Organisation.
+      de: Verwaltung der VPS-Infrastruktur, Google Workspace sowie die Definition von Sicherheits- und Datenschutzrichtlinien für die Organisation.
   - id: upv-web-internship
     icon: i-simple-icons-wordpress
     start: 2026-06

@@ -24,7 +24,7 @@ photos:
     alt: Podiumsdiskussion der Tagung aus Sicht des Publikums
 tags:
   - CEEINA
-  - Formationen
+  - Fortbildung
 seo:
   title: IV. CEEINA-Fortbildungstagung 2025
   description: Fotogalerie der IV. CEEINA-Fortbildungstagung in Munébrega (Zaragoza).
@@ -40,7 +40,7 @@ Diese Tagung besteht aus einem Aufenthalt in einer Herberge in der Region Aragó
 ::
 
 ::event-participation
-Ich nahm an der Tagung als **Ausbilder** teil und hielt insgesamt vier Vorträge (zwei Schulungen in zwei verschiedenen Gruppen):
+Ich nahm an der Tagung als **Referent** teil und hielt insgesamt vier Vorträge (zwei Schulungen in zwei verschiedenen Gruppen):
 
 **IT-Tools in der Studierendenvertretung**
 
@@ -50,5 +50,5 @@ In dieser Schulung teilte ich eine Reihe von Tools und Tipps zu Informationstech
 
 In diesem zweiten Vortrag ging ich darauf ein, wie Beschwerden, die beim Studierendenrat eingehen, ordnungsgemäß und effizient bearbeitet werden können, einschließlich ihrer Klassifizierung und der zu befolgenden Protokolle. Ich sprach auch darüber, wie Daten sicher und vorschriftsgemäß behandelt und gespeichert werden sollten.
 
-Ich danke für die Gelegenheit, als Trainer an einer Veranstaltung dieser Art teilgenommen zu haben, und freue mich darüber, dass die Vorträge bei den Teilnehmenden gut angekommen sind.
+Ich danke für die Gelegenheit, als Referent an einer Veranstaltung dieser Art teilgenommen zu haben, und freue mich darüber, dass die Vorträge bei den Teilnehmenden gut angekommen sind.
 ::

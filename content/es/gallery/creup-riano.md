@@ -41,9 +41,9 @@ A este encuentro asistieron las distintas Vicepresidencias y Vocalías de la org
 ::
 
 ::event-participation
-Durante la reunión se avanzamos en varias líneas de trabajo prioritarias:
+Durante la reunión avanzamos en varias líneas de trabajo prioritarias:
 
-- **Nueva página web**: En coordinación con el Área de Comunicación, realizamos en el diseño y definición de la nueva página web de CREUP.
+- **Nueva página web**: En coordinación con el Área de Comunicación, trabajamos en el diseño y la definición de la nueva página web de CREUP.
 - **Mejoras en la Intranet**: Analizamos las necesidades de la Tesorería y el Área de Organización con el fin de optimizar la gestión económica y de eventos dentro de la Intranet.
 
 Este encuentro permitió alinear esfuerzos, mejorar la coordinación interna y concretar las principales líneas de trabajo para los meses siguientes.

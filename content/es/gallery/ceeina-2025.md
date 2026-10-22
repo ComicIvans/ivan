@@ -49,7 +49,7 @@ seo:
   title: IV Jornadas de Formación del CEEINA 2025
   description: Galería de fotos de las IV Jornadas de Formación del CEEINA celebradas en Munébrega (Zaragoza).
 links:
-  - label: Web oficial del IV Jornadas de Formación
+  - label: Web oficial de las IV Jornadas de Formación
     url: https://ceeina.unizar.es/noticia/iv-jornadas-de-formacion-del-ceeina
 ---
 

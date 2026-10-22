@@ -1,5 +1,5 @@
 ---
-title: 78ª Asamblea General Ordinaria de CREUP
+title: 78.ª Asamblea General Ordinaria de CREUP
 location: Barcelona, España
 date: 2025-11-04
 endDate: 2025-11-08
@@ -62,8 +62,8 @@ photos:
     height: 1440
 draft: false
 seo:
-  title: 78ª AGO CREUP - Barcelona 2025
-  description: Galería de fotos de la 78ª Asamblea General Ordinaria de CREUP celebrada en Barcelona.
+  title: 78.ª AGO CREUP - Barcelona 2025
+  description: Galería de fotos de la 78.ª Asamblea General Ordinaria de CREUP celebrada en Barcelona.
 ---
 
 ::event-about

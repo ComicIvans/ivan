@@ -29,7 +29,7 @@ seo:
   title: 4th CEEINA Training Conference 2025
   description: Photo gallery from the 4th CEEINA Training Conference held in Munébrega (Zaragoza).
 links:
-  - label: Official Website of the 4th Training Conference
+  - label: Official website of the 4th Training Conference
     url: https://ceeina.unizar.es/noticia/iv-jornadas-de-formacion-del-ceeina
 ---
 
