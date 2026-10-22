@@ -623,6 +623,10 @@ textarea,
     transform: none !important;
   }
 
+  .page-nav-pending {
+    pointer-events: auto !important;
+  }
+
   .aurora-ring,
   .float-y,
   .ink-gradient {

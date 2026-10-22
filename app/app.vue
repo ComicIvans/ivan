@@ -21,6 +21,7 @@ const pageTransitionsEnabled = ref(false)
 
 let removeRoutePendingHook: (() => void) | null = null
 let removeRouteErrorHook: (() => void) | null = null
+let removeRouteAfterHook: (() => void) | null = null
 
 const clearPendingPagePath = () => {
   pendingPagePath.value = null
@@ -67,11 +68,19 @@ onMounted(() => {
   removeRouteErrorHook = router.onError(() => {
     clearPendingPagePath()
   })
+
+  // A cancelled or aborted navigation (another click while the page chunk
+  // loads) is a failure, not an error, and no page leaves: without this the
+  // current page would stay hidden and unclickable.
+  removeRouteAfterHook = router.afterEach((_to, _from, failure) => {
+    if (failure) clearPendingPagePath()
+  })
 })
 
 onBeforeUnmount(() => {
   removeRoutePendingHook?.()
   removeRouteErrorHook?.()
+  removeRouteAfterHook?.()
 })
 
 // Person details derived from the profile content, so the structured data
