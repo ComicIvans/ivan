@@ -32,7 +32,8 @@ export function getSmtpTransporter(event?: H3Event, publicMessage?: string): Tra
     // Without implicit TLS (NUXT_SMTP_SECURE=false, e.g. port 587), insist on
     // STARTTLS: otherwise someone on the network path who strips the server's
     // STARTTLS offer would read the credentials and the messages. A relay on
-    // this machine's loopback interface never crosses a network.
+    // this machine's loopback interface never crosses a network (in Docker,
+    // the container's own loopback: the host is reached over a network).
     requireTLS: !config.secure && !isLoopbackHost(config.host),
     connectionTimeout: 10_000,
     greetingTimeout: 10_000,
