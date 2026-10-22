@@ -124,9 +124,12 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      // ICO for browsers without SVG favicons (sizes="32x32" keeps the others
+      // on the SVG), and an opaque PNG for iOS home-screen bookmarks.
       link: [
-        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg', sizes: 'any' },
-        { rel: 'shortcut icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'icon', href: '/favicon.ico', sizes: '32x32' },
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
       ],
     },
   },

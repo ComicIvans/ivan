@@ -4,6 +4,8 @@
  * OG image). Keep these in sync
  * with the `ember`/amber/blue tokens declared in app/assets/css/main.css's
  * `@theme` block — they are the same ramp, just duplicated for JS-only use.
+ * The static icons in public/ (favicon.svg, favicon.ico, apple-touch-icon.png)
+ * draw the badge's IS monogram on the ember-400 → ember-600 gradient.
  */
 export const themeColors = {
   /** --color-ember-400 */
