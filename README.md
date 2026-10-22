@@ -117,8 +117,10 @@ esa cabecera, la que añade el proxy; sin la cabecera se usa la dirección de la
 conexión. El limitador de peticiones guarda en el directorio de datos
 (`/data/ratelimit` en Docker) un contador por cliente bajo un HMAC de su IP
 derivado de `NUXT_APP_SECRET`, nunca la IP, y borra cada registro como mucho
-diez minutos después de que termine su ventana. La configuración
-recomendada de nginx está en [docs/nginx.md](docs/nginx.md).
+diez minutos después de que termine su ventana. Además del límite por
+cliente, el formulario envía como mucho 40 correos al día en total, sea cual
+sea su origen. La configuración recomendada de nginx está en
+[docs/nginx.md](docs/nginx.md).
 
 `DATA_DIR` (solo en tiempo de compilación) fija dónde escribe el servidor la base
 de datos de Nuxt Content y el limitador: la imagen de Docker usa `/data` y

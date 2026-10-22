@@ -18,12 +18,20 @@ interface RateLimitOptions {
   maxRequests: number
   windowMs: number
   errorMessage: string
+  /**
+   * Counts every request under this fixed name instead of the client's
+   * address: one shared budget for the whole site.
+   */
+  bucket?: string
+  /** Called once per window, on the first request over the limit. */
+  onLimitReached?: () => void
 }
 
 const STORAGE_NAME = 'ratelimit'
 // `<namespace>:<128-bit hex digest>`: flat, fixed-length and safe as a file
 // name for the fs driver (which maps ':' to '/').
 const KEY_PATTERN = /^[a-z0-9-]+:[0-9a-f]{32}$/
+const PRUNE_CHUNK_SIZE = 100
 
 const pendingByKey = new Map<string, Promise<void>>()
 
@@ -75,9 +83,9 @@ function clientBucket(ip: string): string {
   return `${prefix.join(':')}::/64`
 }
 
-async function storageKey(namespace: string, ip: string): Promise<string> {
+async function storageKey(namespace: string, bucket: string): Promise<string> {
   const digest = createHmac('sha256', await getHashKey())
-    .update(`${namespace}\0${clientBucket(ip)}`)
+    .update(`${namespace}\0${bucket}`)
     .digest('hex')
     .slice(0, 32)
   return `${namespace.toLowerCase().replace(/[^a-z0-9-]/g, '-')}:${digest}`
@@ -97,13 +105,17 @@ function isRecord(value: unknown): value is RateLimitRecord {
  * File-based, proxy-aware rate limiter. State lives in the `ratelimit` Nitro
  * storage (an `fs` driver on the persistent data volume), so it survives
  * process restarts. Each record holds a request count and the end of its
- * window under a keyed hash of the client address, never the address itself.
+ * window under a keyed hash of the client address (or of a shared `bucket`),
+ * never the address itself.
  * It fails open if storage is unavailable: rate limiting is defense in depth,
  * not a hard gate.
  */
 export async function enforceRateLimit(event: H3Event, options: RateLimitOptions): Promise<void> {
   const storage = useStorage<RateLimitRecord>(STORAGE_NAME)
-  const key = await storageKey(options.namespace, getClientIp(event))
+  const bucket = options.bucket ?? clientBucket(getClientIp(event))
+  const key = await storageKey(options.namespace, bucket)
+  const tooManyRequests = () =>
+    createError({ statusCode: 429, statusMessage: options.errorMessage })
 
   await serializeByKey(key, async () => {
     const now = Date.now()
@@ -114,10 +126,15 @@ export async function enforceRateLimit(event: H3Event, options: RateLimitOptions
       return
     }
 
-    const nextRecord: RateLimitRecord =
-      isRecord(record) && record.resetAt > now
-        ? { count: record.count + 1, resetAt: record.resetAt }
-        : { count: 1, resetAt: now + options.windowMs }
+    const current = isRecord(record) && record.resetAt > now ? record : null
+
+    // Already over the limit: refuse without writing, so a flood costs one
+    // read per request and the window still ends at the stored resetAt.
+    if (current && current.count > options.maxRequests) throw tooManyRequests()
+
+    const nextRecord: RateLimitRecord = current
+      ? { count: current.count + 1, resetAt: current.resetAt }
+      : { count: 1, resetAt: now + options.windowMs }
 
     try {
       await storage.setItem(key, nextRecord)
@@ -126,7 +143,8 @@ export async function enforceRateLimit(event: H3Event, options: RateLimitOptions
     }
 
     if (nextRecord.count > options.maxRequests) {
-      throw createError({ statusCode: 429, statusMessage: options.errorMessage })
+      options.onLimitReached?.()
+      throw tooManyRequests()
     }
   })
 }
@@ -145,11 +163,15 @@ export async function pruneRateLimitStore(): Promise<void> {
     return
   }
 
+  // In chunks: a flood can leave one record per client, and opening them all
+  // at once could run out of file handles.
   const now = Date.now()
-  await Promise.all(
-    keys.map(async (key) => {
-      const record = await storage.getItem(key)
-      if (!isRecord(record) || record.resetAt <= now) await storage.removeItem(key)
-    })
-  )
+  for (let start = 0; start < keys.length; start += PRUNE_CHUNK_SIZE) {
+    await Promise.all(
+      keys.slice(start, start + PRUNE_CHUNK_SIZE).map(async (key) => {
+        const record = await storage.getItem(key)
+        if (!isRecord(record) || record.resetAt <= now) await storage.removeItem(key)
+      })
+    )
+  }
 }

@@ -10,7 +10,9 @@ export default defineNitroPlugin((nitroApp) => {
 
   const prune = () =>
     pruneRateLimitStore().catch((error: unknown) => {
-      console.warn('[rate-limit] Could not prune expired records:', error)
+      // An error, not a warning: records then outlive the deletion period
+      // the legal page states.
+      console.error('[rate-limit] Could not prune expired records:', error)
     })
 
   void prune()

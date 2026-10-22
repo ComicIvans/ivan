@@ -13,6 +13,9 @@ import { CONTACT_MIN_SUBMIT_DELAY_MS } from '~~/shared/utils/contactShared'
 import { readLimitedJsonBody } from '../utils/readLimitedJsonBody'
 
 const MAX_CONTACT_BODY_BYTES = 32 * 1024
+// Far above the real traffic of a personal site, low enough that a flood
+// cannot get the SMTP account throttled or suspended.
+const SITE_DAILY_EMAIL_LIMIT = 40
 
 const CONTACT_ERROR_CODES = {
   validation: 'CONTACT_VALIDATION',
@@ -138,6 +141,22 @@ export default defineEventHandler(async (event) => {
   const toEmail = getRequiredSmtpToEmail(event, CONTACT_ERROR_CODES.serviceUnavailable)
 
   const transporter = getSmtpTransporter(event, CONTACT_ERROR_CODES.serviceUnavailable)
+
+  // Site-wide cap on the emails actually sent, whatever address they come
+  // from: the per-client limit alone does not bound a flood spread over many
+  // addresses. Counted last, so rejected or dropped submissions never use it
+  // up.
+  await enforceRateLimit(event, {
+    namespace: 'contact-all',
+    bucket: 'site',
+    maxRequests: SITE_DAILY_EMAIL_LIMIT,
+    windowMs: 24 * 60 * 60 * 1000,
+    errorMessage: CONTACT_ERROR_CODES.rateLimited,
+    onLimitReached: () =>
+      console.warn(
+        `[contact] Site-wide limit of ${SITE_DAILY_EMAIL_LIMIT} emails a day reached: further messages are refused until the window ends`
+      ),
+  })
 
   const language = locale ? `${languageNames.of(locale) ?? locale} (${locale})` : 'desconocido'
 
