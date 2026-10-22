@@ -1,8 +1,19 @@
+import { fileURLToPath } from 'node:url'
+import { join, resolve } from 'node:path'
 import { requireConfigUrl } from './shared/utils/config'
 import { defaultLocale, siteLocales } from './shared/constants/locales'
 import { profileName } from './shared/constants/profile'
 
 const isDev = process.env.NODE_ENV !== 'production'
+
+// Where the production server keeps its writable data (the Nuxt Content
+// database and the rate-limit records). Read at build time and baked into
+// the server bundle as an absolute path. The Docker image sets DATA_DIR=/data
+// (its persistent volume); any other build keeps the data inside the
+// project's .data folder instead of the filesystem (or Windows drive) root.
+const dataDir = resolve(
+  process.env.DATA_DIR || fileURLToPath(new URL('./.data/production', import.meta.url))
+)
 const hasUmami = Boolean(process.env.NUXT_UMAMI_ID && process.env.NUXT_UMAMI_HOST)
 const siteUrl = requireConfigUrl(process.env.SITE_URL, 'SITE_URL')
 const siteImageHostname = new URL(siteUrl).hostname
@@ -377,7 +388,7 @@ export default defineNuxtConfig({
       : {
           database: {
             type: 'sqlite',
-            filename: '/data/nuxt-content.sqlite',
+            filename: join(dataDir, 'nuxt-content.sqlite'),
           },
         }),
   },
@@ -399,11 +410,11 @@ export default defineNuxtConfig({
       crawlLinks: false,
       failOnError: false,
     },
-    // File-based storage for the contact rate limiter (persisted on the /data volume).
+    // File-based storage for the rate limiter (persisted in the data directory).
     storage: {
       ratelimit: {
         driver: 'fs',
-        base: process.env.RATE_LIMIT_DIR || '/data/ratelimit',
+        base: join(dataDir, 'ratelimit'),
       },
     },
     devStorage: {

@@ -18,6 +18,7 @@ npm-debug.log
 .claude
 .github
 .vscode
+.data
 /data
 # Gallery originals; the image only needs the WebP files in public/gallery
 /gallery-src

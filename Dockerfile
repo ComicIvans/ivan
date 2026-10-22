@@ -22,6 +22,10 @@ ENV SITE_URL=$SITE_URL \
   NUXT_UMAMI_HOST=$NUXT_UMAMI_HOST \
   NUXT_UMAMI_ID=$NUXT_UMAMI_ID
 
+# The server keeps its writable data (Nuxt Content database, rate-limit
+# records) on the /data volume. nuxt.config.ts bakes this path into the build.
+ENV DATA_DIR=/data
+
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \

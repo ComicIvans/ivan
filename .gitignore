@@ -29,7 +29,7 @@ REVISION_CONTENIDO.md
 recommendations.md
 code_review.md
 
-# Local Nuxt Content database created by production builds
+# Runtime data of older local production runs (now kept in .data/production)
 /data
 
 # Local env files

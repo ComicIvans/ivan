@@ -87,6 +87,10 @@ conexión. El limitador de peticiones guarda en el directorio de datos
 derivado de `NUXT_APP_SECRET`, nunca la IP, y borra cada registro como mucho
 diez minutos después de que termine su ventana.
 
+`DATA_DIR` (solo en tiempo de compilación) fija dónde escribe el servidor la base
+de datos de Nuxt Content y el limitador: la imagen de Docker usa `/data` y
+cualquier otra compilación, `.data/production` dentro del proyecto.
+
 Los binarios de la galería se mantienen fuera de Git. Antes de construir o
 desplegar hay que restaurar `public/gallery/` desde la copia privada; los
 originales de las fotos van en `gallery-src/`, que tampoco entra en Git ni en
