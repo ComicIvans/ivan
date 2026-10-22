@@ -244,11 +244,11 @@
       },
       "purpose": {
         "title": "Finalidad del tratamiento",
-        "description": "Los datos proporcionados se utilizarán exclusivamente para responder a tu consulta o propuesta. No se utilizarán para ningún otro fin."
+        "description": "Los datos que envías se utilizarán exclusivamente para responder a tu consulta o propuesta y para proteger el formulario contra abusos, como los envíos automáticos o el spam. No se utilizarán para ningún otro fin."
       },
       "legitimation": {
         "title": "Base legal",
-        "description": "El tratamiento de tus datos se basa en tu consentimiento, otorgado al enviar el formulario de contacto (Art. 6.1.a RGPD)."
+        "description": "La respuesta a tu consulta se basa en tu consentimiento, otorgado al enviar el formulario de contacto (art. 6.1.a del RGPD), y la protección contra abusos, en el interés legítimo en proteger el sitio (art. 6.1.f del RGPD)."
       },
       "retention": {
         "title": "Conservación de datos",

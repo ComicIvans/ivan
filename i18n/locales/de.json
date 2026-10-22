@@ -244,11 +244,11 @@
       },
       "purpose": {
         "title": "Zweck der Verarbeitung",
-        "description": "Die bereitgestellten Daten werden ausschließlich verwendet, um auf deine Anfrage oder dein Angebot zu antworten. Sie werden nicht für andere Zwecke genutzt."
+        "description": "Die von dir gesendeten Daten werden ausschließlich verwendet, um auf deine Anfrage oder dein Angebot zu antworten und das Formular vor Missbrauch wie automatisierten Einsendungen oder Spam zu schützen. Sie werden nicht für andere Zwecke genutzt."
       },
       "legitimation": {
         "title": "Rechtsgrundlage",
-        "description": "Die Verarbeitung basiert auf deiner Einwilligung, die du beim Absenden des Kontaktformulars erteilst (Art. 6 Abs. 1 lit. a DSGVO)."
+        "description": "Die Beantwortung deiner Anfrage basiert auf deiner Einwilligung, die du beim Absenden des Kontaktformulars erteilst (Art. 6 Abs. 1 lit. a DSGVO), der Schutz vor Missbrauch auf dem berechtigten Interesse am Schutz der Website (Art. 6 Abs. 1 lit. f DSGVO)."
       },
       "retention": {
         "title": "Speicherdauer",

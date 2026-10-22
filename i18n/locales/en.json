@@ -244,11 +244,11 @@
       },
       "purpose": {
         "title": "Purpose of processing",
-        "description": "The data provided will be used solely to respond to your enquiry or proposal. They will not be used for any other purpose."
+        "description": "The data you send will be used solely to respond to your enquiry or proposal and to protect the form against abuse, such as automated submissions or spam. They will not be used for any other purpose."
       },
       "legitimation": {
         "title": "Legal basis",
-        "description": "Processing is based on your consent, given when submitting the contact form (Art. 6(1)(a) GDPR)."
+        "description": "Replying to your enquiry is based on your consent, given when submitting the contact form (Art. 6(1)(a) GDPR); protecting the form against abuse is based on the legitimate interest in protecting the site (Art. 6(1)(f) GDPR)."
       },
       "retention": {
         "title": "Data retention",
