@@ -104,8 +104,8 @@ usePageSeo('legal.title', 'seo.pages.legal', { robots: 'noindex, follow' })
 
           <USeparator class="my-6" />
 
-          <!-- Contact form -->
-          <section>
+          <!-- Contact form (linked from the form's privacy note) -->
+          <section id="formulario-contacto">
             <h2>{{ t('legal.contactForm.title') }}</h2>
             <p>{{ t('legal.contactForm.description') }}</p>
 

@@ -327,7 +327,8 @@
       "sending": "Wird gesendet...",
       "success": "Nachricht erfolgreich gesendet! Ich melde mich so schnell wie möglich bei dir.",
       "errorGeneric": "Beim Senden der Nachricht ist ein Fehler aufgetreten. Bitte versuche es erneut.",
-      "privacyNote": "Deine Informationen werden vertraulich behandelt und nur verwendet, um auf deine Anfrage zu antworten.",
+      "privacyNote": "Ich verwende deine Daten nur, um auf deine Nachricht zu antworten und das Formular vor Missbrauch zu schützen. Mehr dazu in der {link}.",
+      "privacyLink": "Datenschutzerklärung",
       "apiErrors": {
         "rateLimited": "Du hast in kurzer Zeit zu viele Nachrichten gesendet. Bitte versuche es später erneut.",
         "missingFields": "Es fehlen noch Pflichtfelder.",

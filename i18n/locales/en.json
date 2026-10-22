@@ -327,7 +327,8 @@
       "sending": "Sending...",
       "success": "Message sent successfully! I will reply as soon as possible.",
       "errorGeneric": "An error occurred while sending the message. Please try again.",
-      "privacyNote": "Your information will be treated confidentially and used only to respond to your enquiry.",
+      "privacyNote": "I use your details only to reply to your message and to protect the form against abuse. Find out more in the {link}.",
+      "privacyLink": "privacy policy",
       "apiErrors": {
         "rateLimited": "You have sent too many messages in a short period. Please try again later.",
         "missingFields": "Some required fields are missing.",

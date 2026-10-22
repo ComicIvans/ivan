@@ -6,6 +6,7 @@ import { CONTACT_FIELD_LIMITS, isContactFieldError } from '~~/shared/utils/conta
 defineProps<{ id: string }>()
 
 const { t, locale } = useI18n({ useScope: 'global' })
+const localePath = useLocalePath()
 const toast = useToast()
 
 const form = reactive<ContactFormData>({
@@ -275,17 +276,37 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
             </template>
           </UFormField>
 
-          <!-- Submit Button -->
-          <UButton
-            type="submit"
-            color="primary"
-            block
-            :loading="isSubmitting"
-            :disabled="isSubmitting"
-            icon="i-tabler-send"
-          >
-            {{ isSubmitting ? t('contactPage.form.sending') : t('contactPage.form.submit') }}
-          </UButton>
+          <!-- Submit button, with the privacy information at the point of collection -->
+          <div class="space-y-3">
+            <UButton
+              type="submit"
+              color="primary"
+              block
+              :loading="isSubmitting"
+              :disabled="isSubmitting"
+              icon="i-tabler-send"
+            >
+              {{ isSubmitting ? t('contactPage.form.sending') : t('contactPage.form.submit') }}
+            </UButton>
+
+            <i18n-t
+              keypath="contactPage.form.privacyNote"
+              tag="p"
+              scope="global"
+              class="text-muted text-sm"
+            >
+              <template #link>
+                <!-- raw: ULink's colour utility would override .inline-link -->
+                <ULink
+                  :to="{ path: localePath('/legal'), hash: '#formulario-contacto' }"
+                  raw
+                  class="inline-link"
+                >
+                  {{ t('contactPage.form.privacyLink') }}
+                </ULink>
+              </template>
+            </i18n-t>
+          </div>
         </UForm>
       </div>
 
@@ -311,10 +332,6 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
         <p class="text-muted flex items-center gap-2 font-mono text-sm">
           <UIcon name="i-tabler-clock" class="size-4 shrink-0" aria-hidden="true" />
           {{ t('contactPage.aside.availability') }}
-        </p>
-
-        <p class="text-muted text-sm">
-          {{ t('contactPage.form.privacyNote') }}
         </p>
       </aside>
     </div>
