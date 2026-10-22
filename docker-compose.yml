@@ -1,6 +1,8 @@
 services:
   ivan:
-    image: ghcr.io/comicivans/ivan:latest
+    # The deploy scripts export IMAGE (from .env.deploy) so the container runs
+    # the image they just built.
+    image: ${IMAGE:-ghcr.io/comicivans/ivan:latest}
     container_name: ivan
     restart: unless-stopped
     read_only: true
@@ -12,8 +14,10 @@ services:
       - /tmp:size=64m,mode=1777
     ports:
       - "127.0.0.1:3000:3000"
-    # Runtime secrets (NUXT_SMTP_*) are read from .env at container start.
-    # Build-time vars (SITE_URL, NUXT_UMAMI_*) are baked into the image instead.
+    # Runtime settings (NUXT_SMTP_*, NUXT_APP_SECRET, ...) are read from .env
+    # at container start. Build-time vars (SITE_URL, NUXT_UMAMI_*) are baked
+    # into the image, and deploy settings stay in .env.deploy, which never
+    # reaches the container.
     env_file:
       - .env
     environment:

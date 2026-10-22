@@ -156,6 +156,10 @@ If a handler becomes hard to read, extract helpers into `server/utils/`.
 ### Configuration
 
 - Prefer `SITE_URL` as the canonical site URL variable.
+- `.env` holds what the app reads (dev/build values, and the container's runtime
+  settings through the compose `env_file`); `.env.deploy` holds deploy-only settings
+  (image build args, VPS, GHCR) read by `deploy.sh` and `deploy-local.sh`. Keep
+  deploy secrets out of `.env`.
 - Runtime config parsing should go through shared helpers in `shared/utils/config.ts` and `server/utils/runtimeConfig.ts`.
 - Optional integrations should fail closed rather than partially misconfigure themselves.
 

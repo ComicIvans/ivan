@@ -40,7 +40,8 @@ URLs de producción:
 pnpm install
 ```
 
-2. Crea tu `.env` a partir de `.env.example`.
+2. Crea tu `.env` a partir de `.env.example`. Para desplegar hace falta
+   además `.env.deploy` (ver «Variables de entorno»).
 
 3. Ejecuta la aplicación:
 
@@ -57,9 +58,22 @@ pnpm typecheck
 
 ## Variables de entorno
 
+Se reparten en dos archivos, ambos fuera de Git:
+
+- `.env` (a partir de `.env.example`): lo que lee la aplicación. En local lo
+  cargan `pnpm dev` y `pnpm build`; en el servidor, `docker-compose.yml` lo
+  pasa al contenedor (`env_file`), así que allí solo necesita las variables
+  de tiempo de ejecución: SMTP, `NUXT_APP_SECRET` y, si hace falta,
+  `NUXT_SITE_INDEXABLE`.
+- `.env.deploy` (a partir de `.env.deploy.example`): lo que usan
+  `pnpm deploy:local` y `pnpm deploy:vps`, es decir, los `build-arg` de la
+  imagen, el acceso al VPS y las credenciales de GHCR. Nunca llega al
+  contenedor.
+
 ### Aplicación
 
-- `SITE_URL`
+- `SITE_URL`: URL canónica del sitio. Se lee al compilar: va en `.env` para
+  `pnpm dev` y `pnpm build`, y en `.env.deploy` para la imagen de Docker.
 - `NUXT_APP_SECRET`: secreto raíz con el que se firman las URL `/_og/*` de las
   imágenes para redes sociales. Es obligatorio en producción: sin él, todas esas
   imágenes responden 500. Debe tener al menos 32 caracteres (por ejemplo,
@@ -67,6 +81,9 @@ pnpm typecheck
   URL ya compartidas sigan siendo válidas. Solo se usa en tiempo de ejecución:
   llega al contenedor por el `env_file` de `docker-compose.yml` y nunca se
   incluye en la imagen.
+- `NUXT_SITE_INDEXABLE` (opcional): `docker-compose.yml` lo deja en `true`
+  salvo que `.env` indique `false`, para despliegues de prueba que no deben
+  aparecer en buscadores.
 
 ### SMTP
 
@@ -107,13 +124,26 @@ alineados.
 - `NUXT_UMAMI_ID`
 
 Las variables de Umami son opcionales. Si faltan, la analítica queda desactivada.
+Se leen al compilar, así que para la imagen de Docker van en `.env.deploy`.
 
 ### Despliegue
 
-- `VPS_HOST`
-- `REMOTE_DIR`
-- `IMAGE` (opcional, por defecto `ghcr.io/comicivans/ivan:latest`)
+Van en `.env.deploy`:
+
+- `SITE_URL`, `NUXT_UMAMI_HOST` y `NUXT_UMAMI_ID`: `build-arg` de la imagen.
+- `VPS_HOST`: destino SSH (`usuario@host`).
+- `REMOTE_DIR`: directorio absoluto del VPS que contiene el `.env` de
+  ejecución; `pnpm deploy:vps` copia ahí `docker-compose.yml` en cada
+  despliegue.
+- `GHCR_USERNAME` y `GHCR_TOKEN`: token de GitHub con `write:packages` para
+  publicar la imagen privada y `read:packages` para descargarla en el VPS.
+  Sin ellos, cada máquina necesita un `docker login ghcr.io` previo.
+- `IMAGE` (opcional, por defecto `ghcr.io/comicivans/ivan:latest`): los
+  scripts también se lo pasan a `docker compose`.
 - `DOCKER_PLATFORM` (opcional, por defecto `linux/amd64`)
+
+Si no existe `.env.deploy`, los scripts leen estas variables de `.env` (el
+formato antiguo, con todo en un archivo) y lo avisan.
 
 ## Scripts útiles
 
@@ -132,17 +162,22 @@ Las variables de Umami son opcionales. Si faltan, la analítica queda desactivad
 
 ### Local
 
-Construye la imagen local con los `build-arg` disponibles (`SITE_URL` y, opcionalmente, Umami) y levanta el contenedor con `docker compose`:
+Construye la imagen local con los `build-arg` de `.env.deploy` (`SITE_URL` y,
+opcionalmente, Umami) y levanta el contenedor con `docker compose`, que lee
+`.env`:
 
 ```sh
 pnpm deploy:local
 ```
 
-`deploy-local.sh` requiere que exista `.env` y que `SITE_URL` esté definido.
+`deploy-local.sh` requiere `.env` y que `SITE_URL` esté definido en
+`.env.deploy`.
 
 ### Producción
 
-Ejecuta `deploy.sh`, que carga variables desde `.env` (si existe), construye y publica la imagen (con `docker buildx` cuando está disponible) y actualiza el despliegue remoto:
+Ejecuta `deploy.sh`, que carga `.env.deploy`, construye y publica la imagen
+(con `docker buildx` cuando está disponible), copia `docker-compose.yml` a
+`REMOTE_DIR` y, en el VPS, descarga la imagen y recrea el contenedor:
 
 ```sh
 pnpm deploy:vps
@@ -150,6 +185,25 @@ pnpm deploy:vps
 
 `pnpm deploy` no sirve: es un comando propio de pnpm (despliegue de
 paquetes de un workspace) y no ejecuta este script.
+
+Preparación del VPS (una sola vez):
+
+1. Instala Docker con el plugin Compose y crea `REMOTE_DIR`.
+2. Crea en `REMOTE_DIR` un `.env` solo con las variables de ejecución de
+   `.env.example` (SMTP, `NUXT_APP_SECRET` y, si hace falta,
+   `NUXT_SITE_INDEXABLE`).
+
+Cada despliegue sobrescribe el `docker-compose.yml` del VPS con el del
+repositorio: los cambios hechos a mano allí se pierden.
+
+Si vienes del formato antiguo, con un único `.env`:
+
+1. Crea `.env.deploy` a partir de `.env.deploy.example`. Mueve a él
+   `VPS_HOST`, `REMOTE_DIR`, `GHCR_USERNAME`, `GHCR_TOKEN` y, si los usas,
+   `IMAGE` y `DOCKER_PLATFORM`; copia `SITE_URL` y las variables de Umami,
+   que `pnpm dev` sigue leyendo de `.env`.
+2. Quita esas variables de despliegue del `.env` local y del `.env` del VPS
+   para que no lleguen al contenedor.
 
 ## Estructura principal
 

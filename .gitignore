@@ -32,10 +32,11 @@ code_review.md
 # Runtime data of older local production runs (now kept in .data/production)
 /data
 
-# Local env files
+# Local env files (.env: app settings, .env.deploy: deploy settings)
 .env
 .env.*
 !.env.example
+!.env.deploy.example
 
 # Gallery images: the published WebP files and their originals
 # (pnpm gallery:add reads gallery-src/<slug>/ and writes public/gallery/<slug>/)
