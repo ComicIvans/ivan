@@ -31,6 +31,20 @@ function scrollToAnchor(anchor: ReadingAnchor) {
   window.scrollTo({ top: Math.max(0, top), behavior: 'instant' })
 }
 
+interface SavedScroll {
+  left: number
+  top: number
+}
+
+/**
+ * The position vue-router saved for this history entry when the visitor left
+ * it. Back/forward and reloads come with one; fresh navigations do not.
+ */
+function savedScrollPosition(): SavedScroll | null {
+  const scroll = (window.history.state as { scroll?: SavedScroll | null } | null)?.scroll
+  return scroll && Number.isFinite(scroll.top) ? scroll : null
+}
+
 /**
  * Repeats `align` whenever the page may have moved under it (a ScrollTrigger
  * refresh puts the page back at a recorded pixel offset; content above can
@@ -61,6 +75,9 @@ function holdPosition(align: () => void, ms: number) {
  *   the hash while the setups are still settling, a refresh cuts a smooth
  *   scroll short and the projects pin adds height above the later sections.
  *   The page lands on the hash target until the visitor scrolls.
+ * - Back/forward and reloads: the router restores the position saved for the
+ *   history entry, which is held the same way instead of the hash target (the
+ *   visitor may have scrolled far from it before leaving).
  * - A media condition of the setups flips (the motion tier across a resize,
  *   the reduced-motion setting): GSAP reverts and re-runs every setup at
  *   once, and ScrollTrigger can drop the page to the top on the way (killing
@@ -72,10 +89,17 @@ export function useHomeReadingPosition() {
   let cleanup: (() => void) | null = null
 
   onMounted(() => {
-    const target = location.hash ? document.getElementById(location.hash.slice(1)) : null
-    let releaseHold = target
-      ? holdPosition(() => target.scrollIntoView({ behavior: 'instant' }), 5000)
-      : null
+    const saved = savedScrollPosition()
+    const target = !saved && location.hash ? document.getElementById(location.hash.slice(1)) : null
+    let releaseHold: (() => void) | null = null
+    if (saved) {
+      releaseHold = holdPosition(
+        () => window.scrollTo({ left: saved.left, top: saved.top, behavior: 'instant' }),
+        5000
+      )
+    } else if (target) {
+      releaseHold = holdPosition(() => target.scrollIntoView({ behavior: 'instant' }), 5000)
+    }
 
     // Read on every scroll, before anything moves the page: the scrolls GSAP
     // makes while it rebuilds only reach this listener in a later frame.
