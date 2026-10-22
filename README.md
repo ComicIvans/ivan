@@ -78,9 +78,14 @@ pnpm typecheck
 - `NUXT_SMTP_FROM_EMAIL`
 - `NUXT_SMTP_TO_EMAIL`
 
-El proxy inverso debe reemplazar cualquier `X-Forwarded-For` proporcionado por
-el cliente por su propia cadena de confianza. La aplicación usa esa cabecera
-para los controles de abuso.
+La aplicación espera un único proxy inverso (nginx) delante que añada la IP del
+cliente al final de `X-Forwarded-For` (`$proxy_add_x_forwarded_for` o
+`$remote_addr`). Para los controles de abuso solo cuenta la última entrada de
+esa cabecera, la que añade el proxy; sin la cabecera se usa la dirección de la
+conexión. El limitador de peticiones guarda en el directorio de datos
+(`/data/ratelimit` en Docker) un contador por cliente bajo un HMAC de su IP
+derivado de `NUXT_APP_SECRET`, nunca la IP, y borra cada registro como mucho
+diez minutos después de que termine su ventana.
 
 Los binarios de la galería se mantienen fuera de Git. Antes de construir o
 desplegar hay que restaurar `public/gallery/` desde la copia privada; los
