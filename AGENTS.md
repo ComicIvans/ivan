@@ -212,7 +212,7 @@ Common commands:
 Deployment commands:
 
 - `pnpm deploy:local`
-- `pnpm deploy`
+- `pnpm deploy:vps` (not `pnpm deploy`, which is pnpm's built-in workspace command)
 
 ---
 

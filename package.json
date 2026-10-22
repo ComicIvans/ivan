@@ -19,7 +19,7 @@
     "verify:i18n": "node scripts/verify-i18n.mjs",
     "gallery:add": "node scripts/gallery-add.mjs",
     "deploy:local": "bash ./deploy-local.sh",
-    "deploy": "bash ./deploy.sh"
+    "deploy:vps": "bash ./deploy.sh"
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.10.0",

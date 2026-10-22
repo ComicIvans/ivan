@@ -126,7 +126,7 @@ Las variables de Umami son opcionales. Si faltan, la analítica queda desactivad
 - `pnpm verify` (`verify:gallery`, `verify:content` y `verify:i18n`)
 - `pnpm gallery:add <slug> [carpeta] [--cover <archivo>] [--write]`
 - `pnpm deploy:local`
-- `pnpm deploy`
+- `pnpm deploy:vps`
 
 ## Despliegue
 
@@ -145,8 +145,11 @@ pnpm deploy:local
 Ejecuta `deploy.sh`, que carga variables desde `.env` (si existe), construye y publica la imagen (con `docker buildx` cuando está disponible) y actualiza el despliegue remoto:
 
 ```sh
-pnpm deploy
+pnpm deploy:vps
 ```
+
+`pnpm deploy` no sirve: es un comando propio de pnpm (despliegue de
+paquetes de un workspace) y no ejecuta este script.
 
 ## Estructura principal
 
