@@ -16,7 +16,7 @@ const showCursorGlow = computed(() => motionTier.value === 'full')
 </script>
 
 <template>
-  <div class="layout-surface bg-default flex min-h-screen flex-col pt-[var(--navbar-h)]">
+  <div class="layout-surface flex min-h-screen flex-col bg-default pt-[var(--navbar-h)]">
     <ClientOnly>
       <CursorGlow v-if="showCursorGlow" />
     </ClientOnly>
@@ -26,7 +26,7 @@ const showCursorGlow = computed(() => motionTier.value === 'full')
 
     <a
       href="#main-content"
-      class="bg-primary-600 sr-only rounded px-4 py-2 text-white focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50"
+      class="sr-only rounded bg-primary-600 px-4 py-2 text-white focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50"
     >
       {{ $t('nav.skipLink') }}
     </a>

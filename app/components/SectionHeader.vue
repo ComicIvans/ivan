@@ -46,7 +46,7 @@ const ruleClass = computed(
       >
         {{ index }}
       </span>
-      <component :is="as" class="text-highlighted flex items-center gap-2 text-2xl font-bold">
+      <component :is="as" class="flex items-center gap-2 text-2xl font-bold text-highlighted">
         <UIcon
           v-if="icon"
           :name="icon"

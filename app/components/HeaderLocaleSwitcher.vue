@@ -78,7 +78,7 @@ function withActiveSection(path: string) {
     <button
       ref="triggerRef"
       type="button"
-      class="focus-visible:ring-primary-500 inline-flex size-10 items-center justify-center rounded-full focus-visible:ring-2 focus-visible:outline-none"
+      class="inline-flex size-10 items-center justify-center rounded-full focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:outline-none"
       :aria-label="t('language.toggle')"
       :aria-expanded="open"
       :aria-controls="open ? menuId : undefined"
@@ -98,13 +98,13 @@ function withActiveSection(path: string) {
       <div
         v-if="open"
         :id="menuId"
-        class="border-default bg-default absolute top-full right-0 z-20 mt-2 min-w-40 origin-top-right rounded-2xl border p-2 shadow-lg"
+        class="absolute top-full right-0 z-20 mt-2 min-w-40 origin-top-right rounded-2xl border border-default bg-default p-2 shadow-lg"
       >
         <ul class="space-y-1">
           <li v-for="lang in localesConfig" :key="lang.code">
             <button
               type="button"
-              class="text-highlighted hover:bg-elevated focus-visible:ring-primary-500 flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm focus-visible:ring-2 focus-visible:outline-none"
+              class="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm text-highlighted hover:bg-elevated focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:outline-none"
               :class="{ 'bg-elevated': lang.code === locale }"
               :aria-current="lang.code === locale ? 'true' : undefined"
               @click="selectLocale(lang.code)"

@@ -148,7 +148,7 @@ useGsapMatchMedia(sceneEl, setupScene, {
         accent="ember"
       />
 
-      <h4 class="text-muted mb-4 text-lg font-semibold">
+      <h4 class="mb-4 text-lg font-semibold text-muted">
         {{ t('projects.stack.primary.title') }}
       </h4>
       <div class="mb-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -162,20 +162,20 @@ useGsapMatchMedia(sceneEl, setupScene, {
             </div>
             <h5 class="font-bold">{{ tech.name }}</h5>
           </div>
-          <p v-if="tech.description" class="text-muted mt-2 text-sm">{{ tech.description }}</p>
+          <p v-if="tech.description" class="mt-2 text-sm text-muted">{{ tech.description }}</p>
         </UCard>
       </div>
 
-      <h4 class="text-muted mb-4 text-lg font-semibold">
+      <h4 class="mb-4 text-lg font-semibold text-muted">
         {{ t('projects.stack.secondary.title') }}
       </h4>
       <div class="flex flex-wrap gap-3">
         <div
           v-for="tech in stack.secondary"
           :key="tech.id"
-          class="border-default bg-elevated/50 flex items-center gap-2 rounded-full border px-4 py-2"
+          class="flex items-center gap-2 rounded-full border border-default bg-elevated/50 px-4 py-2"
         >
-          <UIcon :name="tech.icon" class="text-muted size-5" aria-hidden="true" />
+          <UIcon :name="tech.icon" class="size-5 text-muted" aria-hidden="true" />
           <span class="font-medium">{{ tech.name }}</span>
         </div>
       </div>
@@ -201,7 +201,7 @@ useGsapMatchMedia(sceneEl, setupScene, {
             v-for="project in projects"
             :key="project.id"
             v-spotlight
-            class="project-card motion-link-card bg-default ring-default min-w-0 overflow-hidden rounded-lg ring"
+            class="project-card motion-link-card min-w-0 overflow-hidden rounded-lg bg-default ring ring-default"
             :style="accentStyle(project.accent)"
           >
             <div class="project-cover relative aspect-[2/1] overflow-hidden">
@@ -223,13 +223,13 @@ useGsapMatchMedia(sceneEl, setupScene, {
               </div>
             </div>
             <div class="p-4 sm:p-6">
-              <p v-if="project.year" class="text-muted font-mono text-xs">{{ project.year }}</p>
+              <p v-if="project.year" class="font-mono text-xs text-muted">{{ project.year }}</p>
               <h4 class="text-lg font-bold">{{ project.title }}</h4>
-              <p class="text-muted mt-2">{{ project.description }}</p>
+              <p class="mt-2 text-muted">{{ project.description }}</p>
               <dl v-if="project.metrics.length" class="mt-3 flex flex-wrap gap-x-6 gap-y-2">
                 <div v-for="metric in project.metrics" :key="metric.label">
-                  <dt class="text-muted text-xs">{{ metric.label }}</dt>
-                  <dd class="text-highlighted font-mono text-lg font-semibold tabular-nums">
+                  <dt class="text-xs text-muted">{{ metric.label }}</dt>
+                  <dd class="font-mono text-lg font-semibold text-highlighted tabular-nums">
                     {{ metric.value }}
                   </dd>
                 </div>

@@ -90,20 +90,20 @@ function dotClass(index: number) {
           <UIcon :name="item.icon" class="size-5" aria-hidden="true" />
         </span>
 
-        <div v-spotlight class="bg-elevated/50 min-w-0 flex-1 rounded-xl p-4">
+        <div v-spotlight class="min-w-0 flex-1 rounded-xl bg-elevated/50 p-4">
           <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <span class="text-toned font-mono text-xs font-medium tracking-wide">
+            <span class="font-mono text-xs font-medium tracking-wide text-toned">
               {{ item.date }}
             </span>
             <UBadge v-if="item.current && currentLabel" color="warning" variant="subtle" size="sm">
               {{ currentLabel }}
             </UBadge>
           </div>
-          <h3 class="text-highlighted mt-1.5 text-base font-semibold">{{ item.title }}</h3>
-          <p v-if="item.organization" class="text-toned mt-0.5 text-sm font-medium">
+          <h3 class="mt-1.5 text-base font-semibold text-highlighted">{{ item.title }}</h3>
+          <p v-if="item.organization" class="mt-0.5 text-sm font-medium text-toned">
             {{ item.organization }}
           </p>
-          <p class="text-muted mt-1.5 text-sm">{{ item.description }}</p>
+          <p class="mt-1.5 text-sm text-muted">{{ item.description }}</p>
           <UButton
             v-if="item.link"
             :to="item.link.url"

@@ -115,7 +115,7 @@ function getEventIcon(event: { icon?: string }) {
         :aria-label="t('gallery.filters.tags')"
         class="mt-4 flex flex-wrap gap-2"
       >
-        <span class="text-muted flex items-center gap-2 text-sm" aria-hidden="true">
+        <span class="flex items-center gap-2 text-sm text-muted" aria-hidden="true">
           <UIcon name="i-tabler-tags" class="size-4" />
           {{ t('gallery.filters.tags') }}:
         </span>
@@ -137,7 +137,7 @@ function getEventIcon(event: { icon?: string }) {
       </div>
 
       <div class="mt-4 flex flex-wrap items-center justify-between gap-3" aria-live="polite">
-        <span class="text-muted font-mono text-sm">
+        <span class="font-mono text-sm text-muted">
           {{ t('gallery.filters.resultsCount', { count: totalEvents }) }}
         </span>
         <UButton
@@ -176,7 +176,7 @@ function getEventIcon(event: { icon?: string }) {
     <!-- No results -->
     <UCard v-else-if="events.length === 0" class="text-center">
       <div class="flex flex-col items-center gap-4 py-8">
-        <UIcon name="i-tabler-photo-off" class="text-muted size-16" />
+        <UIcon name="i-tabler-photo-off" class="size-16 text-muted" />
         <h2 class="text-lg font-semibold">{{ t('gallery.noResults.title') }}</h2>
         <p class="text-muted">{{ t('gallery.noResults.description') }}</p>
         <UButton v-if="hasActiveFilters" variant="soft" @click="clearFilters">
@@ -196,7 +196,7 @@ function getEventIcon(event: { icon?: string }) {
         class="motion-link-card reveal surface-glass group relative block overflow-hidden rounded-2xl"
       >
         <!-- Cover / fallback tile with title scrim -->
-        <div class="bg-elevated relative aspect-video w-full overflow-hidden">
+        <div class="relative aspect-video w-full overflow-hidden bg-elevated">
           <template v-if="event.cover">
             <!-- One column below md, two up to lg, then three (~400 px max).
                  The first row is usually in view on load, so it is not lazy. -->
@@ -223,7 +223,7 @@ function getEventIcon(event: { icon?: string }) {
             <div class="gallery-fallback-tile absolute inset-0 flex items-center justify-center">
               <UIcon
                 :name="getEventIcon(event)"
-                class="text-primary-500/25 size-24"
+                class="size-24 text-primary-500/25"
                 aria-hidden="true"
               />
             </div>
@@ -268,10 +268,10 @@ function getEventIcon(event: { icon?: string }) {
         <!-- Card body -->
         <div class="p-4 sm:p-5">
           <div v-if="event.location" class="flex items-center gap-2 text-sm">
-            <UIcon name="i-tabler-map-pin" class="text-muted size-4 shrink-0" aria-hidden="true" />
+            <UIcon name="i-tabler-map-pin" class="size-4 shrink-0 text-muted" aria-hidden="true" />
             <span class="text-muted">{{ event.location }}</span>
           </div>
-          <p class="text-muted mt-2 line-clamp-2">{{ event.description }}</p>
+          <p class="mt-2 line-clamp-2 text-muted">{{ event.description }}</p>
 
           <!-- Tags -->
           <div v-if="event.tags.length > 0" class="mt-3 flex flex-wrap gap-1">
@@ -306,7 +306,7 @@ function getEventIcon(event: { icon?: string }) {
     <!-- Informational note when no events have photos -->
     <UCard v-if="allVisibleEventsLackPhotos" class="mt-8">
       <div class="flex items-center justify-center gap-3 text-center">
-        <UIcon name="i-tabler-camera" class="text-primary-500 size-6" aria-hidden="true" />
+        <UIcon name="i-tabler-camera" class="size-6 text-primary-500" aria-hidden="true" />
         <p class="text-muted">
           {{ t('gallery.comingSoon') }}
         </p>

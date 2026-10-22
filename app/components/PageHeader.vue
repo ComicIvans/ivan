@@ -26,7 +26,7 @@ const ruleClass = computed(
 <template>
   <header class="mb-10" :class="align === 'center' ? 'text-center' : 'text-left'">
     <h1
-      class="type-display text-highlighted text-4xl sm:text-5xl lg:text-[3.4rem] lg:leading-[1.05]"
+      class="type-display text-4xl text-highlighted sm:text-5xl lg:text-[3.4rem] lg:leading-[1.05]"
     >
       {{ title }}
     </h1>
@@ -37,7 +37,7 @@ const ruleClass = computed(
     />
     <p
       v-if="intro"
-      class="text-muted mt-4 max-w-2xl text-lg"
+      class="mt-4 max-w-2xl text-lg text-muted"
       :class="align === 'center' ? 'mx-auto' : ''"
     >
       {{ intro }}

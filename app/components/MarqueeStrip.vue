@@ -23,14 +23,14 @@ withDefaults(
     <div class="marquee-track flex w-max items-center">
       <!-- The label names the list: a generic div cannot carry one -->
       <ul class="flex items-center gap-8 pr-8" :aria-label="ariaLabel">
-        <li v-for="item in items" :key="item.label" class="text-muted flex items-center gap-2">
+        <li v-for="item in items" :key="item.label" class="flex items-center gap-2 text-muted">
           <UIcon v-if="item.icon" :name="item.icon" class="size-5 shrink-0" aria-hidden="true" />
           <span class="text-sm font-medium whitespace-nowrap">{{ item.label }}</span>
         </li>
       </ul>
       <!-- Duplicate run makes the loop seamless; hidden from assistive tech -->
       <ul class="flex items-center gap-8 pr-8" aria-hidden="true">
-        <li v-for="item in items" :key="item.label" class="text-muted flex items-center gap-2">
+        <li v-for="item in items" :key="item.label" class="flex items-center gap-2 text-muted">
           <UIcon v-if="item.icon" :name="item.icon" class="size-5 shrink-0" aria-hidden="true" />
           <span class="text-sm font-medium whitespace-nowrap">{{ item.label }}</span>
         </li>

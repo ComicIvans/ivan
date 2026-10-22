@@ -145,7 +145,7 @@ onBeforeUnmount(() => {
         <button
           ref="menuToggle"
           type="button"
-          class="text-muted hover:text-highlighted focus-visible:ring-primary-600 inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-transparent focus-visible:ring-2 focus-visible:outline-none lg:hidden"
+          class="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-transparent text-muted hover:text-highlighted focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:outline-none lg:hidden"
           :aria-label="t('nav.menu')"
           :aria-expanded="mobileMenuOpen"
           :aria-controls="mobileMenuOpen ? 'navbar-menu' : undefined"
@@ -161,7 +161,7 @@ onBeforeUnmount(() => {
         <!-- Joke portrait (desktop) -->
         <button
           type="button"
-          class="focus-visible:ring-primary-600 hidden shrink-0 rounded-full transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:outline-none lg:inline-flex"
+          class="hidden shrink-0 rounded-full transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:outline-none lg:inline-flex"
           :aria-label="t('header.jokeButton')"
           @click="showRandomJoke"
         >
@@ -181,7 +181,7 @@ onBeforeUnmount(() => {
         <!-- On the home a plain link to it would be a no-op: scroll back up -->
         <NuxtLink
           :to="isHome ? anchorLink(SECTIONS[0].id) : { path: localePath('/') }"
-          class="type-display text-highlighted hover:text-primary-700 dark:hover:text-primary-400 min-w-0 flex-1 truncate text-base transition-colors lg:flex-none lg:text-lg"
+          class="type-display min-w-0 flex-1 truncate text-base text-highlighted transition-colors hover:text-primary-700 lg:flex-none lg:text-lg dark:hover:text-primary-400"
           @click="onTabClick(SECTIONS[0].id)"
         >
           {{ t('header.title') }}
@@ -192,7 +192,7 @@ onBeforeUnmount(() => {
           <div
             v-if="desktopIndicatorStyle"
             aria-hidden="true"
-            class="bg-primary-600 pointer-events-none absolute top-0 left-0 z-0 rounded-full shadow-sm transition-[transform,width,height] duration-300 ease-(--ease-spring) motion-reduce:transition-none"
+            class="pointer-events-none absolute top-0 left-0 z-0 rounded-full bg-primary-600 shadow-sm transition-[transform,width,height] duration-300 ease-(--ease-spring) motion-reduce:transition-none"
             :style="desktopIndicatorStyle"
           />
           <ul class="flex items-center gap-0.5">
@@ -223,7 +223,7 @@ onBeforeUnmount(() => {
         <div class="flex shrink-0 items-center gap-1 sm:gap-2">
           <button
             type="button"
-            class="text-muted hover:text-highlighted focus-visible:ring-primary-600 inline-flex size-10 items-center justify-center rounded-full border border-transparent focus-visible:ring-2 focus-visible:outline-none"
+            class="inline-flex size-10 items-center justify-center rounded-full border border-transparent text-muted hover:text-highlighted focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:outline-none"
             :aria-label="t('theme.toggle')"
             :aria-pressed="isClientReady ? isDark : undefined"
             @click="toggleTheme"
@@ -246,7 +246,7 @@ onBeforeUnmount(() => {
               <div
                 v-if="mobileIndicatorStyle"
                 aria-hidden="true"
-                class="bg-primary-600 pointer-events-none absolute top-0 left-0 z-0 rounded-xl shadow-sm transition-[transform,width,height] duration-300 ease-(--ease-spring) motion-reduce:transition-none"
+                class="pointer-events-none absolute top-0 left-0 z-0 rounded-xl bg-primary-600 shadow-sm transition-[transform,width,height] duration-300 ease-(--ease-spring) motion-reduce:transition-none"
                 :style="mobileIndicatorStyle"
               />
               <ul class="space-y-1">

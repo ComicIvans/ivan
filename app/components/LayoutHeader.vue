@@ -14,7 +14,7 @@ const homePath = computed(() => localePath('/'))
     <div class="hidden items-center gap-x-6 lg:flex">
       <button
         type="button"
-        class="focus-visible:ring-primary-600 shrink-0 rounded-full transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:outline-none"
+        class="shrink-0 rounded-full transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:outline-none"
         :aria-label="t('header.jokeButton')"
         @click="showRandomJoke"
       >
@@ -35,11 +35,11 @@ const homePath = computed(() => localePath('/'))
       <div class="min-w-0 flex-1">
         <NuxtLink
           :to="homePath"
-          class="type-display text-highlighted hover:text-primary-700 dark:hover:text-primary-400 block truncate text-3xl transition-colors"
+          class="type-display block truncate text-3xl text-highlighted transition-colors hover:text-primary-700 dark:hover:text-primary-400"
         >
           {{ t('header.title') }}
         </NuxtLink>
-        <p class="text-muted text-base">
+        <p class="text-base text-muted">
           {{ t('header.subtitle') }}
         </p>
       </div>
@@ -49,7 +49,7 @@ const homePath = computed(() => localePath('/'))
     <div class="flex flex-col items-center gap-3 lg:hidden">
       <button
         type="button"
-        class="focus-visible:ring-primary-600 shrink-0 rounded-full transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:outline-none"
+        class="shrink-0 rounded-full transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:ring-primary-600 focus-visible:outline-none"
         :aria-label="t('header.jokeButton')"
         @click="showRandomJoke"
       >
@@ -70,11 +70,11 @@ const homePath = computed(() => localePath('/'))
       <div class="space-y-1 text-center">
         <NuxtLink
           :to="homePath"
-          class="type-display text-highlighted hover:text-primary-700 dark:hover:text-primary-400 text-xl transition-colors"
+          class="type-display text-xl text-highlighted transition-colors hover:text-primary-700 dark:hover:text-primary-400"
         >
           {{ t('header.title') }}
         </NuxtLink>
-        <p class="text-muted text-sm">
+        <p class="text-sm text-muted">
           {{ t('header.subtitle') }}
         </p>
       </div>

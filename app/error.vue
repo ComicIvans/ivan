@@ -97,11 +97,11 @@ useSeoMeta({
             {{ errorTitle }}
           </h1>
 
-          <p class="text-muted mt-2">
+          <p class="mt-2 text-muted">
             {{ errorDescription }}
           </p>
 
-          <p v-if="is404" class="text-muted mt-3 font-mono text-sm">
+          <p v-if="is404" class="mt-3 font-mono text-sm text-muted">
             {{ t('error.searchlight') }}
           </p>
 
@@ -122,7 +122,7 @@ useSeoMeta({
               </template>
             </UButton>
             <template #content>
-              <pre class="bg-elevated mt-2 overflow-auto rounded p-4 text-left text-xs">{{
+              <pre class="mt-2 overflow-auto rounded bg-elevated p-4 text-left text-xs">{{
                 error.message
               }}</pre>
             </template>

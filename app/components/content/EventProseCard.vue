@@ -15,7 +15,7 @@ const { t } = useI18n({ useScope: 'global' })
   <UCard class="reveal mb-8">
     <SectionHeader :title="t(titleKey)" :icon="icon" />
     <div
-      class="event-prose prose prose-gray dark:prose-invert prose-headings:text-highlighted prose-headings:mt-6 prose-headings:mb-3 prose-headings:font-bold prose-h3:text-lg prose-p:my-3 prose-ul:my-3 prose-li:my-1 prose-strong:text-primary-700 dark:prose-strong:text-primary-400 max-w-none"
+      class="event-prose prose max-w-none prose-gray dark:prose-invert prose-headings:mt-6 prose-headings:mb-3 prose-headings:font-bold prose-headings:text-highlighted prose-h3:text-lg prose-p:my-3 prose-strong:text-primary-700 dark:prose-strong:text-primary-400 prose-ul:my-3 prose-li:my-1"
     >
       <slot />
     </div>

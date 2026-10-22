@@ -51,7 +51,7 @@ watch(
           accent="blue"
         />
 
-        <div class="border-default reveal grid grid-cols-3 gap-4 border-y py-6 sm:gap-6">
+        <div class="reveal grid grid-cols-3 gap-4 border-y border-default py-6 sm:gap-6">
           <StatCounter
             :value="representationStats.yearsActive"
             :label="t('representation.stats.years')"

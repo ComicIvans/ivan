@@ -217,16 +217,16 @@ watch(eventSlug, () => {
   <section :aria-label="event?.title || t('gallery.title')">
     <!-- Breadcrumb -->
     <nav class="mb-6" :aria-label="t('gallery.event.breadcrumb')">
-      <ol class="text-muted flex min-w-0 items-center gap-1.5 text-sm">
+      <ol class="flex min-w-0 items-center gap-1.5 text-sm text-muted">
         <li class="shrink-0">
-          <NuxtLink :to="localePath('/galeria')" class="hover:text-default transition-colors">
+          <NuxtLink :to="localePath('/galeria')" class="transition-colors hover:text-default">
             {{ t('gallery.title') }}
           </NuxtLink>
         </li>
         <li class="flex shrink-0" aria-hidden="true">
           <UIcon name="i-tabler-chevron-right" class="size-4" />
         </li>
-        <li class="text-highlighted min-w-0 flex-1 truncate font-semibold" aria-current="page">
+        <li class="min-w-0 flex-1 truncate font-semibold text-highlighted" aria-current="page">
           {{ event?.title || '...' }}
         </li>
       </ol>
@@ -256,7 +256,7 @@ watch(eventSlug, () => {
     <!-- Event not found -->
     <UCard v-else-if="!event" class="text-center">
       <div class="flex flex-col items-center gap-4 py-12">
-        <UIcon name="i-tabler-photo-off" class="text-muted size-20" />
+        <UIcon name="i-tabler-photo-off" class="size-20 text-muted" />
         <h2 class="text-2xl font-bold">{{ t('gallery.eventNotFound.title') }}</h2>
         <p class="text-muted">{{ t('gallery.eventNotFound.description') }}</p>
         <UButton :to="localePath('/galeria')" variant="soft">
@@ -324,29 +324,29 @@ watch(eventSlug, () => {
       <!-- Header without cover -->
       <div v-else class="mb-8 flex items-start gap-4">
         <div
-          class="bg-primary-500/10 text-primary-600 dark:text-primary-400 hidden size-16 shrink-0 items-center justify-center rounded-2xl md:flex"
+          class="hidden size-16 shrink-0 items-center justify-center rounded-2xl bg-primary-500/10 text-primary-600 md:flex dark:text-primary-400"
         >
           <UIcon :name="getEventIcon()" class="size-8" aria-hidden="true" />
         </div>
         <div class="min-w-0 flex-1">
           <h1
-            class="type-display text-highlighted text-3xl break-words hyphens-auto [hyphenate-limit-chars:12_5_5] lg:text-4xl"
+            class="type-display text-3xl break-words hyphens-auto text-highlighted [hyphenate-limit-chars:12_5_5] lg:text-4xl"
           >
             {{ event.title }}
           </h1>
           <div
-            class="from-primary-500 mt-3 h-[3px] w-10 rounded-full bg-gradient-to-r to-amber-400"
+            class="mt-3 h-[3px] w-10 rounded-full bg-gradient-to-r from-primary-500 to-amber-400"
             aria-hidden="true"
           />
           <div class="mt-4 flex flex-wrap gap-2">
             <span
               v-for="chip in metaChips"
               :key="chip.icon"
-              class="bg-elevated text-muted inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm"
+              class="inline-flex items-center gap-1.5 rounded-full bg-elevated px-3 py-1 text-sm text-muted"
             >
               <UIcon
                 :name="chip.icon"
-                class="text-primary-600 dark:text-primary-400 size-4 shrink-0"
+                class="size-4 shrink-0 text-primary-600 dark:text-primary-400"
                 aria-hidden="true"
               />
               {{ chip.label }}
@@ -375,7 +375,7 @@ watch(eventSlug, () => {
         <SectionHeader as="h2" :title="t('gallery.event.links')" icon="i-tabler-link" />
         <ul class="space-y-2">
           <li v-for="link in event.links" :key="link.url" class="flex items-center gap-2">
-            <UIcon name="i-tabler-external-link" class="text-primary-500 size-4" />
+            <UIcon name="i-tabler-external-link" class="size-4 text-primary-500" />
             <a :href="link.url" target="_blank" rel="noopener noreferrer" class="inline-link">
               {{ link.label }}
             </a>
@@ -386,17 +386,17 @@ watch(eventSlug, () => {
       <!-- Photo wall -->
       <div v-if="event.photos.length > 0" class="mt-10">
         <div class="mb-6">
-          <h2 class="text-highlighted flex items-center gap-2 text-2xl font-bold">
+          <h2 class="flex items-center gap-2 text-2xl font-bold text-highlighted">
             <UIcon
               name="i-tabler-photo"
-              class="text-primary-600 dark:text-primary-400 size-7 shrink-0"
+              class="size-7 shrink-0 text-primary-600 dark:text-primary-400"
               aria-hidden="true"
             />
             {{ t('gallery.event.photos') }}
             <UBadge color="primary" variant="subtle" size="sm">{{ event.photos.length }}</UBadge>
           </h2>
           <div
-            class="from-primary-500 mt-2 h-[3px] w-10 rounded-full bg-gradient-to-r to-amber-400"
+            class="mt-2 h-[3px] w-10 rounded-full bg-gradient-to-r from-primary-500 to-amber-400"
             aria-hidden="true"
           />
         </div>
@@ -427,7 +427,7 @@ watch(eventSlug, () => {
                   customAlt: photo.alt,
                 })
               "
-              class="motion-link-card group focus-visible:ring-primary-500 relative block w-full cursor-zoom-in overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+              class="motion-link-card group relative block w-full cursor-zoom-in overflow-hidden rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2"
               @click="onThumbnailClick($event, absoluteIndex(index))"
             >
               <!-- width/height only give the ratio; sizes picks a variant for the
@@ -495,7 +495,7 @@ watch(eventSlug, () => {
       <!-- No photos -->
       <UCard v-else class="text-center">
         <div class="flex flex-col items-center gap-4 py-8">
-          <UIcon name="i-tabler-camera" class="text-muted size-16" />
+          <UIcon name="i-tabler-camera" class="size-16 text-muted" />
           <h3 class="text-lg font-semibold">{{ t('gallery.event.noPhotos.title') }}</h3>
           <p class="text-muted">{{ t('gallery.event.noPhotos.description') }}</p>
         </div>

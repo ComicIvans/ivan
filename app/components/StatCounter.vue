@@ -78,9 +78,9 @@ onBeforeUnmount(() => {
 
 <template>
   <div ref="root" class="flex flex-col">
-    <span class="text-highlighted font-mono text-3xl font-semibold tabular-nums sm:text-4xl">
+    <span class="font-mono text-3xl font-semibold text-highlighted tabular-nums sm:text-4xl">
       {{ shown }}{{ suffix }}
     </span>
-    <span class="text-muted mt-1 text-sm">{{ label }}</span>
+    <span class="mt-1 text-sm text-muted">{{ label }}</span>
   </div>
 </template>

@@ -293,7 +293,7 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
               keypath="contactPage.form.privacyNote"
               tag="p"
               scope="global"
-              class="text-muted text-sm"
+              class="text-sm text-muted"
             >
               <template #link>
                 <!-- raw: ULink's colour utility would override .inline-link -->
@@ -313,15 +313,15 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
       <!-- Alternative contact channels -->
       <aside
         v-spotlight
-        class="bg-elevated/50 reveal flex flex-col gap-4 rounded-2xl p-6 lg:self-start"
+        class="reveal flex flex-col gap-4 rounded-2xl bg-elevated/50 p-6 lg:self-start"
       >
         <CredentialAnchor section="contacto" class="mx-auto" />
 
-        <h3 class="text-highlighted text-lg font-semibold">
+        <h3 class="text-lg font-semibold text-highlighted">
           {{ t('contactPage.aside.title') }}
         </h3>
 
-        <p class="text-muted text-sm">
+        <p class="text-sm text-muted">
           {{ t('contactPage.alternative') }}
         </p>
 
@@ -329,7 +329,7 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
           <SocialLinks placement="contact" />
         </div>
 
-        <p class="text-muted flex items-center gap-2 font-mono text-sm">
+        <p class="flex items-center gap-2 font-mono text-sm text-muted">
           <UIcon name="i-tabler-clock" class="size-4 shrink-0" aria-hidden="true" />
           {{ t('contactPage.aside.availability') }}
         </p>

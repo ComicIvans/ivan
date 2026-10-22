@@ -46,8 +46,8 @@ const { academic, languages, certifications, competencies } = useProfile()
                     {{ item.period }}
                   </UBadge>
                 </div>
-                <p class="text-toned mt-1 font-medium">{{ item.organization }}</p>
-                <p class="text-muted mt-2">{{ item.description }}</p>
+                <p class="mt-1 font-medium text-toned">{{ item.organization }}</p>
+                <p class="mt-2 text-muted">{{ item.description }}</p>
               </div>
             </div>
           </UCard>
@@ -73,12 +73,12 @@ const { academic, languages, certifications, competencies } = useProfile()
                 <UIcon :name="lang.flag" class="size-10" aria-hidden="true" />
                 <div>
                   <h4 :id="`${id}-lang-${lang.id}`" class="font-bold">{{ lang.name }}</h4>
-                  <p class="text-toned text-sm">{{ lang.level }}</p>
+                  <p class="text-sm text-toned">{{ lang.level }}</p>
                 </div>
               </div>
-              <p class="text-muted mt-2 text-sm">{{ lang.description }}</p>
+              <p class="mt-2 text-sm text-muted">{{ lang.description }}</p>
               <div class="mt-4">
-                <p :id="`${id}-lang-${lang.id}-meter`" class="text-muted mb-2 text-xs">
+                <p :id="`${id}-lang-${lang.id}-meter`" class="mb-2 text-xs text-muted">
                   {{ t('training.languages.proficiency') }}
                 </p>
                 <!-- Meter name: the label above plus the language name -->
@@ -116,7 +116,7 @@ const { academic, languages, certifications, competencies } = useProfile()
                   />
                 </div>
                 <h4 class="font-bold">{{ item.title }}</h4>
-                <p class="text-muted text-sm">
+                <p class="text-sm text-muted">
                   {{ item.description }}
                 </p>
               </div>
@@ -138,7 +138,7 @@ const { academic, languages, certifications, competencies } = useProfile()
             <div
               v-for="comp in competencies"
               :key="comp.id"
-              class="border-default bg-elevated/50 flex items-center gap-2 rounded-full border px-4 py-2"
+              class="flex items-center gap-2 rounded-full border border-default bg-elevated/50 px-4 py-2"
             >
               <UIcon
                 :name="comp.icon"

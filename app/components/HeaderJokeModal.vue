@@ -29,7 +29,7 @@ function close() {
           </div>
         </template>
 
-        <p class="text-muted text-base">{{ description }}</p>
+        <p class="text-base text-muted">{{ description }}</p>
 
         <template #footer>
           <div class="flex justify-end">

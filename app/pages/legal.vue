@@ -57,7 +57,7 @@ usePageSeo('legal.title', 'seo.pages.legal', { robots: 'noindex, follow' })
       <PageHeader :title="t('legal.title')" />
 
       <UCard class="reveal">
-        <div class="prose prose-neutral dark:prose-invert max-w-none">
+        <div class="prose max-w-none prose-neutral dark:prose-invert">
           <!-- Site information -->
           <section>
             <h2>{{ t('legal.siteInfo.title') }}</h2>
@@ -166,7 +166,7 @@ usePageSeo('legal.title', 'seo.pages.legal', { robots: 'noindex, follow' })
           </section>
 
           <!-- Last update -->
-          <p class="text-muted mt-8 text-sm">
+          <p class="mt-8 text-sm text-muted">
             {{ t('legal.lastUpdate') }}: {{ t('legal.updateDate') }}
           </p>
         </div>

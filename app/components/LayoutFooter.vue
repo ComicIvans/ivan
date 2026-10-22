@@ -6,7 +6,7 @@ const localePath = useLocalePath()
 </script>
 
 <template>
-  <footer class="footer-band text-toned p-4 pb-6 md:pb-4" role="contentinfo">
+  <footer class="footer-band p-4 pb-6 text-toned md:pb-4" role="contentinfo">
     <!-- The text links are raw ULinks: the default ULink colour utilities
          would override .inline-link and .muted-link. -->
     <div
@@ -14,7 +14,7 @@ const localePath = useLocalePath()
     >
       <!-- Wordmark + copyright -->
       <div class="flex flex-col items-center gap-1 md:items-start md:text-left">
-        <span class="type-display text-highlighted text-lg" aria-hidden="true">
+        <span class="type-display text-lg text-highlighted" aria-hidden="true">
           {{ t('header.title') }}
         </span>
         <p class="text-sm">

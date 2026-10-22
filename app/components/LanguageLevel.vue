@@ -86,7 +86,7 @@ onBeforeUnmount(() => observer?.disconnect())
         aria-hidden="true"
       />
     </div>
-    <div class="text-muted mt-2 flex items-center justify-between font-mono text-xs">
+    <div class="mt-2 flex items-center justify-between font-mono text-xs text-muted">
       <span>{{ levelLabel }}</span>
       <span aria-hidden="true">{{ level === 'native' ? 'C2' : level }}</span>
     </div>

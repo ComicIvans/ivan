@@ -104,7 +104,7 @@ useGsapMatchMedia(rootEl, (ctx) => {
     <h2
       :id="headingId"
       ref="titleEl"
-      class="type-display text-highlighted text-3xl sm:text-4xl lg:text-[2.75rem] lg:leading-[1.08]"
+      class="type-display text-3xl text-highlighted sm:text-4xl lg:text-[2.75rem] lg:leading-[1.08]"
     >
       {{ title }}
     </h2>
@@ -114,7 +114,7 @@ useGsapMatchMedia(rootEl, (ctx) => {
       :class="ruleClass"
       aria-hidden="true"
     />
-    <p v-if="intro" ref="introEl" class="text-muted mt-4 max-w-2xl text-lg">
+    <p v-if="intro" ref="introEl" class="mt-4 max-w-2xl text-lg text-muted">
       {{ intro }}
     </p>
     <slot />

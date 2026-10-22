@@ -171,11 +171,11 @@ useGsapMatchMedia(sectionEl, (ctx) => {
           />
         </figure>
         <div class="max-w-2xl">
-          <h1 class="type-display text-highlighted text-4xl sm:text-5xl lg:text-6xl">
+          <h1 class="type-display text-4xl text-highlighted sm:text-5xl lg:text-6xl">
             {{ t('home.hero.titleLead') }}
             <span class="ink-gradient">{{ t('home.hero.titleAccent') }}</span>
           </h1>
-          <p class="text-muted mt-6 text-base leading-relaxed sm:text-lg">
+          <p class="mt-6 text-base leading-relaxed text-muted sm:text-lg">
             {{ t('home.hero.pitch') }}
           </p>
           <div class="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
@@ -202,7 +202,7 @@ useGsapMatchMedia(sectionEl, (ctx) => {
       <!-- Scroll cue -->
       <button
         type="button"
-        class="hero-scroll-cue text-muted hover:text-highlighted absolute bottom-4 left-1/2 flex -translate-x-1/2 cursor-pointer flex-col items-center gap-1 font-mono text-xs transition-colors"
+        class="hero-scroll-cue absolute bottom-4 left-1/2 flex -translate-x-1/2 cursor-pointer flex-col items-center gap-1 font-mono text-xs text-muted transition-colors hover:text-highlighted"
         @click="goTo('experiencia')"
       >
         {{ t('home.hero.scrollCue') }}
@@ -221,17 +221,17 @@ useGsapMatchMedia(sectionEl, (ctx) => {
           class="bento-tile surface-glass motion-card rounded-2xl p-5 sm:p-6"
           :class="isLastLeadTile(index) ? lastLeadTileClass : ''"
         >
-          <div class="bg-primary-500/10 flex size-12 items-center justify-center rounded-xl">
+          <div class="flex size-12 items-center justify-center rounded-xl bg-primary-500/10">
             <UIcon
               :name="highlight.icon"
-              class="text-primary-600 dark:text-primary-400 size-6"
+              class="size-6 text-primary-600 dark:text-primary-400"
               aria-hidden="true"
             />
           </div>
-          <h3 class="text-highlighted mt-4 text-lg font-semibold">
+          <h3 class="mt-4 text-lg font-semibold text-highlighted">
             {{ highlight.title }}
           </h3>
-          <p class="text-muted mt-2 text-sm leading-relaxed">
+          <p class="mt-2 text-sm leading-relaxed text-muted">
             {{ highlight.description }}
           </p>
         </article>
@@ -245,19 +245,19 @@ useGsapMatchMedia(sectionEl, (ctx) => {
           @click="goTo('experiencia')"
         >
           <!-- Phrasing content only inside a button: spans, not paragraphs -->
-          <span class="text-primary flex items-center gap-2 text-xs font-medium tracking-wide">
+          <span class="flex items-center gap-2 text-xs font-medium tracking-wide text-primary">
             <span class="relative flex size-2" aria-hidden="true">
               <span
-                class="now-dot-ping bg-primary-500 absolute inline-flex size-full rounded-full"
+                class="now-dot-ping absolute inline-flex size-full rounded-full bg-primary-500"
               />
-              <span class="bg-primary-500 relative inline-flex size-2 rounded-full" />
+              <span class="relative inline-flex size-2 rounded-full bg-primary-500" />
             </span>
             {{ t('home.now.title') }}
           </span>
-          <span class="text-highlighted mt-3 block font-semibold">
+          <span class="mt-3 block font-semibold text-highlighted">
             {{ currentRole.title }}
           </span>
-          <span class="text-muted mt-1 block text-sm leading-snug">
+          <span class="mt-1 block text-sm leading-snug text-muted">
             {{ currentRole.organization }}
           </span>
         </button>
@@ -291,8 +291,8 @@ useGsapMatchMedia(sectionEl, (ctx) => {
             height="360"
             sizes="xs:100vw lg:520px"
           />
-          <div v-else class="bg-elevated absolute inset-0 flex items-center justify-center">
-            <UIcon name="i-tabler-photo" class="text-dimmed size-12" aria-hidden="true" />
+          <div v-else class="absolute inset-0 flex items-center justify-center bg-elevated">
+            <UIcon name="i-tabler-photo" class="size-12 text-dimmed" aria-hidden="true" />
           </div>
           <div
             class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 from-0% to-transparent to-45% p-5 pt-14"
@@ -320,7 +320,7 @@ useGsapMatchMedia(sectionEl, (ctx) => {
 @reference '../../assets/css/main.css';
 
 .home-hero-panel {
-  @apply border-default bg-default/80 dark:bg-elevated/75 relative overflow-hidden rounded-[2rem] border px-6 py-10 shadow-sm shadow-black/5 backdrop-blur-xl sm:px-8 sm:py-12 dark:shadow-black/30;
+  @apply relative overflow-hidden rounded-[2rem] border border-default bg-default/80 px-6 py-10 shadow-sm shadow-black/5 backdrop-blur-xl sm:px-8 sm:py-12 dark:bg-elevated/75 dark:shadow-black/30;
 }
 
 .home-hero-panel::after {
