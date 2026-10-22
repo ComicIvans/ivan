@@ -159,9 +159,17 @@ Van en `.env.deploy`:
 - `REMOTE_DIR`: directorio absoluto del VPS que contiene el `.env` de
   ejecución; `pnpm deploy:vps` copia ahí `docker-compose.yml` en cada
   despliegue.
-- `GHCR_USERNAME` y `GHCR_TOKEN`: token de GitHub con `write:packages` para
-  publicar la imagen privada y `read:packages` para descargarla en el VPS.
-  Sin ellos, cada máquina necesita un `docker login ghcr.io` previo.
+- `GHCR_USERNAME`, `GHCR_PUSH_TOKEN` y `GHCR_PULL_TOKEN`: dos tokens clásicos
+  de GitHub para la imagen privada. `GHCR_PUSH_TOKEN` (`write:packages`) solo
+  se usa en local para publicarla; créalo desde
+  <https://github.com/settings/tokens/new?scopes=write:packages>, porque al
+  marcar `write:packages` en el formulario se marca también todo `repo`.
+  `GHCR_PULL_TOKEN` (solo `read:packages`) es el único que llega al VPS, donde
+  `docker login` lo guarda para descargar la imagen. Así, quien acceda al VPS
+  no puede publicar otra imagen. Sin tokens, cada máquina necesita un
+  `docker login ghcr.io` previo (en el VPS, con un token de solo lectura).
+  `GHCR_TOKEN`, el nombre anterior del token de publicación, se sigue
+  aceptando en local, pero ya no se envía al VPS.
 - `IMAGE` (opcional, por defecto `ghcr.io/comicivans/ivan:latest`): los
   scripts también se lo pasan a `docker compose`.
 - `DOCKER_PLATFORM` (opcional, por defecto `linux/amd64`)
@@ -231,19 +239,28 @@ Preparación del VPS (una sola vez):
 1. Instala Docker con el plugin Compose y crea `REMOTE_DIR`.
 2. Crea en `REMOTE_DIR` un `.env` solo con las variables de ejecución de
    `.env.example` (SMTP, `NUXT_APP_SECRET` y, si hace falta,
-   `NUXT_SITE_INDEXABLE`).
+   `NUXT_SITE_INDEXABLE`) y deja que solo lo lea su dueño, porque contiene la
+   contraseña SMTP y el secreto de la aplicación: `chmod 600 .env`.
 3. Configura nginx delante de la aplicación según
    [docs/nginx.md](docs/nginx.md).
 
 Cada despliegue sobrescribe el `docker-compose.yml` del VPS con el del
 repositorio: los cambios hechos a mano allí se pierden.
 
+Las versiones anteriores de `deploy.sh` hacían `docker login` en el VPS con el
+token de publicación (`GHCR_TOKEN`), que quedó guardado en
+`~/.docker/config.json` del usuario de despliegue. Si desplegaste con ellas,
+ejecuta allí `docker logout ghcr.io` (el siguiente despliegue entra con
+`GHCR_PULL_TOKEN`) y valora revocar ese token en GitHub y crear otro para
+publicar.
+
 Si vienes del formato antiguo, con un único `.env`:
 
 1. Crea `.env.deploy` a partir de `.env.deploy.example`. Mueve a él
-   `VPS_HOST`, `REMOTE_DIR`, `GHCR_USERNAME`, `GHCR_TOKEN` y, si los usas,
-   `IMAGE` y `DOCKER_PLATFORM`; copia `SITE_URL` y las variables de Umami,
-   que `pnpm dev` sigue leyendo de `.env`.
+   `VPS_HOST`, `REMOTE_DIR`, `GHCR_USERNAME`, el token de GitHub (como
+   `GHCR_PUSH_TOKEN`) y, si los usas, `IMAGE` y `DOCKER_PLATFORM`; añade un
+   `GHCR_PULL_TOKEN` de solo lectura y copia `SITE_URL` y las variables de
+   Umami, que `pnpm dev` sigue leyendo de `.env`.
 2. Quita esas variables de despliegue del `.env` local y del `.env` del VPS
    para que no lleguen al contenedor.
 
