@@ -329,11 +329,13 @@ textarea,
   /* Motion utilities                                                  */
   /* ---------------------------------------------------------------- */
 
-  /* One lift behavior for static cards and linked cards */
+  /* One lift behavior for static cards and linked cards. The lift moves the
+     `translate` property, so `transform` stays free for GSAP entrances and
+     parallax, which a CSS transition on it would ease a second time. */
   .motion-card,
   .motion-link-card {
     transition:
-      transform 300ms var(--motion-emphasized),
+      translate 300ms var(--motion-emphasized),
       box-shadow 300ms var(--motion-emphasized);
   }
 

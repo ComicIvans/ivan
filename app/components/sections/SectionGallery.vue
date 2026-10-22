@@ -133,49 +133,57 @@ useGsapMatchMedia(sectionEl, (ctx) => {
     </div>
 
     <!-- Tiles keep a CSS ratio, so the covers need no width/height. lg: a fixed
-         4 x 2 grid whose cells keep the 16:10 tile ratio. -->
+         4 x 2 grid whose cells keep the 16:10 tile ratio. Each cell is a
+         wrapper that carries the layout and the entrance or parallax
+         transform, and the link inside it fills it (a one-cell grid stretches
+         it), so the link's own hover lift never competes with them. min-h-0
+         keeps the cover's own ratio from stretching the wrapper. -->
     <div
       v-if="mosaicTiles.length > 0"
       class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:aspect-[32/10] lg:grid-cols-4 lg:grid-rows-2"
     >
-      <NuxtLink
+      <div
         v-for="tile in mosaicTiles"
         :key="tile.event.slug"
-        v-spotlight
-        :to="localePath(`/galeria/${tile.event.slug}`)"
-        :aria-label="`${tile.event.title}. ${tile.event.monthText}`"
-        class="gallery-tile motion-link-card reveal group relative block aspect-[16/10] overflow-hidden rounded-2xl lg:aspect-auto"
+        class="gallery-tile reveal grid aspect-[16/10] min-h-0 min-w-0 lg:aspect-auto"
         :class="tile.class"
       >
-        <NuxtImg
-          v-if="tile.event.cover"
-          :src="tile.event.cover.src"
-          :alt="getCoverAlt(tile.event.title, tile.event.cover.alt)"
-          :style="{ viewTransitionName: `gallery-cover-${tile.event.slug}` }"
-          class="motion-link-media size-full object-cover"
-          loading="lazy"
-          format="webp"
-          quality="75"
-          :sizes="tile.sizes"
-          :densities="tile.densities"
-        />
-        <!-- Title scrim confined to the bottom band -->
-        <div
-          class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 from-0% to-transparent to-45%"
+        <NuxtLink
+          v-spotlight
+          :to="localePath(`/galeria/${tile.event.slug}`)"
+          :aria-label="`${tile.event.title}. ${tile.event.monthText}`"
+          class="motion-link-card group relative block overflow-hidden rounded-2xl"
         >
-          <div class="px-4 pt-10 pb-3">
-            <h3
-              class="line-clamp-2 leading-snug font-bold text-white drop-shadow-sm"
-              :class="tile.featured ? 'text-xl' : 'text-base'"
-            >
-              {{ tile.event.title }}
-            </h3>
-            <p class="mt-0.5 font-mono text-xs text-white/85">
-              {{ tile.event.monthText }}
-            </p>
+          <NuxtImg
+            v-if="tile.event.cover"
+            :src="tile.event.cover.src"
+            :alt="getCoverAlt(tile.event.title, tile.event.cover.alt)"
+            :style="{ viewTransitionName: `gallery-cover-${tile.event.slug}` }"
+            class="motion-link-media size-full object-cover"
+            loading="lazy"
+            format="webp"
+            quality="75"
+            :sizes="tile.sizes"
+            :densities="tile.densities"
+          />
+          <!-- Title scrim confined to the bottom band -->
+          <div
+            class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 from-0% to-transparent to-45%"
+          >
+            <div class="px-4 pt-10 pb-3">
+              <h3
+                class="line-clamp-2 leading-snug font-bold text-white drop-shadow-sm"
+                :class="tile.featured ? 'text-xl' : 'text-base'"
+              >
+                {{ tile.event.title }}
+              </h3>
+              <p class="mt-0.5 font-mono text-xs text-white/85">
+                {{ tile.event.monthText }}
+              </p>
+            </div>
           </div>
-        </div>
-      </NuxtLink>
+        </NuxtLink>
+      </div>
     </div>
 
     <div class="mt-8 flex justify-center">
