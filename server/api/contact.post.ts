@@ -73,17 +73,25 @@ function assertSameSiteJsonRequest(event: H3Event) {
   }
 
   // Current browsers send Sec-Fetch-Site to HTTPS sites (`none`: typed or
-  // bookmarked); Origin covers older ones. Origin is compared with the Host
-  // the request was sent to, which nginx passes through, so a local preview
-  // on another host keeps working.
+  // bookmarked); Origin covers older ones. Origin may name either the Host the
+  // request was sent to (local previews, or a proxy that passes Host through)
+  // or the canonical SITE_URL host, so a proxy that forwards its upstream
+  // address as Host (nginx's proxy_pass default) does not reject the form.
   const fetchSite = getRequestHeader(event, 'sec-fetch-site')
   const origin = getRequestHeader(event, 'origin')
   const crossSite =
     (fetchSite !== undefined && fetchSite !== 'same-origin' && fetchSite !== 'none') ||
-    (origin !== undefined && originHost(origin) !== getRequestHost(event))
+    (origin !== undefined && !isOwnOrigin(event, origin))
   if (crossSite) {
     throw createError({ statusCode: 403, statusMessage: CONTACT_ERROR_CODES.validation })
   }
+}
+
+function isOwnOrigin(event: H3Event, origin: string): boolean {
+  const host = originHost(origin)
+  if (host === null) return false
+  if (host === getRequestHost(event)) return true
+  return host === originHost(getRequiredSiteUrl(event, CONTACT_ERROR_CODES.serviceUnavailable))
 }
 
 function originHost(origin: string): string | null {
