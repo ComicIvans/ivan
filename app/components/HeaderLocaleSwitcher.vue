@@ -48,6 +48,9 @@ watch(locale, close)
 
 const selectLocale = (code: string) => {
   close()
+  // The chosen item leaves the DOM with the menu: keep the focus on the
+  // trigger, which stays in the navbar across the language switch.
+  triggerRef.value?.focus()
 
   if (code === locale.value) {
     return
