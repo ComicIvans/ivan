@@ -331,9 +331,6 @@
       "apiErrors": {
         "rateLimited": "Du hast in kurzer Zeit zu viele Nachrichten gesendet. Bitte versuche es später erneut.",
         "missingFields": "Es fehlen noch Pflichtfelder.",
-        "nameLength": "Der Name muss zwischen 2 und 100 Zeichen lang sein.",
-        "subjectLength": "Der Betreff muss zwischen 3 und 200 Zeichen lang sein.",
-        "messageLength": "Die Nachricht muss zwischen 10 und 5000 Zeichen lang sein.",
         "prohibitedContent": "Die Nachricht enthält Inhalte, die nicht akzeptiert werden konnten.",
         "serviceUnavailable": "Der E-Mail-Dienst ist derzeit nicht verfügbar.",
         "sendFailed": "Die Nachricht konnte nicht gesendet werden. Bitte versuche es später erneut."

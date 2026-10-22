@@ -7,7 +7,7 @@ import {
 import { enforceRateLimit } from '../utils/rateLimit'
 import { getSmtpTransporter } from '../utils/smtp'
 import { validatePublicBody } from '../utils/validatePublicBody'
-import { contactFormSchema } from '~~/shared/utils/contactValidation'
+import { contactRequestSchema } from '~~/shared/utils/contactValidation'
 import { CONTACT_MIN_SUBMIT_DELAY_MS } from '~~/shared/utils/contactShared'
 import { readLimitedJsonBody } from '../utils/readLimitedJsonBody'
 
@@ -24,13 +24,28 @@ const CONTACT_ERROR_CODES = {
 // Structural spam signals only. Ambiguous keyword matching (crypto, investment,
 // winner, ...) was removed: it blocked legitimate messages from a cybersecurity
 // professional. The honeypot, submit-timing check and rate limiter carry the load.
-const SPAM_PATTERNS = [/\[url=/i, /\[link=/i, /<a\s+href/i, /https?:\/\/[^\s]{256,}/i, /(.)\1{10,}/]
+// Long runs of one letter or digit count as spam; separator lines such as
+// "----------" or "..........." do not.
+const SPAM_PATTERNS = [
+  /\[url=/i,
+  /\[link=/i,
+  /<a\s+href/i,
+  /https?:\/\/[^\s]{256,}/i,
+  /([\p{L}\p{N}])\1{19,}/u,
+]
+
+// The email is Spanish by design; this names the visitor's site language.
+const languageNames = new Intl.DisplayNames(['es'], { type: 'language' })
+
+const EMAIL_RULE = '-'.repeat(40)
 
 function hasSpamPatterns(text: string): boolean {
   return SPAM_PATTERNS.some((pattern) => pattern.test(text))
 }
 
-// Email header fields must never contain CR/LF/NUL (header injection).
+// Email header fields must never contain CR/LF/NUL (header injection). The
+// schema already rejects them in the address and collapses them in the
+// subject; this keeps the guarantee next to the headers.
 function assertNoHeaderInjection(value: string) {
   if (/[\r\n\0]/.test(value)) {
     throw createError({
@@ -49,25 +64,30 @@ export default defineEventHandler(async (event) => {
   })
 
   const body = validatePublicBody(
-    contactFormSchema,
+    contactRequestSchema,
     await readLimitedJsonBody(event, MAX_CONTACT_BODY_BYTES, CONTACT_ERROR_CODES.validation),
     CONTACT_ERROR_CODES.validation
   )
 
-  // Honeypot: silently accept (don't reveal the trap to bots).
+  // Honeypot and submit timing: answer as if the message was sent (so bots
+  // learn nothing), but log the drop so lost messages can be noticed.
   if (body.website && body.website.trim() !== '') {
+    console.warn('[contact] Dropped a submission: the honeypot field was filled')
     return { success: true }
   }
 
-  // Submit-timing check: genuine humans take longer than a couple of seconds.
+  // elapsedMs is measured on the visitor's device alone. Negative values
+  // cannot come from the form, so only a plausible, too-short delay drops.
   if (
-    typeof body.startedAt === 'number' &&
-    Date.now() - body.startedAt < CONTACT_MIN_SUBMIT_DELAY_MS
+    body.elapsedMs !== undefined &&
+    body.elapsedMs >= 0 &&
+    body.elapsedMs < CONTACT_MIN_SUBMIT_DELAY_MS
   ) {
+    console.warn(`[contact] Dropped a submission sent ${body.elapsedMs} ms after the form appeared`)
     return { success: true }
   }
 
-  const { name, email, subject, message } = body
+  const { name, email, subject, message, locale } = body
 
   assertNoHeaderInjection(email)
   assertNoHeaderInjection(subject)
@@ -85,24 +105,27 @@ export default defineEventHandler(async (event) => {
 
   const transporter = getSmtpTransporter(event, CONTACT_ERROR_CODES.serviceUnavailable)
 
+  const language = locale ? `${languageNames.of(locale) ?? locale} (${locale})` : 'desconocido'
+
   const emailContent = `
 Nuevo mensaje de contacto desde el portfolio
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📧 De: ${name} <${email}>
-📋 Asunto: ${subject}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${EMAIL_RULE}
+De: ${name} <${email}>
+Asunto: ${subject}
+Idioma de la web: ${language}
+${EMAIL_RULE}
 
 ${message}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${EMAIL_RULE}
 Enviado desde: ${siteUrl}
 Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })}
   `.trim()
 
   try {
     await transporter.sendMail({
-      from: `"Portfolio Contact" <${fromEmail}>`,
+      from: `"Contacto del portfolio" <${fromEmail}>`,
       to: toEmail,
       replyTo: email,
       subject: `[Portfolio] ${subject}`,

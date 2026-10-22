@@ -331,9 +331,6 @@
       "apiErrors": {
         "rateLimited": "You have sent too many messages in a short period. Please try again later.",
         "missingFields": "Some required fields are missing.",
-        "nameLength": "Name must be between 2 and 100 characters.",
-        "subjectLength": "Subject must be between 3 and 200 characters.",
-        "messageLength": "Message must be between 10 and 5000 characters.",
         "prohibitedContent": "The message contains content that could not be accepted.",
         "serviceUnavailable": "The email service is not available right now.",
         "sendFailed": "The message could not be sent. Please try again later."

@@ -331,9 +331,6 @@
       "apiErrors": {
         "rateLimited": "Has enviado demasiados mensajes en poco tiempo. Vuelve a intentarlo más tarde.",
         "missingFields": "Faltan campos obligatorios por completar.",
-        "nameLength": "El nombre debe tener entre 2 y 100 caracteres.",
-        "subjectLength": "El asunto debe tener entre 3 y 200 caracteres.",
-        "messageLength": "El mensaje debe tener entre 10 y 5000 caracteres.",
         "prohibitedContent": "El mensaje contiene contenido que no he podido aceptar.",
         "serviceUnavailable": "El servicio de correo no está disponible en este momento.",
         "sendFailed": "No he podido enviar el mensaje. Inténtalo de nuevo más tarde."

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { FormSchema, FormSubmitEvent } from '@nuxt/ui'
 import type { ContactFormData } from '~~/shared/utils/contactValidation'
-import { CONTACT_FIELD_LIMITS } from '~~/shared/utils/contactShared'
+import { CONTACT_FIELD_LIMITS, isContactFieldError } from '~~/shared/utils/contactShared'
 
 defineProps<{ id: string }>()
 
-const { t } = useI18n({ useScope: 'global' })
+const { t, locale } = useI18n({ useScope: 'global' })
 const toast = useToast()
 
 const form = reactive<ContactFormData>({
@@ -14,10 +14,14 @@ const form = reactive<ContactFormData>({
   subject: '',
   message: '',
   website: '',
-  startedAt: undefined,
 })
 
 const isSubmitting = ref(false)
+
+// When the form appeared, on the visitor's own monotonic clock: the server
+// only receives the elapsed time, so a skewed device clock cannot make a
+// genuine message look like an instant bot submission.
+let formShownAt = 0
 
 // Live name printing on the credential badge. Once accredited, the printed
 // name is frozen: the form reset below would otherwise blank it right as the
@@ -31,20 +35,36 @@ watch(
 )
 
 onMounted(() => {
-  form.startedAt = Date.now()
+  formShownAt = performance.now()
 })
+
+// The schema reports error codes; they are also the keys of the localized
+// messages.
+function fieldErrorMessage(code: string): string {
+  return isContactFieldError(code)
+    ? t(`contactPage.form.errors.${code}`)
+    : t('contactPage.form.apiErrors.missingFields')
+}
 
 // The shared zod schema (and zod with it) loads on the first validation, not
 // with the home page: the form sits at the very bottom. UForm accepts any
-// Standard Schema and awaits its validate(), so this wrapper behaves exactly
-// like passing the zod schema itself (same issues, same parsed output).
+// Standard Schema and awaits its validate(), so this wrapper behaves like
+// passing the zod schema itself (same issues, same parsed output), except
+// that each issue carries its translated message.
 const contactSchema = {
   '~standard': {
     version: 1,
     vendor: 'zod',
     validate: async (value: unknown) => {
       const { contactFormSchema } = await import('~~/shared/utils/contactValidation')
-      return contactFormSchema['~standard'].validate(value)
+      const result = await contactFormSchema['~standard'].validate(value)
+      if (!result.issues) return result
+      return {
+        issues: result.issues.map((issue) => ({
+          ...issue,
+          message: fieldErrorMessage(issue.message),
+        })),
+      }
     },
   },
 } satisfies FormSchema<ContactFormData>
@@ -94,7 +114,11 @@ async function onSubmit(event: FormSubmitEvent<ContactFormData>) {
   try {
     await $fetch('/api/contact', {
       method: 'POST',
-      body: event.data,
+      body: {
+        ...event.data,
+        locale: locale.value,
+        elapsedMs: Math.round(performance.now() - formShownAt),
+      },
     })
 
     toast.add({
@@ -112,7 +136,7 @@ async function onSubmit(event: FormSubmitEvent<ContactFormData>) {
     form.subject = ''
     form.message = ''
     form.website = ''
-    form.startedAt = Date.now()
+    formShownAt = performance.now()
   } catch (error: unknown) {
     toast.add({
       title: resolveContactErrorMessage(error),
@@ -143,10 +167,13 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
     <div class="grid gap-6 lg:grid-cols-[1fr_20rem]">
       <!-- Contact Form -->
       <div class="surface-glass reveal rounded-2xl p-4 sm:p-6">
+        <!-- novalidate: the browser's own bubbles (e.g. for type="email") would
+             block UForm and speak the browser's language, not the page's. -->
         <UForm
           :schema="contactSchema"
           :state="form"
           class="space-y-6"
+          novalidate
           aria-describedby="form-description"
           @submit="onSubmit"
           @error="onFormError"
@@ -166,13 +193,17 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
             />
           </div>
 
+          <!-- The controls take their id from UFormField, so each label points
+               at its field; `required` draws the asterisk, aria-required
+               announces it. -->
+
           <!-- Name -->
-          <UFormField name="name" :label="t('contactPage.form.name') + ' *'">
+          <UFormField name="name" :label="t('contactPage.form.name')" required>
             <UInput
-              id="contact-name"
               v-model="form.name"
               name="name"
               type="text"
+              aria-required="true"
               :placeholder="t('contactPage.form.namePlaceholder')"
               autocomplete="name"
               :maxlength="CONTACT_FIELD_LIMITS.name.max"
@@ -182,12 +213,12 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
           </UFormField>
 
           <!-- Email -->
-          <UFormField name="email" :label="t('contactPage.form.email') + ' *'">
+          <UFormField name="email" :label="t('contactPage.form.email')" required>
             <UInput
-              id="contact-email"
               v-model="form.email"
               name="email"
               type="email"
+              aria-required="true"
               :placeholder="t('contactPage.form.emailPlaceholder')"
               autocomplete="email"
               inputmode="email"
@@ -198,12 +229,12 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
           </UFormField>
 
           <!-- Subject -->
-          <UFormField name="subject" :label="t('contactPage.form.subject') + ' *'">
+          <UFormField name="subject" :label="t('contactPage.form.subject')" required>
             <UInput
-              id="contact-subject"
               v-model="form.subject"
               name="subject"
               type="text"
+              aria-required="true"
               :placeholder="t('contactPage.form.subjectPlaceholder')"
               autocomplete="off"
               :maxlength="CONTACT_FIELD_LIMITS.subject.max"
@@ -213,11 +244,11 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
           </UFormField>
 
           <!-- Message -->
-          <UFormField name="message" :label="t('contactPage.form.message') + ' *'">
+          <UFormField name="message" :label="t('contactPage.form.message')" required>
             <UTextarea
-              id="contact-message"
               v-model="form.message"
               name="message"
+              aria-required="true"
               :placeholder="t('contactPage.form.messagePlaceholder')"
               :rows="5"
               :maxlength="CONTACT_FIELD_LIMITS.message.max"
