@@ -181,7 +181,7 @@
     }
   },
   "footer": {
-    "copyright": "Desarrollado por Iván Salido Cobo bajo la licencia MIT. Consulta el código en {link}.",
+    "copyright": "Desarrollado por Iván Salido Cobo. El código está en {link} con licencia MIT.",
     "github": "GitHub",
     "contactLabel": "Ir a la sección de contacto",
     "socialNav": "Redes sociales"

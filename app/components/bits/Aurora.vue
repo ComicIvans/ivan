@@ -1,11 +1,47 @@
+<!--
+  Adapted from the Aurora background of Vue Bits
+  (https://github.com/DavidHDev/vue-bits). This file is distributed under the
+  upstream license below, not under the MIT License of the rest of this
+  repository.
+
+  MIT + Commons Clause License Condition v1.0
+
+  Copyright (c) 2025 David Haz
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, and distribute the Software as part of
+  an application, website, or product, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  Commons Clause Restriction
+
+  You may use this Software, including for any commercial purpose, so long as
+  you do not sell, sublicense, or redistribute the components themselves-whether
+  alone, in a bundle, template, or as a ported version.
+
+  No Warranty
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+-->
+
 <template>
   <div ref="ctnDom" class="aurora-container" aria-hidden="true" />
 </template>
 
 <script setup lang="ts">
-// Adapted from Vue Bits' Aurora background (MIT + Commons Clause).
-// Runs a single fullscreen-triangle OGL shader; rendering pauses while the
-// element is off-screen or the tab is hidden to save GPU/battery. Mount it
+// Adapted from Vue Bits' Aurora background (license notice at the top of this
+// file). Runs a single fullscreen-triangle OGL shader; rendering pauses while
+// the element is off-screen or the tab is hidden to save GPU/battery. Mount it
 // behind <ClientOnly> and never for reduced-motion users.
 import { Color, Mesh, Program, Renderer, Triangle } from 'ogl'
 import { auroraColorStops } from '~~/shared/constants/theme'
