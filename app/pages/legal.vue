@@ -1,35 +1,42 @@
 <script setup lang="ts">
+import { profileName } from '~~/shared/constants/profile'
+import { colorModeStorageKey, localeCookieName } from '~~/shared/constants/storage'
+
 const { t, tm, rt } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
 
-const cookieItems = computed(() => {
-  const items = tm('legal.cookies.items') as Array<{
-    id: string
-    purpose: string
-    duration: string
-  }>
-  return items.map((item) => ({
-    id: item.id,
-    name: item.id === 'colorMode' ? 'nuxt-color-mode' : 'i18n_redirected',
-    purpose: rt(item.purpose),
-    duration: rt(item.duration),
+// Everything the site stores in the browser. The names come from the same
+// constants nuxt.config hands to the modules; purpose and duration are copy.
+const storageItems = [
+  { id: 'colorMode', name: colorModeStorageKey, type: 'localStorage' },
+  { id: 'i18n', name: localeCookieName, type: 'cookie' },
+] as const
+
+const storageRows = computed(() =>
+  storageItems.map((item) => ({
+    name: item.name,
+    type: t(`legal.cookies.types.${item.type}`),
+    purpose: t(`legal.cookies.items.${item.id}.purpose`),
+    duration: t(`legal.cookies.items.${item.id}.duration`),
   }))
-})
+)
 
-const privacyItems = computed(() => {
-  const items = tm('legal.privacy.items') as string[]
-  return items.map((item) => rt(item))
-})
+const storageColumns = computed(() => [
+  { accessorKey: 'name', header: t('legal.cookies.table.name') },
+  { accessorKey: 'type', header: t('legal.cookies.table.type') },
+  { accessorKey: 'purpose', header: t('legal.cookies.table.purpose') },
+  { accessorKey: 'duration', header: t('legal.cookies.table.duration') },
+])
 
-const contactFormDataItems = computed(() => {
-  const items = tm('legal.contactForm.dataCollected.items') as string[]
-  return items.map((item) => rt(item))
-})
+/** A list of messages; a key missing in this locale renders no items. */
+function messageList(key: string) {
+  const items: unknown = tm(key)
+  return Array.isArray(items) ? items.map((item) => rt(item)) : []
+}
 
-const rightsItems = computed(() => {
-  const items = tm('legal.rights.items') as string[]
-  return items.map((item) => rt(item))
-})
+const privacyItems = computed(() => messageList('legal.privacy.items'))
+const contactFormDataItems = computed(() => messageList('legal.contactForm.dataCollected.items'))
+const rightsItems = computed(() => messageList('legal.rights.items'))
 
 definePageMeta({
   i18n: {
@@ -57,7 +64,7 @@ usePageSeo('legal.title', 'seo.pages.legal', { robots: 'noindex, follow' })
             <p>{{ t('legal.siteInfo.description') }}</p>
             <ul>
               <li>
-                <strong>{{ t('legal.siteInfo.owner') }}:</strong> Iván Salido Cobo
+                <strong>{{ t('legal.siteInfo.owner') }}:</strong> {{ profileName }}
               </li>
               <li>
                 <strong>{{ t('legal.siteInfo.email') }}:</strong>
@@ -89,12 +96,8 @@ usePageSeo('legal.title', 'seo.pages.legal', { robots: 'noindex, follow' })
             <!-- not-prose: UTable brings its own table styling -->
             <div class="not-prose mt-4 overflow-x-auto">
               <UTable
-                :data="cookieItems"
-                :columns="[
-                  { accessorKey: 'name', header: t('legal.cookies.table.name') },
-                  { accessorKey: 'purpose', header: t('legal.cookies.table.purpose') },
-                  { accessorKey: 'duration', header: t('legal.cookies.table.duration') },
-                ]"
+                :data="storageRows"
+                :columns="storageColumns"
                 :ui="{ td: 'font-mono text-sm' }"
               />
             </div>
@@ -147,7 +150,18 @@ usePageSeo('legal.title', 'seo.pages.legal', { robots: 'noindex, follow' })
             <ul>
               <li v-for="(item, index) in rightsItems" :key="index">{{ item }}</li>
             </ul>
-            <p>{{ t('legal.rights.contact') }}</p>
+            <i18n-t keypath="legal.rights.contact" tag="p" scope="global">
+              <template #form>
+                <!-- raw + not-prose: see the contact link above -->
+                <ULink
+                  :to="{ path: localePath('/'), hash: '#contacto' }"
+                  raw
+                  class="inline-link not-prose"
+                >
+                  {{ t('legal.rights.formLink') }}
+                </ULink>
+              </template>
+            </i18n-t>
             <p>{{ t('legal.rights.cookiesNote') }}</p>
           </section>
 

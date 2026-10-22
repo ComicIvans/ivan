@@ -3,6 +3,7 @@ import { join, resolve } from 'node:path'
 import { requireConfigUrl } from './shared/utils/config'
 import { defaultLocale, siteLocales } from './shared/constants/locales'
 import { profileName } from './shared/constants/profile'
+import { colorModeStorageKey, localeCookieName } from './shared/constants/storage'
 
 const isDev = process.env.NODE_ENV !== 'production'
 
@@ -290,6 +291,9 @@ export default defineNuxtConfig({
   colorMode: {
     preference: 'system',
     fallback: 'light',
+    // Listed on the legal page as local storage without expiry.
+    storage: 'localStorage',
+    storageKey: colorModeStorageKey,
   },
 
   experimental: {
@@ -383,7 +387,7 @@ export default defineNuxtConfig({
     defaultLocale,
     detectBrowserLanguage: {
       useCookie: true,
-      cookieKey: 'i18n_redirected',
+      cookieKey: localeCookieName,
       redirectOn: 'root',
     },
   },

@@ -207,26 +207,29 @@
       "purposeText": "To present personal professional and academic information"
     },
     "cookies": {
-      "title": "Cookies policy",
-      "description": "This website uses only strictly necessary technical cookies for its operation. No tracking, advertising or analytics cookies are used.",
+      "title": "Cookie policy",
+      "description": "This website only stores the technical items in the table in your browser, to remember your language and theme preferences. It uses no tracking, advertising or analytics cookies.",
       "table": {
-        "name": "Cookie",
+        "name": "Name",
+        "type": "Type",
         "purpose": "Purpose",
         "duration": "Duration"
       },
-      "items": [
-        {
-          "id": "colorMode",
+      "types": {
+        "cookie": "Cookie",
+        "localStorage": "Local storage"
+      },
+      "items": {
+        "colorMode": {
           "purpose": "Stores your theme preference (light/dark)",
-          "duration": "1 year"
+          "duration": "Until you delete it"
         },
-        {
-          "id": "i18n",
+        "i18n": {
           "purpose": "Stores your language preference",
           "duration": "1 year"
         }
-      ],
-      "note": "These cookies are essential for the operation of the site and are exempt from the consent requirement under European regulations (Article 6(1)(f) GDPR)."
+      },
+      "note": "These items are strictly necessary to provide the service you request (showing the site in the language and theme you choose), so they are exempt from consent under Article 22.2 of the Spanish LSSI, which transposes Article 5(3) of Directive 2002/58/EC."
     },
     "contactForm": {
       "title": "Contact form",
@@ -260,11 +263,12 @@
       "title": "General privacy",
       "description": "This website respects your privacy:",
       "items": [
-        "Umami Analytics is used, a privacy-focused analytics tool that does not collect personal data",
-        "Umami does not use tracking cookies or identify individual users",
+        "Visits are measured with Umami, a privacy-friendly analytics tool hosted on my own server, without third-party services",
+        "Umami uses no cookies and does not store your IP address; it only provides aggregate statistics and does not identify individual visitors",
         "No cross-site tracking is performed",
-        "No data are shared with third parties",
-        "Only the data you voluntarily provide via the contact form are collected"
+        "To prevent abuse, the server counts contact form submissions and the security (CSP) reports your browser sends automatically. It links them to a code derived from your IP address with a secret key, never to the address itself",
+        "That code is deleted within 70 minutes at most. The legal basis is the legitimate interest in protecting the site (Art. 6(1)(f) GDPR)",
+        "No data are shared with third parties"
       ]
     },
     "rights": {
@@ -278,11 +282,12 @@
         "Portability: receive your data in a structured format",
         "Restriction: request a limitation of processing"
       ],
-      "contact": "To exercise these rights, you may contact me by email. You also have the right to lodge a complaint with the Spanish Data Protection Agency (AEPD).",
-      "cookiesNote": "You can delete this site’s cookies at any time via your browser settings."
+      "contact": "To exercise these rights, write to me through the {form}, stating which right you wish to exercise. You also have the right to lodge a complaint with the Spanish Data Protection Agency (AEPD).",
+      "formLink": "contact form",
+      "cookiesNote": "You can delete this site’s cookie and local storage at any time in your browser settings."
     },
     "lastUpdate": "Last updated",
-    "updateDate": "December 2025"
+    "updateDate": "October 2026"
   },
   "error": {
     "backHome": "Back to home",

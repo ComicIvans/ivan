@@ -208,25 +208,28 @@
     },
     "cookies": {
       "title": "Cookie-Richtlinie",
-      "description": "Diese Website verwendet ausschließlich technisch notwendige Cookies, die für den Betrieb erforderlich sind. Es werden keine Tracking-, Werbe- oder Analyse-Cookies eingesetzt.",
+      "description": "Diese Website speichert in deinem Browser nur die technischen Einträge aus der Tabelle, die sich deine Sprach- und Designeinstellung merken. Es werden keine Tracking-, Werbe- oder Analyse-Cookies eingesetzt.",
       "table": {
-        "name": "Cookie",
+        "name": "Name",
+        "type": "Art",
         "purpose": "Zweck",
         "duration": "Dauer"
       },
-      "items": [
-        {
-          "id": "colorMode",
+      "types": {
+        "cookie": "Cookie",
+        "localStorage": "Lokaler Speicher"
+      },
+      "items": {
+        "colorMode": {
           "purpose": "Speichert deine Designpräferenz (hell/dunkel)",
-          "duration": "1 Jahr"
+          "duration": "Bis zur manuellen Löschung"
         },
-        {
-          "id": "i18n",
+        "i18n": {
           "purpose": "Speichert deine Sprachpräferenz",
           "duration": "1 Jahr"
         }
-      ],
-      "note": "Diese Cookies sind für den Betrieb der Website erforderlich und unterliegen nach europäischem Recht nicht der Einwilligungspflicht (Art. 6 Abs. 1 lit. f DSGVO)."
+      },
+      "note": "Diese Einträge sind unbedingt erforderlich, um den von dir gewünschten Dienst bereitzustellen (die Website in der von dir gewählten Sprache und Darstellung anzuzeigen). Daher sind sie nach Art. 22.2 des spanischen Gesetzes über Dienste der Informationsgesellschaft (LSSI), das Art. 5 Abs. 3 der Richtlinie 2002/58/EG umsetzt, nicht einwilligungspflichtig."
     },
     "contactForm": {
       "title": "Kontaktformular",
@@ -260,11 +263,12 @@
       "title": "Allgemeiner Datenschutz",
       "description": "Diese Website respektiert deine Privatsphäre:",
       "items": [
-        "Umami Analytics wird verwendet, ein datenschutzorientiertes Analyse-Tool, das keine personenbezogenen Daten erfasst",
-        "Umami verwendet keine Tracking-Cookies und identifiziert Benutzer nicht individuell",
+        "Besuche werden mit Umami gemessen, einem datenschutzfreundlichen Analyse-Tool, das auf meinem eigenen Server läuft, ohne Dienste Dritter",
+        "Umami verwendet keine Cookies und speichert deine IP-Adresse nicht; es liefert nur zusammengefasste Statistiken und identifiziert keine einzelnen Besucher",
         "Es findet kein seitenübergreifendes Tracking statt",
-        "Es werden keine Daten an Dritte weitergegeben",
-        "Es werden nur die Daten erhoben, die du freiwillig über das Kontaktformular bereitstellst"
+        "Zum Schutz vor Missbrauch zählt der Server die Absendungen des Kontaktformulars und die Sicherheitsberichte (CSP), die dein Browser automatisch sendet. Er ordnet sie einem Code zu, der mit einem geheimen Schlüssel aus deiner IP-Adresse abgeleitet wird, nie der Adresse selbst",
+        "Dieser Code wird spätestens nach 70 Minuten gelöscht. Rechtsgrundlage ist das berechtigte Interesse am Schutz der Website (Art. 6 Abs. 1 lit. f DSGVO)",
+        "Es werden keine Daten an Dritte weitergegeben"
       ]
     },
     "rights": {
@@ -278,11 +282,12 @@
         "Datenübertragbarkeit: deine Daten in einem strukturierten Format erhalten",
         "Einschränkung: die Einschränkung der Verarbeitung verlangen"
       ],
-      "contact": "Zur Ausübung dieser Rechte kannst du mich per E-Mail kontaktieren. Du hast außerdem das Recht, eine Beschwerde bei der spanischen Datenschutzbehörde (AEPD) einzureichen.",
-      "cookiesNote": "Du kannst die Cookies dieser Website jederzeit über die Einstellungen deines Browsers löschen."
+      "contact": "Zur Ausübung dieser Rechte schreib mir über das {form} und gib an, welches Recht du ausüben möchtest. Du hast außerdem das Recht, eine Beschwerde bei der spanischen Datenschutzbehörde (AEPD) einzureichen.",
+      "formLink": "Kontaktformular",
+      "cookiesNote": "Du kannst das Cookie und den lokalen Speicher dieser Website jederzeit über die Einstellungen deines Browsers löschen."
     },
     "lastUpdate": "Zuletzt aktualisiert",
-    "updateDate": "Dezember 2025"
+    "updateDate": "Oktober 2026"
   },
   "error": {
     "backHome": "Zurück zur Startseite",

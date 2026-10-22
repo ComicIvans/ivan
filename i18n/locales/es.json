@@ -208,25 +208,28 @@
     },
     "cookies": {
       "title": "Política de cookies",
-      "description": "Este sitio utiliza únicamente cookies técnicas estrictamente necesarias para su funcionamiento. No se utilizan cookies de seguimiento, publicidad ni analítica.",
+      "description": "Este sitio solo guarda en tu navegador los elementos técnicos de la tabla, que recuerdan tus preferencias de idioma y de tema. No utiliza cookies de seguimiento, publicidad ni analítica.",
       "table": {
-        "name": "Cookie",
+        "name": "Nombre",
+        "type": "Tipo",
         "purpose": "Finalidad",
         "duration": "Duración"
       },
-      "items": [
-        {
-          "id": "colorMode",
+      "types": {
+        "cookie": "Cookie",
+        "localStorage": "Almacenamiento local"
+      },
+      "items": {
+        "colorMode": {
           "purpose": "Guarda tu preferencia de tema (claro/oscuro)",
-          "duration": "1 año"
+          "duration": "Hasta que lo borres"
         },
-        {
-          "id": "i18n",
+        "i18n": {
           "purpose": "Guarda tu preferencia de idioma",
           "duration": "1 año"
         }
-      ],
-      "note": "Estas cookies son esenciales para el funcionamiento del sitio y están exentas del requisito de consentimiento según la normativa europea (Artículo 6.1.f del RGPD)."
+      },
+      "note": "Estos elementos son estrictamente necesarios para prestar el servicio que solicitas (mostrar el sitio en el idioma y el tema que eliges), por lo que están exentos de consentimiento conforme al artículo 22.2 de la LSSI, que transpone el artículo 5.3 de la Directiva 2002/58/CE."
     },
     "contactForm": {
       "title": "Formulario de contacto",
@@ -260,11 +263,12 @@
       "title": "Privacidad general",
       "description": "Este sitio respeta tu privacidad:",
       "items": [
-        "Se utiliza Umami Analytics, una herramienta de analítica respaldada por privacidad que no recopila datos personales",
-        "Umami no utiliza cookies de seguimiento ni identifica a usuarios individuales",
+        "Las visitas se miden con Umami, una herramienta de analítica respetuosa con la privacidad que se aloja en un servidor propio, sin servicios de terceros",
+        "Umami no usa cookies ni guarda tu dirección IP, y solo ofrece estadísticas agregadas, sin identificar a visitantes individuales",
         "No se realiza seguimiento entre sitios web",
-        "No se comparten datos con terceros",
-        "Solo se recopilan los datos que tú proporcionas voluntariamente en el formulario de contacto"
+        "Para prevenir abusos, el servidor cuenta los envíos del formulario de contacto y los informes de seguridad (CSP) que tu navegador envía automáticamente. Los asocia a un código derivado de tu dirección IP con una clave secreta, nunca a la dirección en sí",
+        "Ese código se borra como máximo 70 minutos después. La base legal es el interés legítimo en proteger el sitio (art. 6.1.f del RGPD)",
+        "No se comparten datos con terceros"
       ]
     },
     "rights": {
@@ -278,11 +282,12 @@
         "Portabilidad: recibir tus datos en formato estructurado",
         "Limitación: solicitar la limitación del tratamiento"
       ],
-      "contact": "Para ejercer estos derechos, puedes contactarme por correo electrónico. También tienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD).",
-      "cookiesNote": "Puedes eliminar las cookies de este sitio en cualquier momento desde la configuración de tu navegador."
+      "contact": "Para ejercer estos derechos, escríbeme a través del {form} indicando qué derecho quieres ejercer. También tienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD).",
+      "formLink": "formulario de contacto",
+      "cookiesNote": "Puedes borrar en cualquier momento la cookie y el almacenamiento local de este sitio desde la configuración de tu navegador."
     },
     "lastUpdate": "Última actualización",
-    "updateDate": "Diciembre 2025"
+    "updateDate": "octubre de 2026"
   },
   "error": {
     "backHome": "Volver al inicio",
