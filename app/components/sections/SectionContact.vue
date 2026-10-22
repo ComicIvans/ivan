@@ -105,6 +105,22 @@ function resolveContactErrorMessage(error: unknown): string {
   return t('contactPage.form.errorGeneric')
 }
 
+const formCard = useTemplateRef<HTMLElement>('formCard')
+
+/**
+ * Focuses a control of the form once it can take focus. While a submission
+ * is pending, UForm disables its controls (and the submit button follows
+ * isSubmitting), and focus() on a disabled control does nothing; they are
+ * enabled again before the next frame.
+ */
+function focusInForm(selector: string, onlyIfLost = false) {
+  requestAnimationFrame(() => {
+    const focused = document.activeElement
+    if (onlyIfLost && focused && focused !== document.body && focused.isConnected) return
+    formCard.value?.querySelector<HTMLElement>(selector)?.focus()
+  })
+}
+
 async function onSubmit(event: FormSubmitEvent<ContactFormData>) {
   if (isSubmitting.value) {
     return
@@ -146,13 +162,16 @@ async function onSubmit(event: FormSubmitEvent<ContactFormData>) {
     })
   } finally {
     isSubmitting.value = false
+    // The focused control was disabled while sending: keyboard users go back
+    // to the submit button instead of the start of the page.
+    focusInForm('button[type="submit"]', true)
   }
 }
 
 function onFormError(event: { errors: Array<{ name?: string }> }) {
   const fieldName = event.errors[0]?.name
   if (!fieldName) return
-  document.querySelector<HTMLElement>(`[name="${CSS.escape(fieldName)}"]`)?.focus()
+  focusInForm(`[name="${CSS.escape(fieldName)}"]`)
 }
 </script>
 
@@ -167,7 +186,7 @@ function onFormError(event: { errors: Array<{ name?: string }> }) {
 
     <div class="grid gap-6 lg:grid-cols-[1fr_20rem]">
       <!-- Contact Form -->
-      <div class="surface-glass reveal rounded-2xl p-4 sm:p-6">
+      <div ref="formCard" class="surface-glass reveal rounded-2xl p-4 sm:p-6">
         <!-- novalidate: the browser's own bubbles (e.g. for type="email") would
              block UForm and speak the browser's language, not the page's. -->
         <UForm
