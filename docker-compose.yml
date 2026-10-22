@@ -20,9 +20,10 @@ services:
       NODE_ENV: "production"
       NITRO_PORT: "3000"
       HOST: "0.0.0.0"
-      # Safety net: force indexability at runtime regardless of the build's
-      # NODE_ENV. The image already bakes indexable=true, this just guarantees it.
-      NUXT_SITE_INDEXABLE: "true"
+      # Indexable unless .env sets NUXT_SITE_INDEXABLE=false (staging or
+      # preview deployments). A value here would override the one in env_file,
+      # so the default comes through interpolation, which reads the same .env.
+      NUXT_SITE_INDEXABLE: "${NUXT_SITE_INDEXABLE:-true}"
     # /data persists the Nuxt Content DB and the contact rate-limiter store.
     volumes:
       - ivan_data:/data
