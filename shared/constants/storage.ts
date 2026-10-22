@@ -24,3 +24,12 @@ export const localeCookieOptions = {
  * the visitor picks light or dark with the theme button.
  */
 export const colorModeStorageKey = 'nuxt-color-mode'
+
+/**
+ * Nuxt's own chunk-reload plugin: when a deploy replaces the page's code
+ * while someone browses, it reloads the page and writes this sessionStorage
+ * key (the path, as a guard against reload loops), plus `nuxt:reload:state`
+ * with the app state, which the reloaded page reads and removes. Nothing here
+ * configures it; the name is kept here so the legal page can list it.
+ */
+export const nuxtReloadStorageKey = 'nuxt:reload'

@@ -208,7 +208,7 @@
     },
     "cookies": {
       "title": "Política de cookies",
-      "description": "Este sitio solo guarda en tu navegador los dos elementos técnicos de la tabla, que recuerdan el idioma que eliges y el tema con que ves el sitio. No utiliza cookies de seguimiento, publicidad ni analítica.",
+      "description": "Este sitio solo guarda en tu navegador los elementos técnicos de la tabla: el idioma que eliges, el tema con que ves el sitio y, solo si una actualización del sitio interrumpe tu navegación, lo necesario para recargar la página. No utiliza cookies de seguimiento, publicidad ni analítica.",
       "table": {
         "name": "Nombre",
         "type": "Tipo",
@@ -217,7 +217,8 @@
       },
       "types": {
         "cookie": "Cookie",
-        "localStorage": "Almacenamiento local"
+        "localStorage": "Almacenamiento local",
+        "sessionStorage": "Almacenamiento de sesión"
       },
       "items": {
         "colorMode": {
@@ -227,9 +228,13 @@
         "i18n": {
           "purpose": "Guarda el idioma que eliges con el selector de idioma, para abrir la portada en ese idioma",
           "duration": "1 año"
+        },
+        "reload": {
+          "purpose": "Recupera la página si una actualización del sitio interrumpe la navegación. Mientras se recarga, nuxt:reload:state conserva el estado de la página, incluido lo que hayas escrito en el formulario",
+          "duration": "Hasta que cierras la pestaña"
         }
       },
-      "note": "La cookie solo se crea cuando cambias de idioma con el selector de idioma (la bandera de la barra de navegación) y se actualiza cada vez que vuelves a cambiarlo. Visitar el sitio no la crea, ni siquiera cuando la portada se abre en el idioma de tu navegador. El tema se guarda desde tu primera visita: sigue el de tu dispositivo hasta que eliges claro u oscuro con el botón de tema. Ambos elementos solo sirven para mostrarte el sitio en ese idioma y ese tema, no se usan para nada más ni se comparten con terceros. Por eso se consideran estrictamente necesarios para prestar el servicio que solicitas y están exentos de consentimiento conforme al artículo 22.2 de la LSSI, que transpone el artículo 5.3 de la Directiva 2002/58/CE."
+      "note": "La cookie solo se crea cuando cambias de idioma con el selector de idioma (la bandera de la barra de navegación) y se actualiza cada vez que vuelves a cambiarlo. Visitar el sitio no la crea, ni siquiera cuando la portada se abre en el idioma de tu navegador. El tema se guarda desde tu primera visita: sigue el de tu dispositivo hasta que eliges claro u oscuro con el botón de tema. El almacenamiento de sesión solo se usa si una actualización del sitio obliga a recargar la página mientras navegas, y el navegador lo borra al cerrar la pestaña. Estos elementos solo sirven para mostrarte el sitio en ese idioma y ese tema y para recuperar la página tras una actualización; no se usan para nada más ni se comparten con terceros. Por eso se consideran estrictamente necesarios para prestar el servicio que solicitas y están exentos de consentimiento conforme al artículo 22.2 de la LSSI, que transpone el artículo 5.3 de la Directiva 2002/58/CE."
     },
     "contactForm": {
       "title": "Formulario de contacto",
@@ -239,7 +244,8 @@
         "items": [
           "Nombre: para identificarte y personalizar la respuesta",
           "Correo electrónico: para poder responderte",
-          "Asunto y mensaje: para atender tu consulta"
+          "Asunto y mensaje: para atender tu consulta",
+          "Idioma de la web desde la que escribes: para responderte en ese idioma"
         ]
       },
       "purpose": {
@@ -280,11 +286,12 @@
         "Supresión: solicitar la eliminación de tus datos",
         "Oposición: oponerte al tratamiento de tus datos",
         "Portabilidad: recibir tus datos en formato estructurado",
-        "Limitación: solicitar la limitación del tratamiento"
+        "Limitación: solicitar la limitación del tratamiento",
+          "Retirada del consentimiento: retirarlo en cualquier momento, sin que afecte a la licitud del tratamiento anterior"
       ],
       "contact": "Para ejercer estos derechos, escríbeme a través del {form} indicando qué derecho quieres ejercer. También tienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD).",
       "formLink": "formulario de contacto",
-      "cookiesNote": "Puedes borrar en cualquier momento la cookie y el almacenamiento local de este sitio desde la configuración de tu navegador."
+      "cookiesNote": "Puedes borrar en cualquier momento la cookie y el almacenamiento local y de sesión de este sitio desde la configuración de tu navegador."
     },
     "lastUpdate": "Última actualización",
     "updateDate": "octubre de 2026"

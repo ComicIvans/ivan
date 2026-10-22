@@ -208,7 +208,7 @@
     },
     "cookies": {
       "title": "Cookie-Richtlinie",
-      "description": "Diese Website speichert in deinem Browser nur die beiden technischen Einträge aus der Tabelle, die sich die von dir gewählte Sprache und das Design merken, in dem du die Website ansiehst. Es werden keine Tracking-, Werbe- oder Analyse-Cookies eingesetzt.",
+      "description": "Diese Website speichert in deinem Browser nur die technischen Einträge aus der Tabelle: die von dir gewählte Sprache, das Design, in dem du die Website ansiehst, und nur dann, wenn ein Update der Website deinen Besuch unterbricht, das, was zum Neuladen der Seite nötig ist. Es werden keine Tracking-, Werbe- oder Analyse-Cookies eingesetzt.",
       "table": {
         "name": "Name",
         "type": "Art",
@@ -217,7 +217,8 @@
       },
       "types": {
         "cookie": "Cookie",
-        "localStorage": "Lokaler Speicher"
+        "localStorage": "Lokaler Speicher",
+        "sessionStorage": "Sitzungsspeicher"
       },
       "items": {
         "colorMode": {
@@ -227,9 +228,13 @@
         "i18n": {
           "purpose": "Speichert die Sprache, die du über die Sprachauswahl wählst, damit sich die Startseite in dieser Sprache öffnet",
           "duration": "1 Jahr"
+        },
+        "reload": {
+          "purpose": "Stellt die Seite wieder her, wenn ein Update der Website deinen Besuch unterbricht. Während sie neu lädt, bewahrt nuxt:reload:state ihren Zustand auf, einschließlich deiner Eingaben im Formular",
+          "duration": "Bis du den Tab schließt"
         }
       },
-      "note": "Das Cookie wird nur angelegt, wenn du die Sprache über die Sprachauswahl (die Flagge in der Navigationsleiste) wechselst, und jedes Mal aktualisiert, wenn du sie erneut wechselst. Ein Besuch der Website legt es nicht an, auch nicht, wenn sich die Startseite in der Sprache deines Browsers öffnet. Das Design wird ab deinem ersten Besuch gespeichert: Es folgt der Einstellung deines Geräts, bis du über die Design-Schaltfläche hell oder dunkel wählst. Beide Einträge dienen nur dazu, dir die Website in dieser Sprache und diesem Design anzuzeigen, werden für nichts anderes verwendet und nicht an Dritte weitergegeben. Daher gelten sie als unbedingt erforderlich, um den von dir gewünschten Dienst bereitzustellen, und sind nach Art. 22.2 des spanischen Gesetzes über Dienste der Informationsgesellschaft (LSSI), das Art. 5 Abs. 3 der Richtlinie 2002/58/EG umsetzt, nicht einwilligungspflichtig."
+      "note": "Das Cookie wird nur angelegt, wenn du die Sprache über die Sprachauswahl (die Flagge in der Navigationsleiste) wechselst, und jedes Mal aktualisiert, wenn du sie erneut wechselst. Ein Besuch der Website legt es nicht an, auch nicht, wenn sich die Startseite in der Sprache deines Browsers öffnet. Das Design wird ab deinem ersten Besuch gespeichert: Es folgt der Einstellung deines Geräts, bis du über die Design-Schaltfläche hell oder dunkel wählst. Der Sitzungsspeicher wird nur genutzt, wenn ein Update der Website während deines Besuchs ein Neuladen der Seite erfordert, und dein Browser löscht ihn, wenn du den Tab schließt. Diese Einträge dienen nur dazu, dir die Website in dieser Sprache und diesem Design anzuzeigen und die Seite nach einem Update wiederherzustellen, werden für nichts anderes verwendet und nicht an Dritte weitergegeben. Daher gelten sie als unbedingt erforderlich, um den von dir gewünschten Dienst bereitzustellen, und sind nach Art. 22.2 des spanischen Gesetzes über Dienste der Informationsgesellschaft (LSSI), das Art. 5 Abs. 3 der Richtlinie 2002/58/EG umsetzt, nicht einwilligungspflichtig."
     },
     "contactForm": {
       "title": "Kontaktformular",
@@ -239,7 +244,8 @@
         "items": [
           "Name: um dich zu identifizieren und die Antwort zu personalisieren",
           "E-Mail-Adresse: um auf deine Anfrage zu antworten",
-          "Betreff und Nachricht: um dein Anliegen zu bearbeiten"
+          "Betreff und Nachricht: um dein Anliegen zu bearbeiten",
+          "Sprache der Website, von der aus du schreibst: um dir in dieser Sprache zu antworten"
         ]
       },
       "purpose": {
@@ -280,11 +286,12 @@
         "Löschung: die Löschung deiner Daten verlangen",
         "Widerspruch: der Verarbeitung widersprechen",
         "Datenübertragbarkeit: deine Daten in einem strukturierten Format erhalten",
-        "Einschränkung: die Einschränkung der Verarbeitung verlangen"
+        "Einschränkung: die Einschränkung der Verarbeitung verlangen",
+          "Widerruf der Einwilligung: sie jederzeit widerrufen, ohne dass die Rechtmäßigkeit der bisherigen Verarbeitung berührt wird"
       ],
       "contact": "Zur Ausübung dieser Rechte schreib mir über das {form} und gib an, welches Recht du ausüben möchtest. Du hast außerdem das Recht, eine Beschwerde bei der spanischen Datenschutzbehörde (AEPD) einzureichen.",
       "formLink": "Kontaktformular",
-      "cookiesNote": "Du kannst das Cookie und den lokalen Speicher dieser Website jederzeit über die Einstellungen deines Browsers löschen."
+      "cookiesNote": "Du kannst das Cookie, den lokalen Speicher und den Sitzungsspeicher dieser Website jederzeit über die Einstellungen deines Browsers löschen."
     },
     "lastUpdate": "Zuletzt aktualisiert",
     "updateDate": "Oktober 2026"

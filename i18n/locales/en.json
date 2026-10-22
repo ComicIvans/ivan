@@ -208,7 +208,7 @@
     },
     "cookies": {
       "title": "Cookie policy",
-      "description": "This website only stores the two technical items in the table in your browser, which remember the language you choose and the theme you view the site in. It uses no tracking, advertising or analytics cookies.",
+      "description": "This website only stores the technical items in the table in your browser: the language you choose, the theme you view the site in and, only if a site update interrupts your browsing, what is needed to reload the page. It uses no tracking, advertising or analytics cookies.",
       "table": {
         "name": "Name",
         "type": "Type",
@@ -217,7 +217,8 @@
       },
       "types": {
         "cookie": "Cookie",
-        "localStorage": "Local storage"
+        "localStorage": "Local storage",
+        "sessionStorage": "Session storage"
       },
       "items": {
         "colorMode": {
@@ -227,9 +228,13 @@
         "i18n": {
           "purpose": "Stores the language you choose with the language selector, so the home page opens in that language",
           "duration": "1 year"
+        },
+        "reload": {
+          "purpose": "Recovers the page if a site update interrupts your browsing. While it reloads, nuxt:reload:state keeps the page’s state, including anything you typed in the form",
+          "duration": "Until you close the tab"
         }
       },
-      "note": "The cookie is only created when you change language with the language selector (the flag in the navigation bar) and is updated whenever you change it again. Visiting the site does not create it, not even when the home page opens in your browser’s language. The theme is stored from your first visit: it follows your device’s setting until you choose light or dark with the theme button. Both items are only used to show you the site in that language and theme, for nothing else, and are not shared with third parties. They are therefore considered strictly necessary to provide the service you request and are exempt from consent under Article 22.2 of the Spanish LSSI, which transposes Article 5(3) of Directive 2002/58/EC."
+      "note": "The cookie is only created when you change language with the language selector (the flag in the navigation bar) and is updated whenever you change it again. Visiting the site does not create it, not even when the home page opens in your browser’s language. The theme is stored from your first visit: it follows your device’s setting until you choose light or dark with the theme button. Session storage is only used if a site update forces the page to reload while you browse, and your browser deletes it when you close the tab. These items are only used to show you the site in that language and theme and to recover the page after an update, for nothing else, and are not shared with third parties. They are therefore considered strictly necessary to provide the service you request and are exempt from consent under Article 22.2 of the Spanish LSSI, which transposes Article 5(3) of Directive 2002/58/EC."
     },
     "contactForm": {
       "title": "Contact form",
@@ -239,7 +244,8 @@
         "items": [
           "Name: to identify you and personalise the response",
           "Email address: to reply to your enquiry",
-          "Subject and message: to handle your request"
+          "Subject and message: to handle your request",
+          "The site language you write from: to reply in that language"
         ]
       },
       "purpose": {
@@ -280,11 +286,12 @@
         "Erasure: request the deletion of your data",
         "Objection: object to the processing of your data",
         "Portability: receive your data in a structured format",
-        "Restriction: request a limitation of processing"
+        "Restriction: request a limitation of processing",
+          "Withdrawal of consent: withdraw it at any time, without affecting the lawfulness of earlier processing"
       ],
       "contact": "To exercise these rights, write to me through the {form}, stating which right you wish to exercise. You also have the right to lodge a complaint with the Spanish Data Protection Agency (AEPD).",
       "formLink": "contact form",
-      "cookiesNote": "You can delete this site’s cookie and local storage at any time in your browser settings."
+      "cookiesNote": "You can delete this site’s cookie, local storage and session storage at any time in your browser settings."
     },
     "lastUpdate": "Last updated",
     "updateDate": "October 2026"

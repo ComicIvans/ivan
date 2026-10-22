@@ -1,6 +1,11 @@
 <script setup lang="ts">
+import type { TableColumn } from '@nuxt/ui'
 import { profileName } from '~~/shared/constants/profile'
-import { colorModeStorageKey, localeCookieName } from '~~/shared/constants/storage'
+import {
+  colorModeStorageKey,
+  localeCookieName,
+  nuxtReloadStorageKey,
+} from '~~/shared/constants/storage'
 
 const { t, tm, rt } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
@@ -10,9 +15,13 @@ const localePath = useLocalePath()
 const storageItems = [
   { id: 'colorMode', name: colorModeStorageKey, type: 'localStorage' },
   { id: 'i18n', name: localeCookieName, type: 'cookie' },
+  { id: 'reload', name: nuxtReloadStorageKey, type: 'sessionStorage' },
 ] as const
 
-const storageRows = computed(() =>
+const storageFields = ['name', 'type', 'purpose', 'duration'] as const
+type StorageRow = Record<(typeof storageFields)[number], string>
+
+const storageRows = computed<StorageRow[]>(() =>
   storageItems.map((item) => ({
     name: item.name,
     type: t(`legal.cookies.types.${item.type}`),
@@ -21,12 +30,20 @@ const storageRows = computed(() =>
   }))
 )
 
-const storageColumns = computed(() => [
-  { accessorKey: 'name', header: t('legal.cookies.table.name') },
-  { accessorKey: 'type', header: t('legal.cookies.table.type') },
-  { accessorKey: 'purpose', header: t('legal.cookies.table.purpose') },
-  { accessorKey: 'duration', header: t('legal.cookies.table.duration') },
-])
+// The cells wrap, except the storage names; the purpose column keeps a
+// readable width.
+const storageColumnClass: Partial<Record<(typeof storageFields)[number], string>> = {
+  name: 'font-mono whitespace-nowrap',
+  purpose: 'min-w-56',
+}
+
+const storageColumns = computed<TableColumn<StorageRow>[]>(() =>
+  storageFields.map((field) => ({
+    accessorKey: field,
+    header: t(`legal.cookies.table.${field}`),
+    meta: { class: { td: storageColumnClass[field] } },
+  }))
+)
 
 /** A list of messages; a key missing in this locale renders no items. */
 function messageList(key: string) {
@@ -93,12 +110,26 @@ usePageSeo('legal.title', 'seo.pages.legal', { robots: 'noindex, follow' })
             <h2>{{ t('legal.cookies.title') }}</h2>
             <p>{{ t('legal.cookies.description') }}</p>
 
+            <!-- Below lg the four columns do not fit the card: one block per item -->
+            <div class="not-prose mt-4 space-y-3 lg:hidden">
+              <dl
+                v-for="row in storageRows"
+                :key="row.name"
+                class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-3 gap-y-1 rounded-lg border border-default p-4 text-sm"
+              >
+                <template v-for="field in storageFields" :key="field">
+                  <dt class="text-muted">{{ t(`legal.cookies.table.${field}`) }}</dt>
+                  <dd :class="field === 'name' ? 'font-mono break-all' : ''">{{ row[field] }}</dd>
+                </template>
+              </dl>
+            </div>
+
             <!-- not-prose: UTable brings its own table styling -->
-            <div class="not-prose mt-4 overflow-x-auto">
+            <div class="not-prose mt-4 hidden overflow-x-auto lg:block">
               <UTable
                 :data="storageRows"
                 :columns="storageColumns"
-                :ui="{ td: 'font-mono text-sm' }"
+                :ui="{ td: 'whitespace-normal align-top' }"
               />
             </div>
 
