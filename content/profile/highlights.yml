@@ -1,4 +1,4 @@
-# Hero "areas of expertise" tiles, in display order.
+# Hero "areas of expertise" tiles, in display order, and structured-data topics.
 
 # Text fields take one plain string (the same in every language) or one value
 # per language (es, en, de). Spanish is required and fills in for any missing
@@ -35,3 +35,16 @@ items:
       es: Coordinación de eventos institucionales de ámbito nacional, con responsabilidad directa en logística, presupuestos y planificación.
       en: Coordination of national-level institutional events, with direct responsibility for logistics, budgeting and planning.
       de: Koordination institutioneller Veranstaltungen auf nationaler Ebene, mit direkter Verantwortung für Logistik, Budgetierung und Planung.
+
+# Subjects named only in running text (the hero pitch): the structured data
+# lists them as areas of knowledge, next to the competencies and the stack.
+topics:
+  - es: Matemáticas
+    en: Mathematics
+    de: Mathematik
+  - es: Ciberseguridad
+    en: Cybersecurity
+    de: Cybersicherheit
+  - es: Representación estudiantil
+    en: Student representation
+    de: Studentische Vertretung

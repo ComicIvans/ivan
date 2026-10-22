@@ -13,7 +13,6 @@ const router = useRouter()
 const pendingPagePath = useState<string | null>('page-nav-pending-path', () => null)
 
 const nuxtUiLocale = computed(() => getNuxtUiLocale(locale.value))
-const availableLocaleCodes = computed(() => localeCodes.value.map((code) => String(code)))
 const alternateOgLocales = computed(() =>
   localeCodes.value.filter((code) => code !== locale.value).map((code) => getOgLocale(code))
 )
@@ -115,8 +114,11 @@ const personAlumniOf = computed(() =>
 )
 
 const personKnowsAbout = computed(() => [
-  ...profile.competencies.value.map((competency) => competency.name),
-  ...profile.stack.value.primary.map((tech) => tech.name),
+  ...new Set([
+    ...profile.topics.value,
+    ...profile.competencies.value.map((competency) => competency.name),
+    ...profile.stack.value.primary.map((tech) => tech.name),
+  ]),
 ])
 
 const personKnowsLanguage = computed(() =>
@@ -127,16 +129,12 @@ const personKnowsLanguage = computed(() =>
   }))
 )
 
+// The WebSite node and its translations come from nuxt-schema-org. This
+// Person keeps the default #identity id, which schemaOrg.identity in
+// nuxt.config declares as the site owner: the WebSite names it as publisher
+// and the home page as its subject.
 useSchemaOrg([
-  defineWebSite({
-    '@id': () => `${siteUrl.value}#website`,
-    name: () => String(siteConfig.name ?? profileName),
-    url: () => siteUrl.value,
-    description: () => t('seo.description'),
-    inLanguage: availableLocaleCodes.value,
-  }),
   definePerson({
-    '@id': () => `${siteUrl.value}#person`,
     name: profileName,
     givenName: 'Iván',
     familyName: 'Salido Cobo',

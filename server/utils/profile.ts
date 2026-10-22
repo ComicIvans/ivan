@@ -52,7 +52,7 @@ function withPeriodText<T extends { start?: YearMonth; end?: YearMonth }>(item: 
  */
 export async function fetchProfile(event: H3Event): Promise<ProfileData> {
   const [highlights, experience, representation, projects, training] = await Promise.all([
-    queryCollection(event, 'profile_highlights').select('items').first(),
+    queryCollection(event, 'profile_highlights').select('items', 'topics').first(),
     queryCollection(event, 'profile_experience').select('items').first(),
     queryCollection(event, 'profile_representation').select('items').first(),
     queryCollection(event, 'profile_projects').select('stack', 'items').first(),
@@ -70,6 +70,7 @@ export async function fetchProfile(event: H3Event): Promise<ProfileData> {
   // verify-content guarantees the YAML matches them.
   return {
     highlights: highlights.items,
+    topics: highlights.topics ?? [],
     experience: experience.items.map(withPeriodText),
     representation: representation.items.map((item) => ({
       ...item,

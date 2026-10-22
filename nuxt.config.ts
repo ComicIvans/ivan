@@ -323,6 +323,12 @@ export default defineNuxtConfig({
     indexable: !isDev,
   },
 
+  // The site belongs to a person: the Person node that app.vue fills in from
+  // the profile becomes the WebSite publisher and the subject of the home.
+  schemaOrg: {
+    identity: 'Person',
+  },
+
   // OG image defaults. Runtime generation (Satori) is required because routes
   // are SSR and not prerendered; zeroRuntime would emit no og:image at all.
   ogImage: {

@@ -148,6 +148,12 @@ export const highlightsSchema = z.strictObject({
       description: localizedText,
     })
   ),
+  /**
+   * Subjects named only in prose (the degree, student representation): the
+   * Person structured data lists them in knowsAbout with the competencies and
+   * the primary stack.
+   */
+  topics: z.array(localizedText).optional(),
 })
 
 export const experienceSchema = z.strictObject({
@@ -329,6 +335,7 @@ export interface PeriodText {
 /** Profile content as /api/profile returns it: the YAML plus formatted dates. */
 export interface ProfileData {
   highlights: ProfileHighlights['items']
+  topics: NonNullable<ProfileHighlights['topics']>
   experience: Array<ProfileExperience['items'][number] & PeriodText>
   /** `dateText` is the milestone date with the full month name ("December 2020"). */
   representation: Array<ProfileRepresentation['items'][number] & { dateText: LocalizedDate }>

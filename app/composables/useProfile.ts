@@ -66,6 +66,8 @@ function resolveProfile(data: { readonly value: ProfileData | null | undefined }
     }))
   )
 
+  const topics = computed(() => (data.value?.topics ?? []).map(lt))
+
   const experience = computed(() =>
     (data.value?.experience ?? []).map((item) => {
       const title = lt(item.title)
@@ -205,6 +207,7 @@ function resolveProfile(data: { readonly value: ProfileData | null | undefined }
 
   return {
     highlights,
+    topics,
     experience,
     currentRole,
     representation,
