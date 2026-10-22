@@ -1,7 +1,11 @@
 import { z } from 'zod'
 
 import { siteLocales, type SiteLocaleCode } from '../constants/locales'
-import { CONTACT_FIELD_LIMITS, type ContactFieldError } from './contactShared'
+import {
+  CONTACT_FIELD_LIMITS,
+  CONTACT_MAX_SUBMIT_DELAY_MS,
+  type ContactFieldError,
+} from './contactShared'
 import { EMAIL_PATTERN } from './emailValidation'
 
 // zod compiles object parsers with `new Function` unless it runs jitless, and
@@ -61,8 +65,10 @@ export const contactRequestSchema = contactFormSchema.extend({
   // Site language the visitor wrote from, shown in the email.
   locale: z.enum(localeCodes).optional(),
   // Milliseconds between the form appearing and the submission, measured on
-  // the visitor's device only (for the submit-timing check).
-  elapsedMs: z.number().int().optional(),
+  // the visitor's device only (for the submit-timing check). The form always
+  // sends it and a monotonic clock never goes negative, so a missing,
+  // negative or absurdly large value is a forged request.
+  elapsedMs: z.number().int().min(0).max(CONTACT_MAX_SUBMIT_DELAY_MS),
 })
 
 export type ContactFormData = z.infer<typeof contactFormSchema>

@@ -21,6 +21,10 @@ export const CONTACT_FIELD_LIMITS = {
 // Bots typically submit instantly; humans take longer.
 export const CONTACT_MIN_SUBMIT_DELAY_MS = 2000
 
+// Upper bound for that delay: 30 days, far beyond any form left open in a
+// tab, so only forged values are rejected.
+export const CONTACT_MAX_SUBMIT_DELAY_MS = 30 * 24 * 60 * 60 * 1000
+
 /**
  * Error codes the contact schema reports for each field. They double as the
  * keys of `contactPage.form.errors.*`, so the form shows them in the visitor's

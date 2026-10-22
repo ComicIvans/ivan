@@ -76,13 +76,9 @@ export default defineEventHandler(async (event) => {
     return { success: true }
   }
 
-  // elapsedMs is measured on the visitor's device alone. Negative values
-  // cannot come from the form, so only a plausible, too-short delay drops.
-  if (
-    body.elapsedMs !== undefined &&
-    body.elapsedMs >= 0 &&
-    body.elapsedMs < CONTACT_MIN_SUBMIT_DELAY_MS
-  ) {
+  // elapsedMs is measured on the visitor's device alone; the schema already
+  // rejects a missing or out-of-range value.
+  if (body.elapsedMs < CONTACT_MIN_SUBMIT_DELAY_MS) {
     console.warn(`[contact] Dropped a submission sent ${body.elapsedMs} ms after the form appeared`)
     return { success: true }
   }
