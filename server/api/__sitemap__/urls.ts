@@ -24,10 +24,14 @@ export default defineSitemapEventHandler(async (event) => {
       return []
     }
 
-    const alternatives: { hreflang: string; href: string }[] = siteLocales.map(({ code }) => ({
-      hreflang: code as string,
-      href: `${siteUrl}${localizedGalleryPath(code, slug)}`,
-    }))
+    // Region tags (es-ES, en-GB, de-DE), as in the page head and the sitemap
+    // entries of the static pages.
+    const alternatives: { hreflang: string; href: string }[] = siteLocales.map(
+      ({ code, language }) => ({
+        hreflang: language,
+        href: `${siteUrl}${localizedGalleryPath(code, slug)}`,
+      })
+    )
     alternatives.push({
       hreflang: 'x-default',
       href: `${siteUrl}${localizedGalleryPath(defaultLocale, slug)}`,

@@ -344,7 +344,7 @@ export default defineNuxtConfig({
     autoLastmod: true,
     xsl: false,
     sources: ['/api/__sitemap__/urls'],
-    exclude: ['/legal', '/en/legal', '/de/legal'],
+    exclude: ['/legal', '/en/legal', '/de/impressum'],
   },
 
   // Robots configuration
