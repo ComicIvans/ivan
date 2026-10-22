@@ -71,9 +71,11 @@ onMounted(() => {
 
   // A cancelled or aborted navigation (another click while the page chunk
   // loads) is a failure, not an error, and no page leaves: without this the
-  // current page would stay hidden and unclickable.
-  removeRouteAfterHook = router.afterEach((_to, _from, failure) => {
-    if (failure) clearPendingPagePath()
+  // current page would stay hidden and unclickable. The same holds when a
+  // navigation lands on the page marked as leaving (an in-page anchor clicked
+  // meanwhile): the cancelled one only reports once its chunk has loaded.
+  removeRouteAfterHook = router.afterEach((to, _from, failure) => {
+    if (failure || to.path === pendingPagePath.value) clearPendingPagePath()
   })
 })
 
