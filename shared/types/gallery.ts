@@ -35,8 +35,13 @@ export interface GalleryEventSummary {
   photoCount: number
 }
 
-/** A single event page: the summary plus links, SEO fields, photos and body. */
+/** A single event page: the summary plus organizer, links, SEO fields, photos and body. */
 export interface GalleryEvent extends GalleryEventSummary {
+  /** Who organized the event, for its structured data. */
+  organizer?: {
+    name: string
+    url?: string
+  }
   links?: Array<{
     label: string
     url: string

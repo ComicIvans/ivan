@@ -1,6 +1,9 @@
 ---
 title: 78.ª Asamblea General Ordinaria de CREUP
 location: Barcelona, España
+organizer:
+  name: Coordinadora de Representantes de Estudiantes de Universidades Públicas (CREUP)
+  url: https://www.creup.es/
 date: 2025-11-04
 endDate: 2025-11-08
 description: Las Asambleas Generales Ordinarias de CREUP reúnen a representantes estudiantiles de toda España para debatir y ejercer incidencia política a nivel nacional, con el objetivo de mejorar la situación del estudiantado de las universidades públicas.

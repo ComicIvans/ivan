@@ -1,6 +1,8 @@
 ---
 title: 78th CREUP Ordinary General Assembly
 location: Barcelona, Spain
+organizer:
+  name: Coordinator of Student Representatives of Public Universities (CREUP)
 description: The Ordinary General Assemblies of CREUP bring together student representatives from across Spain to discuss issues and engage in political advocacy at the national level, with the aim of improving the situation of students at public universities.
 cover:
   src: /gallery/creup-ago-78/cover.webp

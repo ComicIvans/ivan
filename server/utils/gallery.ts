@@ -13,6 +13,7 @@ interface GalleryDocument {
   path: string
   title: string
   location: string
+  organizer?: GalleryEvent['organizer'] | null
   date: string
   endDate?: string | null
   description: string
@@ -182,6 +183,7 @@ function toSummary(document: GalleryDocument, locale: SiteLocaleCode): GalleryEv
 function toGalleryEvent(document: GalleryDocument, locale: SiteLocaleCode): GalleryEvent {
   return {
     ...toSummary(document, locale),
+    organizer: document.organizer ?? undefined,
     links: document.links ?? undefined,
     seo: document.seo ?? undefined,
     photos: document.photos ?? [],

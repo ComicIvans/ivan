@@ -1,6 +1,8 @@
 ---
 title: Präsenztreffen der erweiterten Exekutivkommission von CREUP
 location: Riaño, Kantabrien, Spanien
+organizer:
+  name: Koordinationsstelle der Studierendenvertretungen öffentlicher Universitäten (CREUP)
 description: Präsenztreffen der Vizepräsidentschaften und Vorstandsmitglieder von CREUP zur Nachverfolgung der strategischen Planung und zur bereichsübergreifenden Zusammenarbeit.
 cover:
   src: /gallery/creup-riano/cover.webp

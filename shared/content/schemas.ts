@@ -357,6 +357,7 @@ export interface ProfileData {
 export const galleryEventSchema = z.object({
   title: z.string(),
   location: z.string(),
+  organizer: z.object({ name: z.string(), url: z.string().optional() }).optional(),
   date: z.string(),
   endDate: z.string().optional(),
   description: z.string(),
@@ -393,11 +394,20 @@ const galleryImagePath = z
 const galleryLinks = z.array(z.strictObject({ label: nonBlank, url: httpsUrl }))
 const gallerySeo = z.strictObject({ title: nonBlank.optional(), description: nonBlank.optional() })
 
+/**
+ * Who organized the event, for the Event structured data. It is required:
+ * left empty, the schema.org resolver names the site owner as the organizer.
+ * The url is required too, because an organizer without one gets the site's
+ * own address.
+ */
+const galleryOrganizer = z.strictObject({ name: nonBlank, url: httpsUrl })
+
 /** Spanish source entry: every required field present and well formed. */
 export const galleryEventSourceSchema = z
   .strictObject({
     title: nonBlank,
     location: nonBlank,
+    organizer: galleryOrganizer,
     /** First day. The page derives the event length from date and endDate. */
     date: isoDate,
     /** Last day; leave it out for a one-day event. */
@@ -449,6 +459,8 @@ export const galleryEventSourceSchema = z
 export const galleryEventTranslationSchema = z.strictObject({
   title: nonBlank.optional(),
   location: nonBlank.optional(),
+  /** The organizer's name in this language; its url comes from Spanish. */
+  organizer: z.strictObject({ name: nonBlank }).optional(),
   description: nonBlank.optional(),
   links: galleryLinks.optional(),
   seo: gallerySeo.optional(),

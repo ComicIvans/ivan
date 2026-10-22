@@ -1,6 +1,9 @@
 ---
 title: IV Jornadas de Formación del CEEINA
 location: Munébrega, Zaragoza, España
+organizer:
+  name: Consejo de Estudiantes de la Escuela de Ingeniería y Arquitectura de la Universidad de Zaragoza (CEEINA)
+  url: https://ceeina.unizar.es/
 date: 2025-09-16
 endDate: 2025-09-21
 description: Las Jornadas de Formación del CEEINA consisten en una convivencia en un albergue de la comunidad aragonesa, donde se llevan a cabo formaciones y dinámicas para fomentar el aprendizaje en un ambiente relajado y favorable.

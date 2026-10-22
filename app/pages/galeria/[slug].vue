@@ -72,6 +72,13 @@ useSchemaOrg([
       address: () => event.value?.location,
     },
     image: () => absoluteUrl(event.value?.cover?.src),
+    // Named explicitly: left empty, the resolver would make the site owner
+    // the organizer of every event.
+    organizer: {
+      '@type': 'Organization',
+      name: () => event.value?.organizer?.name,
+      url: () => event.value?.organizer?.url,
+    },
   }),
   defineBreadcrumb({
     itemListElement: [

@@ -1,6 +1,9 @@
 ---
 title: Reunión presencial de la Comisión Ejecutiva Ampliada de CREUP
 location: Riaño, Cantabria, España
+organizer:
+  name: Coordinadora de Representantes de Estudiantes de Universidades Públicas (CREUP)
+  url: https://www.creup.es/
 date: 2025-09-01
 endDate: 2025-09-04
 description: Reunión presencial de las Vicepresidencias y Vocalías de CREUP para realizar seguimiento de la planificación estratégica y trabajar entre las distintas áreas.

@@ -1,6 +1,8 @@
 ---
 title: 4th CEEINA Training Conference
 location: Munébrega, Zaragoza, Spain
+organizer:
+  name: Student Council of the School of Engineering and Architecture of the University of Zaragoza (CEEINA)
 description: The CEEINA Training Conference consists of a stay at a hostel in the Aragonese region, where training sessions and activities are held to foster learning in a relaxed and favourable environment.
 cover:
   src: /gallery/ceeina-2025/cover.webp

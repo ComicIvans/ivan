@@ -1,6 +1,8 @@
 ---
 title: IV. CEEINA-Fortbildungstagung
 location: Munébrega, Zaragoza, Spanien
+organizer:
+  name: Studierendenrat der Fakultät für Ingenieurwesen und Architektur der Universität Zaragoza (CEEINA)
 description: Die CEEINA-Fortbildungstagung besteht aus einem Aufenthalt in einer Herberge in der Region Aragón, wo Schulungen und Aktivitäten durchgeführt werden, um das Lernen in einer entspannten und günstigen Umgebung zu fördern.
 cover:
   src: /gallery/ceeina-2025/cover.webp

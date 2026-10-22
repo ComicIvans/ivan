@@ -1,6 +1,8 @@
 ---
 title: In-person meeting of the CREUP Extended Executive Committee
 location: Riaño, Cantabria, Spain
+organizer:
+  name: Coordinator of Student Representatives of Public Universities (CREUP)
 description: In-person meeting of CREUP's Vice-Presidencies and Board Members to follow up on strategic planning and work across different areas.
 cover:
   src: /gallery/creup-riano/cover.webp
