@@ -12,10 +12,13 @@ const props = withDefaults(
   defineProps<{
     title?: string
     description?: string
+    /** False when the title already names the owner, so the card says it once. */
+    showName?: boolean
   }>(),
   {
     title: '',
     description: '',
+    showName: true,
   }
 )
 
@@ -89,7 +92,7 @@ const barStyle = {
     <!-- Brand row -->
     <div style="display: flex; align-items: center">
       <div :style="markStyle" />
-      <div :style="nameStyle">
+      <div v-if="showName" :style="nameStyle">
         {{ profileName }}
       </div>
     </div>

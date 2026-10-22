@@ -66,6 +66,7 @@ export function usePageSeo(
     defineOgImage('OgPortfolio', {
       title: title() ?? '',
       description: description() ?? '',
+      showName: !options.fullTitle,
     })
   }
 
