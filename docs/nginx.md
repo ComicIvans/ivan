@@ -8,7 +8,8 @@ propia aplicación envía las cabeceras de seguridad desde `nuxt-security`
 (`nuxt.config.ts`): `Content-Security-Policy`, `Strict-Transport-Security`,
 `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy` y
 `Permissions-Policy`. nginx solo tiene que terminar TLS, reenviar las
-peticiones y redirigir el dominio secundario.
+peticiones, redirigir el dominio secundario y limitar el tamaño de los cuerpos
+y el ritmo de las peticiones de imágenes redimensionadas (`/_ipx`).
 
 ## Lo que la aplicación espera del proxy
 
@@ -81,17 +82,46 @@ server {
 
     # No security add_header lines here: the app already sends them.
 
+    # The largest legitimate request body is a CSP report (64 KB at most).
+    # This is the only cap on chunked request bodies: the app checks the
+    # Content-Length header, which a chunked request does not send.
+    client_max_body_size 64k;
+
+    # Inherited by both locations below.
+    proxy_http_version 1.1;
+    proxy_set_header Host $host;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    # Replace whatever the client sent: the app trusts only the last
+    # X-Forwarded-For entry, so it must be the address nginx saw.
+    proxy_set_header X-Forwarded-For $remote_addr;
+
     location / {
         proxy_pass http://127.0.0.1:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        # Replace whatever the client sent: the app trusts only the last
-        # X-Forwarded-For entry, so it must be the address nginx saw.
-        proxy_set_header X-Forwarded-For $remote_addr;
+    }
+
+    # Every image resize costs CPU: the burst covers a gallery page and its
+    # lightbox, a flood is answered with 429.
+    location /_ipx/ {
+        limit_req zone=isalidocobo_ipx burst=100 nodelay;
+        limit_req_status 429;
+        proxy_pass http://127.0.0.1:3000;
     }
 }
 ```
+
+`limit_req_zone` solo se admite en el bloque `http {}`, no dentro de
+`server {}`. Ponlo en un archivo propio que nginx incluya desde `http {}`, por
+ejemplo `/etc/nginx/conf.d/isalidocobo-limits.conf`:
+
+```nginx
+# Image resizing (/_ipx): per-client rate for the location above.
+limit_req_zone $binary_remote_addr zone=isalidocobo_ipx:10m rate=10r/s;
+```
+
+Sin `client_max_body_size`, nginx aplica 1 MB por defecto, pero conviene
+fijarlo en el vhost: es el único límite para los cuerpos enviados por partes
+(`Transfer-Encoding: chunked`), y así un cambio posterior en `http {}` no lo
+levanta sin querer.
 
 `http2 on;` requiere nginx 1.25.1 o posterior. En versiones anteriores, quita
 esa línea y usa `listen 443 ssl http2;`.
