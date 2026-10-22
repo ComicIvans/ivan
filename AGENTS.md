@@ -111,6 +111,7 @@ Current scope includes:
 - Spanish content is the base entry; translated entries may override only the fields they actually localize.
 - Translated photos are matched by `src` and carry only `alt`/`description`; order and sizes come from Spanish.
 - Events have `date` and optional `endDate` (`YYYY-MM-DD`); the displayed duration is derived from them.
+- Every Spanish entry names its `organizer` (`name` and `url`) for the Event JSON-LD; translations may localize only `organizer.name`. Both fields are required because the schema.org resolver otherwise fills them with the site owner and the site's own address.
 - Photos are published as WebP through `pnpm gallery:add` (originals stay in the ignored `gallery-src/`).
 - Do not replace a valid Spanish value with an empty localized value.
 - Image alt text should stay descriptive for third parties, not for internal notes.
@@ -122,7 +123,8 @@ Current scope includes:
 - Profile sections live in `content/profile/<section>.yml` (`highlights`, `experience`, `representation`, `projects`, `training`), one Nuxt Content data collection each, validated by the zod schemas in `shared/content/schemas.ts`.
 - Text fields are a plain string when identical in every language, or `{ es, en, de }` with `es` required; a missing translation falls back to Spanish.
 - Facts are typed fields, never copy: dates as `YYYY` / `YYYY-MM` (`start`/`end`, no `end` = current), Iconify names, CEFR levels, tags, accents (theme tokens), URLs.
-- Links are data too: `showLink: true` on an experience role shows its `organizationUrl` as a visible link, a project's optional `repository` (GitHub URL) adds a "GitHub" link, and `current: true` on a representation milestone makes its date read "May 2026 – Present". `topics` in `highlights.yml` names subjects that only appear in prose (the degree, student representation) for the Person JSON-LD `knowsAbout`.
+- Links are data too: `showLink: true` on an experience role shows its `organizationUrl` as a visible link, a project's optional `repository` (GitHub URL) adds a "GitHub" link, and `current: true` on a representation milestone makes its date read "May 2026 – Present".
+- `topics` in `highlights.yml` names subjects that only appear in prose (the degree, student representation) for the Person JSON-LD `knowsAbout`.
 - Components read the data through `useProfile()`, which resolves the locale and derives counters, the current role, years active, badge role lines and the Person JSON-LD. Do not hard-code profile facts or id maps in components.
 - A page that renders profile sections awaits `loadProfile()` in its setup (see `app/pages/index.vue`), so after a client-side navigation the sections mount with their content and GSAP setups and hash scrolling measure the final layout.
 - `/api/profile` formats the dates for every locale on the server; the client only picks the right string, so SSR and hydration print the same month names.
