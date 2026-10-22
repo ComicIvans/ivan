@@ -34,19 +34,23 @@ const { arrive } = useSectionNav()
   height: 2rem;
 }
 
+/* The ring of an inactive dot is its only visible boundary: the muted text
+   colour keeps it above 3:1 against the page in both themes. */
 .dot-btn span {
   width: 0.65rem;
   height: 0.65rem;
-  border: 1px solid var(--ui-border);
+  border: 1px solid var(--ui-text-muted);
   border-radius: 9999px;
   background: var(--ui-bg);
   transition:
     transform 200ms ease,
-    background-color 200ms ease;
+    background-color 200ms ease,
+    border-color 200ms ease;
 }
 
 .dot-btn:hover span,
 .dot-btn.is-active span {
+  border-color: var(--ui-primary);
   background: var(--ui-primary);
 }
 
