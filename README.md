@@ -232,7 +232,7 @@ Si vienes del formato antiguo, con un único `.env`:
 
 El código se publica con licencia MIT. Las fotografías (retratos y galería) y
 los textos del sitio (`content/`, `i18n/locales/` y los chistes de
-`app/assets/`) quedan fuera: son de Iván Salido Cobo, con todos los derechos
-reservados. `app/components/bits/Aurora.vue` procede de Vue Bits y conserva
-su propia licencia (MIT + Commons Clause). Los detalles están en
-[LICENSE](LICENSE).
+`app/assets/`) quedan fuera: pertenecen a Iván Salido Cobo o a sus autores,
+con todos los derechos reservados. `app/components/bits/Aurora.vue` procede
+de Vue Bits y conserva su propia licencia (MIT + Commons Clause). Los
+detalles están en [LICENSE](LICENSE).
