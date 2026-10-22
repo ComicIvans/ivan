@@ -1,4 +1,5 @@
-import { defineEventHandler, createError } from 'h3'
+import type { H3Event } from 'h3'
+import { defineEventHandler, createError, getRequestHeader, getRequestHost } from 'h3'
 import {
   getRequiredSiteUrl,
   getRequiredSmtpFromEmail,
@@ -55,7 +56,44 @@ function assertNoHeaderInjection(value: string) {
   }
 }
 
+/**
+ * The form posts JSON with $fetch from the site itself. A page on another
+ * site can only send a "simple" cross-site request (text/plain, no
+ * preflight), which would let every visitor of that page submit the form from
+ * their own address. Such requests are refused before anything is read or
+ * counted.
+ */
+function assertSameSiteJsonRequest(event: H3Event) {
+  const mediaType = getRequestHeader(event, 'content-type')?.split(';')[0]?.trim().toLowerCase()
+  if (mediaType !== 'application/json') {
+    throw createError({ statusCode: 415, statusMessage: CONTACT_ERROR_CODES.validation })
+  }
+
+  // Current browsers send Sec-Fetch-Site to HTTPS sites (`none`: typed or
+  // bookmarked); Origin covers older ones. Origin is compared with the Host
+  // the request was sent to, which nginx passes through, so a local preview
+  // on another host keeps working.
+  const fetchSite = getRequestHeader(event, 'sec-fetch-site')
+  const origin = getRequestHeader(event, 'origin')
+  const crossSite =
+    (fetchSite !== undefined && fetchSite !== 'same-origin' && fetchSite !== 'none') ||
+    (origin !== undefined && originHost(origin) !== getRequestHost(event))
+  if (crossSite) {
+    throw createError({ statusCode: 403, statusMessage: CONTACT_ERROR_CODES.validation })
+  }
+}
+
+function originHost(origin: string): string | null {
+  try {
+    return new URL(origin).host
+  } catch {
+    return null
+  }
+}
+
 export default defineEventHandler(async (event) => {
+  assertSameSiteJsonRequest(event)
+
   await enforceRateLimit(event, {
     namespace: 'contact',
     maxRequests: 5,
