@@ -14,7 +14,10 @@ import { EMAIL_PATTERN } from './emailValidation'
 z.config({ jitless: true })
 
 const fail = (error: ContactFieldError) => ({ error })
-const required = (error: ContactFieldError) => ({ error, abort: true })
+// zod 4 runs every later check after a failed one unless it aborts. The
+// length limits abort, so an oversized value never reaches the next checks
+// (the email pattern in particular).
+const failFast = (error: ContactFieldError) => ({ error, abort: true })
 
 // Single-line fields: line breaks, tabs and other control characters collapse
 // into one space, so a name or subject cannot add lines to the email.
@@ -30,27 +33,27 @@ export const contactFormSchema = z.object({
   name: z
     .string(fail('nameRequired'))
     .overwrite(toSingleLine)
-    .min(1, required('nameRequired'))
+    .min(1, failFast('nameRequired'))
     .min(CONTACT_FIELD_LIMITS.name.min, fail('nameMin'))
-    .max(CONTACT_FIELD_LIMITS.name.max, fail('nameMax')),
+    .max(CONTACT_FIELD_LIMITS.name.max, failFast('nameMax')),
   email: z
     .string(fail('emailRequired'))
     .trim()
-    .min(1, required('emailRequired'))
-    .max(CONTACT_FIELD_LIMITS.emailMax, fail('emailInvalid'))
+    .min(1, failFast('emailRequired'))
+    .max(CONTACT_FIELD_LIMITS.emailMax, failFast('emailInvalid'))
     .regex(EMAIL_PATTERN, fail('emailInvalid')),
   subject: z
     .string(fail('subjectRequired'))
     .overwrite(toSingleLine)
-    .min(1, required('subjectRequired'))
+    .min(1, failFast('subjectRequired'))
     .min(CONTACT_FIELD_LIMITS.subject.min, fail('subjectMin'))
-    .max(CONTACT_FIELD_LIMITS.subject.max, fail('subjectMax')),
+    .max(CONTACT_FIELD_LIMITS.subject.max, failFast('subjectMax')),
   message: z
     .string(fail('messageRequired'))
     .trim()
-    .min(1, required('messageRequired'))
+    .min(1, failFast('messageRequired'))
     .min(CONTACT_FIELD_LIMITS.message.min, fail('messageMin'))
-    .max(CONTACT_FIELD_LIMITS.message.max, fail('messageMax')),
+    .max(CONTACT_FIELD_LIMITS.message.max, failFast('messageMax')),
   // Honeypot: must stay empty. Bots tend to fill every field.
   website: z.string().max(CONTACT_FIELD_LIMITS.honeypotMax).optional(),
 })
