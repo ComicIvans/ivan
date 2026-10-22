@@ -110,6 +110,12 @@ Se reparten en dos archivos, ambos fuera de Git:
 - `NUXT_SMTP_FROM_EMAIL`
 - `NUXT_SMTP_TO_EMAIL`
 
+Con `NUXT_SMTP_SECURE=true` la conexión usa TLS desde el principio (puerto 465,
+normalmente). Con `false` (puerto 587, normalmente) el servidor tiene que
+ofrecer STARTTLS: si no lo ofrece, el envío falla en lugar de salir sin cifrar.
+Solo un servidor en la propia máquina (`localhost`, `127.0.0.1` o `::1`) puede
+funcionar sin TLS.
+
 La aplicación espera un único proxy inverso (nginx) delante que añada la IP del
 cliente al final de `X-Forwarded-For` (`$proxy_add_x_forwarded_for` o
 `$remote_addr`). Para los controles de abuso solo cuenta la última entrada de
