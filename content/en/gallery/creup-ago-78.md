@@ -29,7 +29,7 @@ photos:
   - src: /gallery/creup-ago-78/10.webp
     alt: Recording attendance with a scanner and a laptop
   - src: /gallery/creup-ago-78/11.webp
-    alt: Working at the assembly's control desk
+    alt: Working at the assembly’s control desk
   - src: /gallery/creup-ago-78/12.webp
     alt: Group photo of the assembly participants
 tags:

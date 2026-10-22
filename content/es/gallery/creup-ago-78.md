@@ -13,7 +13,7 @@ tags:
   - Asamblea
 cover:
   src: /gallery/creup-ago-78/cover.webp
-  alt: Imagen de la asamblea en mitad de un debate
+  alt: Asamblea en mitad de un debate
 photos:
   - src: /gallery/creup-ago-78/01.webp
     alt: Representantes sentados en el salón de actos durante la asamblea

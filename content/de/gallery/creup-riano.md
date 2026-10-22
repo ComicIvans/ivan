@@ -25,7 +25,7 @@ seo:
 ---
 
 ::event-about
-Zwischen dem 1. und 4. September 2025 fand in Riaño (Kantabrien) ein Präsenztreffen der erweiterten Exekutivkommission der CREUP (Koordinationsstelle der Studierendenvertretungen öffentlicher Universitäten) statt.
+Zwischen dem 1. und 4. September 2025 fand in Riaño (Kantabrien) ein Präsenztreffen der erweiterten Exekutivkommission von CREUP (Koordinationsstelle der Studierendenvertretungen öffentlicher Universitäten) statt.
 
 An dem Treffen nahmen die verschiedenen Vizepräsidentschaften und Vorstandsmitglieder der Organisation teil, mit dem Ziel, die strategische Planung zu überprüfen und die Koordination zwischen den unterschiedlichen Arbeitsbereichen zu stärken.
 ::

@@ -3,7 +3,7 @@ title: 78. Ordentliche Generalversammlung von CREUP
 location: Barcelona, Spanien
 organizer:
   name: Koordinationsstelle der Studierendenvertretungen öffentlicher Universitäten (CREUP)
-description: Die Ordentlichen Generalversammlungen der CREUP bringen Studierendenvertretungen aus ganz Spanien zusammen, um Themen zu diskutieren und politische Interessenvertretung auf nationaler Ebene zu betreiben, mit dem Ziel, die Situation der Studierenden an öffentlichen Universitäten zu verbessern.
+description: Die Ordentlichen Generalversammlungen von CREUP bringen Studierendenvertretungen aus ganz Spanien zusammen, um Themen zu diskutieren und politische Interessenvertretung auf nationaler Ebene zu betreiben, mit dem Ziel, die Situation der Studierenden an öffentlichen Universitäten zu verbessern.
 cover:
   src: /gallery/creup-ago-78/cover.webp
   alt: Delegierte während einer Debatte der Versammlung
@@ -41,7 +41,7 @@ seo:
 ---
 
 ::event-about
-Die 78. Ordentliche Generalversammlung der CREUP (Koordinationsstelle der Studierendenvertretungen öffentlicher Universitäten) fand vom 4. bis 8. November 2025 an der Universität Barcelona statt.
+Die 78. Ordentliche Generalversammlung von CREUP (Koordinationsstelle der Studierendenvertretungen öffentlicher Universitäten) fand vom 4. bis 8. November 2025 an der Universität Barcelona statt.
 
 Diese Versammlung stellte einen der wichtigsten Diskussions- und Entscheidungsräume der studentischen Vertretung auf nationaler Ebene dar. Im Rahmen der Veranstaltung wurde die Exekutivkommission neu gewählt und es wurden zentrale Themen von besonderer Bedeutung für das spanische öffentliche Hochschulsystem behandelt, darunter:
 - **Digitale Souveränität der Universitäten**
@@ -55,7 +55,7 @@ An dem Treffen nahmen Vertreterinnen und Vertreter von 33 öffentlichen Universi
 ::
 
 ::event-participation
-Ich nahm an der Versammlung als **Mitglied des Vorstands für Digitalisierung und Transparenz** teil, als Mitglied der erweiterten Exekutivkommission, und stellte die in den vorangegangenen Monaten geleistete Arbeit vor.
+Ich nahm als **Vorstandsmitglied für Digitalisierung und Transparenz** und damit als Teil der erweiterten Exekutivkommission an der Versammlung teil und stellte die in den vorangegangenen Monaten geleistete Arbeit vor.
 
 Darüber hinaus beteiligte ich mich aktiv am Ablauf der Versammlung, indem ich die Organisation logistisch unterstützte und bei der Kontrolle der Anwesenheit der Vertreterinnen und Vertreter mitwirkte.
 ::

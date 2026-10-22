@@ -159,7 +159,7 @@ items:
     description:
       es: Scripts en PowerShell para configurar y auditar automáticamente Windows 10/11 según perfiles del Esquema Nacional de Seguridad.
       en: PowerShell scripts to automatically configure and audit Windows 10/11 systems according to the Spanish National Security Scheme (ENS).
-      de: PowerShell-Skripte zur automatischen Konfiguration und Auditierung von Windows-10/11-Systemen gemäß dem spanischen Nationalen Sicherheits­schema (ENS).
+      de: PowerShell-Skripte zur automatischen Konfiguration und Auditierung von Windows-10/11-Systemen gemäß dem spanischen Nationalen Sicherheitsschema (ENS).
     tags:
       - PowerShell
       - ENS

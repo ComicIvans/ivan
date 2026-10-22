@@ -5,7 +5,7 @@
     "description": "Mathematics graduate and Cybersecurity specialist: web development, digital infrastructure, project coordination and student representation.",
     "pages": {
       "legal": "Legal information, cookies and privacy policy of Iván Salido Cobo’s professional portfolio.",
-      "gallery": "Gallery of events, conferences and key moments from my professional and academic trajectory."
+      "gallery": "Gallery of events, conferences and key moments from my professional and academic career."
     }
   },
   "schema": {
@@ -69,7 +69,7 @@
     "title": "Selected Experience",
     "intro": "Experience in web development, digital infrastructure, project management and university governance.",
     "fullExperience": "If you would like to see my full background in student representation, you can find it in the Representation section.",
-    "viewRepresentation": "View full trajectory",
+    "viewRepresentation": "View full track record",
     "current": "Current"
   },
   "projects": {
