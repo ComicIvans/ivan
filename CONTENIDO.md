@@ -1,7 +1,10 @@
 # Guía de contenido
 
 Dónde está cada texto y cada foto de la web, cómo cambiarlos y cómo añadir
-elementos nuevos. Nada de lo que se describe aquí requiere tocar código.
+elementos nuevos. Casi todo vive en archivos de contenido (YAML, Markdown y
+JSON) que se editan sin tocar código. La única excepción son las redes
+sociales, que están en un archivo TypeScript (`shared/constants/profile.ts`):
+cambia solo los valores y respeta el formato de la lista.
 
 ## Flujo de trabajo
 
@@ -222,16 +225,18 @@ Tecnologías (`stack`, en el mismo archivo):
 ```yaml
 stack:
   primary: # tarjetas grandes, con descripción
-    - id: nuxt
-      name: Nuxt
-      icon: i-simple-icons-nuxt
+    - id: ejemplo-tecnologia
+      name: Nombre de la tecnología
+      icon: i-tabler-code
       tint: ember # ember o blue
       description:
-        es: ...
+        es: Para qué la usas, en una frase.
+        en: What you use it for, in one sentence.
+        de: Wofür du sie einsetzt, in einem Satz.
   secondary: # fila de iconos, solo nombre
-    - id: python
-      name: Python
-      icon: i-simple-icons-python
+    - id: ejemplo-herramienta
+      name: Nombre de la herramienta
+      icon: i-tabler-tool
 ```
 
 ### Añadir estudios o un curso (`training.yml`, lista `academic`)
@@ -546,42 +551,47 @@ GitHub, cada cambio pasa `verify:content` y `verify:i18n` (no
 
 ## Errores frecuentes
 
+`pnpm verify` se detiene en la primera comprobación que falla: primero las fotos
+de la galería, luego el contenido y por último los textos de la interfaz.
+Corrige lo que indique y vuelve a lanzarlo, porque detrás puede haber más
+errores.
+
 Los mensajes empiezan por el archivo y la ruta del campo: `items[2].end` es el
 campo `end` del tercer elemento (se cuenta desde 0).
 
-| Mensaje                                                                                        | Qué pasa y cómo arreglarlo                                                                                  |
-| ---------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `items[0].title.es: Invalid input: expected string, received undefined`                        | Falta el texto en español de ese campo.                                                                     |
-| `items[0].title.en: must not be empty`                                                         | Un idioma está vacío (`en: ""`). Escribe la traducción o borra la línea.                                    |
-| `items[0].start: use YYYY or YYYY-MM`                                                          | Fecha mal escrita (`06/2024`, `2024-6`). Usa `2024-06`.                                                     |
-| `items[2].end: end must not be before start`                                                   | La fecha de fin es anterior a la de inicio.                                                                 |
-| `items[1].id: duplicate id "…"`                                                                | Dos elementos de la lista tienen el mismo `id`.                                                             |
-| `items[0]: Unrecognized key: "organisationUrl"`                                                | Campo con un nombre que no existe (una errata). Compáralo con las plantillas de esta guía.                  |
-| `items[0].icon: icon "…" does not exist in @iconify-json/tabler`                               | El icono no existe. Búscalo en <https://icones.js.org> en la colección Tabler, Simple Icons o Circle Flags. |
-| `items[1].showLink: showLink needs an organizationUrl to show`                                 | `showLink: true` sin `organizationUrl`.                                                                     |
-| `items[0].organizationUrl: use an absolute https:// URL`                                       | La URL no empieza por `https://`.                                                                           |
-| `items[1].badgeRole: must be at most 28 characters in every language`                          | La línea de la credencial es demasiado larga en algún idioma.                                               |
-| `items[0].accent.from: use a theme colour token such as ember-500`                             | Color no válido: usa `ember`, `amber` o `blue` con un tono del 50 al 950.                                   |
-| `languages[0].cefr: Invalid option: expected one of …`                                         | Nivel no válido: `A1`, `A2`, `B1`, `B2`, `C1`, `C2` o `native`.                                             |
-| `items[0].screenshot.src: public/projects/….webp not found (check the exact file name)`        | La captura no está en `public/` o su nombre difiere (mayúsculas incluidas).                                 |
-| `YAML Nested mappings are not allowed in compact mappings at line 87, column 11`               | Un texto contiene `: `. Ponlo entre comillas dobles.                                                        |
-| `YAML Tabs are not allowed as indentation …`                                                   | Hay un tabulador en la sangría. Usa espacios.                                                               |
-| `YAML All mapping items must start at the same column …` o `Sequence item without - indicator` | Sangría descuadrada cerca de esa línea. Alinea los campos del elemento con dos espacios.                    |
-| `no collection reads this file (see content.config.ts)`                                        | Hay un archivo de más en `content/profile/`. Solo se leen los cinco de esta guía.                           |
-| `photos[0].alt: must not be empty`                                                             | Una foto sigue con `alt: ""` tras `pnpm gallery:add`. Descríbela.                                           |
-| `date: use a real calendar date as YYYY-MM-DD`                                                 | Fecha de evento mal escrita o inexistente (`2025-02-30`).                                                   |
-| `endDate: endDate must not be before date`                                                     | El último día es anterior al primero.                                                                       |
-| `organizer: Invalid input: expected object, received undefined`                                | Falta `organizer` (con `name` y `url`) en el evento en español.                                             |
-| `photos[0].width: Invalid input: expected number, received undefined`                          | Foto sin tamaño. Ejecuta `pnpm gallery:add <evento> --write`.                                               |
-| `photos[0] declares 2560x1707, the file is 2560x1706`                                          | El tamaño escrito no es el del archivo. Ejecuta `pnpm gallery:add <evento> --write`.                        |
-| `cover.src /gallery/…/cover.webp not found (check the exact file name)`                        | Falta la imagen en `public/gallery/` o su nombre difiere. En un clon nuevo, restaura la copia de seguridad. |
-| `photos[0].src: "…" is not a photo of the Spanish entry`                                       | Una traducción menciona una foto que no está en el archivo en español.                                      |
-| `(root): Unrecognized key: "date"`                                                             | Una traducción incluye un campo que solo va en español (fechas, icono, tamaños).                            |
-| `es: "credential.role.hero": "\|" splits the message into plural forms …`                      | Un mensaje de `i18n/locales/` contiene `\|`. Escribe `{'\|'}` o usa `·`.                                    |
-| `en: "footer.contactLabel": "@" starts a linked message (write {'@'})`                         | Un mensaje contiene `@`. Escribe `{'@'}`.                                                                   |
-| `de: missing "footer.contactLabel"`                                                            | Falta esa clave en el archivo de ese idioma.                                                                |
-| `gallery:add: no folder gallery-src/<evento> with the original photos`                         | No existe la carpeta de originales (o el nombre del evento no coincide).                                    |
-| `gallery:add: content/es/gallery/<evento>.md does not exist yet; …`                            | Crea primero el archivo del evento en español.                                                              |
+| Mensaje                                                                                               | Qué pasa y cómo arreglarlo                                                                                                                  |
+| ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items[0].title.es: Invalid input: expected string, received undefined`                               | Falta el texto en español de ese campo.                                                                                                     |
+| `items[0].title.en: must not be empty`                                                                | Un idioma está vacío (`en: ""`). Escribe la traducción o borra la línea.                                                                    |
+| `items[0].start: use YYYY or YYYY-MM`                                                                 | Fecha mal escrita (`06/2024`, `2024-6`). Usa `2024-06`.                                                                                     |
+| `items[2].end: end must not be before start`                                                          | La fecha de fin es anterior a la de inicio.                                                                                                 |
+| `items[1].id: duplicate id "…"`                                                                       | Dos elementos de la lista tienen el mismo `id`.                                                                                             |
+| `items[0]: Unrecognized key: "organisationUrl"`                                                       | Campo con un nombre que no existe (una errata). Compáralo con las plantillas de esta guía.                                                  |
+| `items[0].icon: icon "…" does not exist in @iconify-json/tabler`                                      | El icono no existe. Búscalo en <https://icones.js.org> en la colección Tabler, Simple Icons o Circle Flags.                                 |
+| `items[1].showLink: showLink needs an organizationUrl to show`                                        | `showLink: true` sin `organizationUrl`.                                                                                                     |
+| `items[0].organizationUrl: use an absolute https:// URL`                                              | La URL no empieza por `https://`.                                                                                                           |
+| `items[1].badgeRole: must be at most 28 characters in every language`                                 | La línea de la credencial es demasiado larga en algún idioma.                                                                               |
+| `items[0].accent.from: use a theme colour token such as ember-500`                                    | Color no válido: usa `ember`, `amber` o `blue` con un tono del 50 al 950.                                                                   |
+| `languages[0].cefr: Invalid option: expected one of …`                                                | Nivel no válido: `A1`, `A2`, `B1`, `B2`, `C1`, `C2` o `native`.                                                                             |
+| `items[0].screenshot.src: public/projects/….webp not found (check the exact file name)`               | La captura no está en `public/` o su nombre difiere (mayúsculas incluidas).                                                                 |
+| `YAML Nested mappings are not allowed in compact mappings at line 87, column 11`                      | Un texto contiene `: `. Ponlo entre comillas dobles.                                                                                        |
+| `YAML Tabs are not allowed as indentation …`                                                          | Hay un tabulador en la sangría. Usa espacios.                                                                                               |
+| `YAML All mapping items must start at the same column …` o `YAML Sequence item without - indicator …` | Sangría descuadrada cerca de esa línea. Alinea los campos del elemento con dos espacios.                                                    |
+| `no collection reads this file (see content.config.ts)`                                               | Hay un archivo de más en `content/profile/`. Solo se leen los cinco de esta guía.                                                           |
+| `photos[0].alt: must not be empty`                                                                    | Una foto sigue con `alt: ""` tras `pnpm gallery:add`. Descríbela.                                                                           |
+| `date: use a real calendar date as YYYY-MM-DD`                                                        | Fecha de evento mal escrita o inexistente (`2025-02-30`).                                                                                   |
+| `endDate: endDate must not be before date`                                                            | El último día es anterior al primero.                                                                                                       |
+| `organizer: Invalid input: expected object, received undefined`                                       | Falta `organizer` (con `name` y `url`) en el evento en español.                                                                             |
+| `photos[0] declares no width/height, the file is 2560x1707`                                           | Foto sin tamaño. Ejecuta `pnpm gallery:add <evento> --write`.                                                                               |
+| `photos[0] declares 2560x1707, the file is 2560x1706`                                                 | El tamaño escrito no es el del archivo. Ejecuta `pnpm gallery:add <evento> --write`.                                                        |
+| `cover.src /gallery/…/cover.webp not found (check the exact file name)`                               | Falta esa imagen en `public/gallery/` o su nombre difiere (lo mismo con `photos[0].src`). En un clon nuevo, restaura la copia de seguridad. |
+| `photos[0].src: "…" is not a photo of the Spanish entry`                                              | Una traducción menciona una foto que existe pero no está en el archivo en español.                                                          |
+| `(root): Unrecognized key: "date"`                                                                    | Una traducción incluye un campo que solo va en español (fechas, icono, tamaños).                                                            |
+| `es: "credential.role.hero": "\|" splits the message into plural forms …`                             | Un mensaje de `i18n/locales/` contiene `\|`. Escribe `{'\|'}` o usa `·`.                                                                    |
+| `en: "footer.contactLabel": "@" starts a linked message (write {'@'})`                                | Un mensaje contiene `@`. Escribe `{'@'}`.                                                                                                   |
+| `de: missing "footer.contactLabel"`                                                                   | Falta esa clave en el archivo de ese idioma.                                                                                                |
+| `gallery:add: no folder gallery-src/<evento> with the original photos`                                | No existe la carpeta de originales (o el nombre del evento no coincide).                                                                    |
+| `gallery:add: content/es/gallery/<evento>.md does not exist yet; …`                                   | Crea primero el archivo del evento en español.                                                                                              |
 
 ## Textos que caducan
 
