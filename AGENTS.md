@@ -282,9 +282,13 @@ Prefer these over bespoke CSS or new components:
 - Composables: `useGsapMatchMedia` (scoped GSAP with reduced-motion
   conditions), `useMotionTier`, `useMagnet` (reserved for a single primary
   CTA), `useSectionNav` (in-page jumps to a home section that keep the
-  credential badge in step), `useScrollSpy`, `useHomeReadingPosition` (keeps
-  the home on the hash target and on the section being read while the GSAP
-  setups rebuild the page), `useProfile`/`loadProfile`,
+  credential badge in step), `useScrollSpy`, `useHomeReadingPosition` (while
+  the GSAP setups rebuild the page, holds the home on the hash target after a
+  fresh load or navigation, on the position the router restores after
+  back/forward, and on the section being read when the visitor scrolled
+  before the mount or the motion tier changes; the `reading-position` client
+  plugin records the restored position and that early scrolling),
+  `useProfile`/`loadProfile`,
   `useGalleryEvents`/`loadGalleryEvents`, `useGalleryImages` (alt fallbacks),
   `usePageSeo`.
 - GSAP helper `revealOnScroll` (`app/utils/gsapReveal.ts`) for staggered card

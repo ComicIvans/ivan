@@ -37,9 +37,10 @@ onMounted(() => {
   hydrated.value = true
 })
 
-// Lands on the URL hash once the GSAP setups have settled, on the first load
-// and after client-side navigations alike, and keeps the section being read
-// in place when the motion tier changes.
+// Keeps the page where it should be while the GSAP setups settle: on the URL
+// hash after a fresh load or navigation, on the position the router restores
+// after back/forward, and on the section being read when the visitor scrolled
+// before the page mounted or the motion tier changes.
 useHomeReadingPosition()
 
 // Mount the sections with their content in place. After a client-side

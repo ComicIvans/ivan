@@ -1,49 +1,7 @@
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { SECTION_IDS } from '~/utils/sections'
+import { readReadingAnchor, scrollToReadingAnchor } from '~/utils/readingAnchor'
 
 const USER_SCROLL_EVENTS = ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const
-
-/** A section and where its top edge sits in the viewport. */
-interface ReadingAnchor {
-  id: string
-  top: number
-}
-
-/** The section being read: the last one whose top has passed the spy's line. */
-function readAnchor(): ReadingAnchor | null {
-  const line = window.innerHeight * ACTIVE_SECTION_LINE
-  let anchor: ReadingAnchor | null = null
-  for (const id of SECTION_IDS) {
-    const top = document.getElementById(id)?.getBoundingClientRect().top
-    if (top === undefined) continue
-    if (!anchor || top <= line) anchor = { id, top }
-  }
-  return anchor
-}
-
-/** Puts the anchor's section back where it was in the viewport. */
-function scrollToAnchor(anchor: ReadingAnchor) {
-  const section = document.getElementById(anchor.id)
-  if (!section) return
-  // The section may have shrunk (the pinned projects scene becomes a grid).
-  const offset = Math.min(-anchor.top, Math.max(0, section.offsetHeight - 1))
-  const top = section.getBoundingClientRect().top + window.scrollY + offset
-  window.scrollTo({ top: Math.max(0, top), behavior: 'instant' })
-}
-
-interface SavedScroll {
-  left: number
-  top: number
-}
-
-/**
- * The position vue-router saved for this history entry when the visitor left
- * it. Back/forward and reloads come with one; fresh navigations do not.
- */
-function savedScrollPosition(): SavedScroll | null {
-  const scroll = (window.history.state as { scroll?: SavedScroll | null } | null)?.scroll
-  return scroll && Number.isFinite(scroll.top) ? scroll : null
-}
 
 /**
  * Repeats `align` whenever the page may have moved under it (a ScrollTrigger
@@ -70,31 +28,42 @@ function holdPosition(align: () => void, ms: number) {
 /**
  * Keeps the home on the section being read while its GSAP setups rebuild the
  * page around it:
- * - Deep links (/#contacto, the legacy 301 redirects, the language switch,
- *   the navbar pills on another page): the browser or the router scrolls to
- *   the hash while the setups are still settling, a refresh cuts a smooth
- *   scroll short and the projects pin adds height above the later sections.
- *   The page lands on the hash target until the visitor scrolls.
- * - Back/forward and reloads: the router restores the position saved for the
- *   history entry, which is held the same way instead of the hash target (the
- *   visitor may have scrolled far from it before leaving).
+ * - Fresh navigations with a hash (/#contacto, the legacy 301 redirects, the
+ *   language switch, the navbar pills on another page): the browser or the
+ *   router scrolls to the hash while the setups are still settling, a refresh
+ *   cuts a smooth scroll short and the projects pin adds height above the
+ *   later sections. The page lands on the hash target until the visitor
+ *   scrolls. A reload counts as a fresh load.
+ * - Back/forward: the router restores the position it recorded when the
+ *   visitor left the history entry, and that position is held instead of the
+ *   hash target (the visitor may have scrolled far from it before leaving).
+ * - The visitor scrolled the server-rendered page before it mounted: the
+ *   section they were reading goes back to where it was in the viewport.
  * - A media condition of the setups flips (the motion tier across a resize,
  *   the reduced-motion setting): GSAP reverts and re-runs every setup at
  *   once, and ScrollTrigger can drop the page to the top on the way (killing
  *   the last trigger of the old layout wipes the scroll position it had
  *   recorded). The section being read goes back to the same place in the
  *   viewport: not the same pixel offset, as the height above it changes.
+ * The positions from before the mount come from the reading-position plugin.
  */
 export function useHomeReadingPosition() {
+  const nuxtApp = useNuxtApp()
+  // The navigation that mounts the page.
+  const fullPath = useRoute().fullPath
   let cleanup: (() => void) | null = null
 
   onMounted(() => {
-    const saved = savedScrollPosition()
-    const target = !saved && location.hash ? document.getElementById(location.hash.slice(1)) : null
+    const { $readingPosition } = nuxtApp
+    const early = $readingPosition.takeEarlyAnchor()
+    const restored = $readingPosition.takeRestoredScroll(fullPath)
+    const target = location.hash ? document.getElementById(location.hash.slice(1)) : null
     let releaseHold: (() => void) | null = null
-    if (saved) {
+    if (early) {
+      releaseHold = holdPosition(() => scrollToReadingAnchor(early), 5000)
+    } else if (restored) {
       releaseHold = holdPosition(
-        () => window.scrollTo({ left: saved.left, top: saved.top, behavior: 'instant' }),
+        () => window.scrollTo({ left: restored.left, top: restored.top, behavior: 'instant' }),
         5000
       )
     } else if (target) {
@@ -103,9 +72,9 @@ export function useHomeReadingPosition() {
 
     // Read on every scroll, before anything moves the page: the scrolls GSAP
     // makes while it rebuilds only reach this listener in a later frame.
-    let anchor = readAnchor()
+    let anchor = readReadingAnchor()
     const track = () => {
-      anchor = readAnchor()
+      anchor = readReadingAnchor()
     }
     window.addEventListener('scroll', track, { passive: true })
 
@@ -120,7 +89,7 @@ export function useHomeReadingPosition() {
         restoreFrame = 0
         releaseHold?.()
         releaseHold = holdPosition(() => {
-          scrollToAnchor(reading)
+          scrollToReadingAnchor(reading)
           refreshScrollSpy()
         }, 1500)
       })
