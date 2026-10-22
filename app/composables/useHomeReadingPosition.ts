@@ -33,10 +33,11 @@ function holdPosition(align: () => void, ms: number) {
  *   router scrolls to the hash while the setups are still settling, a refresh
  *   cuts a smooth scroll short and the projects pin adds height above the
  *   later sections. The page lands on the hash target until the visitor
- *   scrolls. A reload counts as a fresh load.
- * - Back/forward: the router restores the position it recorded when the
- *   visitor left the history entry, and that position is held instead of the
- *   hash target (the visitor may have scrolled far from it before leaving).
+ *   scrolls.
+ * - Back/forward and reloads: the router restores the position it recorded
+ *   when the visitor left the page (vue-router saves it on pagehide too, and
+ *   Nuxt hands it to scrollBehavior on its first replace), and that position
+ *   is held instead of the hash target, as a browser would do natively.
  * - The visitor scrolled the server-rendered page before it mounted: the
  *   section they were reading goes back to where it was in the viewport.
  * - A media condition of the setups flips (the motion tier across a resize,

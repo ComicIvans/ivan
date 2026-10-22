@@ -284,8 +284,8 @@ Prefer these over bespoke CSS or new components:
   CTA), `useSectionNav` (in-page jumps to a home section that keep the
   credential badge in step), `useScrollSpy`, `useHomeReadingPosition` (while
   the GSAP setups rebuild the page, holds the home on the hash target after a
-  fresh load or navigation, on the position the router restores after
-  back/forward, and on the section being read when the visitor scrolled
+  fresh navigation, on the position the router restores after back/forward
+  or a reload, and on the section being read when the visitor scrolled
   before the mount or the motion tier changes; the `reading-position` client
   plugin records the restored position and that early scrolling),
   `useProfile`/`loadProfile`,

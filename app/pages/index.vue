@@ -38,9 +38,9 @@ onMounted(() => {
 })
 
 // Keeps the page where it should be while the GSAP setups settle: on the URL
-// hash after a fresh load or navigation, on the position the router restores
-// after back/forward, and on the section being read when the visitor scrolled
-// before the page mounted or the motion tier changes.
+// hash after a fresh navigation, on the position the router restores after
+// back/forward or a reload, and on the section being read when the visitor
+// scrolled before the page mounted or the motion tier changes.
 useHomeReadingPosition()
 
 // Mount the sections with their content in place. After a client-side

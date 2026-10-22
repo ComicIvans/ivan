@@ -115,9 +115,12 @@ normalmente). Con `false` (puerto 587, normalmente) el servidor tiene que
 ofrecer STARTTLS: si no lo ofrece, el envío falla en lugar de salir sin cifrar.
 Solo un servidor en la interfaz de loopback (`localhost`, `127.0.0.1` o `::1`)
 puede funcionar sin TLS. En Docker esa interfaz es la del propio contenedor: un
-relay en el propio VPS se alcanza por la red de Docker (por ejemplo,
-`172.17.0.1` o `host.docker.internal`), así que tiene que ofrecer STARTTLS o
-usar TLS implícito (`NUXT_SMTP_SECURE=true`, puerto 465).
+relay en el propio VPS se alcanza por la red de Docker, así que también tiene
+que ofrecer STARTTLS o TLS implícito (`NUXT_SMTP_SECURE=true`, puerto 465), con
+un certificado válido para el nombre que pongas en `NUXT_SMTP_HOST` (Nodemailer
+lo verifica). Si usas `host.docker.internal`, en Linux hay que añadir
+`extra_hosts: ["host.docker.internal:host-gateway"]` al servicio en
+`docker-compose.yml`. Lo habitual es usar el SMTP de un proveedor externo.
 
 La aplicación espera un único proxy inverso (nginx) delante que añada la IP del
 cliente al final de `X-Forwarded-For` (`$proxy_add_x_forwarded_for` o
