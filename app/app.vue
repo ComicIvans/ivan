@@ -9,7 +9,6 @@ const siteConfig = useSiteConfig()
 const localeHead = useLocaleHead({ seo: true })
 const siteUrl = computed(() => String(siteConfig.url ?? ''))
 const siteRoot = computed(() => siteUrl.value.replace(/\/$/, ''))
-const route = useRoute()
 const router = useRouter()
 const pendingPagePath = useState<string | null>('page-nav-pending-path', () => null)
 
@@ -41,19 +40,14 @@ useHead(() => ({
   ],
 }))
 
+// Site-wide tags only. Every page sets its own title, description, Open Graph
+// and Twitter tags through usePageSeo.
 useSeoMeta({
-  titleTemplate: (title) => (title ? `${title} | ${t('seo.title')}` : t('seo.title')),
+  titleTemplate: (title) => withSiteName(title, t('seo.title')),
   description: () => t('seo.description'),
-  ogUrl: () => `${siteUrl.value}${route.path}`,
-  ogType: 'profile',
-  ogTitle: () => t('seo.title'),
-  ogDescription: () => t('seo.description'),
   ogSiteName: siteConfig.name,
   ogLocale: () => getOgLocale(locale.value),
   ogLocaleAlternate: () => alternateOgLocales.value,
-  twitterCard: 'summary_large_image',
-  twitterTitle: () => t('seo.title'),
-  twitterDescription: () => t('seo.description'),
   author: profileName,
   themeColor: themeColorMeta,
 })

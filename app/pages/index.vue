@@ -13,7 +13,8 @@ import { SECTIONS, type SectionId } from '~/utils/sections'
 // The hero already carries the portrait, name and pitch.
 definePageMeta({ masthead: false })
 
-usePageSeo('seo.pageTitle', 'seo.description')
+// The home's title already names the site: "Iván Salido Cobo · <fields>".
+usePageSeo('seo.homeTitle', 'seo.description', { fullTitle: true })
 
 // Rendered in SECTIONS order; the record type makes a section without a
 // component a type error.

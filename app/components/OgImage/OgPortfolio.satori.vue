@@ -8,7 +8,7 @@ import { themeColors } from '~~/shared/constants/theme'
 // inject newlines into CSS values (which breaks Satori's gradient parser).
 // Satori defaults to content-box, so the padded full-size root opts into
 // border-box to stay inside the 1200x630 canvas.
-withDefaults(
+const props = withDefaults(
   defineProps<{
     title?: string
     description?: string
@@ -57,13 +57,15 @@ const markStyle = {
 
 const nameStyle = { display: 'flex', fontSize: '34px', fontWeight: 700, color: text } as const
 
-const titleStyle = {
+// Page titles ("Galería") take the full 72px. The home title carries the name
+// and the fields, so it steps down to keep the description inside the card.
+const titleStyle = computed(() => ({
   display: 'flex',
-  fontSize: '72px',
+  fontSize: props.title.length > 40 ? '56px' : '72px',
   fontWeight: 800,
   lineHeight: 1.1,
   color: accent,
-} as const
+}))
 
 const descriptionStyle = {
   display: 'flex',
