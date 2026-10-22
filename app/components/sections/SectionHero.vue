@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { auroraColorStops as auroraColorStopsByScheme } from '~~/shared/constants/theme'
 import { variantsById } from '~/components/credential/credentialVariants'
 
@@ -88,25 +87,18 @@ const sectionEl = useTemplateRef<HTMLElement>('sectionEl')
 // The headline itself does not animate: it is the first thing painted (and
 // the largest), so it stays exactly as the server rendered it.
 useGsapMatchMedia(sectionEl, (ctx) => {
-  const tiles = '.bento-tile'
+  const section = sectionEl.value
+  if (!section || ctx.conditions?.reduceMotion) return
 
-  if (ctx.conditions?.reduceMotion) {
-    gsap.set(tiles, { autoAlpha: 1 })
-    return
-  }
-
-  gsap.set(tiles, { autoAlpha: 0, y: 32 })
-  ScrollTrigger.batch(tiles, {
-    start: 'top 85%',
-    once: true,
-    onEnter: (batch) =>
-      gsap.to(batch, { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: 0.08 }),
-  })
+  const removeFocusReveal = revealOnScroll(
+    section,
+    Array.from(section.querySelectorAll<HTMLElement>('.bento-tile'))
+  )
 
   // Hero recedes as the next content scrolls in (keyed to the panel, not the
   // whole section, so the bento grid below doesn't stretch the effect).
   // Scrubbed parallax is a full-tier effect.
-  const heroPanel = sectionEl.value?.querySelector('.home-hero-panel')
+  const heroPanel = section.querySelector('.home-hero-panel')
   if (ctx.conditions?.fullMotion && heroPanel) {
     gsap.to('.hero-inner', {
       yPercent: -8,
@@ -120,6 +112,8 @@ useGsapMatchMedia(sectionEl, (ctx) => {
       },
     })
   }
+
+  return removeFocusReveal
 })
 </script>
 

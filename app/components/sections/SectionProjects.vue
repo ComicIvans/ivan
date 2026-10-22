@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 defineProps<{ id: string }>()
 
@@ -41,10 +40,7 @@ function setupScene(ctx: gsap.Context) {
   const cards = scene ? Array.from(scene.querySelectorAll<HTMLElement>('.project-card')) : []
   if (!scene || !cards.length) return
 
-  if (ctx.conditions?.reduceMotion) {
-    gsap.set(cards, { autoAlpha: 1 })
-    return
-  }
+  if (ctx.conditions?.reduceMotion) return
 
   if (ctx.conditions?.fullMotion && ctx.conditions?.pinFits && trackEl.value) {
     // Horizontal showcase: the scene pins while the card track translates
@@ -117,13 +113,7 @@ function setupScene(ctx: gsap.Context) {
 
   // Mobile / tablet, or a short desktop window: the grid with a staggered
   // entrance.
-  gsap.set(cards, { autoAlpha: 0, y: 32 })
-  ScrollTrigger.batch(cards, {
-    start: 'top 85%',
-    once: true,
-    onEnter: (batch) =>
-      gsap.to(batch, { autoAlpha: 1, y: 0, duration: 0.6, ease: 'power2.out', stagger: 0.08 }),
-  })
+  return revealOnScroll(scene, cards)
 }
 
 useGsapMatchMedia(sceneEl, setupScene, {
