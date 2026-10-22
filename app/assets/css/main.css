@@ -232,8 +232,10 @@ textarea,
   .surface-glass {
     position: relative;
     background: color-mix(in oklab, var(--ui-bg) 78%, var(--color-ember-400) 3%);
-    backdrop-filter: blur(12px);
+    /* Prefixed first: the minifier keeps only the last of the two when the
+       unprefixed one comes first, and only Safari reads the prefixed one. */
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
   }
 
   .dark .surface-glass {
