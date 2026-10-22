@@ -283,7 +283,7 @@ useGsapMatchMedia(sectionEl, (ctx) => {
             loading="lazy"
             width="640"
             height="360"
-            sizes="xs:100vw lg:520px"
+            sizes="xs:100vw lg:480px xl:640px"
           />
           <div v-else class="absolute inset-0 flex items-center justify-center bg-elevated">
             <UIcon name="i-tabler-photo" class="size-12 text-dimmed" aria-hidden="true" />
