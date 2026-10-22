@@ -43,8 +43,10 @@ let hashKey: Promise<string> | undefined
 
 // Keyed hash, so the stored keys cannot be turned back into IP addresses
 // without the app secret (a plain hash of an IPv4 address falls to brute
-// force). The key is derived from NUXT_APP_SECRET; without a usable one a
-// per-process key only means that counters restart with the process.
+// force). The key is derived from NUXT_APP_SECRET, which production needs
+// anyway for the /_og/* images. Without a usable one the limiter keeps the
+// contact form working with a random per-process key, whose counters restart
+// with the process; server/plugins/appSecretCheck.ts reports it at startup.
 function getHashKey(): Promise<string> {
   hashKey ??= deriveSecret('ivan:rate-limit').catch(() => randomBytes(32).toString('hex'))
   return hashKey

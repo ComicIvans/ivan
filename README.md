@@ -87,10 +87,13 @@ Se reparten en dos archivos, ambos fuera de Git:
 - `SITE_URL`: URL canónica del sitio. Se lee al compilar: va en `.env` para
   `pnpm dev` y `pnpm build`, y en `.env.deploy` para la imagen de Docker.
 - `NUXT_APP_SECRET`: secreto raíz con el que se firman las URL `/_og/*` de las
-  imágenes para redes sociales. Es obligatorio en producción: sin él, todas esas
-  imágenes responden 500. Debe tener al menos 32 caracteres (por ejemplo,
-  `openssl rand -base64 32`) y mantenerse igual entre despliegues para que las
-  URL ya compartidas sigan siendo válidas. Solo se usa en tiempo de ejecución:
+  imágenes para redes sociales y del que sale la clave del limitador de
+  peticiones. Es obligatorio en producción: sin él, todas esas imágenes responden
+  500, el limitador usa una clave aleatoria que cambia en cada arranque (sus
+  contadores vuelven a cero) y el servidor lo avisa en el registro al arrancar.
+  Debe tener al menos 32 caracteres (por ejemplo, `openssl rand -base64 32`) y
+  mantenerse igual entre despliegues para que las URL ya compartidas sigan
+  siendo válidas. Solo se usa en tiempo de ejecución:
   llega al contenedor por el `env_file` de `docker-compose.yml` y nunca se
   incluye en la imagen.
 - `NUXT_SITE_INDEXABLE` (opcional): `docker-compose.yml` lo deja en `true`
