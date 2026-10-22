@@ -18,13 +18,14 @@ interface RateLimitOptions {
   maxRequests: number
   windowMs: number
   errorMessage: string
-  /**
-   * Counts every request under this fixed name instead of the client's
-   * address: one shared budget for the whole site.
-   */
-  bucket?: string
-  /** Called once per window, on the first request over the limit. */
-  onLimitReached?: () => void
+}
+
+/** One budget for the whole site, counted under a fixed name. */
+interface SharedBudgetOptions {
+  namespace: string
+  bucket: string
+  maxRequests: number
+  windowMs: number
 }
 
 const STORAGE_NAME = 'ratelimit'
@@ -105,15 +106,14 @@ function isRecord(value: unknown): value is RateLimitRecord {
  * File-based, proxy-aware rate limiter. State lives in the `ratelimit` Nitro
  * storage (an `fs` driver on the persistent data volume), so it survives
  * process restarts. Each record holds a request count and the end of its
- * window under a keyed hash of the client address (or of a shared `bucket`),
- * never the address itself.
+ * window under a keyed hash of the client address (or of a shared budget's
+ * name), never the address itself.
  * It fails open if storage is unavailable: rate limiting is defense in depth,
  * not a hard gate.
  */
 export async function enforceRateLimit(event: H3Event, options: RateLimitOptions): Promise<void> {
   const storage = useStorage<RateLimitRecord>(STORAGE_NAME)
-  const bucket = options.bucket ?? clientBucket(getClientIp(event))
-  const key = await storageKey(options.namespace, bucket)
+  const key = await storageKey(options.namespace, clientBucket(getClientIp(event)))
   const tooManyRequests = () =>
     createError({ statusCode: 429, statusMessage: options.errorMessage })
 
@@ -142,11 +142,60 @@ export async function enforceRateLimit(event: H3Event, options: RateLimitOptions
       return
     }
 
-    if (nextRecord.count > options.maxRequests) {
-      options.onLimitReached?.()
-      throw tooManyRequests()
-    }
+    if (nextRecord.count > options.maxRequests) throw tooManyRequests()
   })
+}
+
+/**
+ * Whether a shared budget is used up for its current window. Counts nothing,
+ * so a caller can check before doing the work and count only what succeeded
+ * (countSharedBudget). Fails open, like enforceRateLimit.
+ */
+export async function isSharedBudgetSpent(options: SharedBudgetOptions): Promise<boolean> {
+  const storage = useStorage<RateLimitRecord>(STORAGE_NAME)
+  const key = await storageKey(options.namespace, options.bucket)
+  try {
+    const record = await storage.getItem(key)
+    return isRecord(record) && record.resetAt > Date.now() && record.count >= options.maxRequests
+  } catch {
+    return false
+  }
+}
+
+/**
+ * Counts one use of a shared budget and returns the count in the current
+ * window (0 when storage is unavailable).
+ */
+export async function countSharedBudget(
+  options: Omit<SharedBudgetOptions, 'maxRequests'>
+): Promise<number> {
+  const storage = useStorage<RateLimitRecord>(STORAGE_NAME)
+  const key = await storageKey(options.namespace, options.bucket)
+  let count = 0
+
+  await serializeByKey(key, async () => {
+    const now = Date.now()
+    let record: RateLimitRecord | null
+    try {
+      record = await storage.getItem(key)
+    } catch {
+      return
+    }
+
+    const nextRecord: RateLimitRecord =
+      isRecord(record) && record.resetAt > now
+        ? { count: record.count + 1, resetAt: record.resetAt }
+        : { count: 1, resetAt: now + options.windowMs }
+
+    try {
+      await storage.setItem(key, nextRecord)
+    } catch {
+      return
+    }
+    count = nextRecord.count
+  })
+
+  return count
 }
 
 /**

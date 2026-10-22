@@ -343,6 +343,7 @@
       "privacyLink": "privacy policy",
       "apiErrors": {
         "rateLimited": "You have sent too many messages in a short period. Please try again later.",
+        "dailyLimit": "The form has reached its message limit for today. Please try again tomorrow.",
         "missingFields": "Some required fields are missing.",
         "prohibitedContent": "The message contains content that could not be accepted.",
         "serviceUnavailable": "The email service is not available right now.",

@@ -343,6 +343,7 @@
       "privacyLink": "política de privacidad",
       "apiErrors": {
         "rateLimited": "Has enviado demasiados mensajes en poco tiempo. Vuelve a intentarlo más tarde.",
+        "dailyLimit": "El formulario ha llegado hoy a su límite de mensajes. Vuelve a intentarlo mañana.",
         "missingFields": "Faltan campos obligatorios por completar.",
         "prohibitedContent": "El mensaje contiene contenido que no he podido aceptar.",
         "serviceUnavailable": "El servicio de correo no está disponible en este momento.",

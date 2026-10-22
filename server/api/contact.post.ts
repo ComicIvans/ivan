@@ -5,7 +5,7 @@ import {
   getRequiredSmtpFromEmail,
   getRequiredSmtpToEmail,
 } from '../utils/runtimeConfig'
-import { enforceRateLimit } from '../utils/rateLimit'
+import { countSharedBudget, enforceRateLimit, isSharedBudgetSpent } from '../utils/rateLimit'
 import { getSmtpTransporter } from '../utils/smtp'
 import { validatePublicBody } from '../utils/validatePublicBody'
 import { contactRequestSchema } from '~~/shared/utils/contactValidation'
@@ -13,14 +13,23 @@ import { CONTACT_MIN_SUBMIT_DELAY_MS } from '~~/shared/utils/contactShared'
 import { readLimitedJsonBody } from '../utils/readLimitedJsonBody'
 
 const MAX_CONTACT_BODY_BYTES = 32 * 1024
-// Far above the real traffic of a personal site, low enough that a flood
-// cannot get the SMTP account throttled or suspended.
+// Site-wide cap on the emails actually sent, whatever address they come
+// from: the per-client limit alone does not bound a flood spread over many
+// addresses. Far above the real traffic of a personal site, low enough that
+// a flood cannot get the SMTP account throttled or suspended.
 const SITE_DAILY_EMAIL_LIMIT = 40
+const SITE_EMAIL_BUDGET = {
+  namespace: 'contact-all',
+  bucket: 'site',
+  maxRequests: SITE_DAILY_EMAIL_LIMIT,
+  windowMs: 24 * 60 * 60 * 1000,
+}
 
 const CONTACT_ERROR_CODES = {
   validation: 'CONTACT_VALIDATION',
   prohibitedContent: 'CONTACT_PROHIBITED_CONTENT',
   rateLimited: 'CONTACT_RATE_LIMITED',
+  dailyLimit: 'CONTACT_DAILY_LIMIT',
   sendFailed: 'CONTACT_SEND_FAILED',
   serviceUnavailable: 'CONTACT_SERVICE_UNAVAILABLE',
 } as const
@@ -150,21 +159,17 @@ export default defineEventHandler(async (event) => {
 
   const transporter = getSmtpTransporter(event, CONTACT_ERROR_CODES.serviceUnavailable)
 
-  // Site-wide cap on the emails actually sent, whatever address they come
-  // from: the per-client limit alone does not bound a flood spread over many
-  // addresses. Counted last, so rejected or dropped submissions never use it
-  // up.
-  await enforceRateLimit(event, {
-    namespace: 'contact-all',
-    bucket: 'site',
-    maxRequests: SITE_DAILY_EMAIL_LIMIT,
-    windowMs: 24 * 60 * 60 * 1000,
-    errorMessage: CONTACT_ERROR_CODES.rateLimited,
-    onLimitReached: () =>
-      console.warn(
-        `[contact] Site-wide limit of ${SITE_DAILY_EMAIL_LIMIT} emails a day reached: further messages are refused until the window ends`
-      ),
-  })
+  // The site-wide cap is checked here and counted only once the email has
+  // gone out, so rejected, dropped or failed submissions never use it up.
+  // Sends already in flight when it fills up can pass it by that many. The
+  // visitor did nothing wrong, so the answer is a 503 with its own message,
+  // not the per-client "too many messages".
+  if (await isSharedBudgetSpent(SITE_EMAIL_BUDGET)) {
+    throw createError({
+      statusCode: 503,
+      statusMessage: CONTACT_ERROR_CODES.dailyLimit,
+    })
+  }
 
   const language = locale ? `${languageNames.of(locale) ?? locale} (${locale})` : 'desconocido'
 
@@ -192,8 +197,6 @@ Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })}
       subject: `[Portfolio] ${subject}`,
       text: emailContent,
     })
-
-    return { success: true }
   } catch (error) {
     console.error('Error sending contact email:', error)
     throw createError({
@@ -201,4 +204,13 @@ Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })}
       statusMessage: CONTACT_ERROR_CODES.sendFailed,
     })
   }
+
+  const sentToday = await countSharedBudget(SITE_EMAIL_BUDGET)
+  if (sentToday === SITE_DAILY_EMAIL_LIMIT) {
+    console.warn(
+      `[contact] Site-wide limit of ${SITE_DAILY_EMAIL_LIMIT} emails a day reached: further messages are refused until the window ends`
+    )
+  }
+
+  return { success: true }
 })

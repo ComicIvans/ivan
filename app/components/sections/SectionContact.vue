@@ -74,6 +74,7 @@ const apiErrorMessages = computed<Record<string, string>>(() => ({
   CONTACT_VALIDATION: t('contactPage.form.apiErrors.missingFields'),
   CONTACT_PROHIBITED_CONTENT: t('contactPage.form.apiErrors.prohibitedContent'),
   CONTACT_RATE_LIMITED: t('contactPage.form.apiErrors.rateLimited'),
+  CONTACT_DAILY_LIMIT: t('contactPage.form.apiErrors.dailyLimit'),
   CONTACT_SEND_FAILED: t('contactPage.form.apiErrors.sendFailed'),
   CONTACT_SERVICE_UNAVAILABLE: t('contactPage.form.apiErrors.serviceUnavailable'),
 }))
