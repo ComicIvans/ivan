@@ -3,8 +3,11 @@ import { enforceRateLimit } from '../utils/rateLimit'
 import { readLimitedJsonBody } from '../utils/readLimitedJsonBody'
 
 const MAX_CSP_REPORT_BYTES = 64 * 1024
-const MAX_REPORTS_PER_REQUEST = 10
-const MAX_LOGGED_VALUE_LENGTH = 300
+// These two and the rate limit below bound what one client can write to the
+// logs (about 2 KB a request, 10 requests a minute), so a flood of reports
+// cannot quickly rotate away the other entries of the container log.
+const MAX_REPORTS_PER_REQUEST = 2
+const MAX_LOGGED_VALUE_LENGTH = 150
 
 // Logged fields, by their legacy `report-uri` name and their Reporting API
 // (`report-to`) name. The policy itself is left out: it is long and already
@@ -58,7 +61,7 @@ export default defineEventHandler(async (event) => {
   // client can write to the logs.
   await enforceRateLimit(event, {
     namespace: 'csp-report',
-    maxRequests: 30,
+    maxRequests: 10,
     windowMs: 60 * 1000,
     errorMessage: 'CSP_REPORT_RATE_LIMITED',
   })
