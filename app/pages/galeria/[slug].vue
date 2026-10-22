@@ -57,6 +57,20 @@ useSeoMeta({
 const absoluteUrl = (path: string | undefined) =>
   toAbsoluteUrl(path, String(siteConfig.url ?? '')) ?? undefined
 
+// Each organizer gets an id of its own, named after its website's host
+// (#/schema/organization/creup.es). Without one the resolver numbers it
+// #/schema/organization/1 on every event page, so different organizers would
+// share a single id across the site.
+const organizerId = computed(() => {
+  const url = event.value?.organizer?.url
+  if (!url) return undefined
+  try {
+    return `#/schema/organization/${new URL(url).hostname.replace(/^www\./, '')}`
+  } catch {
+    return undefined
+  }
+})
+
 useSchemaOrg([
   defineEvent({
     name: () => event.value?.title || t('gallery.title'),
@@ -76,6 +90,7 @@ useSchemaOrg([
     // the organizer of every event.
     organizer: {
       '@type': 'Organization',
+      '@id': () => organizerId.value,
       name: () => event.value?.organizer?.name,
       url: () => event.value?.organizer?.url,
     },
