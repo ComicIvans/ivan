@@ -463,9 +463,12 @@ export default defineNuxtConfig({
     // /_ipx is public and unsigned, so its options are user input: only the
     // modifiers the site emits (NuxtImg sizes/format/quality, the lightbox
     // srcset, the 1200x630 event cover for Open Graph) and no output larger
-    // than the 2560 px gallery photos. Every image is a local path (as
-    // shared/content/schemas.ts enforces), so no host may be fetched: with an
-    // empty `domains` list, IPX refuses any /_ipx/_/https://... URL unfetched.
+    // than the 2560 px gallery photos. server/middleware/ipx-format.ts limits
+    // the format to WebP and JPEG; widths and qualities stay open within
+    // those bounds (the nginx setup in docs/nginx.md rate-limits /_ipx per
+    // client). Every image is a local path (as shared/content/schemas.ts
+    // enforces), so no host may be fetched: with an empty `domains` list, IPX
+    // refuses any /_ipx/_/https://... URL unfetched.
     ipx: {
       maxAge: 60 * 60 * 24,
       maxOutputDimension: 2560,
