@@ -1,6 +1,22 @@
 import gsap from 'gsap'
 import type { ShallowRef } from 'vue'
 
+const mediaChangeCallbacks = new Set<() => void>()
+
+/**
+ * Calls `callback` whenever a media condition of a mounted GSAP setup flips
+ * (a resize across a breakpoint, the reduced-motion setting changing). GSAP
+ * then reverts and re-runs the setups, synchronously, and ScrollTrigger can
+ * lose the scroll position on the way. Returns a function that removes the
+ * callback.
+ */
+export function onGsapMediaChange(callback: () => void) {
+  mediaChangeCallbacks.add(callback)
+  return () => {
+    mediaChangeCallbacks.delete(callback)
+  }
+}
+
 /**
  * Runs GSAP setup after mount inside gsap.matchMedia() and reverts everything
  * on unmount. The handler receives context.conditions booleans (isDesktop,
@@ -18,6 +34,9 @@ export function useGsapMatchMedia(
 
   onMounted(() => {
     mm = gsap.matchMedia(scope.value ?? undefined)
+    // isDesktop and isMobile always match one way or the other, so the
+    // handler runs again after every flip: every run but the first is one.
+    let setUp = false
     mm.add(
       {
         isDesktop: '(min-width: 1024px)',
@@ -27,7 +46,11 @@ export function useGsapMatchMedia(
         reduceMotion: '(prefers-reduced-motion: reduce)',
         ...extraConditions,
       },
-      handler,
+      (context, contextSafe) => {
+        if (setUp) for (const callback of mediaChangeCallbacks) callback()
+        setUp = true
+        return handler(context, contextSafe)
+      },
       scope.value ?? undefined
     )
   })

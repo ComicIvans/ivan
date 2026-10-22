@@ -3,6 +3,23 @@ export const useActiveSectionId = () =>
   useState<string | null>('section-scroll-spy-active', () => null)
 
 /**
+ * Where the reading line sits, as a fraction of the viewport height from the
+ * top: the active section is the last one whose top has passed it.
+ */
+export const ACTIVE_SECTION_LINE = 0.35
+
+// pick() of the mounted spy (there is one for the whole app).
+let pickActiveSection: (() => void) | null = null
+
+/**
+ * Re-derives the active section now. For moves that may cross no observed
+ * band, such as putting the page back in place after a layout rebuild.
+ */
+export function refreshScrollSpy() {
+  pickActiveSection?.()
+}
+
+/**
  * Deterministic scroll spy for the anchor navigation. IntersectionObserver
  * only signals WHEN to recompute; pick() decides WHAT is active: the observed
  * section whose top sits closest to (without passing) the activation line.
@@ -14,10 +31,8 @@ export function useScrollSpy(sectionIds: Readonly<string[]>) {
   const initialized = useState<boolean>('section-scroll-spy-initialized', () => false)
   const nuxtApp = useNuxtApp()
 
-  const ACTIVATION_LINE = 0.35 // fraction of viewport height
-
   const pick = () => {
-    const line = window.innerHeight * ACTIVATION_LINE
+    const line = window.innerHeight * ACTIVE_SECTION_LINE
     let best: string | null = null
     let bestDist = Infinity
     let anyFound = false
@@ -41,6 +56,7 @@ export function useScrollSpy(sectionIds: Readonly<string[]>) {
     // other consumers (dot rail) only read the shared state.
     if (initialized.value) return
     initialized.value = true
+    pickActiveSection = pick
     const observer = new IntersectionObserver(() => pick(), {
       rootMargin: '-35% 0px -60% 0px',
       threshold: [0, 1],
@@ -69,6 +85,7 @@ export function useScrollSpy(sectionIds: Readonly<string[]>) {
       observer.disconnect()
       removePageHook()
       window.removeEventListener('resize', pick)
+      pickActiveSection = null
       initialized.value = false
     })
   })
