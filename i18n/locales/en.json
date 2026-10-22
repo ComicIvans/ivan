@@ -287,7 +287,7 @@
         "Objection: object to the processing of your data",
         "Portability: receive your data in a structured format",
         "Restriction: request a limitation of processing",
-          "Withdrawal of consent: withdraw it at any time, without affecting the lawfulness of earlier processing"
+        "Withdrawal of consent: withdraw it at any time, without affecting the lawfulness of earlier processing"
       ],
       "contact": "To exercise these rights, write to me through the {form}, stating which right you wish to exercise. You also have the right to lodge a complaint with the Spanish Data Protection Agency (AEPD).",
       "formLink": "contact form",
