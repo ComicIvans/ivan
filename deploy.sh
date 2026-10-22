@@ -81,7 +81,6 @@ DOCKER_PLATFORM="${DOCKER_PLATFORM:-linux/amd64}"
 
 require_command docker
 require_command ssh
-require_command scp
 
 # The VPS logs in to GHCR only when credentials are configured; otherwise it
 # relies on an earlier `docker login` there. The token travels inside the
@@ -98,9 +97,12 @@ log "Build and push: $IMAGE"
 build_and_push_image
 
 # Upload under a temporary name; the remote step moves it into place, so an
-# interrupted copy never replaces the running configuration.
+# interrupted copy never replaces the running configuration. The file goes
+# through ssh so that REMOTE_DIR is quoted for the remote shell exactly as in
+# the deploy step (scp would read the same quoting literally in its default
+# SFTP mode).
 log "Copia de docker-compose.yml al VPS"
-scp -q docker-compose.yml "$VPS_HOST:$REMOTE_DIR/docker-compose.yml.new"
+ssh "$VPS_HOST" "cat > $(printf '%q' "$REMOTE_DIR")/docker-compose.yml.new" <docker-compose.yml
 
 log "Deploy en VPS con docker compose"
 ssh "$VPS_HOST" bash -s <<EOF
