@@ -157,6 +157,14 @@ export default defineNuxtConfig({
         xssValidator: false,
       },
     },
+    // CSP reports are only parsed and logged. The XSS validator would buffer
+    // the whole body, without the handler's size cap, before the handler
+    // reads it.
+    '/api/csp-report': {
+      security: {
+        xssValidator: false,
+      },
+    },
     '/gallery/**': {
       headers: {
         'cache-control': 'public, max-age=86400, stale-while-revalidate=604800',
