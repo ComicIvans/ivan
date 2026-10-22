@@ -39,7 +39,7 @@ code_review.md
 !.env.deploy.example
 
 # Gallery images: the published WebP files and their originals
-# (pnpm gallery:add reads gallery-src/<slug>/ and writes public/gallery/<slug>/)
-public/gallery/*
-!public/gallery/README.md
+# (pnpm gallery:add reads gallery-src/<slug>/ and writes public/gallery/<slug>/;
+# CONTENIDO.md describes the workflow and the backup they need)
+/public/gallery/
 /gallery-src/

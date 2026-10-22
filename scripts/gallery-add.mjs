@@ -259,11 +259,11 @@ if (!options.write) {
   console.log(`\nPhotos for ${where(contentFile)} (or run again with --write):\n`)
   console.log(stringify({ photos: mergePhotoList(existing) }, { lineWidth: 0 }))
   if (!existsSync(contentFile)) {
-    console.log(`Create ${where(contentFile)} first; public/gallery/README.md shows a template.`)
+    console.log(`Create ${where(contentFile)} first; CONTENIDO.md shows a template.`)
   }
 } else {
   if (!existsSync(contentFile)) {
-    fail(`${where(contentFile)} does not exist yet; create it first (see public/gallery/README.md)`)
+    fail(`${where(contentFile)} does not exist yet; create it first (see CONTENIDO.md)`)
   }
   const source = splitFrontmatter(contentFile)
   const list = mergePhotoList(source.document.toJS()?.photos ?? [])
