@@ -28,7 +28,7 @@ onBeforeUnmount(() => journey.unregisterSlot(props.section))
     :class="{ 'dock-only': !keepsStaticBadge }"
     :data-section="section"
   >
-    <!-- Hero: the SSR badge is slotted in by SectionHero (accessible instance) -->
+    <!-- Hero: SectionHero slots in its server-rendered badge (decorative, like every badge) -->
     <slot>
       <ClientOnly>
         <div

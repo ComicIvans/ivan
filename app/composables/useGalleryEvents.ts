@@ -38,8 +38,9 @@ export function loadGalleryEvents() {
 }
 
 /**
- * Composable for querying gallery events with filters, search, and pagination
- * Events are loaded from Spanish (es) as base and merged with current locale translations
+ * Composable for querying gallery events with filters, search, and pagination.
+ * The server returns each Spanish entry already merged with its translation
+ * for the current locale (server/utils/gallery.ts).
  */
 export function useGalleryEvents(options: Ref<GalleryQueryOptions> = ref({})) {
   const { locale } = useI18n({ useScope: 'global' })
@@ -119,8 +120,8 @@ export function useGalleryEvents(options: Ref<GalleryQueryOptions> = ref({})) {
 }
 
 /**
- * Composable to fetch a specific event by its slug
- * Loads Spanish content as base and merges with current locale translation
+ * Composable to fetch a specific event by its slug, with the Spanish entry
+ * merged with its current-locale translation on the server.
  */
 export async function useGalleryEvent(eventSlug: Ref<string> | string) {
   const { locale } = useI18n({ useScope: 'global' })

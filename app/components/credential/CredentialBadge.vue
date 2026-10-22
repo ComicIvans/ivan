@@ -36,7 +36,7 @@ const accentVar = computed(
 
 const emblem = computed(() => emblems[props.variant.emblem])
 
-// Placeholder until the ID-style portrait asset lands (material list A1).
+// Holder photo: the site portrait; the gallery badge shows event covers instead.
 const portraitSrc = '/profile-pic.webp'
 const displayedPhotoSrc = computed(() => {
   if (props.variant.id !== 'galeria') return portraitSrc
