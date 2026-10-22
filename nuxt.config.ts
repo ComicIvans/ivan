@@ -460,10 +460,18 @@ export default defineNuxtConfig({
     // under the same name keeps every variant URL: they expire after a day,
     // like the /gallery/** sources in routeRules. Revalidating is cheap because
     // IPX answers If-Modified-Since from the source file's mtime with a 304.
+    // /_ipx is public and unsigned, so its options are user input: only the
+    // modifiers the site emits (NuxtImg sizes/format/quality, the lightbox
+    // srcset, the 1200x630 event cover for Open Graph) and no output larger
+    // than the 2560 px gallery photos. Every image is a local path (as
+    // shared/content/schemas.ts enforces), so no host may be fetched: with an
+    // empty `domains` list, IPX refuses any /_ipx/_/https://... URL unfetched.
     ipx: {
       maxAge: 60 * 60 * 24,
+      maxOutputDimension: 2560,
+      allowedModifiers: ['width', 'height', 'resize', 'format', 'quality'],
+      http: { domains: [] },
     },
-    domains: Array.from(new Set([siteImageHostname, ...(isDev ? ['localhost', '127.0.0.1'] : [])])),
     screens: {
       xs: 320,
       sm: 640,

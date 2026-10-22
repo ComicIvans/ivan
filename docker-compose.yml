@@ -10,6 +10,10 @@ services:
       - ALL
     security_opt:
       - no-new-privileges:true
+    # Generous upper bounds, so a flood of image resizes or requests degrades
+    # this container instead of exhausting the VPS.
+    mem_limit: 1g
+    pids_limit: 256
     tmpfs:
       - /tmp:size=64m,mode=1777
     ports:
