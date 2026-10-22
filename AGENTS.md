@@ -79,6 +79,7 @@ The home hides the layout masthead (`definePageMeta({ masthead: false })`) becau
 - vue-i18n falls back to Spanish (`i18n/i18n.config.ts`), but every key must still exist in all three files (`pnpm verify:i18n`).
 - In i18n messages `|` separates plural forms, `{x}` is a placeholder and `@` starts a linked message; write literal characters as `{'|'}`, `{'{'}`, `{'}'}` and `{'@'}`.
 - Prefer shared locale helpers such as `app/utils/locales.ts`, `app/utils/nuxtUiLocale.ts`, and the existing gallery composables instead of scattering raw locale checks.
+- The language cookie (`i18n_redirected`) is written only by the language switcher (`HeaderLocaleSwitcher`). `@nuxtjs/i18n` runs with `detectBrowserLanguage.useCookie: false`, so page views and the browser-language redirect on `/` store nothing; the module still reads the cookie to open `/` in the chosen language. The legal page states exactly this, so change both together.
 
 ### Emails
 

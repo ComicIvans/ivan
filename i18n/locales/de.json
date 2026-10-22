@@ -208,7 +208,7 @@
     },
     "cookies": {
       "title": "Cookie-Richtlinie",
-      "description": "Diese Website speichert in deinem Browser nur die beiden technischen Einträge aus der Tabelle, die sich merken, in welcher Sprache und welchem Design du die Website ansiehst. Es werden keine Tracking-, Werbe- oder Analyse-Cookies eingesetzt.",
+      "description": "Diese Website speichert in deinem Browser nur die beiden technischen Einträge aus der Tabelle, die sich die von dir gewählte Sprache und das Design merken, in dem du die Website ansiehst. Es werden keine Tracking-, Werbe- oder Analyse-Cookies eingesetzt.",
       "table": {
         "name": "Name",
         "type": "Art",
@@ -225,11 +225,11 @@
           "duration": "Bis zur manuellen Löschung"
         },
         "i18n": {
-          "purpose": "Speichert die Sprache der zuletzt angesehenen Seite, damit sich die Startseite in dieser Sprache öffnet",
+          "purpose": "Speichert die Sprache, die du über die Sprachauswahl wählst, damit sich die Startseite in dieser Sprache öffnet",
           "duration": "1 Jahr"
         }
       },
-      "note": "Beide Einträge werden bei deinem ersten Besuch angelegt. Das Cookie übernimmt die Sprache der aufgerufenen Seite und wird jedes Mal aktualisiert, wenn du eine Seite in einer anderen Sprache ansiehst; das Design folgt der Einstellung deines Geräts, bis du hell oder dunkel wählst. Sie dienen nur dazu, dir die Website in dieser Sprache und diesem Design anzuzeigen, werden für nichts anderes verwendet und nicht an Dritte weitergegeben. Daher gelten sie als unbedingt erforderlich, um den von dir gewünschten Dienst bereitzustellen, und sind nach Art. 22.2 des spanischen Gesetzes über Dienste der Informationsgesellschaft (LSSI), das Art. 5 Abs. 3 der Richtlinie 2002/58/EG umsetzt, nicht einwilligungspflichtig."
+      "note": "Das Cookie wird nur angelegt, wenn du die Sprache über die Sprachauswahl (die Flagge in der Navigationsleiste) wechselst, und jedes Mal aktualisiert, wenn du sie erneut wechselst. Ein Besuch der Website legt es nicht an, auch nicht, wenn sich die Startseite in der Sprache deines Browsers öffnet. Das Design wird ab deinem ersten Besuch gespeichert: Es folgt der Einstellung deines Geräts, bis du über die Design-Schaltfläche hell oder dunkel wählst. Beide Einträge dienen nur dazu, dir die Website in dieser Sprache und diesem Design anzuzeigen, werden für nichts anderes verwendet und nicht an Dritte weitergegeben. Daher gelten sie als unbedingt erforderlich, um den von dir gewünschten Dienst bereitzustellen, und sind nach Art. 22.2 des spanischen Gesetzes über Dienste der Informationsgesellschaft (LSSI), das Art. 5 Abs. 3 der Richtlinie 2002/58/EG umsetzt, nicht einwilligungspflichtig."
     },
     "contactForm": {
       "title": "Kontaktformular",

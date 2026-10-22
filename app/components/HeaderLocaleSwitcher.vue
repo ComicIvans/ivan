@@ -7,6 +7,7 @@ import {
   type LocaleCode,
 } from '~/utils/locales'
 import { SECTIONS } from '~/utils/sections'
+import { localeCookieName, localeCookieOptions } from '~~/shared/constants/storage'
 
 defineProps<{
   menuId: string
@@ -15,6 +16,10 @@ defineProps<{
 const { t, locale } = useI18n({ useScope: 'global' })
 const switchLocalePath = useSwitchLocalePath()
 const route = useRoute()
+// The only place that stores the language: @nuxtjs/i18n runs with useCookie
+// off (see nuxt.config), so page views and the browser-language redirect on /
+// write nothing. The legal page describes exactly this.
+const localeCookie = useCookie<string | null>(localeCookieName, localeCookieOptions)
 
 const open = ref(false)
 const rootRef = ref<HTMLElement | null>(null)
@@ -49,6 +54,7 @@ const selectLocale = (code: string) => {
   }
 
   const target = code as LocaleCode
+  localeCookie.value = target
   const localizedPath = switchLocalePath(target)
   const fallbackPath = getLocaleSwitchPath(route.fullPath, target)
 

@@ -208,7 +208,7 @@
     },
     "cookies": {
       "title": "Cookie policy",
-      "description": "This website only stores the two technical items in the table in your browser, which remember the language and theme you view the site in. It uses no tracking, advertising or analytics cookies.",
+      "description": "This website only stores the two technical items in the table in your browser, which remember the language you choose and the theme you view the site in. It uses no tracking, advertising or analytics cookies.",
       "table": {
         "name": "Name",
         "type": "Type",
@@ -225,11 +225,11 @@
           "duration": "Until you delete it"
         },
         "i18n": {
-          "purpose": "Stores the language of the last page you viewed, so the home page opens in that language",
+          "purpose": "Stores the language you choose with the language selector, so the home page opens in that language",
           "duration": "1 year"
         }
       },
-      "note": "Both items are created on your first visit. The cookie takes the language of the page you open and is updated whenever you view a page in another language; the theme follows your device’s setting until you choose light or dark. They are only used to show you the site in that language and theme, for nothing else, and are not shared with third parties. They are therefore considered strictly necessary to provide the service you request and are exempt from consent under Article 22.2 of the Spanish LSSI, which transposes Article 5(3) of Directive 2002/58/EC."
+      "note": "The cookie is only created when you change language with the language selector (the flag in the navigation bar) and is updated whenever you change it again. Visiting the site does not create it, not even when the home page opens in your browser’s language. The theme is stored from your first visit: it follows your device’s setting until you choose light or dark with the theme button. Both items are only used to show you the site in that language and theme, for nothing else, and are not shared with third parties. They are therefore considered strictly necessary to provide the service you request and are exempt from consent under Article 22.2 of the Spanish LSSI, which transposes Article 5(3) of Directive 2002/58/EC."
     },
     "contactForm": {
       "title": "Contact form",

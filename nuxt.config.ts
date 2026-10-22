@@ -388,8 +388,14 @@ export default defineNuxtConfig({
       file,
     })),
     defaultLocale,
+    // A first visit to / still opens in the browser language, but the module
+    // never stores anything: with useCookie off it writes no cookie on that
+    // redirect nor on any page view. Only the language switcher writes the
+    // cookie (HeaderLocaleSwitcher). The module's detector reads cookieKey
+    // before the Accept-Language header even with useCookie off, so a stored
+    // choice keeps / in that language.
     detectBrowserLanguage: {
-      useCookie: true,
+      useCookie: false,
       cookieKey: localeCookieName,
       redirectOn: 'root',
     },
