@@ -230,7 +230,7 @@
           "duration": "1 año"
         },
         "reload": {
-          "purpose": "Recupera la página si una actualización del sitio interrumpe la navegación. Mientras se recarga, nuxt:reload:state conserva el estado de la página, incluido lo que hayas escrito en el formulario",
+          "purpose": "Recupera la página si una actualización del sitio interrumpe la navegación. Mientras se recarga, nuxt:reload:state conserva el estado de la página, incluido el nombre que hayas escrito en el formulario",
           "duration": "Hasta que cierras la pestaña"
         }
       },

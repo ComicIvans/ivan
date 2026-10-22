@@ -230,7 +230,7 @@
           "duration": "1 Jahr"
         },
         "reload": {
-          "purpose": "Stellt die Seite wieder her, wenn ein Update der Website deinen Besuch unterbricht. Während sie neu lädt, bewahrt nuxt:reload:state ihren Zustand auf, einschließlich deiner Eingaben im Formular",
+          "purpose": "Stellt die Seite wieder her, wenn ein Update der Website deinen Besuch unterbricht. Während sie neu lädt, bewahrt nuxt:reload:state ihren Zustand auf, einschließlich des Namens, den du im Formular eingegeben hast",
           "duration": "Bis du den Tab schließt"
         }
       },

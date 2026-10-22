@@ -230,7 +230,7 @@
           "duration": "1 year"
         },
         "reload": {
-          "purpose": "Recovers the page if a site update interrupts your browsing. While it reloads, nuxt:reload:state keeps the page’s state, including anything you typed in the form",
+          "purpose": "Recovers the page if a site update interrupts your browsing. While it reloads, nuxt:reload:state keeps the page’s state, including the name you typed in the form",
           "duration": "Until you close the tab"
         }
       },
