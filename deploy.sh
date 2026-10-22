@@ -82,30 +82,15 @@ DOCKER_PLATFORM="${DOCKER_PLATFORM:-linux/amd64}"
 require_command docker
 require_command ssh
 
-# Two tokens: the push token (write:packages) stays on this machine; only the
-# pull token (read:packages) reaches the VPS, where `docker login` stores it.
-# A compromised server then cannot replace the image. Without a token, each
-# side relies on an earlier `docker login`. GHCR_TOKEN is the former name of
-# the push token and is never sent to the VPS.
-push_token="${GHCR_PUSH_TOKEN:-${GHCR_TOKEN:-}}"
-if [ -z "${GHCR_PUSH_TOKEN:-}" ] && [ -n "${GHCR_TOKEN:-}" ]; then
-  printf 'AVISO: GHCR_TOKEN está obsoleto; renómbralo a GHCR_PUSH_TOKEN en .env.deploy.\n' >&2
-  if [ -z "${GHCR_PULL_TOKEN:-}" ]; then
-    printf 'AVISO: el VPS ya no recibe GHCR_TOKEN; define GHCR_PULL_TOKEN (solo read:packages) o haz allí un docker login.\n' >&2
-  fi
-fi
-
-if [ -n "${GHCR_USERNAME:-}" ] && [ -n "$push_token" ]; then
-  log "GHCR login (local)"
-  docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin <<<"$push_token"
-fi
-
-# The pull token travels inside the remote script on stdin, never on a
-# command line.
+# The VPS logs in to GHCR only when credentials are configured; otherwise it
+# relies on an earlier `docker login` there. The token travels inside the
+# remote script on stdin, never on a command line.
 remote_login=""
-if [ -n "${GHCR_USERNAME:-}" ] && [ -n "${GHCR_PULL_TOKEN:-}" ]; then
+if [ -n "${GHCR_USERNAME:-}" ] && [ -n "${GHCR_TOKEN:-}" ]; then
+  log "GHCR login (local)"
+  docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin <<<"$GHCR_TOKEN"
   remote_login="echo '== GHCR login (VPS) =='
-docker login ghcr.io -u $(printf '%q' "$GHCR_USERNAME") --password-stdin <<<$(printf '%q' "$GHCR_PULL_TOKEN")"
+docker login ghcr.io -u $(printf '%q' "$GHCR_USERNAME") --password-stdin <<<$(printf '%q' "$GHCR_TOKEN")"
 fi
 
 log "Build and push: $IMAGE"
