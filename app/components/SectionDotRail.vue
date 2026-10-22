@@ -21,7 +21,7 @@ const { arrive } = useSectionNav()
       :class="{ 'is-active': activeId === section.id }"
       :aria-label="t(section.navKey)"
       :aria-current="activeId === section.id ? 'true' : undefined"
-      @click="arrive(section.id)"
+      @click="arrive(section.id, $event)"
     >
       <span aria-hidden="true" />
     </NuxtLink>

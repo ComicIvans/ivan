@@ -66,8 +66,10 @@ const syncIndicators = async () => {
 const { arrive } = useSectionNav()
 
 // The router scrolls to the hash. Off the home the links simply navigate
-// there; on it they also send the badge and the focus to the section.
-function onTabClick(id: SectionId) {
+// there; on it they also send the badge and the focus to the section. A
+// click that opens the link in a new tab or window changes nothing here.
+function onTabClick(id: SectionId, event: MouseEvent) {
+  if (isNewTabClick(event)) return
   mobileMenuOpen.value = false
   if (isHome.value) arrive(id)
 }
@@ -182,7 +184,7 @@ onBeforeUnmount(() => {
         <NuxtLink
           :to="isHome ? anchorLink(SECTIONS[0].id) : { path: localePath('/') }"
           class="type-display min-w-0 flex-1 truncate text-base text-highlighted transition-colors hover:text-primary-700 lg:flex-none lg:text-lg dark:hover:text-primary-400"
-          @click="onTabClick(SECTIONS[0].id)"
+          @click="onTabClick(SECTIONS[0].id, $event)"
         >
           {{ t('header.title') }}
         </NuxtLink>
@@ -210,7 +212,7 @@ onBeforeUnmount(() => {
                   class="inline-flex cursor-pointer items-center gap-1.5 rounded-full px-2.5 py-2 text-sm font-medium whitespace-nowrap transition-colors"
                   :class="getTabClass(tab.id, desktopIndicatorStyle)"
                   :aria-current="activeTabId === tab.id ? 'true' : undefined"
-                  @click="onTabClick(tab.id)"
+                  @click="onTabClick(tab.id, $event)"
                 >
                   <UIcon :name="tab.icon" class="size-4" aria-hidden="true" />
                   <span class="sr-only xl:not-sr-only">{{ tab.label }}</span>
@@ -262,7 +264,7 @@ onBeforeUnmount(() => {
                     class="flex w-full cursor-pointer items-center gap-3 rounded-xl px-4 py-3 text-left transition-colors"
                     :class="getTabClass(tab.id, mobileIndicatorStyle)"
                     :aria-current="activeTabId === tab.id ? 'true' : undefined"
-                    @click="onTabClick(tab.id)"
+                    @click="onTabClick(tab.id, $event)"
                   >
                     <UIcon :name="tab.icon" class="size-5" aria-hidden="true" />
                     <span>{{ tab.label }}</span>
