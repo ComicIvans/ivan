@@ -158,11 +158,12 @@ export function usePhotoSwipe(config: UsePhotoSwipeOptions) {
     function updateDialogAccessibleName() {
       const pswp = instance.pswp
       if (!pswp?.element) return
-      const position = t('gallery.event.modal.position', {
+      const label = t('gallery.event.modal.dialogLabel', {
+        title: toValue(config.eventTitle),
         current: pswp.currIndex + 1,
         total: pswp.getNumItems(),
       })
-      pswp.element.setAttribute('aria-label', `${toValue(config.eventTitle)} — ${position}`)
+      pswp.element.setAttribute('aria-label', label)
     }
 
     instance.on('firstUpdate', updateDialogAccessibleName)

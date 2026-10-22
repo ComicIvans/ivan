@@ -156,7 +156,7 @@
         "prev": "Vorheriges Foto",
         "next": "Nächstes Foto",
         "close": "Schließen",
-        "position": "Foto {current} von {total}",
+        "dialogLabel": "{title}, Foto {current} von {total}",
         "zoomIn": "Vergrößern",
         "error": "Das Bild konnte nicht geladen werden."
       }

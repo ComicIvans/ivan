@@ -156,7 +156,7 @@
         "prev": "Previous photo",
         "next": "Next photo",
         "close": "Close",
-        "position": "Photo {current} of {total}",
+        "dialogLabel": "{title}, photo {current} of {total}",
         "zoomIn": "Zoom in",
         "error": "The image could not be loaded."
       }
