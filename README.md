@@ -231,9 +231,14 @@ Preparación del VPS (una sola vez):
 1. Instala Docker con el plugin Compose y crea `REMOTE_DIR`.
 2. Crea en `REMOTE_DIR` un `.env` solo con las variables de ejecución de
    `.env.example` (SMTP, `NUXT_APP_SECRET` y, si hace falta,
-   `NUXT_SITE_INDEXABLE`).
+   `NUXT_SITE_INDEXABLE`). Contiene la contraseña SMTP y el secreto de la
+   aplicación, así que deja que solo lo lea su propietario: `chmod 600 .env`.
 3. Configura nginx delante de la aplicación según
-   [docs/nginx.md](docs/nginx.md).
+   [docs/nginx.md](docs/nginx.md). Comprueba que reenvía `X-Forwarded-For`:
+   sin esa cabecera todas las visitas comparten la misma IP y, por tanto, el
+   mismo límite de envíos del formulario.
+4. Tras el primer despliegue, envía un mensaje de prueba desde el formulario
+   de contacto.
 
 Cada despliegue sobrescribe el `docker-compose.yml` del VPS con el del
 repositorio: los cambios hechos a mano allí se pierden.
