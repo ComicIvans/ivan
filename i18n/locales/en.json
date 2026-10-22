@@ -208,7 +208,7 @@
     },
     "cookies": {
       "title": "Cookie policy",
-      "description": "This website only stores the technical items in the table in your browser, to remember your language and theme preferences. It uses no tracking, advertising or analytics cookies.",
+      "description": "This website only stores the two technical items in the table in your browser, which remember the language and theme you view the site in. It uses no tracking, advertising or analytics cookies.",
       "table": {
         "name": "Name",
         "type": "Type",
@@ -221,15 +221,15 @@
       },
       "items": {
         "colorMode": {
-          "purpose": "Stores your theme preference (light/dark)",
+          "purpose": "Stores the theme: your device’s setting until you choose light or dark",
           "duration": "Until you delete it"
         },
         "i18n": {
-          "purpose": "Stores your language preference",
+          "purpose": "Stores the language of the last page you viewed, so the home page opens in that language",
           "duration": "1 year"
         }
       },
-      "note": "These items are strictly necessary to provide the service you request (showing the site in the language and theme you choose), so they are exempt from consent under Article 22.2 of the Spanish LSSI, which transposes Article 5(3) of Directive 2002/58/EC."
+      "note": "Both items are created on your first visit. The cookie takes the language of the page you open and is updated whenever you view a page in another language; the theme follows your device’s setting until you choose light or dark. They are only used to show you the site in that language and theme, for nothing else, and are not shared with third parties. They are therefore considered strictly necessary to provide the service you request and are exempt from consent under Article 22.2 of the Spanish LSSI, which transposes Article 5(3) of Directive 2002/58/EC."
     },
     "contactForm": {
       "title": "Contact form",

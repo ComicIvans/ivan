@@ -208,7 +208,7 @@
     },
     "cookies": {
       "title": "Política de cookies",
-      "description": "Este sitio solo guarda en tu navegador los elementos técnicos de la tabla, que recuerdan tus preferencias de idioma y de tema. No utiliza cookies de seguimiento, publicidad ni analítica.",
+      "description": "Este sitio solo guarda en tu navegador los dos elementos técnicos de la tabla, que recuerdan el idioma y el tema con que ves el sitio. No utiliza cookies de seguimiento, publicidad ni analítica.",
       "table": {
         "name": "Nombre",
         "type": "Tipo",
@@ -221,15 +221,15 @@
       },
       "items": {
         "colorMode": {
-          "purpose": "Guarda tu preferencia de tema (claro/oscuro)",
+          "purpose": "Guarda el tema: el de tu dispositivo hasta que eliges claro u oscuro",
           "duration": "Hasta que lo borres"
         },
         "i18n": {
-          "purpose": "Guarda tu preferencia de idioma",
+          "purpose": "Guarda el idioma de la última página que has visto, para abrir la portada en ese idioma",
           "duration": "1 año"
         }
       },
-      "note": "Estos elementos son estrictamente necesarios para prestar el servicio que solicitas (mostrar el sitio en el idioma y el tema que eliges), por lo que están exentos de consentimiento conforme al artículo 22.2 de la LSSI, que transpone el artículo 5.3 de la Directiva 2002/58/CE."
+      "note": "Ambos elementos se crean en tu primera visita. La cookie toma el idioma de la página que abres y se actualiza cada vez que ves una página en otro idioma; el tema sigue el de tu dispositivo hasta que eliges claro u oscuro. Solo sirven para mostrarte el sitio en ese idioma y ese tema, no se usan para nada más ni se comparten con terceros. Por eso se consideran estrictamente necesarios para prestar el servicio que solicitas y están exentos de consentimiento conforme al artículo 22.2 de la LSSI, que transpone el artículo 5.3 de la Directiva 2002/58/CE."
     },
     "contactForm": {
       "title": "Formulario de contacto",
