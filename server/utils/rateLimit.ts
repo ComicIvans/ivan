@@ -147,9 +147,20 @@ export async function enforceRateLimit(event: H3Event, options: RateLimitOptions
 }
 
 /**
- * Whether a shared budget is used up for its current window. Counts nothing,
- * so a caller can check before doing the work and count only what succeeded
- * (countSharedBudget). Fails open, like enforceRateLimit.
+ * A unit taken from a shared budget. `resetAt` identifies the window it was
+ * taken from (null when storage was unavailable and nothing was recorded).
+ */
+export interface SharedBudgetReservation {
+  granted: boolean
+  count: number
+  resetAt: number | null
+}
+
+/**
+ * Whether a shared budget is used up for its current window. Reads only, so a
+ * caller can refuse early without spending anything else (such as the
+ * per-client limit). The authoritative check is reserveSharedBudget. Fails
+ * open, like enforceRateLimit.
  */
 export async function isSharedBudgetSpent(options: SharedBudgetOptions): Promise<boolean> {
   const storage = useStorage<RateLimitRecord>(STORAGE_NAME)
@@ -163,15 +174,18 @@ export async function isSharedBudgetSpent(options: SharedBudgetOptions): Promise
 }
 
 /**
- * Counts one use of a shared budget and returns the count in the current
- * window (0 when storage is unavailable).
+ * Takes one unit of a shared budget before the work it pays for. The check
+ * and the increment happen in one serialized step, so concurrent requests can
+ * never take more than `maxRequests` units in a window. Give the unit back
+ * with releaseSharedBudget if the work fails. Fails open, like
+ * enforceRateLimit.
  */
-export async function countSharedBudget(
-  options: Omit<SharedBudgetOptions, 'maxRequests'>
-): Promise<number> {
+export async function reserveSharedBudget(
+  options: SharedBudgetOptions
+): Promise<SharedBudgetReservation> {
   const storage = useStorage<RateLimitRecord>(STORAGE_NAME)
   const key = await storageKey(options.namespace, options.bucket)
-  let count = 0
+  let reservation: SharedBudgetReservation = { granted: true, count: 0, resetAt: null }
 
   await serializeByKey(key, async () => {
     const now = Date.now()
@@ -182,20 +196,50 @@ export async function countSharedBudget(
       return
     }
 
-    const nextRecord: RateLimitRecord =
-      isRecord(record) && record.resetAt > now
-        ? { count: record.count + 1, resetAt: record.resetAt }
-        : { count: 1, resetAt: now + options.windowMs }
+    const current = isRecord(record) && record.resetAt > now ? record : null
+    if (current && current.count >= options.maxRequests) {
+      reservation = { granted: false, count: current.count, resetAt: current.resetAt }
+      return
+    }
+
+    const nextRecord: RateLimitRecord = current
+      ? { count: current.count + 1, resetAt: current.resetAt }
+      : { count: 1, resetAt: now + options.windowMs }
 
     try {
       await storage.setItem(key, nextRecord)
     } catch {
       return
     }
-    count = nextRecord.count
+    reservation = { granted: true, count: nextRecord.count, resetAt: nextRecord.resetAt }
   })
 
-  return count
+  return reservation
+}
+
+/**
+ * Gives back a unit taken by reserveSharedBudget, but only while the window it
+ * was taken from is still the stored one: a failure never takes a unit out of
+ * a newer window.
+ */
+export async function releaseSharedBudget(
+  options: SharedBudgetOptions,
+  reservation: SharedBudgetReservation
+): Promise<void> {
+  if (!reservation.granted || reservation.resetAt === null) return
+
+  const storage = useStorage<RateLimitRecord>(STORAGE_NAME)
+  const key = await storageKey(options.namespace, options.bucket)
+
+  await serializeByKey(key, async () => {
+    try {
+      const record = await storage.getItem(key)
+      if (!isRecord(record) || record.resetAt !== reservation.resetAt || record.count <= 0) return
+      await storage.setItem(key, { count: record.count - 1, resetAt: record.resetAt })
+    } catch {
+      // Losing a release only leaves the budget one unit tighter.
+    }
+  })
 }
 
 /**

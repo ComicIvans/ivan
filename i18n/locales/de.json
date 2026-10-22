@@ -343,7 +343,7 @@
       "privacyLink": "Datenschutzerklärung",
       "apiErrors": {
         "rateLimited": "Du hast in kurzer Zeit zu viele Nachrichten gesendet. Bitte versuche es später erneut.",
-        "dailyLimit": "Das Formular hat sein Nachrichtenlimit für heute erreicht. Bitte versuche es morgen erneut.",
+        "dailyLimit": "Das Formular hat sein Nachrichtenlimit vorerst erreicht. Bitte versuche es später erneut.",
         "missingFields": "Es fehlen noch Pflichtfelder.",
         "prohibitedContent": "Die Nachricht enthält Inhalte, die nicht akzeptiert werden konnten.",
         "serviceUnavailable": "Der E-Mail-Dienst ist derzeit nicht verfügbar.",

@@ -5,7 +5,12 @@ import {
   getRequiredSmtpFromEmail,
   getRequiredSmtpToEmail,
 } from '../utils/runtimeConfig'
-import { countSharedBudget, enforceRateLimit, isSharedBudgetSpent } from '../utils/rateLimit'
+import {
+  enforceRateLimit,
+  isSharedBudgetSpent,
+  releaseSharedBudget,
+  reserveSharedBudget,
+} from '../utils/rateLimit'
 import { getSmtpTransporter } from '../utils/smtp'
 import { validatePublicBody } from '../utils/validatePublicBody'
 import { contactRequestSchema } from '~~/shared/utils/contactValidation'
@@ -111,8 +116,18 @@ function originHost(origin: string): string | null {
   }
 }
 
+function dailyLimitReached() {
+  // The visitor did nothing wrong, so the answer is a 503 with its own
+  // message, not the per-client "too many messages".
+  return createError({ statusCode: 503, statusMessage: CONTACT_ERROR_CODES.dailyLimit })
+}
+
 export default defineEventHandler(async (event) => {
   assertSameSiteJsonRequest(event)
+
+  // Refuse early while the site-wide cap is full, before the per-client limit
+  // counts the attempt: retrying then must not end in "too many messages".
+  if (await isSharedBudgetSpent(SITE_EMAIL_BUDGET)) throw dailyLimitReached()
 
   await enforceRateLimit(event, {
     namespace: 'contact',
@@ -159,16 +174,16 @@ export default defineEventHandler(async (event) => {
 
   const transporter = getSmtpTransporter(event, CONTACT_ERROR_CODES.serviceUnavailable)
 
-  // The site-wide cap is checked here and counted only once the email has
-  // gone out, so rejected, dropped or failed submissions never use it up.
-  // Sends already in flight when it fills up can pass it by that many. The
-  // visitor did nothing wrong, so the answer is a 503 with its own message,
-  // not the per-client "too many messages".
-  if (await isSharedBudgetSpent(SITE_EMAIL_BUDGET)) {
-    throw createError({
-      statusCode: 503,
-      statusMessage: CONTACT_ERROR_CODES.dailyLimit,
-    })
+  // One unit of the site-wide cap is reserved right before sending (check and
+  // increment in one step, so concurrent requests cannot overshoot it) and
+  // given back if the send fails. Rejected and dropped submissions never
+  // reach this point, so they do not use it up.
+  const reservation = await reserveSharedBudget(SITE_EMAIL_BUDGET)
+  if (!reservation.granted) throw dailyLimitReached()
+  if (reservation.count === SITE_DAILY_EMAIL_LIMIT) {
+    console.warn(
+      `[contact] Site-wide limit of ${SITE_DAILY_EMAIL_LIMIT} emails a day reached: further messages are refused until the window ends`
+    )
   }
 
   const language = locale ? `${languageNames.of(locale) ?? locale} (${locale})` : 'desconocido'
@@ -199,17 +214,11 @@ Fecha: ${new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })}
     })
   } catch (error) {
     console.error('Error sending contact email:', error)
+    await releaseSharedBudget(SITE_EMAIL_BUDGET, reservation)
     throw createError({
       statusCode: 500,
       statusMessage: CONTACT_ERROR_CODES.sendFailed,
     })
-  }
-
-  const sentToday = await countSharedBudget(SITE_EMAIL_BUDGET)
-  if (sentToday === SITE_DAILY_EMAIL_LIMIT) {
-    console.warn(
-      `[contact] Site-wide limit of ${SITE_DAILY_EMAIL_LIMIT} emails a day reached: further messages are refused until the window ends`
-    )
   }
 
   return { success: true }
