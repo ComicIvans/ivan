@@ -94,10 +94,14 @@ export default defineNuxtConfig({
     // Vite 8 minifies with Oxc and ignores the esbuild `drop` option that
     // nuxt-security's removeLoggers relies on, so console/debugger stripping
     // is configured on the client minifier directly (server logs stay intact).
+    // Vite also drops legal comments (/*! ... */, @license) when it minifies;
+    // they are kept so the shipped code carries the notices its licenses ask
+    // for, such as the Vue Bits notice of the Aurora background.
     $client: {
       build: {
         rolldownOptions: {
           output: {
+            comments: { legal: true },
             minify: {
               compress: { dropConsole: true, dropDebugger: true },
               mangle: true,
