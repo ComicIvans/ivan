@@ -282,9 +282,14 @@ Prefer these over bespoke CSS or new components:
 - Composables: `useGsapMatchMedia` (scoped GSAP with reduced-motion
   conditions), `useMotionTier`, `useMagnet` (reserved for a single primary
   CTA), `useSectionNav` (in-page jumps to a home section that keep the
-  credential badge in step), `useScrollSpy`, `useProfile`/`loadProfile`,
+  credential badge in step), `useScrollSpy`, `useHomeReadingPosition` (keeps
+  the home on the hash target and on the section being read while the GSAP
+  setups rebuild the page), `useProfile`/`loadProfile`,
   `useGalleryEvents`/`loadGalleryEvents`, `useGalleryImages` (alt fallbacks),
   `usePageSeo`.
+- GSAP helper `revealOnScroll` (`app/utils/gsapReveal.ts`) for staggered card
+  entrances. Entrances fade `opacity`, never `autoAlpha`: `visibility: hidden`
+  takes links and buttons out of the tab order until they scroll in.
 
 Keep animations subtle and content-supporting, and respect
 `prefers-reduced-motion` in every effect.
