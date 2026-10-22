@@ -8,11 +8,22 @@ un 301 (ver [docs/nginx.md](docs/nginx.md)).
 
 ## Qué incluye
 
-- Web pública SSR con SEO, accesibilidad e i18n.
-- Páginas de presentación, experiencia, proyectos, formación, representación, contacto y legal.
+- Web pública SSR con SEO, accesibilidad e i18n en español (idioma base), inglés
+  y alemán.
+- Una página de inicio con secciones (`#inicio`, `#experiencia`,
+  `#representacion`, `#proyectos`, `#formacion`, `#galeria` y `#contacto`),
+  más la galería (`/galeria`, `/en/gallery`, `/de/galerie`) y el aviso legal
+  (`/legal`, `/en/legal`, `/de/impressum`). Las antiguas páginas sueltas
+  (`/experiencia`, `/en/projects`…) redirigen con un 301 a su sección.
+- Trayectoria en archivos YAML (`content/profile/`), con los tres idiomas
+  juntos en cada campo; contadores, cargo actual y datos estructurados se
+  calculan a partir de ellos.
 - Galería de eventos con contenido en Markdown, fallback al contenido base en español y optimización de imágenes.
 - Formulario de contacto protegido con honeypot, rate limiting básico y validación del servidor.
 - Despliegue con Docker y script de publicación en VPS.
+
+Para editar textos, añadir elementos o publicar fotos, consulta la
+[guía de contenido](CONTENIDO.md).
 
 ## Stack
 
@@ -27,7 +38,8 @@ un 301 (ver [docs/nginx.md](docs/nginx.md)).
 ## Requisitos
 
 - Node.js 24 (`engines`: >= 24.15.0), la misma versión mayor que usa la imagen de Docker
-- `pnpm`
+- pnpm 12 (la versión exacta está en `packageManager` de `package.json`; se
+  instala, por ejemplo, con `npm install --global pnpm@12`)
 - Docker y Docker Compose para el despliegue local o en VPS
 - Linux o WSL para usar los scripts de despliegue
 
@@ -48,9 +60,10 @@ pnpm install
 pnpm dev
 ```
 
-4. Comprueba calidad cuando cambies lógica o estructura:
+4. Comprueba el contenido y, cuando cambies lógica o estructura, el código:
 
 ```sh
+pnpm verify
 pnpm lint
 pnpm typecheck
 ```
@@ -112,7 +125,7 @@ Los binarios de la galería se mantienen fuera de Git. Antes de construir o
 desplegar hay que restaurar `public/gallery/` desde la copia privada; los
 originales de las fotos van en `gallery-src/`, que tampoco entra en Git ni en
 la imagen Docker. `pnpm gallery:add <slug>` convierte esos originales en las
-fotos que se publican (ver `public/gallery/README.md`). `pnpm build` ejecuta
+fotos que se publican (ver [CONTENIDO.md](CONTENIDO.md)). `pnpm build` ejecuta
 antes `pnpm verify`, que falla si el contenido referencia una imagen ausente
 (o con otras mayúsculas) o declara un tamaño que no es el del archivo, si el
 contenido no cumple su esquema o si los archivos de traducción no están
@@ -147,16 +160,32 @@ formato antiguo, con todo en un archivo) y lo avisan.
 
 ## Scripts útiles
 
-- `pnpm dev`
-- `pnpm build`
-- `pnpm preview`
-- `pnpm lint`
-- `pnpm lint:fix`
-- `pnpm typecheck`
-- `pnpm verify` (`verify:gallery`, `verify:content` y `verify:i18n`)
-- `pnpm gallery:add <slug> [carpeta] [--cover <archivo>] [--write]`
-- `pnpm deploy:local`
-- `pnpm deploy:vps`
+- `pnpm dev`: servidor de desarrollo en <http://localhost:3000>.
+- `pnpm build`: `pnpm verify` y compilación de producción en `.output/`.
+- `pnpm preview`: sirve la compilación de producción.
+- `pnpm lint` y `pnpm lint:fix`: ESLint con Prettier.
+- `pnpm typecheck`: comprobación de tipos con `vue-tsc`.
+- `pnpm verify`: ejecuta las tres comprobaciones de contenido:
+  - `verify:content`: valida `content/profile/*.yml` y los datos de cada
+    evento con los esquemas de `shared/content/schemas.ts`, los iconos y las
+    capturas de proyectos.
+  - `verify:i18n`: los tres archivos de `i18n/locales/` tienen las mismas
+    claves y ningún `|`, `@`, `{` o `}` suelto.
+  - `verify:gallery`: cada imagen de la galería existe con ese nombre exacto y
+    su `width`/`height` coincide con el archivo.
+- `pnpm gallery:add <slug> [carpeta] [--cover <archivo>] [--write] [--force]`:
+  convierte los originales de `gallery-src/<slug>/` en las fotos WebP de
+  `public/gallery/<slug>/` y actualiza su lista en el contenido.
+- `pnpm deploy:local` y `pnpm deploy:vps`: ver «Despliegue».
+
+## Integración continua
+
+`.github/workflows/quality.yml` se ejecuta en cada pull request y en cada
+push a `main`: instala las dependencias con la versión de pnpm de
+`packageManager` y ejecuta `verify:content`, `verify:i18n`, `lint`,
+`typecheck` y `nuxt build`. `verify:gallery` solo se ejecuta en local (con
+`pnpm build` o `pnpm verify`), porque las fotos de la galería no están en el
+repositorio.
 
 ## Despliegue
 
@@ -209,24 +238,37 @@ Si vienes del formato antiguo, con un único `.env`:
 
 ## Estructura principal
 
-- `app/` — componentes, layouts, páginas, composables y estilos globales.
-- `content/` — perfil (`content/profile/*.yml`) y galería por idioma.
-- `i18n/locales/` — mensajes de traducción.
-- `server/api/` — endpoints del servidor, incluido el formulario de contacto.
+- `app/` — páginas (`index.vue`, `galeria/`, `legal.vue`), secciones del
+  inicio (`components/sections/`), credencial animada
+  (`components/credential/`), composables y estilos globales.
+- `content/` — trayectoria (`content/profile/*.yml`) y galería por idioma
+  (`content/<idioma>/gallery/`).
+- `i18n/locales/` — textos de interfaz en español, inglés y alemán.
+- `server/api/` — endpoints del servidor: perfil, galería, formulario de
+  contacto, informes CSP y estado.
 - `server/utils/` — utilidades de configuración y soporte del servidor.
+- `shared/` — código común a la aplicación, el servidor y los scripts,
+  incluidos los esquemas del contenido (`shared/content/schemas.ts`).
+- `scripts/` — `pnpm verify` y `pnpm gallery:add`.
 - `public/` — imágenes y assets estáticos.
 - `modules/` — ajustes locales de módulos de Nuxt.
 - `docs/` — notas de operación (nginx).
+- `CONTENIDO.md` — guía para editar el contenido.
 
 ## Contenido y localización
 
-- El español es el idioma base del sitio.
-- Las traducciones de galería pueden sobrescribir parcialmente el contenido base; si falta algo, se conserva la versión en español. Las fotos se traducen por `src`: cada traducción lista solo `src` y `alt` (y `description`), y el orden y los tamaños salen del archivo en español.
-- Cada evento en español indica su `organizer` (`name` y `url`) para los datos estructurados del evento; las traducciones solo pueden traducir `organizer.name`. Ambos campos son obligatorios: si faltan, los datos estructurados atribuirían la organización al propietario del sitio.
-- El texto visible al usuario debe salir de `i18n` o del contenido localizado, no de cadenas sueltas en componentes.
-- La trayectoria (áreas destacadas, experiencia, representación, proyectos y formación) vive en `content/profile/<sección>.yml`, con los tres idiomas juntos en cada campo (`es` obligatorio, `en` y `de` opcionales). Fechas como `YYYY` o `YYYY-MM`; un elemento sin `end` se considera actual. Contadores, cargo actual y datos estructurados se calculan a partir de esos archivos. Con `showLink: true`, la web (`organizationUrl`) de un puesto se muestra como enlace; `repository` añade a un proyecto el enlace a GitHub, y `current: true` marca un hito de representación como vigente («Mayo de 2026 – Actualidad»).
-- La lista `topics` de `highlights.yml` añade a los datos estructurados (`knowsAbout`) los temas que solo aparecen en el texto, como la carrera o la representación estudiantil.
-- Los títulos de sección y textos de interfaz siguen en `i18n/locales/`. En esos mensajes, `|`, `@`, `{` y `}` son sintaxis de vue-i18n: escríbelos como `{'|'}`, `{'@'}`, `{'{'}` y `{'}'}`.
+- El español es el idioma base y el de reserva: cualquier texto sin
+  traducción se muestra en español.
+- La trayectoria vive en `content/profile/<sección>.yml`, con los tres idiomas
+  juntos en cada campo (`es` obligatorio, `en` y `de` opcionales). Los eventos
+  de la galería son archivos Markdown por idioma; las traducciones solo llevan
+  lo que traducen.
+- Los títulos de sección y los textos de interfaz están en `i18n/locales/`.
+- El texto visible al usuario debe salir de `i18n` o del contenido localizado,
+  no de cadenas sueltas en componentes.
+
+Cómo editar y añadir cada tipo de contenido, la galería paso a paso y los
+errores habituales de `pnpm verify` están en [CONTENIDO.md](CONTENIDO.md).
 
 ## Licencia
 
