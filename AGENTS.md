@@ -42,6 +42,7 @@ Current scope includes:
 - `scripts/` — Pre-build checks (`pnpm verify`).
 - `public/` — Static assets served as-is.
 - `modules/` — Local Nuxt module patches or adjustments.
+- `docs/` — Operator notes (recommended nginx vhost).
 
 ---
 
@@ -160,6 +161,8 @@ If a handler becomes hard to read, extract helpers into `server/utils/`.
   settings through the compose `env_file`); `.env.deploy` holds deploy-only settings
   (image build args, VPS, GHCR) read by `deploy.sh` and `deploy-local.sh`. Keep
   deploy secrets out of `.env`.
+- Production runs behind a single nginx proxy (`docs/nginx.md`): the app sends the
+  security headers itself and trusts only the last `X-Forwarded-For` entry.
 - Runtime config parsing should go through shared helpers in `shared/utils/config.ts` and `server/utils/runtimeConfig.ts`.
 - Optional integrations should fail closed rather than partially misconfigure themselves.
 

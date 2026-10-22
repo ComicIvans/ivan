@@ -2,10 +2,9 @@
 
 Portfolio personal de Iván Salido Cobo construido con Nuxt 4, Nuxt UI y Nuxt Content. Incluye una web pública multidioma, una galería editorial gestionada desde Markdown y un formulario de contacto con envío por SMTP.
 
-URLs de producción:
-
-- [ivan.wupp.dev](https://ivan.wupp.dev)
-- [isalidocobo.page](https://isalidocobo.page)
+URL de producción: [isalidocobo.page](https://isalidocobo.page). El dominio
+secundario [ivan.wupp.dev](https://ivan.wupp.dev) debe redirigir a ella con
+un 301 (ver [docs/nginx.md](docs/nginx.md)).
 
 ## Qué incluye
 
@@ -102,7 +101,8 @@ esa cabecera, la que añade el proxy; sin la cabecera se usa la dirección de la
 conexión. El limitador de peticiones guarda en el directorio de datos
 (`/data/ratelimit` en Docker) un contador por cliente bajo un HMAC de su IP
 derivado de `NUXT_APP_SECRET`, nunca la IP, y borra cada registro como mucho
-diez minutos después de que termine su ventana.
+diez minutos después de que termine su ventana. La configuración
+recomendada de nginx está en [docs/nginx.md](docs/nginx.md).
 
 `DATA_DIR` (solo en tiempo de compilación) fija dónde escribe el servidor la base
 de datos de Nuxt Content y el limitador: la imagen de Docker usa `/data` y
@@ -192,6 +192,8 @@ Preparación del VPS (una sola vez):
 2. Crea en `REMOTE_DIR` un `.env` solo con las variables de ejecución de
    `.env.example` (SMTP, `NUXT_APP_SECRET` y, si hace falta,
    `NUXT_SITE_INDEXABLE`).
+3. Configura nginx delante de la aplicación según
+   [docs/nginx.md](docs/nginx.md).
 
 Cada despliegue sobrescribe el `docker-compose.yml` del VPS con el del
 repositorio: los cambios hechos a mano allí se pierden.
@@ -214,6 +216,7 @@ Si vienes del formato antiguo, con un único `.env`:
 - `server/utils/` — utilidades de configuración y soporte del servidor.
 - `public/` — imágenes y assets estáticos.
 - `modules/` — ajustes locales de módulos de Nuxt.
+- `docs/` — notas de operación (nginx).
 
 ## Contenido y localización
 
