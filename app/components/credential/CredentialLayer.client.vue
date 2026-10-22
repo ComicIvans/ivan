@@ -303,6 +303,10 @@ onUnmounted(() => {
   setActive('inicio')
   isJumping.value = false
   photoSrc.value = ''
+  // The role line and the project pass number are rewritten only once the
+  // timeline or the projects pin reaches them again.
+  journey.roleIndex.value = null
+  journey.projectIndex.value = ''
 })
 </script>
 
