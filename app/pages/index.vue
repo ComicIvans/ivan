@@ -71,7 +71,14 @@ function holdInitialHashTarget() {
 // thread) would measure empty lists, and the router's hash scroll would land
 // before the hero's latest-event tile and the gallery mosaic add their height
 // above #contacto.
-await Promise.all([loadProfile(), loadGalleryEvents()])
+const [{ error: profileError }] = await Promise.all([loadProfile(), loadGalleryEvents()])
+
+// Without the profile every section would render empty. Answer with the
+// error page and a 503 instead, so visitors get a retry button and crawlers
+// do not index an empty home.
+if (profileError.value) {
+  throw createError({ statusCode: 503, statusMessage: 'Profile unavailable', fatal: true })
+}
 </script>
 
 <template>
