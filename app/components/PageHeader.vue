@@ -25,8 +25,10 @@ const ruleClass = computed(
 
 <template>
   <header class="mb-10" :class="align === 'center' ? 'text-center' : 'text-left'">
+    <!-- Long compounds ("Datenschutzerklärung") wrap instead of overflowing a
+         phone screen. -->
     <h1
-      class="type-display text-4xl text-highlighted sm:text-5xl lg:text-[3.4rem] lg:leading-[1.05]"
+      class="type-display text-4xl break-words hyphens-auto text-highlighted [hyphenate-limit-chars:12_5_5] sm:text-5xl lg:text-[3.4rem] lg:leading-[1.05]"
     >
       {{ title }}
     </h1>
