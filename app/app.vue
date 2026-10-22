@@ -160,22 +160,26 @@ useSchemaOrg([
     <NuxtRouteAnnouncer />
     <NuxtLayout>
       <NuxtPage v-slot="{ Component, route: pageRoute }">
+        <!-- The same tree from the server render on: enabling the fallback
+             after hydration only switches the transition on. Swapping in
+             another tree would unmount the hydrated page and mount it again. -->
         <Transition
-          v-if="pageTransitionsEnabled"
-          name="page-shell"
-          mode="out-in"
+          :name="pageTransitionsEnabled ? 'page-shell' : undefined"
+          :css="pageTransitionsEnabled"
+          :mode="pageTransitionsEnabled ? 'out-in' : undefined"
           @after-leave="clearPendingPagePath"
         >
           <div :key="pageRoute.path" class="page-shell-node">
             <div
               class="page-shell-frame"
-              :class="{ 'page-nav-pending': pendingPagePath === pageRoute.path }"
+              :class="{
+                'page-nav-pending': pageTransitionsEnabled && pendingPagePath === pageRoute.path,
+              }"
             >
               <component :is="Component" />
             </div>
           </div>
         </Transition>
-        <component :is="Component" v-else />
       </NuxtPage>
     </NuxtLayout>
   </UApp>
