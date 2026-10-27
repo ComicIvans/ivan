@@ -181,7 +181,7 @@
     }
   },
   "footer": {
-    "copyright": "Entwickelt von Iván Salido Cobo. Der Quellcode steht auf {link} unter der MIT-Lizenz.",
+    "copyright": "Entwickelt von Iván Salido Cobo. Der Quellcode steht auf {link} unter der MIT-Lizenz, mit einer in LICENSE genannten Ausnahme.",
     "github": "GitHub",
     "contactLabel": "Zum Kontaktbereich",
     "socialNav": "Soziale Medien"
