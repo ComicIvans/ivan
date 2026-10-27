@@ -153,11 +153,11 @@ useGsapMatchMedia(sectionEl, (ctx) => {
           <NuxtImg
             src="/full-pic.webp"
             class="home-hero-portrait float-y max-w-45 rounded-2xl shadow-xl sm:max-w-55 xl:max-w-70"
-            :alt="t('header.profileAlt')"
+            :alt="t('home.hero.portraitAlt')"
             loading="eager"
             fetchpriority="high"
-            width="560"
-            height="746"
+            width="1120"
+            height="1493"
             sizes="180px sm:220px xl:280px"
             preload
             format="webp"
