@@ -133,7 +133,7 @@ items:
     icon: i-tabler-signature
     url: https://firmas.wupp.dev
     title:
-      es: Generador de Firmas Corporativas
+      es: Generador de firmas corporativas
       en: Corporate Email Signature Generator
       de: Generator für geschäftliche E-Mail-Signaturen
     description:
@@ -174,7 +174,7 @@ items:
     icon: i-tabler-calendar-event
     url: https://ceebi.wupp.dev
     title:
-      es: Gestión de Congresos (CEEBI)
+      es: Gestión de congresos (CEEBI)
       en: Conference Management Platform (CEEBI)
       de: Plattform für Konferenzmanagement (CEEBI)
     description:
