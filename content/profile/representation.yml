@@ -82,6 +82,7 @@ items:
   - id: creup-digitalization
     icon: i-tabler-server-2
     date: 2024-06
+    current: true
     pin: CR
     title:
       es: Vocal de Digitalización y Transparencia
