@@ -1,0 +1,5 @@
+# Files that run or are installed on the Linux VPS must keep LF line endings,
+# also in a Windows checkout with core.autocrlf=true: bash rejects a script
+# with CRLF ($'\r': command not found).
+*.sh text eol=lf
+deploy/** text eol=lf
