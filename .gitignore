@@ -18,17 +18,28 @@ logs
 .fleet
 .idea
 .claude
+.agents
+.codex
 
 # Working/process docs (not part of the codebase)
 PLAN.md
+PLAN_ONEPAGE.md
+MEJORAS_VISUALES.md
+REVISION_CONTENIDO.md
 recommendations.md
 code_review.md
 
-# Local env files
+# Runtime data of older local production runs (now kept in .data/production)
+/data
+
+# Local env files (.env: app settings, .env.deploy: deploy settings)
 .env
 .env.*
 !.env.example
+!.env.deploy.example
 
-# Gallery images
-public/gallery/*
-!public/gallery/README.md
+# Gallery images: the published WebP files and their originals
+# (pnpm gallery:add reads gallery-src/<slug>/ and writes public/gallery/<slug>/;
+# CONTENIDO.md describes the workflow and the backup they need)
+/public/gallery/
+/gallery-src/

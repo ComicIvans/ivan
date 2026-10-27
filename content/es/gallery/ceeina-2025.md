@@ -1,8 +1,11 @@
 ---
 title: IV Jornadas de Formación del CEEINA
 location: Munébrega, Zaragoza, España
+organizer:
+  name: Consejo de Estudiantes de la Escuela de Ingeniería y Arquitectura de la Universidad de Zaragoza (CEEINA)
+  url: https://ceeina.unizar.es/
 date: 2025-09-16
-duration: 5 días
+endDate: 2025-09-21
 description: Las Jornadas de Formación del CEEINA consisten en una convivencia en un albergue de la comunidad aragonesa, donde se llevan a cabo formaciones y dinámicas para fomentar el aprendizaje en un ambiente relajado y favorable.
 icon: i-tabler-school
 tags:
@@ -12,20 +15,44 @@ cover:
   src: /gallery/ceeina-2025/cover.webp
   alt: Acto de apertura de las jornadas
 photos:
-  - src: /gallery/ceeina-2025/01.JPG
-  - src: /gallery/ceeina-2025/02.JPG
-  - src: /gallery/ceeina-2025/03.JPG
-  - src: /gallery/ceeina-2025/04.JPG
-  - src: /gallery/ceeina-2025/05.JPG
-  - src: /gallery/ceeina-2025/06.JPG
-  - src: /gallery/ceeina-2025/07.JPG
-  - src: /gallery/ceeina-2025/08.JPG
+  - src: /gallery/ceeina-2025/01.webp
+    alt: Ponente explicando código ante una pantalla de proyección
+    width: 2560
+    height: 1707
+  - src: /gallery/ceeina-2025/02.webp
+    alt: Ponente durante una presentación sobre inteligencia artificial
+    width: 2560
+    height: 1707
+  - src: /gallery/ceeina-2025/03.webp
+    alt: Taller con asistentes frente a ordenadores portátiles
+    width: 2560
+    height: 1707
+  - src: /gallery/ceeina-2025/04.webp
+    alt: Participantes trabajando en grupo alrededor de varias mesas
+    width: 2560
+    height: 1707
+  - src: /gallery/ceeina-2025/05.webp
+    alt: Ponente impartiendo una sesión ante el público
+    width: 2560
+    height: 1707
+  - src: /gallery/ceeina-2025/06.webp
+    alt: Grupo de participantes reunido junto a una furgoneta
+    width: 2560
+    height: 1707
+  - src: /gallery/ceeina-2025/07.webp
+    alt: Asistentes sentados durante una mesa redonda
+    width: 2560
+    height: 1707
+  - src: /gallery/ceeina-2025/08.webp
+    alt: Mesa redonda de las jornadas vista desde el público
+    width: 2560
+    height: 1707
 draft: false
 seo:
   title: IV Jornadas de Formación del CEEINA 2025
   description: Galería de fotos de las IV Jornadas de Formación del CEEINA celebradas en Munébrega (Zaragoza).
 links:
-  - label: Web oficial del IV Jornadas de Formación
+  - label: Web oficial de las IV Jornadas de Formación
     url: https://ceeina.unizar.es/noticia/iv-jornadas-de-formacion-del-ceeina
 ---
 

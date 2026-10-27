@@ -1,8 +1,16 @@
 packages: ['.']
-onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - better-sqlite3
-  - esbuild
-  - sharp
-  - unrs-resolver
-  - vue-demi
+
+# Dependencies whose install scripts are allowed to run. Every other build
+# script is rejected (strictDepBuilds), so new entries are a deliberate review.
+# better-sqlite3 13 and sharp 0.35 ship prebuilt binaries without install
+# scripts, so they no longer need an entry.
+allowBuilds:
+  esbuild: true
+  unrs-resolver: true
+  vue-demi: true
+
+# Security pin for a transitive dependency: esbuild GHSA-g7r4-m6w7-qqqr
+# (dev server file read on Windows). The 0.27 line still arrives through
+# fontless, used by the @nuxt/fonts 0.14 copy that @nuxt/ui depends on.
+overrides:
+  'esbuild@>=0.27.3 <0.28.1': 0.28.1

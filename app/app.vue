@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { defaultLocale } from '~~/shared/constants/locales'
 import { profileName, profileSameAs } from '~~/shared/constants/profile'
+import { themeColorMeta } from '~~/shared/constants/theme'
 import { getOgLocale } from '~/utils/locales'
 import { getNuxtUiLocale } from '~/utils/nuxtUiLocale'
 
@@ -8,12 +8,11 @@ const { t, locale, localeCodes } = useI18n({ useScope: 'global' })
 const siteConfig = useSiteConfig()
 const localeHead = useLocaleHead({ seo: true })
 const siteUrl = computed(() => String(siteConfig.url ?? ''))
-const route = useRoute()
+const siteRoot = computed(() => siteUrl.value.replace(/\/$/, ''))
 const router = useRouter()
-const pendingPageFullPath = useState<string | null>('page-nav-pending-path', () => null)
+const pendingPagePath = useState<string | null>('page-nav-pending-path', () => null)
 
 const nuxtUiLocale = computed(() => getNuxtUiLocale(locale.value))
-const availableLocaleCodes = computed(() => localeCodes.value.map((code) => String(code)))
 const alternateOgLocales = computed(() =>
   localeCodes.value.filter((code) => code !== locale.value).map((code) => getOgLocale(code))
 )
@@ -22,9 +21,10 @@ const pageTransitionsEnabled = ref(false)
 
 let removeRoutePendingHook: (() => void) | null = null
 let removeRouteErrorHook: (() => void) | null = null
+let removeRouteAfterHook: (() => void) | null = null
 
 const clearPendingPagePath = () => {
-  pendingPageFullPath.value = null
+  pendingPagePath.value = null
 }
 
 useHead(() => ({
@@ -35,124 +35,135 @@ useHead(() => ({
   link: [...(localeHead.value.link ?? [])],
   meta: [
     ...(localeHead.value.meta ?? []),
-    { name: 'theme-color', content: '#f87171' },
+    { name: 'theme-color', content: themeColorMeta },
     { name: 'author', content: profileName },
   ],
 }))
 
+// Site-wide tags only. Every page sets its own title, description, Open Graph
+// and Twitter tags through usePageSeo.
 useSeoMeta({
-  titleTemplate: (title) => (title ? `${title} | ${t('seo.title')}` : t('seo.title')),
+  titleTemplate: (title) => withSiteName(title, t('seo.title')),
   description: () => t('seo.description'),
-  ogUrl: () => `${siteUrl.value}${route.path}`,
-  ogType: 'profile',
-  ogTitle: () => t('seo.title'),
-  ogDescription: () => t('seo.description'),
   ogSiteName: siteConfig.name,
   ogLocale: () => getOgLocale(locale.value),
   ogLocaleAlternate: () => alternateOgLocales.value,
-  twitterCard: 'summary_large_image',
-  twitterTitle: () => t('seo.title'),
-  twitterDescription: () => t('seo.description'),
   author: profileName,
-  themeColor: '#f87171',
+  themeColor: themeColorMeta,
 })
 
 onMounted(() => {
-  pageTransitionsEnabled.value = true
+  // The native View Transitions API (experimental.viewTransition) owns page
+  // navigation where supported; the Vue transition below is the fallback.
+  // Nuxt skips view transitions when the property is falsy; the fallback
+  // engages whenever it is not a callable function.
+  pageTransitionsEnabled.value = typeof document.startViewTransition !== 'function'
 
+  // Path, not fullPath: anchor links on the one-page only change the hash,
+  // which must neither hide nor remount the page.
   removeRoutePendingHook = router.beforeEach((to, from) => {
-    if (to.fullPath !== from.fullPath) {
-      pendingPageFullPath.value = from.fullPath
+    if (to.path !== from.path) {
+      pendingPagePath.value = from.path
     }
   })
 
   removeRouteErrorHook = router.onError(() => {
     clearPendingPagePath()
   })
+
+  // A cancelled or aborted navigation (another click while the page chunk
+  // loads) is a failure, not an error, and no page leaves: without this the
+  // current page would stay hidden and unclickable. The same holds when a
+  // navigation lands on the page marked as leaving (an in-page anchor clicked
+  // meanwhile): the cancelled one only reports once its chunk has loaded.
+  removeRouteAfterHook = router.afterEach((to, _from, failure) => {
+    if (failure || to.path === pendingPagePath.value) clearPendingPagePath()
+  })
 })
 
 onBeforeUnmount(() => {
   removeRoutePendingHook?.()
   removeRouteErrorHook?.()
+  removeRouteAfterHook?.()
 })
 
+// Person details derived from the profile content, so the structured data
+// follows the timeline (current roles, studies, languages) without edits here.
+// They are added once the home has loaded the profile; other pages keep the
+// base Person node and a lighter payload.
+const profile = useLoadedProfile()
+
+function nonEmpty<T>(items: T[]) {
+  return items.length ? items : undefined
+}
+
+const uniqueByUrl = <T extends { url: string }>(items: T[]) =>
+  items.filter((item, index) => items.findIndex((other) => other.url === item.url) === index)
+
+const personWorksFor = computed(() =>
+  uniqueByUrl(
+    profile.experience.value.flatMap((role) =>
+      role.current && role.organizationUrl
+        ? [{ '@type': 'Organization', name: role.organization, url: role.organizationUrl }]
+        : []
+    )
+  )
+)
+
+const personAlumniOf = computed(() =>
+  uniqueByUrl(
+    profile.academic.value.flatMap((item) =>
+      item.organizationUrl
+        ? [
+            {
+              '@type': 'EducationalOrganization',
+              name: item.organization,
+              url: item.organizationUrl,
+            },
+          ]
+        : []
+    )
+  )
+)
+
+const personKnowsAbout = computed(() => [
+  ...new Set([
+    ...profile.topics.value,
+    ...profile.competencies.value.map((competency) => competency.name),
+    ...profile.stack.value.primary.map((tech) => tech.name),
+  ]),
+])
+
+const personKnowsLanguage = computed(() =>
+  profile.languages.value.map((language) => ({
+    '@type': 'Language',
+    name: language.name,
+    alternateName: language.code,
+  }))
+)
+
+// The WebSite node and its translations come from nuxt-schema-org. This
+// Person keeps the default #identity id, which schemaOrg.identity in
+// nuxt.config declares as the site owner: the WebSite names it as publisher
+// and the home page as its subject.
 useSchemaOrg([
-  defineWebSite({
-    '@id': () => `${siteUrl.value}#website`,
-    name: () => String(siteConfig.name ?? profileName),
-    url: () => siteUrl.value,
-    description: () => t('seo.description'),
-    inLanguage: availableLocaleCodes.value,
-  }),
   definePerson({
-    '@id': () => `${siteUrl.value}#person`,
     name: profileName,
     givenName: 'Iván',
     familyName: 'Salido Cobo',
-    gender: 'Male',
     url: () => siteUrl.value,
-    image: () => `${siteUrl.value}/profile-pic.webp`,
+    image: () => `${siteRoot.value}/profile-pic.webp`,
     description: () => t('seo.description'),
     nationality: {
       '@type': 'Country',
       name: 'Spain',
     },
-    birthPlace: {
-      '@type': 'Place',
-      address: {
-        '@type': 'PostalAddress',
-        addressCountry: 'ES',
-        addressLocality: 'Santa María de los Llanos',
-        addressRegion: 'Castilla-La Mancha',
-        postalCode: '16639',
-      },
-    },
     sameAs: profileSameAs,
     jobTitle: () => t('schema.jobTitle'),
-    worksFor: [
-      {
-        '@type': 'Organization',
-        name: 'Coordinadora de Representantes de Estudiantes de Universidades Públicas - CREUP',
-        url: 'https://www.creup.es/',
-      },
-    ],
-    alumniOf: [
-      {
-        '@type': 'EducationalOrganization',
-        name: 'Universitat Politècnica de València (UPV)',
-        url: 'https://www.upv.es/',
-      },
-      {
-        '@type': 'EducationalOrganization',
-        name: 'Universidad de Granada (UGR)',
-        url: 'https://www.ugr.es/',
-      },
-    ],
-    knowsAbout: [
-      'Cybersecurity',
-      'Mathematics',
-      'Project Management',
-      'Strategic Management',
-      'Student Representation',
-      'Vue.js',
-    ],
-    knowsLanguage: [
-      {
-        '@type': 'Language',
-        name: 'Spanish',
-        alternateName: defaultLocale,
-      },
-      {
-        '@type': 'Language',
-        name: 'English',
-        alternateName: 'en',
-      },
-      {
-        '@type': 'Language',
-        name: 'German',
-        alternateName: 'de',
-      },
-    ],
+    worksFor: () => nonEmpty(personWorksFor.value),
+    alumniOf: () => nonEmpty(personAlumniOf.value),
+    knowsAbout: () => nonEmpty(personKnowsAbout.value),
+    knowsLanguage: () => nonEmpty(personKnowsLanguage.value),
   }),
 ])
 </script>
@@ -162,22 +173,26 @@ useSchemaOrg([
     <NuxtRouteAnnouncer />
     <NuxtLayout>
       <NuxtPage v-slot="{ Component, route: pageRoute }">
+        <!-- The same tree from the server render on: enabling the fallback
+             after hydration only switches the transition on. Swapping in
+             another tree would unmount the hydrated page and mount it again. -->
         <Transition
-          v-if="pageTransitionsEnabled"
-          name="page-shell"
-          mode="out-in"
+          :name="pageTransitionsEnabled ? 'page-shell' : undefined"
+          :css="pageTransitionsEnabled"
+          :mode="pageTransitionsEnabled ? 'out-in' : undefined"
           @after-leave="clearPendingPagePath"
         >
-          <div :key="pageRoute.fullPath" class="page-shell-node">
+          <div :key="pageRoute.path" class="page-shell-node">
             <div
               class="page-shell-frame"
-              :class="{ 'page-nav-pending': pendingPageFullPath === pageRoute.fullPath }"
+              :class="{
+                'page-nav-pending': pageTransitionsEnabled && pendingPagePath === pageRoute.path,
+              }"
             >
               <component :is="Component" />
             </div>
           </div>
         </Transition>
-        <component :is="Component" v-else />
       </NuxtPage>
     </NuxtLayout>
   </UApp>

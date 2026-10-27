@@ -13,6 +13,8 @@ const nuxtUiLocale = computed(() => getNuxtUiLocale(locale.value))
 
 const isDev = import.meta.dev
 
+const is404 = computed(() => (props.error?.statusCode || 500) === 404)
+
 const errorTitle = computed(() => {
   const statusCode = props.error?.statusCode || 500
 
@@ -77,19 +79,30 @@ useSeoMeta({
 
 <template>
   <UApp :locale="nuxtUiLocale">
-    <LayoutShell>
-      <div class="flex min-h-[60vh] flex-col items-center justify-center text-center">
-        <UCard class="max-w-md">
-          <h1 class="text-primary-500 text-9xl font-bold">
-            {{ error?.statusCode || 500 }}
+    <LayoutShell class="error-searchlight">
+      <div class="reveal flex min-h-[60vh] flex-col items-center justify-center text-center">
+        <div class="surface-glass w-full max-w-md rounded-2xl p-4 sm:p-6">
+          <div class="relative">
+            <div class="error-bloom" aria-hidden="true" />
+            <!-- Decorative status code: the title below is the page heading -->
+            <p
+              class="type-display ink-gradient relative text-[8rem] leading-none tracking-tight sm:text-9xl"
+              aria-hidden="true"
+            >
+              {{ error?.statusCode || 500 }}
+            </p>
+          </div>
+
+          <h1 class="mt-4 text-2xl font-semibold sm:text-3xl">
+            {{ errorTitle }}
           </h1>
 
-          <h2 class="mt-4 text-2xl font-semibold sm:text-3xl">
-            {{ errorTitle }}
-          </h2>
-
-          <p class="text-muted mt-2">
+          <p class="mt-2 text-muted">
             {{ errorDescription }}
+          </p>
+
+          <p v-if="is404" class="mt-3 font-mono text-sm text-muted">
+            {{ t('error.searchlight') }}
           </p>
 
           <div class="mt-6 flex flex-wrap justify-center gap-4">
@@ -109,13 +122,49 @@ useSeoMeta({
               </template>
             </UButton>
             <template #content>
-              <pre class="bg-elevated mt-2 overflow-auto rounded p-4 text-left text-xs">{{
+              <pre class="mt-2 overflow-auto rounded bg-elevated p-4 text-left text-xs">{{
                 error.message
               }}</pre>
             </template>
           </UCollapsible>
-        </UCard>
+        </div>
       </div>
     </LayoutShell>
   </UApp>
 </template>
+
+<style scoped>
+/* Soft bloom behind the status code. */
+.error-bloom {
+  position: absolute;
+  inset: -15%;
+  pointer-events: none;
+  background: radial-gradient(circle, var(--glow-soft), transparent 70%);
+  filter: blur(40px);
+}
+
+/* Narrow the ambient cursor glow into a searchlight on this page. The
+   translate offset must stay at half the diameter so the beam keeps
+   following the cursor center. Touch/reduced-motion hiding still applies. */
+:global(.error-searchlight .pointer-glow) {
+  width: 12rem;
+  height: 12rem;
+  filter: blur(28px);
+  transform: translate3d(calc(var(--glow-x, 50vw) - 6rem), calc(var(--glow-y, 40vh) - 6rem), 0);
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--color-ember-400) 18%, transparent),
+    color-mix(in oklab, var(--color-amber-400) 9%, transparent) 44%,
+    transparent 74%
+  );
+}
+
+:global(.dark .error-searchlight .pointer-glow) {
+  background: radial-gradient(
+    circle,
+    color-mix(in oklab, var(--color-ember-400) 24%, transparent),
+    color-mix(in oklab, var(--color-blue-500) 12%, transparent) 44%,
+    transparent 74%
+  );
+}
+</style>

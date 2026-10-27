@@ -3,8 +3,6 @@ import { getRequiredSiteUrl } from '~~/server/utils/runtimeConfig'
 import { defaultLocale, siteLocales } from '~~/shared/constants/locales'
 import { galleryBasePathByLocale } from '~~/shared/constants/routes'
 
-const getEventSlug = (path: string) => path.split('/').pop() || ''
-
 const localizedGalleryPath = (localeCode: string, slug: string) => {
   const base = galleryBasePathByLocale[localeCode as keyof typeof galleryBasePathByLocale]
   const prefix = localeCode === defaultLocale ? '' : `/${localeCode}`
@@ -21,16 +19,19 @@ export default defineSitemapEventHandler(async (event) => {
   const siteUrl = getRequiredSiteUrl(event).replace(/\/$/, '')
   const baseEvents = await fetchGalleryEvents(event, defaultLocale)
 
-  return baseEvents.flatMap((galleryEvent) => {
-    const slug = getEventSlug(galleryEvent.path)
+  return baseEvents.flatMap(({ slug }) => {
     if (!slug) {
       return []
     }
 
-    const alternatives: { hreflang: string; href: string }[] = siteLocales.map(({ code }) => ({
-      hreflang: code as string,
-      href: `${siteUrl}${localizedGalleryPath(code, slug)}`,
-    }))
+    // Region tags (es-ES, en-GB, de-DE), as in the page head and the sitemap
+    // entries of the static pages.
+    const alternatives: { hreflang: string; href: string }[] = siteLocales.map(
+      ({ code, language }) => ({
+        hreflang: language,
+        href: `${siteUrl}${localizedGalleryPath(code, slug)}`,
+      })
+    )
     alternatives.push({
       hreflang: 'x-default',
       href: `${siteUrl}${localizedGalleryPath(defaultLocale, slug)}`,
@@ -38,7 +39,6 @@ export default defineSitemapEventHandler(async (event) => {
 
     return siteLocales.map(({ code }) => ({
       loc: localizedGalleryPath(code, slug),
-      lastmod: galleryEvent.date,
       alternatives,
     }))
   })

@@ -14,3 +14,16 @@ npm-debug.log
 .cache
 .turbo
 .codex
+.agents
+.claude
+.github
+.vscode
+.data
+/data
+# Gallery originals; the image only needs the WebP files in public/gallery
+/gallery-src
+PLAN*.md
+MEJORAS_VISUALES.md
+REVISION_CONTENIDO.md
+recommendations.md
+code_review.md

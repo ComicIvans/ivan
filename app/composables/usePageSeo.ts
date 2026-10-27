@@ -1,19 +1,8 @@
 import { getLocaleConfig } from '~/utils/locales'
 import { toAbsoluteUrl } from '~~/shared/utils/url'
 
-type SeoOgType =
-  | 'website'
-  | 'article'
-  | 'book'
-  | 'profile'
-  | 'music.song'
-  | 'music.album'
-  | 'music.playlist'
-  | 'music.radio_status'
-  | 'video.movie'
-  | 'video.episode'
-  | 'video.tv_show'
-  | 'video.other'
+// Derived from useSeoMeta so the accepted Open Graph types follow unhead.
+type SeoOgType = Extract<NonNullable<Parameters<typeof useSeoMeta>[0]['ogType']>, string>
 
 type SeoValue<T extends string = string> = T | (() => T | null | undefined)
 
@@ -22,6 +11,8 @@ interface UsePageSeoOptions {
   ogImage?: SeoValue
   ogType?: SeoValue<SeoOgType>
   robots?: SeoValue
+  /** The title already names the site: use it as is, without " | <site name>". */
+  fullTitle?: boolean
 }
 
 const resolveLiteralValue = <T extends string>(value: SeoValue<T> | undefined): T | undefined => {
@@ -50,6 +41,8 @@ export function usePageSeo(
 
   const title = () => resolveTranslatedValue(titleValue, t)
   const description = () => resolveTranslatedValue(descriptionValue, t)
+  // Shared links carry the same title as the browser tab.
+  const shareTitle = () => (options.fullTitle ? title() : withSiteName(title(), t('seo.title')))
 
   const canonicalUrl = computed(() => {
     const canonicalPath = resolveLiteralValue(options.canonicalPath) ?? route.path
@@ -73,22 +66,24 @@ export function usePageSeo(
     defineOgImage('OgPortfolio', {
       title: title() ?? '',
       description: description() ?? '',
+      showName: !options.fullTitle,
     })
   }
 
   // Canonical + hreflang are owned solely by useLocaleHead({ seo: true }) in
   // app.vue. We intentionally do NOT emit a second canonical link here.
   useSeoMeta({
+    ...(options.fullTitle ? { titleTemplate: '%s' } : {}),
     title,
     description,
-    ogTitle: title,
+    ogTitle: shareTitle,
     ogDescription: description,
     ogUrl: () => canonicalUrl.value,
     ogImage: () => ogImage.value,
     ogType,
     robots,
     twitterCard: 'summary_large_image',
-    twitterTitle: title,
+    twitterTitle: shareTitle,
     twitterDescription: description,
     twitterImage: () => ogImage.value,
   })

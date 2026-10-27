@@ -1,37 +1,63 @@
-import type { GalleryEvent, GalleryQueryOptions } from '~~/shared/types/gallery'
+import type {
+  GalleryEvent,
+  GalleryEventSummary,
+  GalleryQueryOptions,
+} from '~~/shared/types/gallery'
+
+/** Lowercase text without accents, so "reunion" finds "Reunión". */
+function toSearchText(value: string, locale: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLocaleLowerCase(locale)
+}
 
 /**
- * Composable for querying gallery events with filters, search, and pagination
- * Events are loaded from Spanish (es) as base and merged with current locale translations
+ * Starts the request for the gallery event summaries in the current locale, or
+ * joins the one already running. The home awaits it in setup, as it does with
+ * the profile, so the sections that show events mount at their final height
+ * before the router scrolls to a hash after a client-side navigation.
  */
-export function useGalleryEvents(options: Ref<GalleryQueryOptions> = ref({})) {
+export function loadGalleryEvents() {
   const { locale } = useI18n({ useScope: 'global' })
 
-  const { data: allEvents, status } = useAsyncData(
+  return useAsyncData(
     () => `gallery-events-${locale.value}`,
     () =>
-      $fetch<GalleryEvent[]>('/api/gallery/events', {
+      $fetch<GalleryEventSummary[]>('/api/gallery/events', {
         params: { locale: locale.value },
       }),
     {
       watch: [locale],
       getCachedData: (key, nuxtApp) => nuxtApp.payload.data[key] ?? nuxtApp.static.data[key],
+      // Several sections ask at once: join the pending request instead of
+      // cancelling it and starting another one per caller.
+      dedupe: 'defer',
     }
   )
+}
+
+/**
+ * Composable for querying gallery events with filters, search, and pagination.
+ * The server returns each Spanish entry already merged with its translation
+ * for the current locale (server/utils/gallery.ts).
+ */
+export function useGalleryEvents(options: Ref<GalleryQueryOptions> = ref({})) {
+  const { locale } = useI18n({ useScope: 'global' })
+
+  const { data: allEvents, status } = loadGalleryEvents()
 
   const filteredEvents = computed(() => {
     if (!allEvents.value) return []
 
     let events = [...allEvents.value]
 
-    const searchTerm = options.value.search?.toLowerCase()
+    const searchTerm = toSearchText(options.value.search?.trim() ?? '', locale.value)
     if (searchTerm) {
-      events = events.filter(
-        (event) =>
-          event.title.toLowerCase().includes(searchTerm) ||
-          event.description.toLowerCase().includes(searchTerm) ||
-          event.location.toLowerCase().includes(searchTerm) ||
-          event.tags.some((tag) => tag.toLowerCase().includes(searchTerm))
+      events = events.filter((event) =>
+        [event.title, event.description, event.location, ...event.tags].some((text) =>
+          toSearchText(text, locale.value).includes(searchTerm)
+        )
       )
     }
 
@@ -47,7 +73,7 @@ export function useGalleryEvents(options: Ref<GalleryQueryOptions> = ref({})) {
       let comparison = 0
 
       if (sortBy === 'date') {
-        comparison = new Date(a.date).getTime() - new Date(b.date).getTime()
+        comparison = a.date.localeCompare(b.date)
       } else if (sortBy === 'title') {
         comparison = a.title.localeCompare(b.title, locale.value)
       }
@@ -94,8 +120,8 @@ export function useGalleryEvents(options: Ref<GalleryQueryOptions> = ref({})) {
 }
 
 /**
- * Composable to fetch a specific event by its slug
- * Loads Spanish content as base and merges with current locale translation
+ * Composable to fetch a specific event by its slug, with the Spanish entry
+ * merged with its current-locale translation on the server.
  */
 export async function useGalleryEvent(eventSlug: Ref<string> | string) {
   const { locale } = useI18n({ useScope: 'global' })
@@ -122,11 +148,10 @@ export async function useGalleryEvent(eventSlug: Ref<string> | string) {
     }
   )
 
-  // A missing event must surface as a real 404 (the slug API throws 404). The
-  // composable is awaited in the page, so throwing here renders Nuxt's error
-  // page with a 404 status on both SSR and client navigation.
+  // Preserve the API status: missing slugs remain 404, while operational
+  // failures must stay 5xx instead of being misreported as removed content.
   if (error.value) {
-    throw createError({ statusCode: 404, statusMessage: 'GALLERY_EVENT_NOT_FOUND' })
+    throw error.value
   }
 
   return {

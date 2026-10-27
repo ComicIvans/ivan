@@ -1,9 +1,12 @@
 # syntax=docker/dockerfile:1.7
 
-FROM node:24 AS base
+# Debian 13 (trixie) builder to match the distroless runtime below; Node 24
+# here is always >= 24.15, the floor required by Nuxt 4.6 and Nuxt SEO 6.
+FROM node:24-trixie AS base
 WORKDIR /app
 
-RUN npm install --global pnpm@10.33.0 \
+# Same pnpm release as package.json "packageManager".
+RUN npm install --global pnpm@12.11.2 \
   && npm cache clean --force
 
 ############################
@@ -17,29 +20,41 @@ ARG NUXT_UMAMI_ID
 
 ENV SITE_URL=$SITE_URL \
   NUXT_UMAMI_HOST=$NUXT_UMAMI_HOST \
-  NUXT_UMAMI_ID=$NUXT_UMAMI_ID \
-  npm_config_nodedir=/usr/local
+  NUXT_UMAMI_ID=$NUXT_UMAMI_ID
+
+# The server keeps its writable data (Nuxt Content database, rate-limit
+# records) on the /data volume. nuxt.config.ts bakes this path into the build.
+ENV DATA_DIR=/data
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 
 RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
-  pnpm config set store-dir /pnpm/store \
-  && pnpm install --frozen-lockfile
+  pnpm install --frozen-lockfile --store-dir /pnpm/store
 
 COPY . .
 
 # NODE_ENV=production is set only for the build (not the install above, where it
 # would skip devDependencies like nuxt/vite) so the prod branches of nuxt.config
 # (CSP, content DB path, indexability, umami) are taken explicitly instead of
-# relying on nuxi's implicit default.
-RUN NODE_ENV=production pnpm run build
+# relying on nuxi's implicit default. The build runs out of memory with Node's
+# default heap limit, so NODE_OPTIONS raises it to 6 GB.
+RUN NODE_ENV=production NODE_OPTIONS=--max-old-space-size=6144 pnpm run build
+
+# better-sqlite3 13 ships prebuilt binaries for eight platforms and the server
+# bundle traces all of them (about 17 MB). It loads prebuilds/<platform>-<arch>
+# at runtime, and this stage runs on the same platform and glibc as the runtime
+# image, so keep only that binary and fail the build if it is missing.
+RUN target="$(node -p 'process.platform + "-" + process.arch')" \
+  && find .output/server/node_modules -path '*/better-sqlite3*/prebuilds/*.node' ! -name "${target}.node" -delete \
+  && find .output/server/node_modules -path "*/better-sqlite3*/prebuilds/${target}.node" | grep -q .
+
 RUN mkdir -p /runtime-data
 
 
 ############################
 # Minimal runtime image
 ############################
-FROM gcr.io/distroless/nodejs24-debian12:nonroot AS runner
+FROM gcr.io/distroless/nodejs24-debian13:nonroot AS runner
 
 WORKDIR /app
 

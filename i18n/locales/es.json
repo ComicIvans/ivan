@@ -1,27 +1,21 @@
 {
   "seo": {
-    "pageTitle": "Inicio",
+    "homeTitle": "Iván Salido Cobo · Ciberseguridad, estrategia y gestión de proyectos",
     "title": "Iván Salido Cobo",
-    "description": "Graduado en Matemáticas y especializado en Ciberseguridad con experiencia en gestión de proyectos, estrategia y gobernanza IT.",
+    "description": "Graduado en Matemáticas y especialista en Ciberseguridad: desarrollo web, infraestructura digital, coordinación de proyectos y representación estudiantil.",
     "pages": {
       "legal": "Información legal, política de cookies y privacidad del portfolio profesional de Iván Salido Cobo.",
-      "experience": "Experiencia destacada en gestión estratégica, gobernanza universitaria y organización de eventos de ámbito nacional.",
-      "projects": "Proyectos tecnológicos y stack técnico. Especialización en Ciberseguridad, automatización y desarrollo web.",
-      "representation": "Trayectoria en representación estudiantil, política universitaria y gestión de órganos colegiados.",
-      "gallery": "Galería de eventos, congresos y momentos destacados de la trayectoria profesional y académica.",
-      "training": "Formación académica, idiomas y competencias. MBA, Ciberseguridad y Grado en Matemáticas.",
-      "contact": "Contacto profesional. Envíame un mensaje a través del formulario."
+      "gallery": "Galería de eventos, congresos y momentos destacados de la trayectoria profesional y académica."
     }
   },
   "schema": {
-    "jobTitle": "Matemático | Ciberseguridad, Estrategia y Gestión de Proyectos"
+    "jobTitle": "Matemático · Ciberseguridad, Estrategia y Gestión de Proyectos"
   },
   "header": {
     "title": "Iván Salido Cobo",
     "subtitle": "Ciberseguridad, Estrategia y Gestión de Proyectos",
     "profileAlt": "Fotografía de perfil de Iván Salido Cobo",
-    "jokeButton": "Mostrar un chiste aleatorio",
-    "content": "Contenido"
+    "jokeButton": "Mostrar un chiste aleatorio"
   },
   "nav": {
     "home": "Inicio",
@@ -32,6 +26,8 @@
     "training": "Formación",
     "skipLink": "Saltar al contenido principal",
     "mainNav": "Navegación",
+    "menu": "Menú",
+    "sectionsNav": "Secciones de la página",
     "contact": "Contacto"
   },
   "joke": {
@@ -39,238 +35,86 @@
     "error": "¡Vaya! No se ha podido cargar ningún chiste :(",
     "close": "Cerrar"
   },
-  "contact": {
-    "linkedinLabel": "Perfil de LinkedIn de Iván Salido Cobo",
-    "instagramLabel": "Perfil de Instagram de Iván Salido Cobo"
-  },
   "home": {
     "hero": {
-      "title": "¡Hola! Soy Iván",
-      "subtitle": "MBA en formación y especialista en Ciberseguridad",
-      "pitch": "Graduado en Matemáticas y especializado en Ciberseguridad. Actualmente curso un MBA, con un enfoque práctico en la ejecución de proyectos y la gestión de organizaciones. Me motiva trabajar en retos complejos, aportando análisis, criterio y organización para generar resultados concretos en entornos tecnológicos y de seguridad digital."
+      "pitch": "Soy graduado en Matemáticas y especialista en Ciberseguridad. Curso el Máster en Gestión de Empresas, Productos y Servicios de la UPV y actualmente realizo una estancia Erasmus+ en la Hochschule Ansbach (Alemania). Combino el desarrollo web y la gestión de infraestructura digital con la coordinación de proyectos y la representación estudiantil.",
+      "titleLead": "¡Hola! Soy",
+      "titleAccent": "Iván",
+      "scrollCue": "Desliza"
     },
     "cta": {
       "experience": "Ver mi experiencia",
       "contact": "Contactar"
     },
     "highlights": {
-      "title": "Áreas de experiencia",
-      "items": [
-        {
-          "id": "governance",
-          "title": "Gobernanza y toma de decisiones",
-          "description": "Experiencia como Consejero de Gobierno de la Universidad de Granada, participando en decisiones estratégicas sobre políticas académicas y económicas."
-        },
-        {
-          "id": "infrastructure",
-          "title": "Infraestructura y seguridad digital",
-          "description": "Responsable de la infraestructura tecnológica y políticas de seguridad de CREUP, organización que representa a más de un millón de estudiantes a nivel nacional."
-        },
-        {
-          "id": "events",
-          "title": "Gestión de proyectos y eventos",
-          "description": "Coordinación de eventos institucionales de ámbito nacional, con responsabilidad directa en logística, presupuestos y planificación."
-        }
-      ]
+      "title": "Áreas de experiencia"
+    },
+    "stats": {
+      "projects": "Proyectos publicados",
+      "roles": "Cargos de representación",
+      "events": "Eventos en la galería"
+    },
+    "now": {
+      "title": "Ahora"
+    },
+    "tiles": {
+      "gallery": "Último evento"
     }
+  },
+  "period": {
+    "present": "Actualidad",
+    "ongoing": "En curso"
   },
   "experience": {
     "title": "Experiencia Destacada",
-    "intro": "Trayectoria orientada a la gestión de proyectos, la gobernanza institucional y la coordinación de equipos en entornos organizativos complejos.",
+    "intro": "Experiencia en desarrollo web, infraestructura digital, gestión de proyectos y gobernanza universitaria.",
     "fullExperience": "Si quieres ver mi experiencia completa en representación estudiantil, puedes consultarla en la sección de Representación.",
     "viewRepresentation": "Ver trayectoria completa",
-    "roles": [
-      {
-        "id": "creup-digitalization",
-        "title": "Vocal de Digitalización y Transparencia",
-        "organization": "Coordinadora de Representantes de Estudiantes de Universidades Públicas (CREUP)",
-        "period": "Jun 2024 - Actual",
-        "description": "Gestión de infraestructura VPS, Google Workspace y definición de políticas de seguridad, privacidad y protección de datos de la organización."
-      },
-      {
-        "id": "enem-treasurer",
-        "title": "Tesorero y Secretario (Comité Organizador)",
-        "organization": "XXVI Encuentro Nacional de Estudiantes de Matemáticas (ENEM)",
-        "period": "Feb 2024 - Jul 2025",
-        "description": "Gestión integral de presupuestos, patrocinio y logística para un congreso nacional con centenares de participantes y decenas de entidades colaboradoras."
-      },
-      {
-        "id": "ugr-council",
-        "title": "Consejero de Gobierno",
-        "organization": "Universidad de Granada",
-        "period": "Dic 2022 - Ene 2025",
-        "description": "Participación en el máximo órgano colegiado de la universidad, contribuyendo a la regulación académica y negociando presupuestos y otras normativas clave."
-      },
-      {
-        "id": "dge-treasurer",
-        "title": "Tesorero",
-        "organization": "Consejo de Estudiantes de la Universidad de Granada",
-        "period": "Dic 2020 - Dic 2022",
-        "description": "Gestión y optimización de un presupuesto público de 35.000 €, con foco en transparencia y eficiencia."
-      }
-    ]
+    "current": "Actual"
   },
   "projects": {
     "title": "Proyectos y Tecnología",
     "stack": {
       "title": "Stack Tecnológico",
       "primary": {
-        "title": "Tecnologías Principales",
-        "items": [
-          {
-            "id": "nuxt",
-            "name": "Nuxt",
-            "description": "Framework de Vue.js para aplicaciones web modernas con SSR y generación estática."
-          },
-          {
-            "id": "vue",
-            "name": "Vue.js",
-            "description": "Framework progresivo de JavaScript para construir interfaces de usuario."
-          },
-          {
-            "id": "linux",
-            "name": "Linux",
-            "description": "Administración de sistemas y servidores basados en Linux."
-          },
-          {
-            "id": "docker",
-            "name": "Docker",
-            "description": "Contenedores para despliegue y orquestación de aplicaciones."
-          }
-        ]
+        "title": "Tecnologías Principales"
       },
       "secondary": {
-        "title": "Tecnologías Secundarias",
-        "items": [
-          {
-            "id": "powershell",
-            "name": "PowerShell"
-          },
-          {
-            "id": "python",
-            "name": "Python"
-          },
-          {
-            "id": "php",
-            "name": "PHP"
-          },
-          {
-            "id": "sql",
-            "name": "SQL"
-          },
-          {
-            "id": "nginx",
-            "name": "Nginx"
-          },
-          {
-            "id": "dns",
-            "name": "DNS"
-          },
-          {
-            "id": "typescript",
-            "name": "TypeScript"
-          },
-          {
-            "id": "node",
-            "name": "Node.js"
-          }
-        ]
+        "title": "Tecnologías Secundarias"
       }
     },
     "list": {
       "title": "Proyectos Relevantes",
-      "items": [
-        {
-          "id": "server",
-          "title": "Servidor personal",
-          "description": "Gestión desde 2020 de un servidor Linux con Docker, desplegando múltiples servicios bajo dominio propio.",
-          "link": "wupp.dev"
-        },
-        {
-          "id": "firmas",
-          "title": "Generador de Firmas Corporativas",
-          "description": "Dos herramientas (CLI con Python y aplicación web) para generar firmas de correos electrónicos siguiendo la identidad corporativa.",
-          "link": "firmas.wupp.dev"
-        },
-        {
-          "id": "win-ens",
-          "title": "Automatización de Cumplimiento ENS (TFM)",
-          "description": "Scripts en PowerShell para configurar y auditar automáticamente Windows 10/11 según perfiles del Esquema Nacional de Seguridad.",
-          "link": "github.com/ComicIvans/win-ens"
-        },
-        {
-          "id": "ceebi",
-          "title": "Gestión de Congresos (CEEBI)",
-          "description": "Plataforma web para consulta de horarios y turnos, realización de preguntas en tiempo real y generación de certificados de asistencia.",
-          "link": "ceebi.wupp.dev"
-        }
-      ]
+      "repositoryLabel": "Código fuente de {project} en GitHub"
     }
   },
   "representation": {
     "title": "Representación Estudiantil",
-    "intro": "Trayectoria completa en la política universitaria, defensa de derechos estudiantiles y gobernanza universitaria .",
+    "intro": "Trayectoria en política universitaria, defensa de los derechos del estudiantado y gobernanza institucional.",
     "timelineLabel": "Cronología de trayectoria en representación estudiantil",
-    "timeline": [
-      {
-        "id": "start-2020",
-        "date": "Diciembre de 2020",
-        "title": "Comienzo",
-        "description": "Inicio como miembro del Claustro Universitario, del Consejo de Estudiantes (DGE) y de la Delegación de Estudiantes de la Facultad de Ciencias (DEFC), participando activamente en órganos de representación.",
-        "highlights": ["Tesorero de la DGE", "Secretario de la DEFC"]
-      },
-      {
-        "id": "end-first-term",
-        "date": "Diciembre de 2022",
-        "title": "Cierre de primer mandato",
-        "description": "Finalización del mandato de los cargos anteriores, manteniendo la participación en el Claustro y accediendo al Consejo de Gobierno.",
-        "highlights": [
-          "Consejo de Gobierno",
-          "Comisión Académica",
-          "Comisión Económica",
-          "Asesor de la DEFC"
-        ]
-      },
-      {
-        "id": "external-relations",
-        "date": "Marzo de 2023",
-        "title": "Director de Relaciones Externas",
-        "description": "Creación y asunción del cargo para fortalecer la presencia institucional y coordinación con entidades externas.",
-        "highlights": ["Director de Relaciones Externas de la DGE"]
-      },
-      {
-        "id": "academic-vicecoord",
-        "date": "Junio de 2023",
-        "title": "Vicecoordinador Académico",
-        "description": "Participación directa en la mejora de la calidad docente y en la ampliación de garantías en la evaluación del estudiantado.",
-        "highlights": ["Vicecoordinador Académico de la DGE"]
-      },
-      {
-        "id": "creup-digitalization",
-        "date": "Junio de 2024",
-        "title": "Vocal de Digitalización y Transparencia",
-        "description": "Responsable de la infraestructura tecnológica y de las políticas de seguridad, privacidad y protección de datos de CREUP.",
-        "highlights": ["Vocal de Digitalización y Transparencia de CREUP"]
-      },
-      {
-        "id": "dge-advisor",
-        "date": "Marzo de 2025",
-        "title": "Director de Transparencia y Asesor",
-        "description": "Elegido Director de Transparencia y nombrado Asesor del Consejo de Estudiantes, asumiendo funciones de apoyo estratégico, asesoramiento institucional y supervisión de buenas prácticas en materia de transparencia y gestión interna.",
-        "highlights": ["Director de Transparencia de la DGE", "Asesor de la DGE"]
-      },
-      {
-        "id": "upv-delegate",
-        "date": "Septiembre de 2025",
-        "title": "Delegado en la UPV",
-        "description": "Desde que comencé mis estudios de máster en la Universitat Politècnica de València, soy el delegado de mi clase, continuando así mi labor de representación estudiantil en una nueva universidad.",
-        "highlights": ["Delegado de clase"]
-      }
-    ]
+    "stats": {
+      "years": "Años en activo",
+      "milestones": "Hitos",
+      "roles": "Cargos desempeñados"
+    }
+  },
+  "credential": {
+    "role": {
+      "hero": "Representante · Developer"
+    },
+    "yourBadge": "TU ACREDITACIÓN",
+    "accredited": "ACREDITADO",
+    "holder": "Portador",
+    "delegate": "DELEGADO",
+    "diploma": "DIPLOMA",
+    "demoPass": "PASE DEMO",
+    "photoPass": "PASE DE PRENSA"
   },
   "gallery": {
     "title": "Galería",
     "intro": "Momentos destacados de eventos, congresos y actividades de representación estudiantil.",
+    "viewAll": "Ver toda la galería",
+    "loading": "Cargando galería...",
     "photoSoon": "Foto próximamente",
     "comingSoon": "Las fotografías de estos eventos se añadirán próximamente.",
     "filters": {
@@ -300,6 +144,7 @@
       "links": "Enlaces",
       "photos": "Galería de fotos",
       "photosCount": "{count} foto | {count} fotos",
+      "duration": "{count} día | {count} días",
       "photoAlt": "Foto {number}",
       "breadcrumb": "Ruta de navegación del evento",
       "backToGallery": "Volver a la galería",
@@ -311,122 +156,44 @@
         "prev": "Foto anterior",
         "next": "Foto siguiente",
         "close": "Cerrar",
-        "loading": "Cargando imagen...",
-        "position": "Foto {current} de {total}",
+        "dialogLabel": "{title}, foto {current} de {total}",
         "zoomIn": "Aumentar zoom",
-        "zoomOut": "Reducir zoom",
-        "resetZoom": "Restablecer zoom"
+        "error": "No se ha podido cargar la imagen."
       }
     }
   },
   "training": {
     "title": "Formación y Competencias",
     "academic": {
-      "title": "Formación Académica",
-      "items": [
-        {
-          "id": "mugeps",
-          "title": "Máster Universitario en Gestión de Empresas, Productos y Servicios (MUGEPS)",
-          "organization": "Universitat Politècnica de València",
-          "period": "En curso",
-          "description": "Enfoque en dirección estratégica y gestión de equipos. Docencia mayoritariamente en inglés y próxima estancia Erasmus+ en Alemania."
-        },
-        {
-          "id": "cybersecurity-master",
-          "title": "Máster de Formación Permanente en Ciberseguridad",
-          "organization": "Universidad de Granada",
-          "period": "2024",
-          "description": "Especialización en Hacking Ético, Análisis Forense y Gestión de Seguridad. Tesis sobre cumplimiento del ENS."
-        },
-        {
-          "id": "math-degree",
-          "title": "Grado en Matemáticas",
-          "organization": "Universidad de Granada",
-          "period": "2019 - 2024",
-          "description": "Desarrollo de pensamiento analítico complejo y resolución de problemas."
-        },
-        {
-          "id": "data-analyst",
-          "title": "Curso de Data Analyst",
-          "organization": "Google Cloud Skills Boost",
-          "period": "03/2023 - 05/2023",
-          "description": "Google Cloud Big Data and Machine Learning Fundamentals, Exploring and Preparing Your Data with BigQuery, Creating New BigQuery Datasets and Visualizing Insights, Achieving Advanced Insights with BigQuery."
-        },
-        {
-          "id": "math-conferences",
-          "title": "Encuentros Nacionales de Matemáticas",
-          "organization": "ENEM / ANEM",
-          "period": "Desde 2019 (anual)",
-          "description": "Asistencia anual a encuentros formativos sobre matemáticas, estadística, ciencia de datos e inteligencia artificial."
-        }
-      ]
+      "title": "Formación Académica"
     },
     "languages": {
       "title": "Idiomas",
       "proficiency": "Nivel de dominio",
-      "items": [
-        {
-          "id": "english",
-          "name": "Inglés",
-          "level": "Nivel C1 Cambridge",
-          "description": "Capacidad profesional completa (Máster en inglés). Estancia de inmersión en Galway (2018)."
-        },
-        {
-          "id": "german",
-          "name": "Alemán",
-          "level": "Nivel Básico (A1)",
-          "description": "En formación para movilidad internacional."
-        },
-        {
-          "id": "spanish",
-          "name": "Español",
-          "level": "Nativo",
-          "description": "Lengua materna."
-        }
-      ]
+      "level": "Nivel {level}",
+      "native": "Nativo"
     },
     "other": {
-      "title": "Otras Certificaciones",
-      "drivingLicense": {
-        "title": "Permiso de conducir B",
-        "description": "Permiso de conducir de vehículos particulares."
-      }
+      "title": "Otras Certificaciones"
     },
     "competencies": {
-      "title": "Competencias Transversales",
-      "items": [
-        { "id": "project-management", "name": "Gestión y Ejecución de Proyectos" },
-        { "id": "team-leadership", "name": "Liderazgo y Coordinación de Equipos" },
-        { "id": "governance", "name": "Gobernanza y Negociación" },
-        { "id": "communication", "name": "Comunicación" },
-        { "id": "systems", "name": "Administración de Sistemas" },
-        { "id": "cybersecurity-management", "name": "Gestión de la Seguridad de la Información" },
-        { "id": "compliance", "name": "Cumplimiento Normativo y Ciberseguridad" },
-        { "id": "automation", "name": "Automatización de Procesos" },
-        { "id": "data-analysis", "name": "Análisis y Toma de Decisiones" },
-        { "id": "problem-solving", "name": "Resolución de Problemas Complejos" },
-        { "id": "strategic-thinking", "name": "Pensamiento Estratégico y Planificación" }
-      ]
+      "title": "Competencias Transversales"
     }
   },
   "footer": {
-    "copyright": "Desarrollado por Iván Salido Cobo bajo la licencia MIT. Consulta el código en {link}.",
+    "copyright": "Desarrollado por Iván Salido Cobo. El código está en {link} con licencia MIT.",
     "github": "GitHub",
-    "contactLabel": "Ir a la página de contacto",
-    "linkedinLabel": "Perfil de LinkedIn (abre en nueva pestaña)",
-    "instagramLabel": "Perfil de Instagram (abre en nueva pestaña)",
-    "githubLabel": "Perfil de GitHub (abre en nueva pestaña)",
+    "contactLabel": "Ir a la sección de contacto",
     "socialNav": "Redes sociales"
   },
+  "social": {
+    "profileLabel": "Perfil de {network} de Iván Salido Cobo (se abre en una pestaña nueva)"
+  },
   "theme": {
-    "toggle": "Cambiar tema",
-    "light": "Tema claro",
-    "dark": "Tema oscuro"
+    "toggle": "Cambiar tema"
   },
   "language": {
-    "toggle": "Cambiar idioma",
-    "es": "Español",
-    "en": "English"
+    "toggle": "Cambiar idioma"
   },
   "legal": {
     "title": "Aviso legal y política de privacidad",
@@ -441,25 +208,33 @@
     },
     "cookies": {
       "title": "Política de cookies",
-      "description": "Este sitio utiliza únicamente cookies técnicas estrictamente necesarias para su funcionamiento. No se utilizan cookies de seguimiento, publicidad ni analítica.",
+      "description": "Este sitio solo guarda en tu navegador los elementos técnicos de la tabla: el idioma que eliges, el tema con que ves el sitio y, solo si una actualización del sitio interrumpe tu navegación, lo necesario para recargar la página. No utiliza cookies de seguimiento, publicidad ni analítica.",
       "table": {
-        "name": "Cookie",
+        "name": "Nombre",
+        "type": "Tipo",
         "purpose": "Finalidad",
         "duration": "Duración"
       },
-      "items": [
-        {
-          "id": "colorMode",
-          "purpose": "Guarda tu preferencia de tema (claro/oscuro)",
+      "types": {
+        "cookie": "Cookie",
+        "localStorage": "Almacenamiento local",
+        "sessionStorage": "Almacenamiento de sesión"
+      },
+      "items": {
+        "colorMode": {
+          "purpose": "Guarda el tema: el de tu dispositivo hasta que eliges claro u oscuro",
+          "duration": "Hasta que lo borres"
+        },
+        "i18n": {
+          "purpose": "Guarda el idioma que eliges con el selector de idioma, para abrir la portada en ese idioma",
           "duration": "1 año"
         },
-        {
-          "id": "i18n",
-          "purpose": "Guarda tu preferencia de idioma",
-          "duration": "1 año"
+        "reload": {
+          "purpose": "Recupera la página si una actualización del sitio interrumpe la navegación. Mientras se recarga, nuxt:reload:state conserva el estado de la página, incluido el nombre que hayas escrito en el formulario",
+          "duration": "Hasta que cierras la pestaña"
         }
-      ],
-      "note": "Estas cookies son esenciales para el funcionamiento del sitio y están exentas del requisito de consentimiento según la normativa europea (Artículo 6.1.f del RGPD)."
+      },
+      "note": "La cookie solo se crea cuando cambias de idioma con el selector de idioma (la bandera de la barra de navegación) y se actualiza cada vez que vuelves a cambiarlo. Visitar el sitio no la crea, ni siquiera cuando la portada se abre en el idioma de tu navegador. El tema se guarda desde tu primera visita: sigue el de tu dispositivo hasta que eliges claro u oscuro con el botón de tema. El almacenamiento de sesión solo se usa si una actualización del sitio obliga a recargar la página mientras navegas, y el navegador lo borra al cerrar la pestaña. Estos elementos solo sirven para mostrarte el sitio en ese idioma y ese tema y para recuperar la página tras una actualización; no se usan para nada más ni se comparten con terceros. Por eso se consideran estrictamente necesarios para prestar el servicio que solicitas y están exentos de consentimiento conforme al artículo 22.2 de la LSSI, que transpone el artículo 5.3 de la Directiva 2002/58/CE."
     },
     "contactForm": {
       "title": "Formulario de contacto",
@@ -469,16 +244,17 @@
         "items": [
           "Nombre: para identificarte y personalizar la respuesta",
           "Correo electrónico: para poder responderte",
-          "Asunto y mensaje: para atender tu consulta"
+          "Asunto y mensaje: para atender tu consulta",
+          "Idioma de la web desde la que escribes: para responderte en ese idioma"
         ]
       },
       "purpose": {
         "title": "Finalidad del tratamiento",
-        "description": "Los datos proporcionados se utilizarán exclusivamente para responder a tu consulta o propuesta. No se utilizarán para ningún otro fin."
+        "description": "Los datos que envías se utilizarán exclusivamente para responder a tu consulta o propuesta y para proteger el formulario contra abusos, como los envíos automáticos o el spam. No se utilizarán para ningún otro fin."
       },
       "legitimation": {
         "title": "Base legal",
-        "description": "El tratamiento de tus datos se basa en tu consentimiento, otorgado al enviar el formulario de contacto (Art. 6.1.a RGPD)."
+        "description": "La respuesta a tu consulta se basa en tu consentimiento, otorgado al enviar el formulario de contacto (art. 6.1.a del RGPD), y la protección contra abusos, en el interés legítimo en proteger el sitio (art. 6.1.f del RGPD)."
       },
       "retention": {
         "title": "Conservación de datos",
@@ -493,11 +269,12 @@
       "title": "Privacidad general",
       "description": "Este sitio respeta tu privacidad:",
       "items": [
-        "Se utiliza Umami Analytics, una herramienta de analítica respaldada por privacidad que no recopila datos personales",
-        "Umami no utiliza cookies de seguimiento ni identifica a usuarios individuales",
+        "Las visitas se miden con Umami, una herramienta de analítica respetuosa con la privacidad que se aloja en un servidor propio, sin servicios de terceros",
+        "Umami no usa cookies ni guarda tu dirección IP, y solo ofrece estadísticas agregadas, sin identificar a visitantes individuales",
         "No se realiza seguimiento entre sitios web",
-        "No se comparten datos con terceros",
-        "Solo se recopilan los datos que tú proporcionas voluntariamente en el formulario de contacto"
+        "Para prevenir abusos, el servidor cuenta los envíos del formulario de contacto y los informes de seguridad (CSP) que tu navegador envía automáticamente. Los asocia a un código derivado de tu dirección IP con una clave secreta, nunca a la dirección en sí",
+        "Ese código se borra como máximo 70 minutos después. La base legal es el interés legítimo en proteger el sitio (art. 6.1.f del RGPD)",
+        "No se comparten datos con terceros"
       ]
     },
     "rights": {
@@ -509,13 +286,15 @@
         "Supresión: solicitar la eliminación de tus datos",
         "Oposición: oponerte al tratamiento de tus datos",
         "Portabilidad: recibir tus datos en formato estructurado",
-        "Limitación: solicitar la limitación del tratamiento"
+        "Limitación: solicitar la limitación del tratamiento",
+        "Retirada del consentimiento: retirarlo en cualquier momento, sin que afecte a la licitud del tratamiento anterior"
       ],
-      "contact": "Para ejercer estos derechos, puedes contactarme por correo electrónico. También tienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD).",
-      "cookiesNote": "Puedes eliminar las cookies de este sitio en cualquier momento desde la configuración de tu navegador."
+      "contact": "Para ejercer estos derechos, escríbeme a través del {form} indicando qué derecho quieres ejercer. También tienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD).",
+      "formLink": "formulario de contacto",
+      "cookiesNote": "Puedes borrar en cualquier momento la cookie y el almacenamiento local y de sesión de este sitio desde la configuración de tu navegador."
     },
     "lastUpdate": "Última actualización",
-    "updateDate": "Diciembre 2025"
+    "updateDate": "octubre de 2026"
   },
   "error": {
     "backHome": "Volver al inicio",
@@ -540,13 +319,10 @@
       "502": "El servidor recibió una respuesta inválida. Inténtalo más tarde.",
       "503": "El servicio está temporalmente no disponible. Vuelve pronto.",
       "default": "Ha ocurrido un error inesperado. Por favor, inténtalo de nuevo."
-    }
+    },
+    "searchlight": "Esta página no está bajo esta luz."
   },
   "contactPage": {
-    "seo": {
-      "title": "Contacto",
-      "description": "Ponte en contacto con Iván Salido Cobo. Envía un mensaje a través del formulario de contacto."
-    },
     "title": "Contacto",
     "subtitle": "¿Tienes alguna pregunta o propuesta? Envíame un mensaje y te responderé lo antes posible.",
     "form": {
@@ -563,13 +339,12 @@
       "sending": "Enviando...",
       "success": "¡Mensaje enviado correctamente! Te responderé lo antes posible.",
       "errorGeneric": "Ha ocurrido un error al enviar el mensaje. Por favor, inténtalo de nuevo.",
-      "privacyNote": "Tu información será tratada de forma confidencial y solo se usará para responder a tu consulta.",
+      "privacyNote": "Uso tus datos solo para responder a tu mensaje y proteger el formulario contra abusos. Más información en la {link}.",
+      "privacyLink": "política de privacidad",
       "apiErrors": {
         "rateLimited": "Has enviado demasiados mensajes en poco tiempo. Vuelve a intentarlo más tarde.",
+        "dailyLimit": "El formulario ha alcanzado por ahora su límite de mensajes. Vuelve a intentarlo más tarde.",
         "missingFields": "Faltan campos obligatorios por completar.",
-        "nameLength": "El nombre debe tener entre 2 y 100 caracteres.",
-        "subjectLength": "El asunto debe tener entre 3 y 200 caracteres.",
-        "messageLength": "El mensaje debe tener entre 10 y 5000 caracteres.",
         "prohibitedContent": "El mensaje contiene contenido que no he podido aceptar.",
         "serviceUnavailable": "El servicio de correo no está disponible en este momento.",
         "sendFailed": "No he podido enviar el mensaje. Inténtalo de nuevo más tarde."
@@ -588,6 +363,10 @@
         "messageMax": "El mensaje no puede superar los 5000 caracteres"
       }
     },
-    "alternative": "También puedes contactarme a través de mis redes sociales:"
+    "alternative": "También puedes contactarme a través de mis redes sociales:",
+    "aside": {
+      "title": "Contacto directo",
+      "availability": "Suelo responder en 24-48 horas."
+    }
   }
 }

@@ -1,0 +1,132 @@
+# Student representation milestones, oldest first. `current: true` marks a
+# milestone that is still ongoing ("May 2026 – Present").
+
+# Text fields take one plain string (the same in every language) or one value
+# per language (es, en, de). Spanish is required and fills in for any missing
+# language. Dates are YYYY or YYYY-MM. Schema: shared/content/schemas.ts.
+
+items:
+  - id: start-2020
+    icon: i-tabler-rocket
+    date: 2020-12
+    pin: UGR
+    title:
+      es: Comienzo
+      en: Starting point
+      de: Startpunkt
+    description:
+      es: Inicio como miembro del Claustro Universitario, del Consejo de Estudiantes (DGE) y de la Delegación de Estudiantes de la Facultad de Ciencias (DEFC), participando activamente en órganos de representación.
+      en: Joined the University Senate, the Students’ Council (DGE) and the Faculty of Science Student Delegation (DEFC), actively participating in representative bodies.
+      de: Beitritt zum Universitätssenat, zum Studierendenrat (DGE) und zur Studierendenvertretung der Fakultät für Naturwissenschaften (DEFC) und aktive Mitarbeit in repräsentativen Gremien.
+    roles:
+      - es: Tesorero de la DGE
+        en: DGE Treasurer
+        de: Kassenwart (DGE)
+      - es: Secretario de la DEFC
+        en: DEFC Secretary
+        de: Sekretär (DEFC)
+  - id: end-first-term
+    icon: i-tabler-refresh
+    date: 2022-12
+    title:
+      es: Cierre de primer mandato
+      en: End of first term
+      de: Ende der ersten Amtszeit
+    description:
+      es: Finalización del mandato de los cargos anteriores, manteniendo la participación en el Claustro y accediendo al Consejo de Gobierno.
+      en: Completion of the first term of office, continuing participation in the Senate and joining the Governing Council.
+      de: Abschluss der ersten Amtszeit, weitere Mitarbeit im Senat und Eintritt in den Universitätsrat.
+    roles:
+      - es: Consejo de Gobierno
+        en: Governing Council
+        de: Universitätsrat
+      - es: Comisión Académica
+        en: Academic Committee
+        de: Akademischer Ausschuss
+      - es: Comisión Económica
+        en: Economic Committee
+        de: Wirtschaftsausschuss
+      - es: Asesor de la DEFC
+        en: Advisor to the DEFC
+        de: Berater der DEFC
+  - id: external-relations
+    icon: i-tabler-world
+    date: 2023-03
+    title:
+      es: Director de Relaciones Externas
+      en: Director of External Relations
+      de: Direktor für externe Beziehungen
+    description:
+      es: Creación y asunción del cargo para fortalecer la presencia institucional y coordinación con entidades externas.
+      en: Created the role and took it on to strengthen institutional presence and coordination with external entities.
+      de: Schaffung und Übernahme der Rolle zur Stärkung der institutionellen Präsenz und zur Koordination mit externen Organisationen.
+    roles:
+      - es: Director de Relaciones Externas de la DGE
+        en: Director of External Relations (DGE)
+        de: Direktor für externe Beziehungen (DGE)
+  - id: academic-vicecoord
+    icon: i-tabler-school
+    date: 2023-06
+    title:
+      es: Vicecoordinador Académico
+      en: Academic Vice-Coordinator
+      de: Akademischer Vizekoordinator
+    description:
+      es: Participación directa en la mejora de la calidad docente y en la ampliación de garantías en la evaluación del estudiantado.
+      en: Direct involvement in improving teaching quality and strengthening student assessment guarantees.
+      de: Direkte Mitarbeit an der Verbesserung der Lehrqualität und an der Stärkung der Prüfungs- und Bewertungsrechte der Studierenden.
+    roles:
+      - es: Vicecoordinador Académico de la DGE
+        en: Academic Vice-Coordinator (DGE)
+        de: Akademischer Vizekoordinator (DGE)
+  - id: creup-digitalization
+    icon: i-tabler-server-2
+    date: 2024-06
+    pin: CR
+    title:
+      es: Vocal de Digitalización y Transparencia
+      en: Board Member for Digitalisation and Transparency
+      de: Vorstandsmitglied für Digitalisierung und Transparenz
+    description:
+      es: Responsable de la infraestructura tecnológica y de las políticas de seguridad, privacidad y protección de datos de CREUP.
+      en: Responsible for CREUP’s technological infrastructure and its security, privacy and data protection policies.
+      de: Verantwortlich für die technologische Infrastruktur von CREUP sowie für Sicherheits- und Datenschutzrichtlinien.
+    roles:
+      - es: Vocal de Digitalización y Transparencia de CREUP
+        en: Board Member for Digitalisation and Transparency (CREUP)
+        de: Vorstandsmitglied für Digitalisierung und Transparenz (CREUP)
+  - id: dge-advisor
+    icon: i-tabler-shield-check
+    date: 2025-03
+    title:
+      es: Director de Transparencia y Asesor
+      en: Director of Transparency and Advisor
+      de: Direktor für Transparenz und Berater
+    description:
+      es: Elegido Director de Transparencia y nombrado Asesor del Consejo de Estudiantes, asumiendo funciones de apoyo estratégico, asesoramiento institucional y supervisión de buenas prácticas en materia de transparencia y gestión interna.
+      en: Elected Director of Transparency and appointed Advisor to the Students’ Council, undertaking strategic support, institutional advisory duties and oversight of transparency and internal management practices.
+      de: Zum Direktor für Transparenz gewählt und als Berater des Studierendenrats ernannt, mit Aufgaben in strategischer Unterstützung, institutioneller Beratung sowie der Aufsicht über Transparenz- und interne Managementpraktiken.
+    roles:
+      - es: Director de Transparencia de la DGE
+        en: Director of Transparency (DGE)
+        de: Direktor für Transparenz (DGE)
+      - es: Asesor de la DGE
+        en: Advisor to the DGE
+        de: Berater des DGE
+  - id: upv-digital-infrastructure
+    icon: i-tabler-server-2
+    date: 2026-05
+    current: true
+    pin: UPV
+    title:
+      es: Coordinador de Infraestructuras Digitales
+      en: Digital Infrastructure Coordinator
+      de: Koordinator für digitale Infrastruktur
+    description:
+      es: Coordino las infraestructuras digitales del Consejo de Estudiantes de la UPV. Actualmente desarrollo una plataforma para gestionar el inventario de material y sus préstamos.
+      en: I coordinate digital infrastructure for UPV’s Students’ Council. I am currently developing a platform to manage equipment inventory and loans.
+      de: Ich koordiniere die digitale Infrastruktur des Studierendenrats der UPV. Derzeit entwickle ich eine Plattform zur Verwaltung des Materialbestands und der Ausleihe.
+    roles:
+      - es: Consejo de Estudiantes de la UPV
+        en: UPV Students’ Council
+        de: Studierendenrat der UPV

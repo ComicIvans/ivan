@@ -1,18 +1,31 @@
 ---
-title: Präsenztreffen des erweiterten CREUP-Vorstands
+title: Präsenztreffen der erweiterten Exekutivkommission von CREUP
 location: Riaño, Kantabrien, Spanien
-duration: 3 Tage
+organizer:
+  name: Koordinationsstelle der Studierendenvertretungen öffentlicher Universitäten (CREUP)
 description: Präsenztreffen der Vizepräsidentschaften und Vorstandsmitglieder von CREUP zur Nachverfolgung der strategischen Planung und zur bereichsübergreifenden Zusammenarbeit.
+cover:
+  src: /gallery/creup-riano/cover.webp
+  alt: Landschaft rund um Riaño
+photos:
+  - src: /gallery/creup-riano/01.webp
+    alt: Grüne Berglandschaft rund um Riaño
+  - src: /gallery/creup-riano/02.webp
+    alt: Arbeit am Laptop während des Treffens
+  - src: /gallery/creup-riano/03.webp
+    alt: Zwei Teilnehmende posieren auf einer Wiese in Riaño
+  - src: /gallery/creup-riano/04.webp
+    alt: Gruppenfoto der Teilnehmenden des Treffens
 tags:
   - CREUP
   - Treffen
 seo:
-  title: CREUP-Vorstandstreffen - Riaño 2025
-  description: Fotogalerie vom Präsenztreffen des erweiterten CREUP-Vorstands in Riaño.
+  title: Treffen der erweiterten CREUP-Exekutivkommission - Riaño 2025
+  description: Fotogalerie vom Präsenztreffen der erweiterten Exekutivkommission von CREUP in Riaño.
 ---
 
 ::event-about
-Zwischen dem 1. und 4. September 2025 fand in Riaño (Kantabrien) ein Präsenztreffen der erweiterten Exekutivkommission der CREUP (Koordinationsstelle der Studierendenvertretungen öffentlicher Universitäten) statt.
+Zwischen dem 1. und 4. September 2025 fand in Riaño (Kantabrien) ein Präsenztreffen der erweiterten Exekutivkommission von CREUP (Koordinationsstelle der Studierendenvertretungen öffentlicher Universitäten) statt.
 
 An dem Treffen nahmen die verschiedenen Vizepräsidentschaften und Vorstandsmitglieder der Organisation teil, mit dem Ziel, die strategische Planung zu überprüfen und die Koordination zwischen den unterschiedlichen Arbeitsbereichen zu stärken.
 ::

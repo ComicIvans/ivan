@@ -1,9 +1,20 @@
-import tailwindcss from '@tailwindcss/vite'
+import { fileURLToPath } from 'node:url'
+import { join, resolve } from 'node:path'
 import { requireConfigUrl } from './shared/utils/config'
 import { defaultLocale, siteLocales } from './shared/constants/locales'
 import { profileName } from './shared/constants/profile'
+import { colorModeStorageKey, localeCookieName } from './shared/constants/storage'
 
 const isDev = process.env.NODE_ENV !== 'production'
+
+// Where the production server keeps its writable data (the Nuxt Content
+// database and the rate-limit records). Read at build time and baked into
+// the server bundle as an absolute path. The Docker image sets DATA_DIR=/data
+// (its persistent volume); any other build keeps the data inside the
+// project's .data folder instead of the filesystem (or Windows drive) root.
+const dataDir = resolve(
+  process.env.DATA_DIR || fileURLToPath(new URL('./.data/production', import.meta.url))
+)
 const hasUmami = Boolean(process.env.NUXT_UMAMI_ID && process.env.NUXT_UMAMI_HOST)
 const siteUrl = requireConfigUrl(process.env.SITE_URL, 'SITE_URL')
 const siteImageHostname = new URL(siteUrl).hostname
@@ -17,30 +28,19 @@ const umamiOrigin = (() => {
   }
 })()
 
-// Report-only CSP (phase 1): emitted as Content-Security-Policy-Report-Only so it
-// never blocks, only reports violations to /api/csp-report. nuxt-security does not
-// substitute the SSR nonce in report-only mode, so inline scripts/styles are allowed
-// via 'unsafe-inline' to avoid false positives; tighten + flip to enforced later.
-const cspReportOnlyValue = [
-  "default-src 'self'",
-  "base-uri 'self'",
-  "object-src 'none'",
-  "frame-ancestors 'self'",
-  "form-action 'self'",
-  `script-src 'self' 'unsafe-inline'${umamiOrigin ? ` ${umamiOrigin}` : ''}`,
-  "style-src 'self' 'unsafe-inline'",
-  `img-src 'self' data: blob: ${siteImageHostname}`,
-  "font-src 'self' data:",
-  `connect-src 'self'${umamiOrigin ? ` ${umamiOrigin}` : ''}`,
-  'report-uri /api/csp-report',
-].join('; ')
-
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: isDev },
 
+  // Section/credential components keep their own descriptive names instead of
+  // the directory-derived prefix (SectionsSectionHero would never resolve).
+  components: [
+    { path: '~/components/sections', pathPrefix: false },
+    { path: '~/components/credential', pathPrefix: false },
+    '~/components',
+  ],
+
   vite: {
-    plugins: [tailwindcss()],
     optimizeDeps: {
       include: [
         '@nuxt/ui > prosemirror-state',
@@ -52,6 +52,63 @@ export default defineNuxtConfig({
     },
     server: {
       allowedHosts: isDev ? ['.trycloudflare.com'] : [],
+    },
+    build: {
+      // Vendor code that rarely changes between deploys gets its own chunk
+      // so a browser that already cached it doesn't re-download it just
+      // because app code changed: Vue, gsap (eager, minus the bonus
+      // plugins), ogl (lazy, WebGL background only) and vue-i18n +
+      // @intlify, which version-bump independently of app code. Per-locale
+      // message data is already lazy per @nuxtjs/i18n's own architecture.
+      // The remaining shared chunk is the entry: vue-router + the Nuxt UI
+      // runtime plus layout chrome used on every route; it is not reducible
+      // without dropping one of those dependencies. Measured on Vite 8 /
+      // Rolldown: entry ~232 kB min / ~72 kB gz, gsap ~128 / ~51 kB,
+      // vue ~115 / ~44 kB, i18n-runtime ~50 / ~17 kB, ogl ~44 / ~13 kB.
+      // chunkSizeWarningLimit applies the same ceiling to every chunk (it
+      // is not tracked per chunk). 420 kB was set just above the previous
+      // framework/layout chunk (~417 kB before Vue moved to its own group)
+      // and is kept as the ceiling, so the build flags any chunk that
+      // grows back towards that size.
+      chunkSizeWarningLimit: 420,
+      rolldownOptions: {
+        output: {
+          codeSplitting: {
+            groups: [
+              // Groups also capture their dependencies, so Vue gets its own
+              // group first; otherwise it is pulled into i18n-runtime.
+              { name: 'vue', test: /node_modules[\\/](?:vue|@vue)[\\/]/, priority: 1 },
+              // Bonus plugins ride the lazy credential chunks, not the eager
+              // gsap chunk that every page downloads at startup.
+              {
+                name: 'gsap',
+                test: /node_modules[\\/]gsap[\\/](?!(?:MorphSVGPlugin|DrawSVGPlugin)\b)/,
+              },
+              { name: 'ogl', test: /node_modules[\\/]ogl[\\/]/ },
+              { name: 'i18n-runtime', test: /node_modules[\\/](?:vue-i18n|@intlify)[\\/]/ },
+            ],
+          },
+        },
+      },
+    },
+    // Vite 8 minifies with Oxc and ignores the esbuild `drop` option that
+    // nuxt-security's removeLoggers relies on, so console/debugger stripping
+    // is configured on the client minifier directly (server logs stay intact).
+    // Vite also drops legal comments (/*! ... */, @license) when it minifies;
+    // they are kept so the shipped code carries the notices its licenses ask
+    // for, such as the Vue Bits notice of the Aurora background.
+    $client: {
+      build: {
+        rolldownOptions: {
+          output: {
+            comments: { legal: true },
+            minify: {
+              compress: { dropConsole: true, dropDebugger: true },
+              mangle: true,
+            },
+          },
+        },
+      },
     },
   },
 
@@ -71,25 +128,42 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      viewport: 'width=device-width, initial-scale=1',
+      // ICO for browsers without SVG favicons (sizes="32x32" keeps the others
+      // on the SVG), and an opaque PNG for iOS home-screen bookmarks.
       link: [
-        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg', sizes: 'any' },
-        { rel: 'shortcut icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'icon', href: '/favicon.ico', sizes: '32x32' },
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
       ],
     },
   },
 
   routeRules: {
-    // Report-only CSP for all routes in production (phase 1, non-blocking).
-    ...(isDev
-      ? {}
-      : {
-          '/**': {
-            headers: {
-              'Content-Security-Policy-Report-Only': cspReportOnlyValue,
-            },
-          },
-        }),
+    // Legacy standalone pages now live as sections of the home page.
+    '/experiencia': { redirect: { to: '/#experiencia', statusCode: 301 } },
+    '/proyectos': { redirect: { to: '/#proyectos', statusCode: 301 } },
+    '/formacion': { redirect: { to: '/#formacion', statusCode: 301 } },
+    '/representacion': { redirect: { to: '/#representacion', statusCode: 301 } },
+    '/contacto': { redirect: { to: '/#contacto', statusCode: 301 } },
+    '/en/experience': { redirect: { to: '/en#experiencia', statusCode: 301 } },
+    '/en/projects': { redirect: { to: '/en#proyectos', statusCode: 301 } },
+    '/en/education': { redirect: { to: '/en#formacion', statusCode: 301 } },
+    '/en/representation': { redirect: { to: '/en#representacion', statusCode: 301 } },
+    '/en/contact': { redirect: { to: '/en#contacto', statusCode: 301 } },
+    '/de/erfahrung': { redirect: { to: '/de#experiencia', statusCode: 301 } },
+    '/de/projekte': { redirect: { to: '/de#proyectos', statusCode: 301 } },
+    '/de/ausbildung': { redirect: { to: '/de#formacion', statusCode: 301 } },
+    '/de/vertretung': { redirect: { to: '/de#representacion', statusCode: 301 } },
+    '/de/kontakt': { redirect: { to: '/de#contacto', statusCode: 301 } },
+    // The legal page is noindex in every locale. The page sets the robots meta
+    // tag itself; these rules make the X-Robots-Tag header agree with it and
+    // also cover the Markdown copies that AI Ready serves at <path>.md.
+    '/legal': { robots: 'noindex, follow' },
+    '/legal.md': { robots: 'noindex, follow' },
+    '/en/legal': { robots: 'noindex, follow' },
+    '/en/legal.md': { robots: 'noindex, follow' },
+    '/de/impressum': { robots: 'noindex, follow' },
+    '/de/impressum.md': { robots: 'noindex, follow' },
     '/api/**': {
       headers: {
         'X-Robots-Tag': 'noindex, nofollow, noarchive',
@@ -102,24 +176,27 @@ export default defineNuxtConfig({
         xssValidator: false,
       },
     },
-    '/_ipx/**': {
-      headers: {
-        'cache-control': 'public, max-age=31536000, stale-while-revalidate=86400',
+    // CSP reports are only parsed and logged. The XSS validator would buffer
+    // the whole body, without the handler's size cap, before the handler
+    // reads it.
+    '/api/csp-report': {
+      security: {
+        xssValidator: false,
       },
     },
     '/gallery/**': {
       headers: {
-        'cache-control': 'public, max-age=31536000, immutable',
+        'cache-control': 'public, max-age=86400, stale-while-revalidate=604800',
       },
     },
     '/full-pic.webp': {
       headers: {
-        'cache-control': 'public, max-age=31536000, immutable',
+        'cache-control': 'public, max-age=86400, stale-while-revalidate=604800',
       },
     },
     '/profile-pic.webp': {
       headers: {
-        'cache-control': 'public, max-age=31536000, immutable',
+        'cache-control': 'public, max-age=86400, stale-while-revalidate=604800',
       },
     },
   },
@@ -127,6 +204,7 @@ export default defineNuxtConfig({
   modules: [
     'nuxt-security',
     '@nuxt/ui',
+    '@nuxt/fonts',
     '@nuxt/icon',
     '@nuxt/a11y',
     '@nuxtjs/seo',
@@ -139,12 +217,46 @@ export default defineNuxtConfig({
     './modules/fix-mdc-optimize-deps',
   ],
 
+  // Fonts are downloaded at build time and self-hosted from /_nuxt/fonts, so
+  // the CSP font-src 'self' directive keeps holding at runtime. A failed
+  // download fails the production build instead of shipping without fonts.
+  fonts: {
+    families: [
+      { name: 'Space Grotesk', weights: [500, 700], subsets: ['latin', 'latin-ext'] },
+      { name: 'IBM Plex Mono', weights: [400, 500], subsets: ['latin', 'latin-ext'] },
+    ],
+  },
+
   security: {
     // Own file-based limiter (server/utils/rateLimit.ts) is used instead.
     rateLimiter: false,
+    // Its esbuild-based console stripping is a no-op on Vite 8; the client
+    // minifier drops console/debugger instead (see vite.$client above).
+    removeLoggers: false,
+    allowedMethodsRestricter: {
+      methods: ['GET', 'HEAD', 'POST'],
+    },
     headers: {
-      // CSP handled in report-only mode via routeRules below (phase 1).
-      contentSecurityPolicy: false,
+      contentSecurityPolicy: {
+        'default-src': ["'self'"],
+        'base-uri': ["'self'"],
+        'object-src': ["'none'"],
+        'frame-ancestors': ["'self'"],
+        'form-action': ["'self'"],
+        'script-src': [
+          "'self'",
+          "'strict-dynamic'",
+          "'nonce-{{nonce}}'",
+          ...(umamiOrigin ? [umamiOrigin] : []),
+        ],
+        'script-src-attr': ["'none'"],
+        'style-src': ["'self'", "'unsafe-inline'"],
+        'img-src': ["'self'", 'data:', 'blob:', siteImageHostname],
+        'font-src': ["'self'", 'data:'],
+        'connect-src': ["'self'", ...(umamiOrigin ? [umamiOrigin] : [])],
+        'report-uri': ['/api/csp-report'],
+        'upgrade-insecure-requests': true,
+      },
       crossOriginEmbedderPolicy: false,
       crossOriginResourcePolicy: 'cross-origin',
       strictTransportSecurity: {
@@ -164,6 +276,9 @@ export default defineNuxtConfig({
 
   icon: {
     collections: ['tabler', 'circle-flags', 'simple-icons'],
+    // Serve icons only from the installed collections; never reach out to
+    // the public Iconify API at runtime.
+    fallbackToApi: false,
   },
 
   ...(hasUmami
@@ -183,11 +298,30 @@ export default defineNuxtConfig({
   colorMode: {
     preference: 'system',
     fallback: 'light',
+    // Listed on the legal page as local storage without expiry.
+    storage: 'localStorage',
+    storageKey: colorModeStorageKey,
   },
 
   experimental: {
     payloadExtraction: !isDev,
     renderJsonPayloads: !isDev,
+    // Native cross-page morphs where supported; the manual page-shell
+    // transition in app.vue stays wired as the universal fallback.
+    viewTransition: true,
+    // Every /_nuxt/ file name must change whenever its bytes change: the files
+    // are cached as immutable and nuxt-security pins their SRI hash, so a
+    // stale cached copy under an unchanged name is blocked and the page fails.
+    // The entry import map breaks that rule. Chunks import the entry through
+    // "#entry", so their [hash] no longer depends on the entry's, yet Vite
+    // writes their __vite__mapDeps preload lists after hashing, and those
+    // lists name the entry's CSS and its other dependencies. A change that
+    // only renames the entry CSS (any edit to the entry or to the Tailwind
+    // output) rewrites the page chunks without renaming them. Without the
+    // import map every importer hashes the entry's final name again. The
+    // trade-off: an entry change also renames every chunk that imports the
+    // entry, so returning visitors download those again after such a deploy.
+    entryImportMap: false,
   },
 
   // Nuxt SEO configuration
@@ -198,6 +332,12 @@ export default defineNuxtConfig({
     trailingSlash: false,
     env: isDev ? 'development' : 'production',
     indexable: !isDev,
+  },
+
+  // The site belongs to a person: the Person node that app.vue fills in from
+  // the profile becomes the WebSite publisher and the subject of the home.
+  schemaOrg: {
+    identity: 'Person',
   },
 
   // OG image defaults. Runtime generation (Satori) is required because routes
@@ -215,6 +355,7 @@ export default defineNuxtConfig({
     autoLastmod: true,
     xsl: false,
     sources: ['/api/__sitemap__/urls'],
+    exclude: ['/legal', '/en/legal', '/de/impressum'],
   },
 
   // Robots configuration
@@ -227,6 +368,20 @@ export default defineNuxtConfig({
     enabled: false,
   },
 
+  // Skew Protection needs old build assets kept between deploys, which the
+  // clean Docker build never has, and it adds client polling for little gain
+  // on a single-instance site.
+  skewProtection: false,
+
+  // AI Ready serves llms.txt and Markdown copies of each page. Its i18n
+  // auto-detection rebuilds hreflang alternates from the locale prefix alone
+  // and ignores the localized page paths (/en/gallery, /de/impressum), so its
+  // Link headers would point at 404 URLs and contradict the hreflang links
+  // that useLocaleHead renders. Those links stay the only hreflang source.
+  aiReady: {
+    autoI18n: false,
+  },
+
   i18n: {
     baseUrl: siteUrl,
     strategy: 'prefix_except_default',
@@ -237,9 +392,15 @@ export default defineNuxtConfig({
       file,
     })),
     defaultLocale,
+    // A first visit to / still opens in the browser language, but the module
+    // never stores anything: with useCookie off it writes no cookie on that
+    // redirect nor on any page view. Only the language switcher writes the
+    // cookie (HeaderLocaleSwitcher). The module's detector reads cookieKey
+    // before the Accept-Language header even with useCookie off, so a stored
+    // choice keeps / in that language.
     detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: 'i18n_redirected',
+      useCookie: false,
+      cookieKey: localeCookieName,
       redirectOn: 'root',
     },
   },
@@ -250,7 +411,7 @@ export default defineNuxtConfig({
       : {
           database: {
             type: 'sqlite',
-            filename: '/data/nuxt-content.sqlite',
+            filename: join(dataDir, 'nuxt-content.sqlite'),
           },
         }),
   },
@@ -272,11 +433,11 @@ export default defineNuxtConfig({
       crawlLinks: false,
       failOnError: false,
     },
-    // File-based storage for the contact rate limiter (persisted on the /data volume).
+    // File-based storage for the rate limiter (persisted in the data directory).
     storage: {
       ratelimit: {
         driver: 'fs',
-        base: process.env.RATE_LIMIT_DIR || '/data/ratelimit',
+        base: join(dataDir, 'ratelimit'),
       },
     },
     devStorage: {
@@ -288,10 +449,32 @@ export default defineNuxtConfig({
   },
 
   // Image optimization
+  // <NuxtImg> keeps the source format unless it gets a `format`, so the
+  // components set format="webp" themselves (`image.format` only applies to
+  // <NuxtPicture>, which the site does not use).
   image: {
     quality: 80,
-    format: ['webp', 'avif', 'png', 'jpg'],
-    domains: Array.from(new Set([siteImageHostname, 'localhost', '127.0.0.1'])),
+    // IPX writes its own Cache-Control (a route rule for /_ipx/** is
+    // overwritten). Resized images live under URLs made of the source path and
+    // the resize options, so a photo, cover or portrait replaced in public/
+    // under the same name keeps every variant URL: they expire after a day,
+    // like the /gallery/** sources in routeRules. Revalidating is cheap because
+    // IPX answers If-Modified-Since from the source file's mtime with a 304.
+    // /_ipx is public and unsigned, so its options are user input: only the
+    // modifiers the site emits (NuxtImg sizes/format/quality, the lightbox
+    // srcset, the 1200x630 event cover for Open Graph) and no output larger
+    // than the 2560 px gallery photos. server/middleware/ipx-format.ts limits
+    // the format to WebP and JPEG; widths and qualities stay open within
+    // those bounds (the nginx setup in docs/nginx.md rate-limits /_ipx per
+    // client). Every image is a local path (as shared/content/schemas.ts
+    // enforces), so no host may be fetched: with an empty `domains` list, IPX
+    // refuses any /_ipx/_/https://... URL unfetched.
+    ipx: {
+      maxAge: 60 * 60 * 24,
+      maxOutputDimension: 2560,
+      allowedModifiers: ['width', 'height', 'resize', 'format', 'quality'],
+      http: { domains: [] },
+    },
     screens: {
       xs: 320,
       sm: 640,

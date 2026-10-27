@@ -1,0 +1,30 @@
+name: Quality
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      # nuxt.config requires a canonical site URL to load (postinstall runs
+      # `nuxt prepare`); the public production URL is not a secret.
+      SITE_URL: https://isalidocobo.page
+    steps:
+      - uses: actions/checkout@v7
+      # Installs the pnpm version pinned in package.json "packageManager".
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Gallery images are not in git, so verify:gallery only runs locally
+      # (pnpm build); the content and locale files are checked here.
+      - run: pnpm verify:content
+      - run: pnpm verify:i18n
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm exec nuxt build

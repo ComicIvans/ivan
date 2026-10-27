@@ -1,47 +1,22 @@
 <script setup lang="ts">
-import { profileRepositoryUrl, socialProfiles } from '~~/shared/constants/profile'
+import { profileRepositoryUrl } from '~~/shared/constants/profile'
 
 const { t } = useI18n({ useScope: 'global' })
 const localePath = useLocalePath()
-
-const socialLinks = computed(() => [
-  {
-    icon: 'i-tabler-mail',
-    to: localePath('/contacto'),
-    label: t('footer.contactLabel'),
-    external: false,
-  },
-  {
-    icon: 'i-tabler-brand-linkedin',
-    to: socialProfiles.linkedin,
-    label: t('footer.linkedinLabel'),
-    external: true,
-  },
-  {
-    icon: 'i-tabler-brand-instagram',
-    to: socialProfiles.instagram,
-    label: t('footer.instagramLabel'),
-    external: true,
-  },
-  {
-    icon: 'i-tabler-brand-github',
-    to: socialProfiles.github,
-    label: t('footer.githubLabel'),
-    external: true,
-  },
-])
 </script>
 
 <template>
-  <footer class="bg-elevated text-muted p-4 pb-6 md:pb-4" role="contentinfo">
+  <footer class="footer-band p-4 pb-6 text-toned md:pb-4" role="contentinfo">
+    <!-- The text links are raw ULinks: the default ULink colour utilities
+         would override .inline-link and .muted-link. -->
     <div
-      class="mx-auto flex w-11/12 max-w-7xl flex-col items-center gap-4 text-center md:grid md:grid-cols-3 md:items-center"
+      class="mx-auto flex w-11/12 max-w-7xl flex-col items-center gap-4 pt-2 text-center md:grid md:grid-cols-[auto_1fr_auto] md:items-center md:gap-8"
     >
-      <!-- Copyright -->
-      <div
-        class="flex flex-col items-center gap-2 text-center md:flex-row md:justify-start md:text-left"
-      >
-        <UIcon name="i-tabler-copyright" class="size-5 shrink-0" aria-hidden="true" />
+      <!-- Wordmark + copyright -->
+      <div class="flex flex-col items-center gap-1 md:items-start md:text-left">
+        <span class="type-display text-lg text-highlighted" aria-hidden="true">
+          {{ t('header.title') }}
+        </span>
         <p class="text-sm">
           <i18n-t keypath="footer.copyright" tag="span" scope="global">
             <template #link>
@@ -49,6 +24,7 @@ const socialLinks = computed(() => [
                 :to="profileRepositoryUrl"
                 target="_blank"
                 rel="noopener noreferrer"
+                raw
                 class="inline-link"
               >
                 {{ t('footer.github') }}
@@ -59,26 +35,52 @@ const socialLinks = computed(() => [
       </div>
 
       <!-- Legal notice -->
-      <ULink :to="localePath('/legal')" class="muted-link text-sm md:text-center">
+      <ULink
+        :to="localePath('/legal')"
+        raw
+        class="muted-link text-sm md:text-center"
+        active-class="text-primary"
+      >
         {{ t('legal.title') }}
       </ULink>
 
       <!-- Social links -->
       <nav class="flex gap-3 md:justify-end" :aria-label="t('footer.socialNav')">
+        <!-- Contact lives as a home section; deep-link via anchor -->
         <UButton
-          v-for="link in socialLinks"
-          :key="link.icon"
-          :to="link.to"
-          :target="link.external ? '_blank' : undefined"
-          :rel="link.external ? 'noopener noreferrer' : undefined"
-          :icon="link.icon"
+          :to="{ path: localePath('/'), hash: '#contacto' }"
+          icon="i-tabler-mail"
           color="neutral"
           variant="ghost"
           size="lg"
           class="social-icon"
-          :aria-label="link.label"
+          :aria-label="t('footer.contactLabel')"
         />
+        <SocialLinks placement="footer" />
       </nav>
     </div>
   </footer>
 </template>
+
+<style scoped>
+/* Aurora hairline instead of a hard color break against the page backdrop */
+.footer-band {
+  position: relative;
+  background: color-mix(in oklab, var(--ui-bg-elevated) 82%, transparent);
+}
+
+.footer-band::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--color-ember-400) 45%, transparent) 30%,
+    color-mix(in oklab, var(--color-amber-400) 35%, transparent) 70%,
+    transparent
+  );
+  pointer-events: none;
+}
+</style>

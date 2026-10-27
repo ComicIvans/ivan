@@ -1,11 +1,32 @@
 ---
 title: IV. CEEINA-Fortbildungstagung
 location: Munébrega, Zaragoza, Spanien
-duration: 5 Tage
+organizer:
+  name: Studierendenrat der Fakultät für Ingenieurwesen und Architektur der Universität Zaragoza (CEEINA)
 description: Die CEEINA-Fortbildungstagung besteht aus einem Aufenthalt in einer Herberge in der Region Aragón, wo Schulungen und Aktivitäten durchgeführt werden, um das Lernen in einer entspannten und günstigen Umgebung zu fördern.
+cover:
+  src: /gallery/ceeina-2025/cover.webp
+  alt: Eröffnungsveranstaltung der Fortbildungstagung
+photos:
+  - src: /gallery/ceeina-2025/01.webp
+    alt: Vortrag, in dem Code vor einer Projektionsleinwand erklärt wird
+  - src: /gallery/ceeina-2025/02.webp
+    alt: Vortrag über künstliche Intelligenz
+  - src: /gallery/ceeina-2025/03.webp
+    alt: Workshop mit Teilnehmenden an ihren Laptops
+  - src: /gallery/ceeina-2025/04.webp
+    alt: Teilnehmende bei der Gruppenarbeit an mehreren Tischen
+  - src: /gallery/ceeina-2025/05.webp
+    alt: Vortrag vor dem Publikum der Tagung
+  - src: /gallery/ceeina-2025/06.webp
+    alt: Gruppe von Teilnehmenden neben einem Kleinbus
+  - src: /gallery/ceeina-2025/07.webp
+    alt: Teilnehmende auf ihren Plätzen während einer Podiumsdiskussion
+  - src: /gallery/ceeina-2025/08.webp
+    alt: Podiumsdiskussion der Tagung aus Sicht des Publikums
 tags:
   - CEEINA
-  - Formationen
+  - Fortbildung
 seo:
   title: IV. CEEINA-Fortbildungstagung 2025
   description: Fotogalerie der IV. CEEINA-Fortbildungstagung in Munébrega (Zaragoza).
@@ -21,7 +42,7 @@ Diese Tagung besteht aus einem Aufenthalt in einer Herberge in der Region Aragó
 ::
 
 ::event-participation
-Ich nahm an der Tagung als **Ausbilder** teil und hielt insgesamt vier Vorträge (zwei Schulungen in zwei verschiedenen Gruppen):
+Ich nahm an der Tagung als **Referent** teil und hielt insgesamt vier Vorträge (zwei Schulungen in zwei verschiedenen Gruppen):
 
 **IT-Tools in der Studierendenvertretung**
 
@@ -31,5 +52,5 @@ In dieser Schulung teilte ich eine Reihe von Tools und Tipps zu Informationstech
 
 In diesem zweiten Vortrag ging ich darauf ein, wie Beschwerden, die beim Studierendenrat eingehen, ordnungsgemäß und effizient bearbeitet werden können, einschließlich ihrer Klassifizierung und der zu befolgenden Protokolle. Ich sprach auch darüber, wie Daten sicher und vorschriftsgemäß behandelt und gespeichert werden sollten.
 
-Ich danke für die Gelegenheit, als Trainer an einer Veranstaltung dieser Art teilgenommen zu haben, und freue mich darüber, dass die Vorträge bei den Teilnehmenden gut angekommen sind.
+Ich danke für die Gelegenheit, als Referent an einer Veranstaltung dieser Art teilgenommen zu haben, und freue mich darüber, dass die Vorträge bei den Teilnehmenden gut angekommen sind.
 ::

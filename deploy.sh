@@ -1,18 +1,42 @@
 #!/usr/bin/env bash
+# Builds the production image, pushes it to the registry and recreates the
+# container on the VPS with the docker-compose.yml of this checkout.
+# Settings come from .env.deploy (see .env.deploy.example).
 set -euo pipefail
 
-IMAGE="${IMAGE:-ghcr.io/comicivans/ivan:latest}"
-DOCKER_PLATFORM="${DOCKER_PLATFORM:-linux/amd64}"
+cd "$(dirname -- "${BASH_SOURCE[0]}")"
 
 log() {
   printf '== %s ==\n' "$1"
 }
 
+fail() {
+  printf 'ERROR: %s\n' "$1" >&2
+  exit 1
+}
+
 require_command() {
-  command -v "$1" >/dev/null 2>&1 || {
-    printf 'ERROR: %s no está disponible en local\n' "$1" >&2
-    exit 1
-  }
+  command -v "$1" >/dev/null 2>&1 || fail "$1 no está disponible en local"
+}
+
+# Exports the deploy settings from .env.deploy. Older checkouts kept them in
+# the runtime .env, which is still read (with a warning) when .env.deploy is
+# missing.
+load_deploy_env() {
+  local env_file=".env.deploy"
+
+  if [ ! -f "$env_file" ]; then
+    [ -f ".env" ] || fail "no existe .env.deploy; créalo a partir de .env.deploy.example"
+    printf 'AVISO: no existe .env.deploy; se leen las variables de despliegue de .env.\n' >&2
+    printf 'AVISO: muévelas a .env.deploy (ver .env.deploy.example) para que no lleguen al contenedor.\n' >&2
+    env_file=".env"
+  fi
+
+  set -a
+  # Plain KEY=VALUE entries, sourced as shell.
+  # shellcheck source=/dev/null
+  . "./$env_file"
+  set +a
 }
 
 build_and_push_image() {
@@ -46,19 +70,10 @@ build_and_push_image() {
   docker push "$IMAGE"
 }
 
-load_env_file() {
-  local env_file="$1"
+load_deploy_env
 
-  if [ -f "$env_file" ]; then
-    set -a
-    # The deployment variables are simple KEY=VALUE entries.
-    # shellcheck disable=SC1090
-    . "$env_file"
-    set +a
-  fi
-}
-
-load_env_file ".env"
+IMAGE="${IMAGE:-ghcr.io/comicivans/ivan:latest}"
+DOCKER_PLATFORM="${DOCKER_PLATFORM:-linux/amd64}"
 
 : "${SITE_URL:?ERROR: SITE_URL no definido}"
 : "${VPS_HOST:?ERROR: VPS_HOST no definido}"
@@ -67,32 +82,49 @@ load_env_file ".env"
 require_command docker
 require_command ssh
 
-# Log in to GHCR locally (needed to push a private image). Uses a here-string so
-# the token never appears in the process list.
+# The VPS logs in to GHCR only when credentials are configured; otherwise it
+# relies on an earlier `docker login` there. The token travels inside the
+# remote script on stdin, never on a command line.
+remote_login=""
 if [ -n "${GHCR_USERNAME:-}" ] && [ -n "${GHCR_TOKEN:-}" ]; then
   log "GHCR login (local)"
   docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin <<<"$GHCR_TOKEN"
+  remote_login="echo '== GHCR login (VPS) =='
+docker login ghcr.io -u $(printf '%q' "$GHCR_USERNAME") --password-stdin <<<$(printf '%q' "$GHCR_TOKEN")"
 fi
 
 log "Build and push: $IMAGE"
 build_and_push_image
 
+# Upload under a temporary name; the remote step moves it into place, so an
+# interrupted copy never replaces the running configuration. The file goes
+# through ssh so that REMOTE_DIR is quoted for the remote shell exactly as in
+# the deploy step (scp would read the same quoting literally in its default
+# SFTP mode).
+log "Copia de docker-compose.yml al VPS"
+ssh "$VPS_HOST" "cat > $(printf '%q' "$REMOTE_DIR")/docker-compose.yml.new" <docker-compose.yml
+
 log "Deploy en VPS con docker compose"
 ssh "$VPS_HOST" bash -s <<EOF
 set -euo pipefail
 
-cd "$REMOTE_DIR"
+cd $(printf '%q' "$REMOTE_DIR")
 
-if [ -n '${GHCR_USERNAME:-}' ] && [ -n '${GHCR_TOKEN:-}' ]; then
-  echo "== GHCR login (VPS) =="
-  __ghcr_user='${GHCR_USERNAME:-}'
-  __ghcr_token='${GHCR_TOKEN:-}'
-  docker login ghcr.io -u "\$__ghcr_user" --password-stdin <<<"\$__ghcr_token"
-  unset __ghcr_user __ghcr_token
+if [ ! -f .env ]; then
+  echo 'ERROR: falta .env (variables de runtime) en el VPS; créalo a partir de .env.example' >&2
+  exit 1
 fi
 
+mv docker-compose.yml.new docker-compose.yml
+export IMAGE=$(printf '%q' "$IMAGE")
+
+$remote_login
+
+echo "== Descarga de la imagen =="
+docker compose pull
+
 echo "== Recreate de contenedores =="
-docker compose up -d --pull always --remove-orphans
+docker compose up -d --remove-orphans
 
 echo "== Estado actual =="
 docker compose ps

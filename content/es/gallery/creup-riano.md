@@ -1,8 +1,11 @@
 ---
 title: Reunión presencial de la Comisión Ejecutiva Ampliada de CREUP
 location: Riaño, Cantabria, España
+organizer:
+  name: Coordinadora de Representantes de Estudiantes de Universidades Públicas (CREUP)
+  url: https://www.creup.es/
 date: 2025-09-01
-duration: 3 días
+endDate: 2025-09-04
 description: Reunión presencial de las Vicepresidencias y Vocalías de CREUP para realizar seguimiento de la planificación estratégica y trabajar entre las distintas áreas.
 icon: i-tabler-users-group
 tags:
@@ -12,10 +15,22 @@ cover:
   src: /gallery/creup-riano/cover.webp
   alt: Paisaje de Riaño
 photos:
-  - src: /gallery/creup-riano/01.JPG
-  - src: /gallery/creup-riano/02.JPG
-  - src: /gallery/creup-riano/03.JPG
-  - src: /gallery/creup-riano/04.JPG
+  - src: /gallery/creup-riano/01.webp
+    alt: Paisaje verde de las montañas de Riaño
+    width: 2560
+    height: 1440
+  - src: /gallery/creup-riano/02.webp
+    alt: Trabajo con ordenador portátil durante el encuentro
+    width: 2560
+    height: 1440
+  - src: /gallery/creup-riano/03.webp
+    alt: Dos participantes posando en un prado de Riaño
+    width: 2560
+    height: 1440
+  - src: /gallery/creup-riano/04.webp
+    alt: Fotografía de grupo de las personas participantes en el encuentro
+    width: 2560
+    height: 1440
 draft: false
 seo:
   title: Reunión CEA CREUP - Riaño 2025
@@ -29,9 +44,9 @@ A este encuentro asistieron las distintas Vicepresidencias y Vocalías de la org
 ::
 
 ::event-participation
-Durante la reunión se avanzamos en varias líneas de trabajo prioritarias:
+Durante la reunión avanzamos en varias líneas de trabajo prioritarias:
 
-- **Nueva página web**: En coordinación con el Área de Comunicación, realizamos en el diseño y definición de la nueva página web de CREUP.
+- **Nueva página web**: En coordinación con el Área de Comunicación, trabajamos en el diseño y la definición de la nueva página web de CREUP.
 - **Mejoras en la Intranet**: Analizamos las necesidades de la Tesorería y el Área de Organización con el fin de optimizar la gestión económica y de eventos dentro de la Intranet.
 
 Este encuentro permitió alinear esfuerzos, mejorar la coordinación interna y concretar las principales líneas de trabajo para los meses siguientes.

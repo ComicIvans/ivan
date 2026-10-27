@@ -1,6 +1,36 @@
-MIT License
+This repository holds the source code of Iván Salido Cobo's personal website
+together with his personal content. They are licensed differently.
 
-Copyright (c) 2025 Iván
+SOURCE CODE
+
+The source code (application code, styles, configuration and scripts) is
+licensed under the MIT License below, except for the third-party code listed
+further down.
+
+PERSONAL CONTENT: ALL RIGHTS RESERVED
+
+The following content belongs to Iván Salido Cobo or to its respective
+authors (such as the photographers of the events in the gallery). All rights
+reserved: it is not licensed under the MIT License, and no permission to
+copy, modify or redistribute it is granted.
+
+- the photographs: the portraits (public/profile-pic.webp,
+  public/full-pic.webp) and the gallery photos published under
+  public/gallery/;
+- the texts of the website: the profile and gallery content in content/, the
+  copy in i18n/locales/ and the joke lists in app/assets/jokes-*.json.
+
+THIRD-PARTY CODE
+
+app/components/bits/Aurora.vue is adapted from Vue Bits
+(https://github.com/DavidHDev/vue-bits), Copyright (c) 2025 David Haz. It is
+distributed under its own license (MIT + Commons Clause License Condition
+v1.0), reproduced at the top of that file, and not under the MIT License
+below.
+
+MIT LICENSE
+
+Copyright (c) 2025-2026 Iván Salido Cobo
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
