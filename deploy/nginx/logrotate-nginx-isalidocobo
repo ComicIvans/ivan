@@ -1,12 +1,15 @@
 # isalidocobo.page logs: kept at most 14 days, as the site's privacy notice
-# states. They live in their own directory, so the global
-# /var/log/nginx/*.log rule (52 days) does not apply to them.
+# states (13 rotated copies plus the live file). ifempty rotates them every
+# day even when nothing new was written, because rotate and maxage only prune
+# old copies when the log rotates: with notifempty, a quiet error log would
+# keep its last copies indefinitely. They live in their own directory, so the
+# global /var/log/nginx/*.log rule (52 days) does not apply to them.
 /var/log/nginx/isalidocobo/*.log {
         daily
-        rotate 14
-        maxage 14
+        rotate 13
+        maxage 13
         missingok
-        notifempty
+        ifempty
         compress
         delaycompress
         create 640 nginx adm

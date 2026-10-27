@@ -121,9 +121,13 @@ canónico.
 
 ### `logrotate-nginx-isalidocobo`
 
-Rotación diaria, 14 copias y `maxage 14`: los registros del sitio se borran a
-los 14 días, como indica el aviso legal. Viven en su propio directorio porque
-los patrones de logrotate no entran en subdirectorios: la regla global
+Rotación diaria, 13 copias más el archivo actual y `maxage 13`: cada línea se
+conserva como máximo 14 días, como indica el aviso legal. Rota también los
+registros vacíos (`ifempty`), así que las copias antiguas siempre caducan:
+logrotate solo descarta copias (`rotate` y `maxage`) cuando rota, y con
+`notifempty` un registro de errores sin líneas nuevas conservaría sus últimas
+copias sin límite de tiempo. Viven en su propio directorio porque los patrones
+de logrotate no entran en subdirectorios: la regla global
 `/var/log/nginx/*.log` (52 días) no los alcanza.
 
 ### `apply.sh`
@@ -159,9 +163,37 @@ En el VPS:
 sudo bash ~/nginx-staging/apply.sh
 ```
 
+`apply.sh` se puede repetir: hace otra copia de seguridad, conserva los
+registros que ya existen y vuelve a instalar los archivos.
+
 Si se edita uno de estos archivos directamente en el servidor, hay que
 llevar el cambio también a `deploy/nginx/`: la siguiente ejecución de
 `apply.sh` lo sobrescribiría.
+
+### Borrar los registros de la configuración anterior
+
+Solo hace falta una vez, tras la primera instalación. La configuración
+anterior escribía en `/var/log/nginx/isalidocobo.page.access.log` y
+`isalidocobo.page.error.log` con el formato `main`: IP completa, cadena de
+consulta, `Referer` y `X-Forwarded-For`. Cuando nginx deja de escribir en
+ellos y quedan vacíos, la regla global de logrotate (`notifempty`) deja de
+rotarlos y sus copias se quedarían en el disco sin límite de tiempo. Cuando
+`sudo tail /var/log/nginx/isalidocobo/access.log` muestre direcciones
+anonimizadas (terminadas en `.0` o `::`), bórralos:
+
+```sh
+sudo rm /var/log/nginx/isalidocobo.page.access.log* /var/log/nginx/isalidocobo.page.error.log*
+```
+
+Las peticiones a `www.isalidocobo.page` y al puerto 80 que la configuración
+anterior registraba en `/var/log/nginx/access.log` y `error.log` siguen la
+regla global (52 copias diarias), pero esa regla también usa `notifempty`:
+solo caducan mientras otros sitios del servidor sigan escribiendo en esos
+archivos. Para comprobarlo, las copias deben tener fechas de días seguidos:
+
+```sh
+sudo ls -l --time-style=long-iso /var/log/nginx/access.log* /var/log/nginx/error.log*
+```
 
 ## Comprobación
 
