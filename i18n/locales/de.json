@@ -270,10 +270,13 @@
       "description": "Diese Website respektiert deine Privatsphäre:",
       "items": [
         "Besuche werden mit Umami gemessen, einem datenschutzfreundlichen Analyse-Tool, das auf meinem eigenen Server läuft, ohne Dienste Dritter",
-        "Umami verwendet keine Cookies und speichert deine IP-Adresse nicht; es liefert nur zusammengefasste Statistiken und identifiziert keine einzelnen Besucher",
+        "Umami verwendet keine Cookies und speichert deine IP-Adresse nicht; es liefert nur zusammengefasste Statistiken und identifiziert keine einzelnen Besucher. Rechtsgrundlage ist das berechtigte Interesse, in zusammengefasster und anonymer Form zu erfahren, wie die Website genutzt wird (Art. 6 Abs. 1 lit. f DSGVO)",
         "Es findet kein seitenübergreifendes Tracking statt",
         "Zum Schutz vor Missbrauch zählt der Server die Absendungen des Kontaktformulars und die Sicherheitsberichte (CSP), die dein Browser automatisch sendet. Er ordnet sie einem Code zu, der mit einem geheimen Schlüssel aus deiner IP-Adresse abgeleitet wird, nie der Adresse selbst",
         "Dieser Code wird spätestens nach 70 Minuten gelöscht. Rechtsgrundlage ist das berechtigte Interesse am Schutz der Website (Art. 6 Abs. 1 lit. f DSGVO)",
+        "Der Webserver protokolliert zu jeder Anfrage in einem Zugriffsprotokoll deine anonymisierte IP-Adresse (bei IPv4 wird das letzte Oktett entfernt, bei IPv6 bleiben nur die ersten 32 Bit erhalten), Datum und Uhrzeit, Methode, Pfad und Protokoll der Anfrage (ohne URL-Parameter), Statuscode, Größe und Dauer der Antwort sowie den User-Agent deines Browsers",
+        "Tritt bei der Bearbeitung einer Anfrage ein technisches Problem auf, vermerkt der Server es in einem Fehlerprotokoll, das deine vollständige IP-Adresse, die aufgerufene URL und die Seite, von der du kommst, enthalten kann",
+        "Beide Protokolle werden höchstens 14 Tage aufbewahrt und danach automatisch gelöscht; sie dienen nur der Sicherheit und dem Betrieb der Website. Rechtsgrundlage ist das berechtigte Interesse an einem sicheren und funktionsfähigen Betrieb der Website (Art. 6 Abs. 1 lit. f DSGVO)",
         "Es werden keine Daten an Dritte weitergegeben"
       ]
     },

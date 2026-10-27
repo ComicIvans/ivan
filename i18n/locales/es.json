@@ -270,10 +270,13 @@
       "description": "Este sitio respeta tu privacidad:",
       "items": [
         "Las visitas se miden con Umami, una herramienta de analítica respetuosa con la privacidad que se aloja en un servidor propio, sin servicios de terceros",
-        "Umami no usa cookies ni guarda tu dirección IP, y solo ofrece estadísticas agregadas, sin identificar a visitantes individuales",
+        "Umami no usa cookies ni guarda tu dirección IP, y solo ofrece estadísticas agregadas, sin identificar a visitantes individuales. La base legal es el interés legítimo en conocer, de forma agregada y anónima, cómo se usa el sitio (art. 6.1.f del RGPD)",
         "No se realiza seguimiento entre sitios web",
         "Para prevenir abusos, el servidor cuenta los envíos del formulario de contacto y los informes de seguridad (CSP) que tu navegador envía automáticamente. Los asocia a un código derivado de tu dirección IP con una clave secreta, nunca a la dirección en sí",
         "Ese código se borra como máximo 70 minutos después. La base legal es el interés legítimo en proteger el sitio (art. 6.1.f del RGPD)",
+        "El servidor web anota cada petición en un registro de acceso con tu dirección IP anonimizada (en IPv4 se elimina el último octeto y en IPv6 solo se conservan los primeros 32 bits), la fecha y la hora, el método, la ruta y el protocolo de la petición (sin los parámetros de la URL), el código de estado, el tamaño y el tiempo de la respuesta y el agente de usuario de tu navegador",
+        "Si surge un problema técnico al atender una petición, el servidor lo anota en un registro de errores, que puede incluir tu dirección IP completa, la URL solicitada y la página desde la que llegas",
+        "Ambos registros se conservan como máximo 14 días, tras los cuales se borran automáticamente, y solo se usan para la seguridad y el funcionamiento del sitio. La base legal es el interés legítimo en mantener el sitio seguro y en funcionamiento (art. 6.1.f del RGPD)",
         "No se comparten datos con terceros"
       ]
     },

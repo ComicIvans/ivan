@@ -270,10 +270,13 @@
       "description": "This website respects your privacy:",
       "items": [
         "Visits are measured with Umami, a privacy-friendly analytics tool hosted on my own server, without third-party services",
-        "Umami uses no cookies and does not store your IP address; it only provides aggregate statistics and does not identify individual visitors",
+        "Umami uses no cookies and does not store your IP address; it only provides aggregate statistics and does not identify individual visitors. The legal basis is the legitimate interest in knowing how the site is used through aggregate, anonymous statistics (Art. 6(1)(f) GDPR)",
         "No cross-site tracking is performed",
         "To prevent abuse, the server counts contact form submissions and the security (CSP) reports your browser sends automatically. It links them to a code derived from your IP address with a secret key, never to the address itself",
         "That code is deleted within 70 minutes at most. The legal basis is the legitimate interest in protecting the site (Art. 6(1)(f) GDPR)",
+        "The web server records each request in an access log with your anonymised IP address (the last octet is removed from IPv4 addresses and only the first 32 bits of IPv6 addresses are kept), the date and time, the request method, path and protocol (without URL parameters), the response status, size and time, and your browser’s user agent",
+        "If a technical problem occurs while handling a request, the server records it in an error log, which may include your full IP address, the requested URL and the page you came from",
+        "Both logs are kept for 14 days at most, after which they are deleted automatically, and are only used for the security and operation of the site. The legal basis is the legitimate interest in keeping the site secure and running (Art. 6(1)(f) GDPR)",
         "No data are shared with third parties"
       ]
     },
