@@ -147,19 +147,19 @@ competencies:
   - id: project-management
     icon: i-tabler-list-check
     name:
-      es: Gestión y Ejecución de Proyectos
+      es: Gestión y ejecución de proyectos
       en: Project Management and Execution
       de: Projektmanagement und -umsetzung
   - id: team-leadership
     icon: i-tabler-users
     name:
-      es: Liderazgo y Coordinación de Equipos
+      es: Liderazgo y coordinación de equipos
       en: Team Leadership and Coordination
       de: Teamführung und -koordination
   - id: governance
     icon: i-tabler-building-bank
     name:
-      es: Gobernanza y Negociación
+      es: Gobernanza y negociación
       en: Institutional Governance and Negotiation
       de: Institutionelle Governance und Verhandlung
   - id: communication
@@ -171,42 +171,42 @@ competencies:
   - id: systems
     icon: i-tabler-server-2
     name:
-      es: Administración de Sistemas
+      es: Administración de sistemas
       en: Systems Administration
       de: Systemadministration
   - id: cybersecurity-management
     icon: i-tabler-shield-lock
     name:
-      es: Gestión de la Seguridad de la Información
+      es: Gestión de la seguridad de la información
       en: Information Security Management
       de: Informationssicherheitsmanagement
   - id: compliance
     icon: i-tabler-shield-check
     name:
-      es: Cumplimiento Normativo y Ciberseguridad
+      es: Cumplimiento normativo y ciberseguridad
       en: Regulatory Compliance and Cybersecurity
       de: Regulatorische Compliance und Cybersicherheit
   - id: automation
     icon: i-tabler-robot
     name:
-      es: Automatización de Procesos
+      es: Automatización de procesos
       en: Process Automation
       de: Prozessautomatisierung
   - id: data-analysis
     icon: i-tabler-chart-dots
     name:
-      es: Análisis y Toma de Decisiones
+      es: Análisis y toma de decisiones
       en: Analysis and Decision-Making
       de: Analyse und Entscheidungsfindung
   - id: problem-solving
     icon: i-tabler-puzzle
     name:
-      es: Resolución de Problemas Complejos
+      es: Resolución de problemas complejos
       en: Complex Problem Solving
       de: Lösen komplexer Probleme
   - id: strategic-thinking
     icon: i-tabler-brain
     name:
-      es: Pensamiento Estratégico y Planificación
+      es: Pensamiento estratégico y planificación
       en: Strategic Thinking and Planning
       de: Strategisches Denken und Planung

@@ -9,11 +9,11 @@
     }
   },
   "schema": {
-    "jobTitle": "Matemático · Ciberseguridad, Estrategia y Gestión de Proyectos"
+    "jobTitle": "Matemático · Ciberseguridad, estrategia y gestión de proyectos"
   },
   "header": {
     "title": "Iván Salido Cobo",
-    "subtitle": "Ciberseguridad, Estrategia y Gestión de Proyectos",
+    "subtitle": "Ciberseguridad, estrategia y gestión de proyectos",
     "profileAlt": "Fotografía de perfil de Iván Salido Cobo",
     "jokeButton": "Mostrar un chiste aleatorio"
   },
@@ -66,30 +66,30 @@
     "ongoing": "En curso"
   },
   "experience": {
-    "title": "Experiencia Destacada",
+    "title": "Experiencia destacada",
     "intro": "Experiencia en desarrollo web, infraestructura digital, gestión de proyectos y gobernanza universitaria.",
     "fullExperience": "Si quieres ver mi experiencia completa en representación estudiantil, puedes consultarla en la sección de Representación.",
     "viewRepresentation": "Ver trayectoria completa",
     "current": "Actual"
   },
   "projects": {
-    "title": "Proyectos y Tecnología",
+    "title": "Proyectos y tecnología",
     "stack": {
-      "title": "Stack Tecnológico",
+      "title": "Stack tecnológico",
       "primary": {
-        "title": "Tecnologías Principales"
+        "title": "Tecnologías principales"
       },
       "secondary": {
-        "title": "Tecnologías Secundarias"
+        "title": "Tecnologías secundarias"
       }
     },
     "list": {
-      "title": "Proyectos Relevantes",
+      "title": "Proyectos relevantes",
       "repositoryLabel": "Código fuente de {project} en GitHub"
     }
   },
   "representation": {
-    "title": "Representación Estudiantil",
+    "title": "Representación estudiantil",
     "intro": "Trayectoria en política universitaria, defensa de los derechos del estudiantado y gobernanza institucional.",
     "timelineLabel": "Cronología de trayectoria en representación estudiantil",
     "stats": {
@@ -163,9 +163,9 @@
     }
   },
   "training": {
-    "title": "Formación y Competencias",
+    "title": "Formación y competencias",
     "academic": {
-      "title": "Formación Académica"
+      "title": "Formación académica"
     },
     "languages": {
       "title": "Idiomas",
@@ -174,10 +174,10 @@
       "native": "Nativo"
     },
     "other": {
-      "title": "Otras Certificaciones"
+      "title": "Otras certificaciones"
     },
     "competencies": {
-      "title": "Competencias Transversales"
+      "title": "Competencias transversales"
     }
   },
   "footer": {
