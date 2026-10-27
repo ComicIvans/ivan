@@ -51,7 +51,8 @@ Current scope includes:
 - `scripts/` — `pnpm verify` checks and `pnpm gallery:add`.
 - `public/` — Static assets served as-is. `public/gallery/` is not in git (see Gallery Content Conventions).
 - `modules/` — Local Nuxt module patches or adjustments.
-- `docs/` — Operator notes (recommended nginx vhost).
+- `deploy/nginx/` — The production nginx configuration and its installer (`apply.sh`), described in `docs/nginx.md`. Not part of the Docker build context.
+- `docs/` — Operator notes (nginx).
 
 ### Home Sections
 

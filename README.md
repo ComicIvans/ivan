@@ -131,8 +131,8 @@ conexión. El limitador de peticiones guarda en el directorio de datos
 derivado de `NUXT_APP_SECRET`, nunca la IP, y borra cada registro como mucho
 diez minutos después de que termine su ventana. Además del límite por
 cliente, el formulario envía como mucho 40 correos al día en total, sea cual
-sea su origen. La configuración recomendada de nginx está en
-[docs/nginx.md](docs/nginx.md).
+sea su origen. La configuración de nginx de producción está en
+[deploy/nginx/](deploy/nginx/) y se explica en [docs/nginx.md](docs/nginx.md).
 
 `DATA_DIR` (solo en tiempo de compilación) fija dónde escribe el servidor la base
 de datos de Nuxt Content y el limitador: la imagen de Docker usa `/data` y
@@ -239,8 +239,8 @@ Preparación del VPS (una sola vez):
    `.env.example` (SMTP, `NUXT_APP_SECRET` y, si hace falta,
    `NUXT_SITE_INDEXABLE`). Contiene la contraseña SMTP y el secreto de la
    aplicación, así que deja que solo lo lea su propietario: `chmod 600 .env`.
-3. Configura nginx delante de la aplicación según
-   [docs/nginx.md](docs/nginx.md). Comprueba que reenvía `X-Forwarded-For`:
+3. Instala la configuración de nginx de `deploy/nginx/` con su `apply.sh`
+   según [docs/nginx.md](docs/nginx.md). Comprueba que reenvía `X-Forwarded-For`:
    sin esa cabecera todas las visitas comparten la misma IP y, por tanto, el
    mismo límite de envíos del formulario.
 4. Tras el primer despliegue, envía un mensaje de prueba desde el formulario
@@ -274,6 +274,7 @@ Si vienes del formato antiguo, con un único `.env`:
 - `scripts/` — `pnpm verify` y `pnpm gallery:add`.
 - `public/` — imágenes y assets estáticos.
 - `modules/` — ajustes locales de módulos de Nuxt.
+- `deploy/nginx/` — configuración de nginx del VPS y su instalador (`apply.sh`).
 - `docs/` — notas de operación (nginx).
 - `CONTENIDO.md` — guía para editar el contenido.
 

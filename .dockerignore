@@ -22,6 +22,8 @@ npm-debug.log
 /data
 # Gallery originals; the image only needs the WebP files in public/gallery
 /gallery-src
+# nginx configuration for the VPS host, not for the app image
+/deploy
 PLAN*.md
 MEJORAS_VISUALES.md
 REVISION_CONTENIDO.md

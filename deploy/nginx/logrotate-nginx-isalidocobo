@@ -1,0 +1,19 @@
+# isalidocobo.page logs: kept at most 14 days, as the site's privacy notice
+# states. They live in their own directory, so the global
+# /var/log/nginx/*.log rule (52 days) does not apply to them.
+/var/log/nginx/isalidocobo/*.log {
+        daily
+        rotate 14
+        maxage 14
+        missingok
+        notifempty
+        compress
+        delaycompress
+        create 640 nginx adm
+        sharedscripts
+        postrotate
+                if [ -f /run/nginx.pid ]; then
+                        kill -USR1 `cat /run/nginx.pid`
+                fi
+        endscript
+}
